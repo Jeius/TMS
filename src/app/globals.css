@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #f1ebeb; /* Light mode background */
-  --foreground: #800000; /* Maroon color for text in light mode */
-  --accent: #931D23; /* A deeper maroon accent for light mode */
+  --background: #f1ebeb;
+  --foreground: #800000;
+  --accent: #931D23;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #4a060e; /* Dark maroon for background in dark mode */
-    --foreground: #f1ebeb; /* Light maroon for text in dark mode */
-    --accent: #b03a48; /* Brighter maroon accent for dark mode */
+    --background: #1b1919;
+    --foreground: #f1ebeb;
+    --accent: #b03a48;
   }
 }
 
@@ -91,6 +91,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
