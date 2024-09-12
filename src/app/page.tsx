@@ -3,6 +3,7 @@ import Navbar from '@/components/navbar'
 import React from 'react'
 import { NextPage } from 'next';
 import { RadialChart } from '@/components/radialchart';
+import TotalCard from '@/components/totalcard';
 
 interface Props {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -18,7 +19,10 @@ const Dashboard: NextPage<Props> = ({ searchParams }) => {
           Overview
         </h1>
 
-        <RadialChart />
+        <section className='grid grid-cols-2 grid-rows-2 gap-3'>
+          <TotalCard />
+          <RadialChart />
+        </section>
       </main>
 
 
