@@ -10,10 +10,10 @@ const TotalCard = () => {
                     Total Thesis <BookIcon className="size-6" />
                 </CardTitle>
             </CardHeader>
-            <CardContent className="flex justify-center">
-                <h2 className='text-6xl font-bold'> 562 </h2>
+            <CardContent>
+                <h2 className='text-5xl font-bold'> 562 </h2>
             </CardContent>
-            <CardFooter className="flex justify-center items-center text-sm font-medium text-muted-foreground">
+            <CardFooter className="flex items-center text-sm font-medium text-muted-foreground">
                 Total number of theses shelfed
             </CardFooter>
         </Card>

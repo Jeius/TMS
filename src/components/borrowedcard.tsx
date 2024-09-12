@@ -12,7 +12,6 @@ import {
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
@@ -22,22 +21,23 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart"
 export const description = "A radial chart with a custom shape"
 
 const chartData = [
-    { browser: "safari", borrowed: 1260, fill: "var(--color-safari)" },
+    { total: 562, borrowed: 320, fill: "var(--color-borrowed)" },
 ]
 
 const chartConfig = {
     borrowed: {
         label: "Borrowed",
-    },
-    safari: {
-        label: "Safari",
         color: "hsl(var(--chart-5))",
+    },
+    total: {
+        label: "Total Theses",
     },
 } satisfies ChartConfig
 
 export function BorrowedCard() {
+    const endAngle = chartData[0].borrowed / chartData[0].total * 360
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col min-w-[200px]">
             <CardHeader className="pb-0">
                 <CardTitle className="flex flex-row justify-between items-center font-semibold text-xl">
                     Borrowed  <BookUp2Icon />
@@ -51,7 +51,7 @@ export function BorrowedCard() {
                 >
                     <RadialBarChart
                         data={chartData}
-                        endAngle={100}
+                        endAngle={endAngle}
                         innerRadius={80}
                         outerRadius={140}
                     >
