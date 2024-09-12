@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { NextPage } from 'next';
 import ThemeSwitch from './themeswitch';
+import { Skeleton } from './ui/skeleton';
 
 type NavbarProps = {
     selected?: string;
@@ -36,8 +37,10 @@ const Navbar: NextPage<NavbarProps> = ({ selected = 'dashboard' }) => {
                 <Input className="min-w-[100px]" type="search" placeholder="Search..." />
                 <ThemeSwitch />
                 <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarImage src="https://github.com/jeius.png" alt="@shadcn" />
+                    <AvatarFallback>
+                        <Skeleton />
+                    </AvatarFallback>
                 </Avatar>
             </div>
         </nav>
