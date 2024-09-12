@@ -38,7 +38,7 @@ const departments = [
     },
 ]
 
-export const Combobox = () => {
+export const Departmentbox = () => {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
 
