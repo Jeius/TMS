@@ -30,7 +30,7 @@ const ThemeSwitch = () => {
 
     return (
         <Button
-            className='hover:bg-zinc-300 dark:hover:bg-zinc-700'
+            className='size-fit p-2 rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-700'
             variant='ghost'
             aria-label="Toggle theme"
             onClick={toggleCallback}>
