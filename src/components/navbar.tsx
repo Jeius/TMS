@@ -27,7 +27,7 @@ const Navbar: NextPage<NavbarProps> = ({ selected = 'dashboard' }) => {
                     <Link
                         key={link.href}
                         href={link.href}
-                        className={selected === link.label.toLowerCase() ? '' : 'hover:text-black dark:hover:text-white text-zinc-600 dark:text-zinc-400'}
+                        className={selected === link.label.toLowerCase() ? '' : 'hover:text-foreground text-muted-foreground'}
                     >
                         {link.label}
                     </Link>

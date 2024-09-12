@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --background: #dfdfdf;
+  --background: #d4d4d4;
   --foreground: #000000;
   --accent: #931D23;
 }
 
 
 .dark {
-  --background: #09090b;
-  --foreground: #f1ebeb;
+  --background: #111113;
+  --foreground: #ffffff;
   --accent: #b03a48;
 }
 
@@ -19,18 +19,18 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 5% 90%;
     --foreground: 240 10% 3.9%;
     --card: 0 5% 90%;
     --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: 0 5% 90%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 346.8 77.2% 49.8%;
     --primary-foreground: 355.7 100% 99%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 45%;
+    --muted: 240 4.8% 75%;
+    --muted-foreground: 240 3.8% 30%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 72% 51%;

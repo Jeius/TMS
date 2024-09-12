@@ -1,23 +1,24 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
-import { BookIcon } from 'lucide-react'
+import { BookIcon, BookPlusIcon } from 'lucide-react'
 
-const TotalCard = () => {
+const AddedCard = () => {
     return (
         <Card className="flex flex-col justify-between">
-            <CardHeader className="items-center">
+            <CardHeader className="items-center pb-0">
                 <CardTitle className="flex flex-row w-full justify-between items-center font-semibold text-xl">
-                    Total Thesis <BookIcon className="size-6" />
+                    Total Added <BookPlusIcon className="size-6" />
                 </CardTitle>
+                <CardDescription className="place-self-start">SY: 2024 - 2025</CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center">
-                <h2 className='text-6xl font-bold'> 562 </h2>
+                <h2 className='text-6xl font-bold'> 123 </h2>
             </CardContent>
             <CardFooter className="flex justify-center items-center text-sm font-medium text-muted-foreground">
-                Total number of theses shelfed
+                Total theses added as of the school year
             </CardFooter>
         </Card>
     )
 }
 
-export default TotalCard
+export default AddedCard

@@ -1,6 +1,6 @@
 "use client"
 
-import { BookUp2Icon, TrendingUp } from "lucide-react"
+import { BookUp2Icon } from "lucide-react"
 import {
     Label,
     PolarGrid,
@@ -35,11 +35,14 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export function RadialChart() {
+export function BorrowedCard() {
     return (
         <Card className="flex flex-col">
-            <CardHeader className="items-center pb-0">
-                <CardTitle>Borrowed</CardTitle>
+            <CardHeader className="pb-0">
+                <CardTitle className="flex flex-row justify-between items-center font-semibold text-xl">
+                    Borrowed  <BookUp2Icon />
+                </CardTitle>
+
             </CardHeader>
             <CardContent className="flex-1 pb-0">
                 <ChartContainer
@@ -94,10 +97,8 @@ export function RadialChart() {
                     </RadialBarChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter >
-                <div className="flex items-center gap-2 text-sm font-medium leading-none">
-                    Total number of thesis borrowed <BookUp2Icon className="h-4 w-4" />
-                </div>
+            <CardFooter className="flex justify-center items-center text-sm font-medium text-muted-foreground">
+                Total number of theses borrowed
             </CardFooter>
         </Card>
     )
