@@ -49,7 +49,7 @@ export const Departmentbox = () => {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between border-zinc-400 text-black dark:text-white hover:text-zinc-500 dark:hover:text-zinc-400"
+                    className="w-[200px] justify-between text-black dark:text-white hover:text-zinc-500 dark:hover:text-zinc-400"
                 >
                     {value
                         ? departments.find((department) => department.value === value)?.label
@@ -57,7 +57,7 @@ export const Departmentbox = () => {
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0 border border-zinc-400">
+            <PopoverContent className="w-[200px] p-0">
                 <Command >
                     <CommandInput placeholder="Search department..." />
                     <CommandList>
