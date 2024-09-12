@@ -19,7 +19,7 @@ const Navbar: NextPage<NavbarProps> = ({ selected = 'dashboard' }) => {
     ];
 
     return (
-        <nav className="flex flex-row items-center p-5 gap-10 h-[70px] justify-between border-b border-zinc-400">
+        <nav className="flex flex-row items-center p-5 gap-10 h-[70px] justify-between border-b bg-card">
             <ul className="flex flex-row gap-10 font-semibold items-center">
                 <Departmentbox />
                 {links.map((link) => (
@@ -33,7 +33,7 @@ const Navbar: NextPage<NavbarProps> = ({ selected = 'dashboard' }) => {
                 ))}
             </ul>
             <div className="flex flex-row gap-5 w-full justify-end items-center max-w-[400px]">
-                <Input className="min-w-[100px] border-zinc-400" type="search" placeholder="Search..." />
+                <Input className="min-w-[100px]" type="search" placeholder="Search..." />
                 <ThemeSwitch />
                 <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
