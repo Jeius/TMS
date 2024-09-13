@@ -1,5 +1,4 @@
 
-import Navbar from '@/components/navbar'
 import React from 'react'
 import { NextPage } from 'next';
 import { BorrowedCard } from '@/components/borrowedcard';
@@ -14,30 +13,24 @@ interface Props {
 
 const Dashboard: NextPage<Props> = ({ searchParams }) => {
   return (
-    <>
-      <Navbar />
-
-      <main className="flex flex-col p-5 gap-y-5 max-w-screen">
-        {/* <h1 className='font-bold text-4xl'>
-          Overview
-        </h1> */}
+    <main className="flex flex-col p-5 gap-y-5 max-w-screen">
+      <section className="flex justify-between">
+        <h1 className='font-bold text-4xl'>
+          Dashboard
+        </h1>
         <Departmentbox />
+      </section>
 
-        <section className='grid grid-cols-1 md:grid-row-2 lg:grid-cols-[1fr_0.5fr] gap-4 size-full'>
-          <BarCard />
+      <section className='flex-grow grid grid-cols-1 md:grid-row-2 lg:grid-cols-[1fr_0.5fr] gap-4 max-h-sc'>
+        <BarCard />
 
-          <div className="grid gap-4 md:grid-flow-col lg:grid-flow-row size-full">
-            <TotalCard />
-            <AddedCard />
-            <BorrowedCard />
-          </div>
-        </section>
-      </main>
-
-
-
-    </>
-
+        <div className="grid gap-4 md:grid-flow-col lg:grid-flow-row size-full">
+          <TotalCard />
+          <AddedCard />
+          <BorrowedCard />
+        </div>
+      </section>
+    </main>
   )
 }
 
