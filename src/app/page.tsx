@@ -13,7 +13,7 @@ interface Props {
 
 const Dashboard: NextPage<Props> = ({ searchParams }) => {
   return (
-    <main className="flex flex-col p-5 gap-y-5 max-w-screen">
+    <main className="flex flex-col p-5 gap-y-5 w-full">
       <section className="flex justify-between">
         <h1 className='font-bold text-4xl'>
           Dashboard
@@ -21,10 +21,10 @@ const Dashboard: NextPage<Props> = ({ searchParams }) => {
         <Departmentbox />
       </section>
 
-      <section className='flex-grow grid grid-cols-1 md:grid-row-2 lg:grid-cols-[1fr_0.5fr] gap-4 max-h-sc'>
+      <section className='flex-grow grid grid-cols-1 md:grid-row-2 lg:grid-cols-[2fr_1fr] gap-4 max-h-[500px]'>
         <BarCard />
 
-        <div className="grid gap-4 md:grid-flow-col lg:grid-flow-row size-full">
+        <div className="grid gap-4 md:grid-flow-col lg:grid-flow-row">
           <TotalCard />
           <AddedCard />
           <BorrowedCard />

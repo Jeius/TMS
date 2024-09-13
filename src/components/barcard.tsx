@@ -1,6 +1,5 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 
 import {
@@ -43,13 +42,13 @@ const chartConfig = {
 
 export function BarCard() {
     return (
-        <Card>
+        <Card className="flex flex-col">
             <CardHeader>
                 <CardTitle className="flex flex-row justify-between items-center font-semibold text-xl">Theses</CardTitle>
                 <CardDescription>Year Approved: 2014 - 2024</CardDescription>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig}>
+                <ChartContainer className="flex max-h-[600px] place-self-center" config={chartConfig}>
                     <BarChart
                         accessibilityLayer
                         data={chartData}
