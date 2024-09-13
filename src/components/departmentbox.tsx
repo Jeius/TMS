@@ -49,7 +49,7 @@ export const Departmentbox = () => {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between text-black dark:text-white hover:text-zinc-500 dark:hover:text-zinc-400"
+                    className="w-[200px] justify-between bg-card text-foreground"
                 >
                     {value
                         ? departments.find((department) => department.value === value)?.label

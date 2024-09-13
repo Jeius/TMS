@@ -1,7 +1,6 @@
 "use client"
 import React from 'react'
-import { Toggle } from './ui/toggle'
-import { LightbulbIcon, LightbulbOffIcon, MoonIcon, SunIcon } from 'lucide-react'
+import { MoonIcon, SunIcon } from 'lucide-react'
 import { Button } from './ui/button'
 
 
@@ -15,10 +14,8 @@ const ThemeSwitch = () => {
 
     React.useEffect(() => {
         if (dark) {
-            // document.documentElement.classList.add('dark')
             localStorage.setItem("theme", "dark")
         } else {
-            // document.documentElement.classList.remove('dark')
             localStorage.setItem("theme", "light")
         }
     }, [dark])
@@ -30,7 +27,7 @@ const ThemeSwitch = () => {
 
     return (
         <Button
-            className='size-fit p-2 rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-700'
+            className='size-fit p-2 rounded-full text-foreground'
             variant='ghost'
             aria-label="Toggle theme"
             onClick={toggleCallback}>

@@ -5,24 +5,17 @@
 :root {
   --background: 0 0% 83%;
   --foreground: 0 0% 0%;
-  --accent: 240 5% 85%;
-  --accent-foreground: 0 0% 0%;
 }
 
 
 .dark {
-  --background: 240 6% 7%;
+  --background: 240 6% 10%;
   --foreground: 0 0 100%;
-  --accent: 240 5% 25%;
-  --accent-foreground: 355.7 100% 99%;
 }
-
 
 
 @layer base {
   :root {
-    --background: 0 5% 90%;
-    --foreground: 240 10% 3.9%;
     --card: 0 5% 90%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 5% 90%;
@@ -46,12 +39,9 @@
     --chart-3: 350 75% 65%;
     --chart-4: 351 80% 75%;
     --chart-5: 349 65% 50%;
-    --hover: 240 5% 85%;
   }
 
   .dark {
-    --background: 240 6% 7%;
-    --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
@@ -69,29 +59,20 @@
     --border: 240 5% 40%;
     --input: 240 3.7% 40%;
     --ring: 221.2 83.2% 53.3%;
-    --hover: 240 5% 25%;
   }
-}
 
-
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }

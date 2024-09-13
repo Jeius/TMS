@@ -26,7 +26,7 @@ export const DropdownNav = ({ links }: Props) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline"> <MenuIcon /> </Button>
+                <Button variant="outline" className="text-foreground"> <MenuIcon /> </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="flex flex-col w-56">
                 {links.map((link) => (
