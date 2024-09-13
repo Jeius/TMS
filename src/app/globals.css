@@ -3,16 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --background: #d4d4d4;
-  --foreground: #000000;
-  --accent: #931D23;
+  --background: 0 0% 83%;
+  --foreground: 0 0% 0%;
+  --accent: 357 61% 32%;
+  --accent-foreground: 355.7 100% 99%;
 }
 
 
 .dark {
-  --background: #111113;
-  --foreground: #ffffff;
-  --accent: #b03a48;
+  --background: 240 6% 7%;
+  --foreground: 0 0 100%;
+  --accent: 354 51% 40%;
 }
 
 
@@ -25,7 +26,7 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 5% 90%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 346.8 77.2% 49.8%;
+    --primary: 357 61% 40%;
     --primary-foreground: 355.7 100% 99%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -37,14 +38,14 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 70%;
     --input: 240 5.9% 70%;
-    --ring: 346.8 77.2% 49.8%;
+    --ring: 357 61% 40%;
     --radius: 0.5rem;
     --chart-1: 347 77% 35%;
     --chart-2: 352 70% 85%;
     --chart-3: 350 75% 65%;
     --chart-4: 351 80% 75%;
     --chart-5: 349 65% 50%;
-
+    --hover: 240 5% 85%;
   }
 
   .dark {
@@ -67,6 +68,7 @@
     --border: 240 5% 40%;
     --input: 240 3.7% 40%;
     --ring: 221.2 83.2% 53.3%;
+    --hover: 240 5% 25%;
   }
 }
 
