@@ -42,16 +42,16 @@ const statsCardData: StatCardProps[] = [
 
 const Dashboard: NextPage<Props> = ({ searchParams }) => {
   return (
-    <main className="flex flex-col p-5 gap-y-5 max-w-screen-2xl w-full box-content">
+    <main className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 max-w-screen-2xl w-full box-content">
       <section className="flex flex-row justify-between">
-        <h1 className='font-bold text-4xl'>
+        <h1 className='font-bold text-2xl lg:text-4xl'>
           Overview
         </h1>
         <Departmentbox />
       </section>
 
-      <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-4'>
-        <div className="grid gap-4 grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-2 xl:grid-cols-4 xl:grid-rows-1">
+      <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-3 md:gap-4'>
+        <div className="grid gap-3 md:gap-4 grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-2 xl:grid-cols-4 xl:grid-rows-1">
           {statsCardData.map(data =>
             <StatsCard
               key={data.title}
@@ -61,7 +61,7 @@ const Dashboard: NextPage<Props> = ({ searchParams }) => {
               description={data.description}
               icon={data.icon} />)}
         </div>
-        <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4">
+        <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 md:gap-4">
           <BarCard />
           <RecentCard />
         </div>
