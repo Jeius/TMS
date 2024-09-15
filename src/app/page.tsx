@@ -5,6 +5,7 @@ import { BarCard } from '@/components/dashboard/barcard';
 import { Departmentbox } from '@/components/department-box';
 import StatsCard, { StatCardProps } from '@/components/dashboard/stats-card';
 import { Book, BookOpenCheckIcon, BookPlusIcon, BookUp2Icon } from 'lucide-react';
+import RecentCard from '@/components/dashboard/recent-card';
 
 interface Props {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -60,7 +61,10 @@ const Dashboard: NextPage<Props> = ({ searchParams }) => {
               description={data.description}
               icon={data.icon} />)}
         </div>
-        <BarCard />
+        <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4">
+          <BarCard />
+          <RecentCard />
+        </div>
       </section>
     </main>
   )

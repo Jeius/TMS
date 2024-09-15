@@ -11,6 +11,7 @@ import { useDeviceSize } from '@/lib/hooks';
 import { Search } from 'lucide-react';
 import { Button } from './ui/button';
 import { DropdownNav } from './dropdown-nav';
+import { cn } from '@/lib/utils';
 
 type NavbarProps = {
     selected?: string;
@@ -42,7 +43,11 @@ const Navbar: NextPage<NavbarProps> = ({ selected = 'dashboard' }) => {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={selected === link.label.toLowerCase() ? 'text-foreground' : 'hover:text-foreground text-muted-foreground'}
+                            className={cn(selected === link.label.toLowerCase()
+                                ? 'text-foreground'
+                                : 'hover:text-foreground text-muted-foreground',
+                                "outline outline-none rounded-sm focus-visible:outline-ring"
+                            )}
                         >
                             {link.label}
                         </Link>

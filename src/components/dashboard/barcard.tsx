@@ -16,6 +16,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
+import { Button } from "../ui/button"
 
 export const description = "A bar chart with a label"
 
@@ -45,10 +46,13 @@ export function BarCard() {
         <Card className="flex flex-col">
             <CardHeader>
                 <CardTitle className="flex flex-row justify-between items-center font-semibold text-xl">Theses</CardTitle>
-                <CardDescription>Year Approved: 2014 - 2024</CardDescription>
+                <div className="flex flex-row justify-between items-center">
+                    <CardDescription>Year Approved: 2014 - 2024</CardDescription>
+
+                </div>
             </CardHeader>
-            <CardContent>
-                <ChartContainer className="flex max-h-[600px] place-self-center" config={chartConfig}>
+            <CardContent className="pb-0">
+                <ChartContainer className="flex place-self-center" config={chartConfig}>
                     <BarChart
                         accessibilityLayer
                         data={chartData}
@@ -78,6 +82,10 @@ export function BarCard() {
                     </BarChart>
                 </ChartContainer>
             </CardContent>
+            <div className="flex gap-2 place-self-center p-2">
+                <Button variant="ghost">Prev.</Button>
+                <Button variant="ghost">Next</Button>
+            </div>
             <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">
                     Displayed in a 10 year timeframe

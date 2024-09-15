@@ -16,7 +16,7 @@ const StatsCard = ({
   return (
     <Card className="flex flex-col p-6">
       <CardHeader className="p-0">
-        <CardTitle className="flex flex-row w-full justify-between items-center font-semibold text-md">
+        <CardTitle className="flex flex-row w-full justify-between items-center">
           {title}
           <div aria-label="icon" className="text-muted-foreground">
             {icon}
