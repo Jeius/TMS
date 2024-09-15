@@ -1,16 +1,16 @@
 "use client"
 import React from 'react';
-import { Departmentbox } from './departmentbox';
+import { Departmentbox } from './department-box';
 import Link from 'next/link';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { NextPage } from 'next';
-import ThemeSwitch from './themeswitch';
+import ThemeSwitch from './theme-switch';
 import { Skeleton } from './ui/skeleton';
 import { useDeviceSize } from '@/lib/hooks';
 import { Search } from 'lucide-react';
 import { Button } from './ui/button';
-import { DropdownNav } from './dropdownnav';
+import { DropdownNav } from './dropdown-nav';
 
 type NavbarProps = {
     selected?: string;

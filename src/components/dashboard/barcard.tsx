@@ -83,7 +83,7 @@ export function BarCard() {
                     Displayed in a 10 year timeframe
                 </div>
                 <div className="leading-none text-muted-foreground">
-                    Showing the total number of theses for each year
+                    Showing the total number of theses approved for each year
                 </div>
             </CardFooter>
         </Card>

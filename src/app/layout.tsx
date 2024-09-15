@@ -30,7 +30,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-screen`}
       >
         <Navbar />
-        {children}
+        <div className="flex justify-center">
+          {children}
+        </div>
       </body>
     </html>
   );
