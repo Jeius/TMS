@@ -14,7 +14,7 @@ import { DropdownNav } from './dropdown-nav';
 import { cn } from '@/lib/utils';
 
 type NavbarProps = {
-    selected?: string;
+    selected?: string
 };
 
 const screens = {

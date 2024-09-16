@@ -15,8 +15,8 @@ import { usePathname } from "next/navigation"
 
 type Props = {
     links: {
-        href: string,
-        label: string,
+        href: string
+        label: string
     }[],
 }
 

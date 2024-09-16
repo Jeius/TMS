@@ -3,11 +3,11 @@ import React from 'react'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card'
 
 export type StatCardProps = {
-  title: string,
-  symbol?: React.ReactNode,
-  icon?: React.ReactNode,
-  description?: string,
-  value: string | number,
+  title: string
+  symbol?: React.ReactNode
+  icon?: React.ReactNode
+  description?: string
+  value: string | number
 }
 
 const StatsCard = ({
