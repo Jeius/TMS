@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -11,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MenuIcon } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 
 type Props = {
     links: {
@@ -20,9 +17,7 @@ type Props = {
     }[],
 }
 
-export const DropdownNav = ({ links }: Props) => {
-    const pathname = usePathname()
-
+export default function DropdownNav({ links }: Props) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

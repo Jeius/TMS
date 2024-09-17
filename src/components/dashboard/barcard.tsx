@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/chart"
 import { Button } from "../ui/button"
 
-export const description = "A bar chart with a label"
-
 const chartData = [
     { year: 2014, theses: 60 },
     { year: 2015, theses: 430 },

@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import { Departmentbox } from './department-box';
 import Link from 'next/link';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -10,7 +9,7 @@ import { Skeleton } from './ui/skeleton';
 import { useDeviceSize } from '@/lib/hooks';
 import { Search } from 'lucide-react';
 import { Button } from './ui/button';
-import { DropdownNav } from './dropdown-nav';
+import DropdownNav from './dropdown-nav';
 import { cn } from '@/lib/utils';
 
 type NavbarProps = {
@@ -25,7 +24,7 @@ const screens = {
     '2xl': 1536,
 }
 
-const Navbar: NextPage<NavbarProps> = ({ selected = 'dashboard' }) => {
+export default function Navbar({ selected = 'dashboard' }: NavbarProps) {
     const windowSize = useDeviceSize();
 
     const links = [
@@ -72,4 +71,3 @@ const Navbar: NextPage<NavbarProps> = ({ selected = 'dashboard' }) => {
     );
 };
 
-export default Navbar;

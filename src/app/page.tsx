@@ -1,14 +1,13 @@
 
 import React from 'react'
-import { NextPage } from 'next';
 import { BarCard } from '@/components/dashboard/barcard';
-import { Departmentbox } from '@/components/department-box';
+import Departmentbox from '@/components/department-box';
 import StatsCard, { StatCardProps } from '@/components/dashboard/stats-card';
 import { Book, BookOpenCheckIcon, BookPlusIcon, BookUp2Icon } from 'lucide-react';
 import RecentCard from '@/components/dashboard/recent-card';
 
-interface Props {
-  searchParams: { [key: string]: string | string[] | undefined };
+type Props = {
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 const statsCardData: StatCardProps[] = [
@@ -40,7 +39,7 @@ const statsCardData: StatCardProps[] = [
   }
 ]
 
-const Dashboard: NextPage<Props> = ({ searchParams }) => {
+export default function Dashboard({ searchParams }: Props) {
   return (
     <main className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 max-w-screen-2xl w-full box-content">
       <section className="flex flex-row justify-between">
@@ -61,7 +60,7 @@ const Dashboard: NextPage<Props> = ({ searchParams }) => {
               description={data.description}
               icon={data.icon} />)}
         </div>
-        <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
           <BarCard />
           <RecentCard />
         </div>
@@ -70,5 +69,4 @@ const Dashboard: NextPage<Props> = ({ searchParams }) => {
   )
 }
 
-export default Dashboard
 

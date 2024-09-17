@@ -10,9 +10,9 @@ export type StatCardProps = {
   value: string | number
 }
 
-const StatsCard = ({
+export default function StatsCard({
   title, symbol, icon, description, value,
-}: StatCardProps) => {
+}: StatCardProps) {
   return (
     <Card className="flex flex-col p-6">
       <CardHeader className="p-0">
@@ -32,5 +32,3 @@ const StatsCard = ({
     </Card>
   )
 }
-
-export default StatsCard

@@ -4,7 +4,7 @@ import { MoonIcon, SunIcon } from 'lucide-react'
 import { Button } from './ui/button'
 
 
-const ThemeSwitch = () => {
+export default function ThemeSwitch() {
     const [dark, setDark] = React.useState(false)
 
     React.useEffect(() => {
@@ -35,5 +35,3 @@ const ThemeSwitch = () => {
         </Button>
     )
 }
-
-export default ThemeSwitch
