@@ -1,7 +1,5 @@
 "use client"
-
 import { ColumnDef } from "@tanstack/react-table"
-
 
 export type Activity = {
     id: string
@@ -14,7 +12,7 @@ export type Activity = {
 export const columns: ColumnDef<Activity>[] = [
     {
         accessorKey: "action",
-        header: "Action",
+        header: "",
         cell: ({ row }) => {
             const value = row.getValue("action") as string
             return (<div className="border rounded-md py-1 px-2 w-fit bg-background">{value}</div>)

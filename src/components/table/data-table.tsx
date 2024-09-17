@@ -17,15 +17,19 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from "../ui/button"
+import { ScrollArea, ScrollBar } from "../ui/scroll-area"
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    data: TData[],
+    classname?: string
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    classname,
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
@@ -36,7 +40,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <>
-            <div className="rounded-md border">
+            <ScrollArea className={cn("rounded-md border mx-auto", classname)}>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -79,7 +83,8 @@ export function DataTable<TData, TValue>({
                         )}
                     </TableBody>
                 </Table>
-            </div >
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea >
             <div className="flex items-center justify-end space-x-2 pt-4">
                 <Button
                     variant="outline"

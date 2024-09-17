@@ -101,9 +101,9 @@ export default function RecentCard() {
                 <CardTitle>Recent Activities</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="container mx-auto">
-                    <DataTable columns={columns} data={data} />
-                </div>
+                <DataTable
+                    classname="border-none container lg:h-96 xl:h-[430px] 2xl:h-full"
+                    columns={columns} data={data} />
             </CardContent>
         </Card>
     )
