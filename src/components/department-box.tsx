@@ -49,7 +49,7 @@ export default function Departmentbox() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between bg-card text-foreground"
+                    className="w-fit lg:w-[200px] justify-between bg-card text-foreground"
                 >
                     {value
                         ? departments.find((department) => department.value === value)?.label

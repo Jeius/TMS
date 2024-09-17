@@ -42,7 +42,7 @@ const statsCardData: StatCardProps[] = [
 export default function Dashboard({ searchParams }: Props) {
   return (
     <main className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 max-w-screen-2xl w-full box-content">
-      <section className="flex flex-row justify-between">
+      <section className="flex flex-col gap-2 sm:flex-row justify-between">
         <h1 className='font-bold text-2xl lg:text-4xl'>
           Overview
         </h1>
