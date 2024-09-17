@@ -1,13 +1,23 @@
 "use client"
 
+import React from "react"
+import { cn } from "@/lib/utils"
+import { ScrollArea, ScrollBar } from "../ui/scroll-area"
+import { DataTablePagination } from "./pagination"
+import { Input } from "@/components/ui/input"
+import { Button } from "../ui/button"
+
 import {
     ColumnDef,
+    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     getPaginationRowModel,
     getSortedRowModel,
+    getFilteredRowModel,
     SortingState,
     useReactTable,
+    VisibilityState,
 } from "@tanstack/react-table"
 
 import {
@@ -18,23 +28,38 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Button } from "../ui/button"
-import { ScrollArea, ScrollBar } from "../ui/scroll-area"
-import { cn } from "@/lib/utils"
-import React from "react"
+
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { DataTableViewOptions } from "./column-toggle"
+
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
-    data: TData[],
+    data: TData[]
     classname?: string
+    showSelected?: boolean
+    showRowsPerPage?: boolean
+    showFilter?: boolean
+    showVisibilityToogle?: boolean
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     classname,
+    showSelected = true,
+    showRowsPerPage = true,
+    showFilter = false,
+    showVisibilityToogle = false,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
 
     const table = useReactTable({
         data,
@@ -43,14 +68,33 @@ export function DataTable<TData, TValue>({
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
         state: {
             sorting,
+            columnFilters,
+            columnVisibility,
         },
     })
 
     return (
         <>
-            <ScrollArea className={cn("rounded-md border mx-auto", classname)}>
+            <div className="flex flex-row items-center">
+                {showFilter &&
+                    <div className="flex items-center py-4">
+                        <Input
+                            placeholder="Filter by keywords..."
+                            value={(table.getColumn("specialization")?.getFilterValue() as string[]) ?? ""}
+                            onChange={(event) =>
+                                table.getColumn("specialization")?.setFilterValue(event.target.value)
+                            }
+                            className="max-w-sm"
+                        />
+                    </div>}
+                {showVisibilityToogle && <DataTableViewOptions table={table} />}
+            </div>
+            <ScrollArea className={cn("rounded-md border mx-auto mb-4", classname)}>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -95,24 +139,10 @@ export function DataTable<TData, TValue>({
                 </Table>
                 <ScrollBar orientation="horizontal" />
             </ScrollArea >
-            <div className="flex items-center justify-end space-x-2 pt-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Previous
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Next
-                </Button>
-            </div>
+            <DataTablePagination
+                showSelected={showSelected}
+                showRowsPerPage={showRowsPerPage}
+                table={table} />
         </>
     )
 }

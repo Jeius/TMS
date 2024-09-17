@@ -6,10 +6,10 @@ export type Thesis = {
     id: string
     title: string
     year: number
-    author: string[]
+    author: string
     adviser: string
-    keywords: string[]
-    specialization: string[]
+    keywords: string
+    specialization: string
     dateUploaded: string
 }
 

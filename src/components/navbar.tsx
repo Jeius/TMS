@@ -39,7 +39,7 @@ export default function Navbar() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={cn(pathname.substring(1) === link.label.toLowerCase()
+                            className={cn(pathname.substring(1) === link.label.toLowerCase() || pathname === "/" && link.label === "Dashboard"
                                 ? 'text-foreground'
                                 : 'hover:text-foreground text-muted-foreground',
                                 "outline outline-none rounded-sm focus-visible:outline-ring"
