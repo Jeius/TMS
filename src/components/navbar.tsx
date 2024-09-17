@@ -3,7 +3,6 @@ import React from 'react';
 import Link from 'next/link';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { NextPage } from 'next';
 import ThemeSwitch from './theme-switch';
 import { Skeleton } from './ui/skeleton';
 import { useDeviceSize } from '@/lib/hooks';
@@ -11,10 +10,7 @@ import { Search } from 'lucide-react';
 import { Button } from './ui/button';
 import DropdownNav from './dropdown-nav';
 import { cn } from '@/lib/utils';
-
-type NavbarProps = {
-    selected?: string
-};
+import { usePathname } from 'next/navigation';
 
 const screens = {
     'sm': 640,
@@ -24,8 +20,9 @@ const screens = {
     '2xl': 1536,
 }
 
-export default function Navbar({ selected = 'dashboard' }: NavbarProps) {
+export default function Navbar() {
     const windowSize = useDeviceSize();
+    const pathname = usePathname();
 
     const links = [
         { href: '/dashboard', label: 'Dashboard' },
@@ -42,7 +39,7 @@ export default function Navbar({ selected = 'dashboard' }: NavbarProps) {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={cn(selected === link.label.toLowerCase()
+                            className={cn(pathname.substring(1) === link.label.toLowerCase()
                                 ? 'text-foreground'
                                 : 'hover:text-foreground text-muted-foreground',
                                 "outline outline-none rounded-sm focus-visible:outline-ring"
@@ -61,7 +58,7 @@ export default function Navbar({ selected = 'dashboard' }: NavbarProps) {
                     </Button>}
                 <ThemeSwitch />
                 <Avatar>
-                    <AvatarImage src="https://github.com/jeius.png" alt="@shadcn" />
+                    <AvatarImage src="https://github.com/jeius.png" alt="@user" />
                     <AvatarFallback>
                         <Skeleton />
                     </AvatarFallback>

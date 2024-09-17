@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { BarCard } from '@/components/dashboard/barcard';
-import Departmentbox from '@/components/department-box';
+import Departmentbox from '@/components/dashboard/department-box';
 import StatsCard, { StatCardProps } from '@/components/dashboard/stats-card';
 import { Book, BookOpenCheckIcon, BookPlusIcon, BookUp2Icon } from 'lucide-react';
 import RecentCard from '@/components/dashboard/recent-card';
