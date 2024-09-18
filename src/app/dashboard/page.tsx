@@ -6,6 +6,7 @@ import StatsCard, { StatCardProps } from '@/components/dashboard/stats-card';
 import { Book, BookOpenCheckIcon, BookPlusIcon, BookUp2Icon } from 'lucide-react';
 import RecentCard from '@/components/dashboard/recent-card';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type Props = {
     searchParams: { [key: string]: string | string[] | undefined }
 }
@@ -39,7 +40,7 @@ const statsCardData: StatCardProps[] = [
     }
 ]
 
-export default function Dashboard({ searchParams }: Props) {
+export default function Dashboard() {
     return (
         <main className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 items-center box-content">
             <section className="flex flex-col gap-2 sm:flex-row sm:justify-between w-full max-w-screen-2xl">
