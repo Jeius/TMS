@@ -30,8 +30,8 @@ export const columns: ColumnDef<Activity>[] = [
         accessorKey: "author",
         header: "Author",
         cell: ({ row }) => {
-            const value = row.getValue("author") as string
-            return (<div className="max-w-36 truncate">{value}</div>)
+            const value = row.getValue("author") as string[]
+            return (<div className="whitespace-nowrap">{value.join(", ")}</div>)
         }
     },
     {

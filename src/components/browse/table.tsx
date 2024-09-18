@@ -3,7 +3,9 @@ import { DataTable } from '../table/data-table'
 import { Thesis, columns } from './table-columns'
 import { Card, CardContent } from '../ui/card'
 
-function getAllData(): Thesis[] {
+type TableProps = React.HtmlHTMLAttributes<HTMLElement>
+
+function getData(): Thesis[] {
     return [
         {
             id: "1",
@@ -209,15 +211,13 @@ function getAllData(): Thesis[] {
     ];
 }
 
-
-
-
-export default function Table() {
-    const data = getAllData()
+export default function Table({ ...props }: TableProps) {
+    const data = getData()
     return (
-        <Card>
+        <Card {...props} >
             <CardContent>
                 <DataTable
+                    classname="h-[490px]"
                     columns={columns}
                     data={data}
                     showSelected={false}

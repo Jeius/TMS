@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { DataTablePagination } from "./pagination"
 import { Input } from "@/components/ui/input"
-import { Button } from "../ui/button"
+import { DataTableViewOptions } from "./column-toggle"
 
 import {
     ColumnDef,
@@ -28,14 +28,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { DataTableViewOptions } from "./column-toggle"
 
 
 interface DataTableProps<TData, TValue> {
@@ -94,7 +86,7 @@ export function DataTable<TData, TValue>({
                     </div>}
                 {showVisibilityToogle && <DataTableViewOptions table={table} />}
             </div>
-            <ScrollArea className={cn("rounded-md border mx-auto mb-4", classname)}>
+            <ScrollArea className={cn("rounded-md border mx-auto mb-3", classname)}>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (

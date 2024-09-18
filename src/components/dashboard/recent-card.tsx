@@ -33,7 +33,7 @@ export default function RecentCard() {
             </CardHeader>
             <CardContent>
                 <DataTable
-                    classname="border-none container lg:h-96 xl:h-[430px] 2xl:h-full"
+                    classname="border-none container lg:h-96 xl:h-[430px] 2xl:h-auto"
                     columns={columns}
                     data={data}
                     showSelected={false}

@@ -21,7 +21,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("author") as string
-            return (<div className="max-w-36 truncate">{value}</div>)
+            return (<div>{value}</div>)
         }
     },
     {
@@ -31,7 +31,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("title") as string
-            return (<div className="max-w-64 truncate">{value}</div>)
+            return (<p className="font-semibold">{value}</p>)
         }
     },
     {
@@ -61,7 +61,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("specialization") as string
-            return (<div className="max-w-36 truncate">{value}</div>)
+            return (<div>{value}</div>)
         }
     },
     {
