@@ -41,15 +41,15 @@ const statsCardData: StatCardProps[] = [
 
 export default function Dashboard({ searchParams }: Props) {
     return (
-        <main className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 max-w-screen-2xl w-full box-content">
-            <section className="flex flex-col gap-2 sm:flex-row justify-between">
+        <main className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 items-center box-content">
+            <section className="flex flex-col gap-2 sm:flex-row sm:justify-between w-full max-w-screen-2xl">
                 <h1 className='font-bold text-2xl lg:text-4xl'>
                     Overview
                 </h1>
                 <Departmentbox />
             </section>
 
-            <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-3 md:gap-4'>
+            <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-3 md:gap-4 w-full max-w-screen-2xl'>
                 <div className="grid gap-3 md:gap-4 grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-2 xl:grid-cols-4 xl:grid-rows-1">
                     {statsCardData.map(data =>
                         <StatsCard

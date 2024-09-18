@@ -32,7 +32,7 @@ export default function Navbar() {
     ];
 
     return (
-        <nav className="flex flex-row items-center p-5 gap-10 h-[70px] justify-between border-b bg-card">
+        <nav className="flex flex-row items-center p-5 gap-10 h-[70px] w-full justify-between border-b bg-card">
             <ul className="flex flex-row gap-10 font-semibold items-center">
                 {windowSize.width >= screens["md"]
                     ? links.map((link) => (
