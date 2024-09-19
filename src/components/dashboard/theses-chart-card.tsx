@@ -2,11 +2,14 @@
 
 import { Button } from "../ui/button"
 import {
+    Area,
+    AreaChart,
     Bar,
     BarChart,
     CartesianGrid,
     LabelList,
-    XAxis
+    XAxis,
+    YAxis
 } from "recharts"
 import {
     Card,
@@ -57,38 +60,7 @@ export function ThesesChartCard() {
                 </div>
             </CardHeader>
             <CardContent className="pb-0">
-                <ChartContainer className="flex place-self-center" config={chartConfig}>
-                    <BarChart
-                        accessibilityLayer
-                        data={chartData}
-                        margin={{ top: 20 }}
-                        className="overflow-auto overscroll-auto"
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="year"
-                            tickMargin={10}
-                            axisLine={false}
-                        />
-                        <ChartTooltip
-                            cursor={true}
-                            content={<ChartTooltipContent
-                                hideLabel
-                                className="bg-muted" />}
-                        />
-                        <Bar
-                            dataKey="theses"
-                            fill="var(--color-theses)"
-                            radius={8}>
-                            <LabelList
-                                className="fill-card-foreground"
-                                position="top"
-                                offset={12}
-                                fontSize={12}
-                            />
-                        </Bar>
-                    </BarChart>
-                </ChartContainer>
+                <MyLineChart />
             </CardContent>
             <div className="flex gap-2 place-self-center p-2">
                 <Button variant="ghost">Prev.</Button>
@@ -103,5 +75,79 @@ export function ThesesChartCard() {
                 </div>
             </CardFooter>
         </Card>
+    )
+}
+
+
+function MyBarChart() {
+    return (
+        <ChartContainer className="flex place-self-center" config={chartConfig}>
+            <BarChart
+                accessibilityLayer
+                data={chartData}
+                margin={{ top: 20 }}
+                className="overflow-auto overscroll-auto"
+            >
+                <CartesianGrid vertical={false} />
+                <XAxis
+                    dataKey="year"
+                    tickMargin={10}
+                    axisLine={false}
+                />
+                <ChartTooltip
+                    cursor={true}
+                    content={<ChartTooltipContent
+                        hideLabel
+                        className="bg-muted" />}
+                />
+                <Bar
+                    dataKey="theses"
+                    fill="var(--color-theses)"
+                    radius={8}>
+                    <LabelList
+                        className="fill-card-foreground"
+                        position="top"
+                        offset={12}
+                        fontSize={12}
+                    />
+                </Bar>
+            </BarChart>
+        </ChartContainer>
+
+    )
+}
+
+function MyLineChart() {
+    return (
+        <ChartContainer className="flex place-self-center" config={chartConfig}>
+            <AreaChart
+                accessibilityLayer
+                data={chartData}
+            >
+                <CartesianGrid vertical={false} />
+                <YAxis
+                    dataKey="theses"
+                    axisLine={false}
+                    orientation="right"
+                    width={40} />
+                <XAxis
+                    dataKey="year"
+                    axisLine={false}
+                    tickMargin={8}
+                />
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent className="bg-muted" indicator="dot" hideLabel />}
+                />
+                <Area
+                    dataKey="theses"
+                    type="linear"
+                    fill="var(--color-theses)"
+                    fillOpacity={0.4}
+                    stroke="var(--color-theses)"
+                />
+            </AreaChart>
+        </ChartContainer>
+
     )
 }

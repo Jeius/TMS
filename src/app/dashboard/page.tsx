@@ -19,7 +19,7 @@ type Props = {
 const getStatistics = (): Statistic[] => {
     return [
         {
-            title: "Total Theses",
+            title: "Total Approved Theses",
             value: 525,
             icon: <Book className="size-4" />,
             description: "Archived at the department"
