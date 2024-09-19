@@ -1,8 +1,14 @@
 
 import React from 'react'
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter
+} from '../ui/card'
 
-export type StatCardProps = {
+export type Statistic = {
   title: string
   symbol?: React.ReactNode
   icon?: React.ReactNode
@@ -10,9 +16,9 @@ export type StatCardProps = {
   value: string | number
 }
 
-export default function StatsCard({
+export function StatisticsCard({
   title, symbol, icon, description, value,
-}: StatCardProps) {
+}: Statistic) {
   return (
     <Card className="flex flex-col p-6">
       <CardHeader className="p-0">

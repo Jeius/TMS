@@ -6,7 +6,7 @@ export type Activity = {
     title: string
     author: string[]
     action: "Uploaded" | "Updated" | "Approved" | "Borrowed"
-    age: number
+    age: string
 }
 
 export const columns: ColumnDef<Activity>[] = [
@@ -30,16 +30,16 @@ export const columns: ColumnDef<Activity>[] = [
         accessorKey: "author",
         header: "Author",
         cell: ({ row }) => {
-            const value = row.getValue("author") as string
-            return (<div className="max-w-36 truncate">{value}</div>)
+            const value = row.getValue("author") as string[]
+            return (<div className="whitespace-nowrap">{value.join(", ")}</div>)
         }
     },
     {
         accessorKey: "age",
         header: "",
         cell: ({ row }) => {
-            const value = Math.round(row.getValue("age"))
-            return (<div className="whitespace-nowrap">{value} hours ago</div>)
+            const value = row.getValue("age") as string
+            return (<div className="whitespace-nowrap">{value} ago</div>)
         }
     }
 ]
