@@ -1,13 +1,20 @@
 import Table from '@/components/browse/table'
 import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import React from 'react'
 
 export default function Browse() {
     return (
-        <main className="grid grid-rows-6 grid-cols-1 lg:grid-cols-5 lg:grid-rows-4 p-5 gap-3">
-            <Card className="lg:row-span-4 lg:col-span-1">s</Card>
-            <Table className="row-span-4 lg:row-span-4 lg:col-span-4" />
+        <main className="flex flex-col items-center justify-center gap-3 md:items-stretch md:flex-row p-5 w-screen">
+            <Card>
+                <CardContent className="h-full w-full">
+                    <ScrollArea className="max-w-32 lg:max-w-52 h-1/2">
+                        sdddddddssssssssssssssssssssssddddddddd
+                        <ScrollBar orientation="horizontal" />
+                    </ScrollArea>
+                </CardContent>
+            </Card>
+            <Table className="w-full md:max-w-[560px] lg:max-w-none" />
         </main>
     )
 }

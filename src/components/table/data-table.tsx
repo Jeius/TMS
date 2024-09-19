@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
     })
 
     return (
-        <>
+        <div>
             <div className="flex flex-row items-center">
                 {showFilter &&
                     <div className="flex items-center py-4">
@@ -86,7 +86,7 @@ export function DataTable<TData, TValue>({
                     </div>}
                 {showVisibilityToogle && <DataTableViewOptions table={table} />}
             </div>
-            <ScrollArea className={cn("rounded-md border mx-auto mb-3", classname)}>
+            <ScrollArea className={cn("rounded-md border mx-auto mb-3 w-full", classname)}>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -135,6 +135,6 @@ export function DataTable<TData, TValue>({
                 showSelected={showSelected}
                 showRowsPerPage={showRowsPerPage}
                 table={table} />
-        </>
+        </div>
     )
 }

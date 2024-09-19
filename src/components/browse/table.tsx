@@ -217,7 +217,7 @@ export default function Table({ ...props }: TableProps) {
         <Card {...props} >
             <CardContent>
                 <DataTable
-                    classname="h-[490px]"
+                    classname="h-[700px] "
                     columns={columns}
                     data={data}
                     showSelected={false}
