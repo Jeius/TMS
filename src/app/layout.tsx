@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/navbar";
+import NavigationBar from "@/components/navigation-bar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const geistSans = localFont({
@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen h-screen flex flex-col`}
       >
-        <Navbar />
+        <NavigationBar />
         <ScrollArea className="flex w-full flex-grow">
           {children}
           <ScrollBar orientation="horizontal" />
