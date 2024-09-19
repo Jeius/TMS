@@ -99,8 +99,11 @@ function DropdownNav(props: { links: LinkConfig[] }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="flex flex-col w-56">
                 {links.map((link) => (
-                    <DropdownMenuItem key={link.href} className="hover:bg-hover">
-                        <Link href={link.href}>{link.label}</Link>
+                    <DropdownMenuItem
+                        key={link.href}
+                        className="hover:bg-accent"
+                        asChild>
+                        <Link href={link.href} className="size-full">{link.label}</Link>
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
