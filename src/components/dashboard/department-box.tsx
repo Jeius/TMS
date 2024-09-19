@@ -25,7 +25,7 @@ export type Department = {
 
 export function Departmentbox(props: { departments: Department[] }) {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
+    const [value, setValue] = React.useState("ALL")
     const { departments } = props
 
     return (

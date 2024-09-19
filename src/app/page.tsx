@@ -50,6 +50,10 @@ const getStatistics = (): Statistic[] => {
 const getDepartments = (): Department[] => {
   return [
     {
+      value: "ALL",
+      label: "All"
+    },
+    {
       value: "CA",
       label: "CA Department",
     },
