@@ -1,7 +1,14 @@
+
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { DataTable } from '../table/data-table'
-import { Activity, columns } from './recent-columns'
+import { Activity, columns } from './recent-activities-columns'
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from '../ui/card'
+
 
 function getData(): Activity[] {
     // Fetch data from 
@@ -24,7 +31,7 @@ function getData(): Activity[] {
     ]
 }
 
-export default function RecentCard() {
+export function RecentActivitiesCard() {
     const data = getData()
     return (
         <Card>

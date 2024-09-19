@@ -1,7 +1,13 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
-
+import { Button } from "../ui/button"
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    LabelList,
+    XAxis
+} from "recharts"
 import {
     Card,
     CardContent,
@@ -16,7 +22,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Button } from "../ui/button"
+
 
 const chartData = [
     { year: 2014, theses: 60 },
@@ -39,14 +45,15 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export function BarCard() {
+export function ThesesChartCard() {
     return (
         <Card className="flex flex-col">
             <CardHeader>
-                <CardTitle className="flex flex-row justify-between items-center font-semibold text-xl">Theses</CardTitle>
+                <CardTitle className="flex flex-row justify-between items-center font-semibold text-xl">
+                    Theses
+                </CardTitle>
                 <div className="flex flex-row justify-between items-center">
                     <CardDescription>Year Approved: 2014 - 2024</CardDescription>
-
                 </div>
             </CardHeader>
             <CardContent className="pb-0">
@@ -54,9 +61,7 @@ export function BarCard() {
                     <BarChart
                         accessibilityLayer
                         data={chartData}
-                        margin={{
-                            top: 20,
-                        }}
+                        margin={{ top: 20 }}
                         className="overflow-auto overscroll-auto"
                     >
                         <CartesianGrid vertical={false} />
@@ -67,13 +72,18 @@ export function BarCard() {
                         />
                         <ChartTooltip
                             cursor={true}
-                            content={<ChartTooltipContent hideLabel className="bg-muted" />}
+                            content={<ChartTooltipContent
+                                hideLabel
+                                className="bg-muted" />}
                         />
-                        <Bar dataKey="theses" fill="var(--color-theses)" radius={8}>
+                        <Bar
+                            dataKey="theses"
+                            fill="var(--color-theses)"
+                            radius={8}>
                             <LabelList
+                                className="fill-card-foreground"
                                 position="top"
                                 offset={12}
-                                className="fill-card-foreground"
                                 fontSize={12}
                             />
                         </Bar>

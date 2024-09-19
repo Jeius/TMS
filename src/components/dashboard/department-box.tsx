@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,28 +18,15 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-const departments = [
-    {
-        value: "CA",
-        label: "CA Department",
-    },
-    {
-        value: "CS",
-        label: "CS Department",
-    },
-    {
-        value: "IS",
-        label: "IS Department",
-    },
-    {
-        value: "IT",
-        label: "IT Department",
-    },
-]
+export type Department = {
+    value: string
+    label: string
+}
 
-export default function Departmentbox() {
+export function Departmentbox(props: { departments: Department[] }) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
+    const { departments } = props
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
