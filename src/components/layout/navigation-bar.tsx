@@ -1,13 +1,13 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
-import { Input } from './ui/input';
-import { Skeleton } from './ui/skeleton';
+import { Input } from '../ui/input';
+import { Skeleton } from '../ui/skeleton';
 import { useDeviceSize } from '@/hooks/use-device-size';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MenuIcon, MoonIcon, Search, SunIcon } from 'lucide-react';
 import {
     DropdownMenu,
