@@ -6,7 +6,7 @@ import {
   CardTitle,
   CardContent,
   CardFooter
-} from '../ui/card'
+} from '../../components/ui/card'
 
 export type Statistic = {
   title: string

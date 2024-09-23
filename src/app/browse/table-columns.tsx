@@ -1,6 +1,6 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
-import { DataTableColumnHeader } from "../table/column-header"
+import { DataTableColumnHeader } from "../../components/table/column-header"
 
 export type Thesis = {
     id: string

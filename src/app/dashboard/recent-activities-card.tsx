@@ -1,13 +1,13 @@
 
 import React from 'react'
-import { DataTable } from '../table/data-table'
+import { DataTable } from '../../components/table/data-table'
 import { Activity, columns } from './recent-activities-columns'
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle
-} from '../ui/card'
+} from '../../components/ui/card'
 
 
 function getData(): Activity[] {

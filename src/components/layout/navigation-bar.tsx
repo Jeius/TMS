@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Input } from './ui/input';
 import { Skeleton } from './ui/skeleton';
-import { useDeviceSize } from '@/lib/hooks';
+import { useDeviceSize } from '@/hooks/use-device-size';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';

@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "../ui/button"
+import { Button } from "../../components/ui/button"
 import {
     Area,
     AreaChart,
@@ -78,7 +78,42 @@ export function ThesesChartCard() {
     )
 }
 
+function MyLineChart() {
+    return (
+        <ChartContainer className="flex place-self-center" config={chartConfig}>
+            <AreaChart
+                accessibilityLayer
+                data={chartData}
+            >
+                <CartesianGrid vertical={false} />
+                <YAxis
+                    dataKey="theses"
+                    axisLine={false}
+                    orientation="right"
+                    width={40} />
+                <XAxis
+                    dataKey="year"
+                    axisLine={false}
+                    tickMargin={8}
+                />
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent className="bg-muted" indicator="dot" hideLabel />}
+                />
+                <Area
+                    dataKey="theses"
+                    type="linear"
+                    fill="var(--color-theses)"
+                    fillOpacity={0.4}
+                    stroke="var(--color-theses)"
+                />
+            </AreaChart>
+        </ChartContainer>
 
+    )
+}
+
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function MyBarChart() {
     return (
         <ChartContainer className="flex place-self-center" config={chartConfig}>
@@ -116,38 +151,5 @@ function MyBarChart() {
 
     )
 }
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 
-function MyLineChart() {
-    return (
-        <ChartContainer className="flex place-self-center" config={chartConfig}>
-            <AreaChart
-                accessibilityLayer
-                data={chartData}
-            >
-                <CartesianGrid vertical={false} />
-                <YAxis
-                    dataKey="theses"
-                    axisLine={false}
-                    orientation="right"
-                    width={40} />
-                <XAxis
-                    dataKey="year"
-                    axisLine={false}
-                    tickMargin={8}
-                />
-                <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent className="bg-muted" indicator="dot" hideLabel />}
-                />
-                <Area
-                    dataKey="theses"
-                    type="linear"
-                    fill="var(--color-theses)"
-                    fillOpacity={0.4}
-                    stroke="var(--color-theses)"
-                />
-            </AreaChart>
-        </ChartContainer>
-
-    )
-}
