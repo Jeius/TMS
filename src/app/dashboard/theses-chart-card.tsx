@@ -90,7 +90,8 @@ function MyLineChart() {
                     dataKey="theses"
                     axisLine={false}
                     orientation="right"
-                    width={40} />
+                    width={40}
+                />
                 <XAxis
                     dataKey="year"
                     axisLine={false}
