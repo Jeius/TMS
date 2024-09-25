@@ -3,7 +3,9 @@
 import { DragHandleDots2Icon } from "@radix-ui/react-icons"
 import * as ResizablePrimitive from "react-resizable-panels"
 
-import { cn } from "@/lib/utils"
+import { cn, screens } from "@/lib/utils"
+import { useDeviceSize } from "@/hooks/use-device-size"
+import React from "react"
 
 const ResizablePanelGroup = ({
   className,
@@ -17,6 +19,32 @@ const ResizablePanelGroup = ({
     {...props}
   />
 )
+
+const AdaptiveResizablePanelGroup = ({
+  changeDirectionAt,
+  direction,
+  ...props
+}: React.ComponentProps<typeof ResizablePrimitive.PanelGroup> & {
+  changeDirectionAt: "sm" | "md" | "lg" | "xl" | "2xl"
+  direction: "vertical" | "horizontal"
+}) => {
+  const deviceSize = useDeviceSize()
+  const [currentDirection, setCurrentDirection] = React.useState(direction)
+
+  React.useEffect(() => {
+    const isVertical = deviceSize.width >= screens[changeDirectionAt] ? direction === "vertical" : false
+    const newDirection = isVertical ? "vertical" : "horizontal"
+    setCurrentDirection(newDirection)
+  }, [deviceSize.width, changeDirectionAt, direction])
+
+  return (
+    <ResizablePrimitive.PanelGroup
+      key={currentDirection}
+      direction={currentDirection}
+      {...props}
+    />
+  )
+}
 
 const ResizablePanel = ResizablePrimitive.Panel
 
@@ -42,4 +70,4 @@ const ResizableHandle = ({
   </ResizablePrimitive.PanelResizeHandle>
 )
 
-export { ResizablePanelGroup, ResizablePanel, ResizableHandle }
+export { ResizablePanelGroup, AdaptiveResizablePanelGroup, ResizablePanel, ResizableHandle }
