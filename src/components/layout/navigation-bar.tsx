@@ -5,7 +5,7 @@ import { Input } from '../ui/input';
 import { Skeleton } from '../ui/skeleton';
 import { useDeviceSize } from '@/hooks/use-device-size';
 import { Button } from '../ui/button';
-import { cn } from '@/lib/utils';
+import { cn, screens } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MenuIcon, MoonIcon, Search, SunIcon } from 'lucide-react';
@@ -21,16 +21,8 @@ type LinkConfig = {
     label: string
 }
 
-const screens = {
-    'sm': 640,
-    'md': 768,
-    'lg': 1024,
-    'xl': 1280,
-    '2xl': 1536,
-}
-
 export default function NavigationBar() {
-    const windowSize = useDeviceSize();
+    const deviceSize = useDeviceSize();
     const pathname = usePathname();
 
     const links = [
@@ -53,7 +45,7 @@ export default function NavigationBar() {
     return (
         <nav className="flex flex-row items-center p-5 gap-10 h-[70px] w-full justify-between border-b bg-card">
             <ul className="flex flex-row gap-10 font-semibold items-center">
-                {windowSize.width >= screens["md"]
+                {deviceSize.width >= screens["md"]
                     ? links.map((link) => (
                         <Link
                             key={link.href}
@@ -68,7 +60,7 @@ export default function NavigationBar() {
                     : <DropdownNav links={links} />}
             </ul>
             <div className="flex flex-row gap-2 lg:gap-5 w-full justify-end items-center max-w-[400px]">
-                {windowSize.width >= screens["sm"]
+                {deviceSize.width >= screens["sm"]
                     ? <Input
                         className="max-w-[250px] lg:max-w-none md:min-w-[250px]"
                         type="search"

@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen h-screen flex flex-col`}
       >
-        <NavigationBar />
+        <header><NavigationBar /></header>
         <ScrollArea className="flex w-full flex-grow">
           {children}
           <ScrollBar orientation="horizontal" />
