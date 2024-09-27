@@ -30,7 +30,12 @@ export function StatisticsCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <h2 className='text-3xl font-bold'>{symbol}{value}</h2>
+        <data
+          className='text-3xl font-bold'
+          value={value}
+        >
+          {symbol}{value}
+        </data>
       </CardContent>
       <CardFooter className="flex items-center text-sm text-muted-foreground p-0">
         {description}

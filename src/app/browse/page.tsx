@@ -1,20 +1,39 @@
 import Table from '@/app/browse/table'
-import { Card, CardContent } from '@/components/ui/card'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import React from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { ResizablePanel, ResizableHandle, AdaptiveResizablePanelGroup, ResizablePanelGroup } from '@/components/ui/resizable'
+import Departments from './departments'
+import MyLibrary from './library'
 
 export default function Browse() {
     return (
-        <main className="flex flex-col justify-center items-stretch gap-3 md:flex-row p-5 w-screen">
-            <Card>
-                <CardContent className="size-full">
-                    <ScrollArea className="max-w-32 lg:max-w-52 h-1/2">
-                        sdddddddssssssssssssssssssssssddddddddd
-                        <ScrollBar orientation="horizontal" />
-                    </ScrollArea>
+        <main className="flex flex-col lg:flex-row justify-center items-stretch gap-3 p-5 w-screen h-full">
+            <Card className="w-full lg:max-w-52 overflow-hidden">
+                <CardContent className="p-0">
+                    <AdaptiveResizablePanelGroup
+                        direction="vertical"
+                        changeDirectionAt='lg'
+                        className="min-h-[200px] lg:min-h-[840px] w-full"
+                    >
+                        <ResizablePanel
+                            defaultSize={200}
+                            className="flex-grow min-w-56 lg:min-w-0 min-h-32"
+                        >
+                            <div className="px-4"><Departments /></div>
+                        </ResizablePanel>
+
+                        <ResizableHandle withHandle className="border-2" />
+
+                        <ResizablePanel
+                            defaultSize={200}
+                            className="flex-grow min-w-56 lg:min-w-0 min-h-32"
+                        >
+                            <div className="px-4"><MyLibrary /></div>
+                        </ResizablePanel>
+                    </AdaptiveResizablePanelGroup>
                 </CardContent>
-            </Card>
-            <Table className="w-full md:max-w-[560px] lg:max-w-none" />
+            </Card >
+            <Table className="w-full" />
         </main>
     )
 }
