@@ -27,7 +27,7 @@ export default function NavigationSideBar() {
     return (
         <div
             id="navigation-sidebar"
-            className={`fixed inset-y-0 left-0 z-[1000] hidden overflow-x-hidden border-r bg-card transition-all duration-150 lg:block overflow-y-auto pb-16 scroll-bar-hidden pt-20 ${isHovered ? 'w-60' : 'w-16'}`}
+            className={`fixed inset-y-0 left-0 z-[1000] hidden overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 lg:block overflow-y-auto pb-16 scroll-bar-hidden pt-20 ${isHovered ? 'w-60' : 'w-16'}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
