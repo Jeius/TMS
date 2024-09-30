@@ -1,7 +1,7 @@
 import React from 'react'
-import { DataTable } from '../../components/table/data-table'
+import { DataTable } from '@/components/table/data-table'
 import { Thesis, columns } from './table-columns'
-import { Card, CardContent } from '../../components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 
 type TableProps = React.HtmlHTMLAttributes<HTMLElement>
 

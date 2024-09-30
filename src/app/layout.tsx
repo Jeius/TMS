@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../styles/globals.css";
-import NavigationBar from "@/components/layout/navigation-bar";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import NavigationSideBar from "@/components/layout/navigation-sidebar";
+import AppHeader from "@/components/layout/header";
 
 const geistSans = localFont({
   src: "../styles/fonts/GeistVF.woff",
@@ -28,13 +28,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header><NavigationBar /></header>
-        <ScrollArea className="flex w-full flex-grow">
-          {children}
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        <div id="__next">
+          <AppHeader />
+          <NavigationSideBar />
+          <main className="pb-4 lg:pl-16">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
