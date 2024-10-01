@@ -4,6 +4,7 @@ import {
     BookCopy,
     BookOpenCheck,
     CalendarDays,
+    ChartLine,
     FilePlus2,
     House,
     Library,
@@ -32,6 +33,7 @@ const secondaryLinks = [
 ];
 
 const toolLinks = [
+    { href: '/analytics', label: 'Analytics', icon: <ChartLine /> },
     { href: '/plagiarism-tool', label: 'Plagiarism Checker', icon: <BookOpenCheck /> },
 ];
 
