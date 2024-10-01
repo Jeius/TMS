@@ -9,6 +9,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { Skeleton } from '../ui/skeleton';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
 export default function AppHeader() {
     const deviceSize = useDeviceSize();
@@ -76,11 +77,35 @@ function ThemeSwitch() {
 
 function User() {
     return (
-        <Avatar>
-            <AvatarImage src="https://github.com/jeius.png" alt="@user" />
-            <AvatarFallback>
-                <Skeleton />
-            </AvatarFallback>
-        </Avatar>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button className="size-fit p-0 rounded-full border-2 border-primary" variant="outline">
+                    <Avatar>
+                        <AvatarImage
+                            src="https://github.com/jeius.png"
+                            alt="@user"
+                            className="transition-all duration-150 filter-none hover:brightness-150"
+                        />
+                        <AvatarFallback>
+                            <Skeleton />
+                        </AvatarFallback>
+                    </Avatar>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="z-[2000] mr-1">
+                <DropdownMenuItem>
+                    <Link href="/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <Link href="/user-management">User Management</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <Link href="/settings">Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <Link href="/logout">Logout</Link>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
