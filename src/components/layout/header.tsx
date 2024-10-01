@@ -2,7 +2,7 @@
 
 import { useDeviceSize } from '@/hooks/use-device-size';
 import { screens } from '@/lib/utils';
-import { MoonIcon, Search, SunIcon } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '../ui/button';
@@ -34,6 +34,9 @@ export default function AppHeader() {
                             aria-label="Search button">
                             <Search />
                         </Button>}
+
+                    <Notifications />
+
                     <User />
                 </div>
             </div>
@@ -47,7 +50,7 @@ function User() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button className="size-fit p-0 rounded-full border-2 border-primary" variant="outline">
-                    <Avatar>
+                    <Avatar className="size-9">
                         <AvatarImage
                             src="https://github.com/jeius.png"
                             alt="@user"
@@ -72,6 +75,32 @@ function User() {
                 <DropdownMenuItem>
                     <Link href="/logout">Logout</Link>
                 </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
+function Notifications() {
+    const links = [
+        { href: '#', label: 'Notification 1' },
+        { href: '#', label: 'Notification 2' },
+        { href: '#', label: 'Notification 3' },
+        { href: '#', label: 'Notification 4' },
+        { href: '#', label: 'Notification 5' },
+    ];
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button className="size-fit p-0 rounded-full" variant="ghost">
+                    <div className="flex size-9 p-2 shrink-0 items-center justify-center"><Bell /></div>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="z-[2000] mr-1">
+                {links.map(link => (
+                    <DropdownMenuItem>
+                        <Link href={link.href}>{link.label}</Link>
+                    </DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
         </DropdownMenu>
     )
