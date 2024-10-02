@@ -1,7 +1,7 @@
 import Table from './table'
 import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { ResizablePanel, ResizableHandle, AdaptiveResizablePanelGroup, ResizablePanelGroup } from '@/components/ui/resizable'
+import { ResizablePanel, ResizableHandle, AdaptiveResizablePanelGroup } from '@/components/ui/resizable'
 import Departments from './departments'
 import MyLibrary from './library'
 
