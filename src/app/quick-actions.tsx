@@ -44,9 +44,9 @@ export default function QuickActions() {
                         key={index}
                         href={action.href}
                     >
-                        <Card className="transition-all duration-150 hover:bg-accent">
+                        <Card className="transition-all duration-300 hover:bg-primary hover:scale-105 hover:border-secondary/50 hover:text-secondary">
                             <CardContent className="flex min-w-60 flex-col items-center justify-center space-y-2 p-6">
-                                <div className="flex items-center justify-center size-10 p-2 bg-accent rounded-lg ">
+                                <div className="flex items-center justify-center size-10 p-2 rounded-lg">
                                     {action.icon}
                                 </div>
                                 <span className="text-md font-semibold">{action.label}</span>
@@ -68,9 +68,9 @@ export default function QuickActions() {
                                 className="p-1"
                             >
                                 <Link href={action.href}>
-                                    <Card className="transition-all duration-150 hover:bg-accent">
-                                        <CardContent className="flex flex-col items-center justify-center space-y-2 p-6">
-                                            <div className="flex items-center justify-center size-10 p-2 bg-accent rounded-lg ">
+                                    <Card className="transition-all duration-300 hover:bg-primary hover:border-secondary/50 hover:text-secondary">
+                                        <CardContent className="flex min-w-60 flex-col items-center justify-center space-y-2 p-6">
+                                            <div className="flex items-center justify-center size-10 p-2 rounded-lg">
                                                 {action.icon}
                                             </div>
                                             <span className="text-md font-semibold">{action.label}</span>

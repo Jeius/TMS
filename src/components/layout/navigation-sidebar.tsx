@@ -37,7 +37,7 @@ const toolLinks = [
     { href: '/plagiarism-tool', label: 'Plagiarism Checker', icon: <BookOpenCheck /> },
 ];
 
-const links = [
+export const navigationLinks = [
     primaryLinks, secondaryLinks, toolLinks
 ]
 
@@ -47,9 +47,9 @@ export default function NavigationSideBar() {
 
     const highlightLabel = (label: string) => {
         if (pathname === "/" && label === "Home")
-            return "bg-primary text-primary-foreground"
+            return "bg-primary text-secondary"
         if (pathname.substring(1) === label.toLowerCase())
-            return "bg-primary text-primary-foreground"
+            return "bg-primary text-secondary"
         return "hover:bg-accent"
     }
 
@@ -63,7 +63,7 @@ export default function NavigationSideBar() {
             onBlur={() => setCanExpand(false)}
         >
             <div className="flex grow flex-col w-full items-center justify-start gap-1 lg:px-3">
-                {links.map((link, index) => (
+                {navigationLinks.map((link, index) => (
                     <React.Fragment key={index}>
                         {link.map(subLink => (
                             <Link
@@ -83,7 +83,7 @@ export default function NavigationSideBar() {
                             </Link>
                         ))}
 
-                        {index !== links.length - 1 && <Separator orientation="horizontal" />}
+                        {index !== navigationLinks.length - 1 && <Separator orientation="horizontal" />}
                     </React.Fragment>
                 ))}
             </div>
