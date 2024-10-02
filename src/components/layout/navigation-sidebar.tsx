@@ -64,10 +64,10 @@ export default function NavigationSideBar() {
         >
             <div className="flex grow flex-col w-full items-center justify-start gap-1 lg:px-3">
                 {links.map((link, index) => (
-                    <>
+                    <React.Fragment key={index}>
                         {link.map(subLink => (
                             <Link
-                                id={subLink.href}
+                                key={subLink.href}
                                 href={subLink.href}
                                 data-test-id="sidebar-home"
                                 className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap font-medium ${highlightLabel(subLink.label)}`}
@@ -84,7 +84,7 @@ export default function NavigationSideBar() {
                         ))}
 
                         {index !== links.length - 1 && <Separator orientation="horizontal" />}
-                    </>
+                    </React.Fragment>
                 ))}
             </div>
 

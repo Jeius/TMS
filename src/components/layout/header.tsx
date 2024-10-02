@@ -96,8 +96,8 @@ function Notifications() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="z-[2000] mr-1">
-                {links.map(link => (
-                    <DropdownMenuItem>
+                {links.map((link, index) => (
+                    <DropdownMenuItem key={index}>
                         <Link href={link.href}>{link.label}</Link>
                     </DropdownMenuItem>
                 ))}
