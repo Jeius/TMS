@@ -11,7 +11,6 @@ import QuickActions from './quick-actions'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import AppCalendar from './app-calendar'
-import { ScrollArea } from '@/components/ui/scroll-area'
 
 const accountLinks = [
     { href: "#", label: "Profile" },
