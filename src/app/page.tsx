@@ -10,6 +10,8 @@ import React from 'react'
 import QuickActions from './quick-actions'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
+import AppCalendar from './app-calendar'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const accountLinks = [
     { href: "#", label: "Profile" },
@@ -19,8 +21,8 @@ const accountLinks = [
 
 export default function Home() {
     return (
-        <div className="flex justify-center max-w-none m-auto p-5">
-            <div className="flex flex-col w-fit items-center space-y-16">
+        <div className="relative flex max-w-none m-auto justify-center lg:justify-start p-5 space-x-10">
+            <div className="flex flex-col w-fit items-center lg:ml-[max(20px,calc(50%-44rem))] space-y-16">
                 <Card className="w-full bg-primary">
                     <CardHeader className="space-y-1">
                         <CardTitle className="font-bold text-3xl text-secondary">Welcome, [user]</CardTitle>
@@ -43,6 +45,13 @@ export default function Home() {
                 </Card>
 
                 <QuickActions />
+                <QuickActions />
+                <QuickActions />
+                <QuickActions />
+            </div>
+
+            <div className="fixed top-[78px] right-10 bottom-5">
+                <AppCalendar />
             </div>
         </div>
     )

@@ -39,7 +39,7 @@ export default function QuickActions() {
         <div className="flex flex-col items-start space-y-2 justify-center">
             <h2 className="font-semibold text-lg pl-2">Quick Actions</h2>
 
-            <div id="grid-quick-actions" className="hidden md:grid grid-cols-3 gap-4 ">
+            <div id="grid-quick-actions" className="hidden md:grid grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4 ">
                 {actions.map((action, index) => (
                     <Link
                         key={index}
