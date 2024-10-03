@@ -2,11 +2,22 @@
 
 import React from 'react'
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { Tooltip, TooltipContent, TooltipProvider } from '@/components/ui/tooltip'
-import { TooltipTrigger } from '@radix-ui/react-tooltip'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle
+} from '@/components/ui/card'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger
+} from '@/components/ui/tooltip'
+
 
 export default function AppCalendar() {
     const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -17,7 +28,9 @@ export default function AppCalendar() {
     }, [date]);
 
     return (
-        <div className={`hidden lg:flex transition-all duration-500 bg-card overflow-hidden w-[300px] h-[380px] border rounded-lg space-x-5 2xl:space-x-0 2xl:w-[600px] ${isDateSelected ? 'justify-end 2xl:justify-between' : 'justify-start 2xl:justify-between'}`}>
+        <div id="calendar/reminders-card"
+            className={`hidden lg:flex transition-all duration-500 bg-card overflow-hidden w-[300px] h-[380px] border rounded-lg space-x-5 2xl:space-x-0 2xl:w-[600px] ${isDateSelected ? 'justify-end 2xl:justify-between' : 'justify-start 2xl:justify-between'}`}
+        >
             {/* Calendar Card */}
             <TooltipProvider>
                 <Tooltip>
