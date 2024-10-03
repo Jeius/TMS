@@ -8,6 +8,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import {
+    BookCopy,
     BookOpen,
     CalendarFold,
     FilePlus2,
@@ -26,7 +27,7 @@ const actions = [
     { href: "#", label: "Go to Library", icon: <BookOpen /> },
     { href: "#", label: "Schedule Defense", icon: <CalendarFold /> },
     { href: "#", label: "Upload Thesis", icon: <FilePlus2 /> },
-    { href: "#", label: "Borrow Thesis", icon: <FilePlus2 /> },
+    { href: "#", label: "Borrow Thesis", icon: <BookCopy /> },
 ]
 
 export default function QuickActions() {
@@ -44,7 +45,7 @@ export default function QuickActions() {
                         key={index}
                         href={action.href}
                     >
-                        <Card className="transition-all duration-300 hover:bg-primary hover:scale-105 hover:border-secondary/50 hover:text-secondary">
+                        <Card className="transition-all duration-300 hover:scale-110 hover:border-primary">
                             <CardContent className="flex min-w-60 flex-col items-center justify-center space-y-2 p-6">
                                 <div className="flex items-center justify-center size-10 p-2 rounded-lg">
                                     {action.icon}
@@ -68,7 +69,7 @@ export default function QuickActions() {
                                 className="p-1"
                             >
                                 <Link href={action.href}>
-                                    <Card className="transition-all duration-300 hover:bg-primary hover:border-secondary/50 hover:text-secondary">
+                                    <Card className="transition-all duration-300 hover:border-primary">
                                         <CardContent className="flex min-w-60 flex-col items-center justify-center space-y-2 p-6">
                                             <div className="flex items-center justify-center size-10 p-2 rounded-lg">
                                                 {action.icon}

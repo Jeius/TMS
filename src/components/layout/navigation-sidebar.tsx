@@ -1,48 +1,37 @@
 "use client"
 
-import {
-    BookCopy,
-    BookOpenCheck,
-    CalendarDays,
-    ChartLine,
-    FilePlus2,
-    House,
-    Library,
-    MessageCircle,
-    MoonIcon,
-    Search,
-    SunIcon,
-} from 'lucide-react'
+import { MoonIcon, SunIcon, } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 import { Separator } from '../ui/separator'
 import { Button } from '../ui/button'
+import { navigationLinks } from '@/lib/navigation-links'
 
-const primaryLinks = [
-    { href: '/', label: 'Home', icon: <House /> },
-    { href: '/browse', label: 'Browse', icon: <Search /> },
-];
-
-const secondaryLinks = [
-    { href: '/my-library', label: 'My Library', icon: <Library /> },
-    { href: '/upload', label: 'Upload', icon: <FilePlus2 /> },
-    { href: '/borrow', label: 'Borrow', icon: <BookCopy /> },
-    { href: '/schedule', label: 'Schedule', icon: <CalendarDays /> },
-    { href: '/messages', label: 'Messages', icon: <MessageCircle /> },
-];
-
-const toolLinks = [
-    { href: '/analytics', label: 'Analytics', icon: <ChartLine /> },
-    { href: '/plagiarism-tool', label: 'Plagiarism Checker', icon: <BookOpenCheck /> },
-];
-
-export const navigationLinks = [
-    primaryLinks, secondaryLinks, toolLinks
-]
 
 export default function NavigationSideBar() {
     const [canExpand, setCanExpand] = React.useState(false)
+
+    return (
+        <div
+            id="navigation-sidebar"
+            className={`fixed inset-y-0 left-0 z-[99] hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 overflow-y-auto pb-16 scroll-bar-hidden pt-20 ${canExpand ? 'w-60' : 'w-16'}`}
+            onMouseEnter={() => setCanExpand(true)}
+            onMouseLeave={() => setCanExpand(false)}
+            onFocus={() => setCanExpand(true)}
+            onBlur={() => setCanExpand(false)}
+        >
+            <NavigationItems showLabels={canExpand} />
+
+            <div className="flex flex-col w-full items-start justify-center gap-1 lg:px-3">
+                <Separator orientation="horizontal" />
+                <ThemeSwitch showLabel={canExpand} />
+            </div>
+        </div>
+    )
+}
+
+export function NavigationItems({ showLabels = true }: { showLabels?: boolean }) {
     const pathname = usePathname();
 
     const highlightLabel = (label: string) => {
@@ -54,50 +43,36 @@ export default function NavigationSideBar() {
     }
 
     return (
-        <div
-            id="navigation-sidebar"
-            className={`fixed inset-y-0 left-0 z-[1000] hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 overflow-y-auto pb-16 scroll-bar-hidden pt-20 ${canExpand ? 'w-60' : 'w-16'}`}
-            onMouseEnter={() => setCanExpand(true)}
-            onMouseLeave={() => setCanExpand(false)}
-            onFocus={() => setCanExpand(true)}
-            onBlur={() => setCanExpand(false)}
-        >
-            <div className="flex grow flex-col w-full items-center justify-start gap-1 lg:px-3">
-                {navigationLinks.map((link, index) => (
-                    <React.Fragment key={index}>
-                        {link.map(subLink => (
-                            <Link
-                                key={subLink.href}
-                                href={subLink.href}
-                                data-test-id="sidebar-home"
-                                className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap font-medium ${highlightLabel(subLink.label)}`}
+        <div className="flex grow flex-col w-full items-center justify-start gap-1 lg:px-3">
+            {navigationLinks.map((link, index) => (
+                <React.Fragment key={index}>
+                    {link.map(subLink => (
+                        <Link
+                            key={subLink.href}
+                            href={subLink.href}
+                            data-test-id="sidebar-home"
+                            className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap font-medium ${highlightLabel(subLink.label)}`}
+                        >
+                            <div className="flex size-9 p-2 shrink-0 items-center justify-center">
+                                {subLink.icon}
+                            </div>
+                            {showLabels && <span
+                                className={`pr-4 text-sm transition-all duration-150`}
                             >
-                                <div className="flex size-9 p-2 shrink-0 items-center justify-center">
-                                    {subLink.icon}
-                                </div>
-                                {canExpand && <span
-                                    className={`pr-4 text-sm transition-all duration-150`}
-                                >
-                                    {subLink.label}
-                                </span>}
-                            </Link>
-                        ))}
+                                {subLink.label}
+                            </span>}
+                        </Link>
+                    ))}
 
-                        {index !== navigationLinks.length - 1 && <Separator orientation="horizontal" />}
-                    </React.Fragment>
-                ))}
-            </div>
-
-            <div className="flex flex-col w-full items-start justify-center gap-1 lg:px-3">
-                <Separator orientation="horizontal" />
-                <ThemeSwitch canExpand={canExpand} />
-            </div>
+                    {index !== navigationLinks.length - 1 && <Separator orientation="horizontal" />}
+                </React.Fragment>
+            ))}
         </div>
     )
 }
 
 
-function ThemeSwitch({ canExpand }: { canExpand: boolean }) {
+function ThemeSwitch({ showLabel }: { showLabel: boolean }) {
     const [dark, setDark] = React.useState(false)
 
     React.useEffect(() => {
@@ -129,7 +104,7 @@ function ThemeSwitch({ canExpand }: { canExpand: boolean }) {
                 {!dark ? <SunIcon /> : <MoonIcon />}
             </div>
 
-            {canExpand && <div>
+            {showLabel && <div>
                 {!dark
                     ? <span className={`pr-4 text-sm transition-all duration-150`}>
                         Light Mode

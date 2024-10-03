@@ -10,14 +10,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '../ui/dropdown-menu';
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger
-} from '../ui/sheet';
+
 import {
     Tooltip,
     TooltipContent,
@@ -25,20 +18,21 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import { Bell, Menu, Search } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui/skeleton';
 import Image from 'next/image';
+import AppMenu from './app-menu';
 
 export default function AppHeader() {
     return (
         <header className="sticky inset-x-0 top-0 z-[100] border-b bg-card p-2 lg:px-4">
             <div className="flex items-center">
                 <div className="flex grow items-center space-x-2 pl-2">
-                    <div className="block lg:hidden"><NavigationMenu /></div>
+                    <div className="block lg:hidden"><AppMenu /></div>
 
                     <Link href={"/"} className="flex items-center space-x-2 font-semibold text-lg w-fit">
                         <Image
@@ -170,37 +164,3 @@ function Notifications() {
     )
 }
 
-function NavigationMenu() {
-    return (
-        <TooltipProvider>
-            <Sheet>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <SheetTrigger asChild>
-                            <Button className="size-fit p-2" variant="ghost">
-                                <Menu aria-hidden />
-                                <span className="sr-only">Open Menu</span>
-                            </Button>
-                        </SheetTrigger>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Menu</p>
-                    </TooltipContent>
-                </Tooltip>
-                <SheetContent className="w-64 sm:w-72 z-[110]" side="left">
-                    <SheetHeader>
-                        <SheetTitle className="flex items-center space-x-2 justify-start">
-                            <Image
-                                src={`/images/msuiit-logo-275x280.png`}
-                                alt='IIT'
-                                width={40}
-                                height={40}
-                            />
-                            <h1 className="text-sm text-left font-bold">Thesis Management System</h1>
-                        </SheetTitle>
-                    </SheetHeader>
-                </SheetContent>
-            </Sheet>
-        </TooltipProvider>
-    )
-}
