@@ -7,6 +7,7 @@ import React from 'react'
 import { Separator } from '../ui/separator'
 import { Button } from '../ui/button'
 import { navigationLinks } from '@/lib/navigation-links'
+import { ScrollArea } from '../ui/scroll-area'
 
 
 export default function NavigationSideBar() {
@@ -15,7 +16,7 @@ export default function NavigationSideBar() {
     return (
         <div
             id="navigation-sidebar"
-            className={`fixed inset-y-0 left-0 z-[99] hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 overflow-y-auto pb-16 scroll-bar-hidden pt-20 ${canExpand ? 'w-60' : 'w-16'}`}
+            className={`fixed inset-y-0 left-0 z-[99] hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 overflow-y-auto pb-10 scroll-bar-hidden pt-20 ${canExpand ? 'w-60' : 'w-16'}`}
             onMouseEnter={() => setCanExpand(true)}
             onMouseLeave={() => setCanExpand(false)}
             onFocus={() => setCanExpand(true)}
@@ -23,8 +24,8 @@ export default function NavigationSideBar() {
         >
             <NavigationItems showLabels={canExpand} />
 
-            <div className="flex flex-col w-full items-start justify-center gap-1 lg:px-3">
-                <Separator orientation="horizontal" />
+            <div className="flex flex-col w-full items-start justify-center lg:px-3">
+                <Separator className='my-1' orientation="horizontal" />
                 <ThemeSwitch showLabel={canExpand} />
             </div>
         </div>
@@ -43,7 +44,7 @@ export function NavigationItems({ showLabels = true }: { showLabels?: boolean })
     }
 
     return (
-        <div className="flex grow flex-col w-full items-center justify-start gap-1 lg:px-3">
+        <ScrollArea className="flex grow flex-col w-full items-center justify-start gap-1 lg:px-3">
             {navigationLinks.map((link, index) => (
                 <React.Fragment key={index}>
                     {link.map(subLink => (
@@ -64,10 +65,10 @@ export function NavigationItems({ showLabels = true }: { showLabels?: boolean })
                         </Link>
                     ))}
 
-                    {index !== navigationLinks.length - 1 && <Separator orientation="horizontal" />}
+                    {index !== navigationLinks.length - 1 && <Separator className='my-1' orientation="horizontal" />}
                 </React.Fragment>
             ))}
-        </div>
+        </ScrollArea>
     )
 }
 
