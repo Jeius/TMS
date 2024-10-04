@@ -54,11 +54,11 @@ export function NavigationItems({ showLabels = true }: { showLabels?: boolean })
                             data-test-id="sidebar-home"
                             className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap font-medium ${highlightLabel(subLink.label)}`}
                         >
-                            <div className="flex size-9 p-2 shrink-0 items-center justify-center">
+                            <div aria-hidden className="flex size-9 p-2 shrink-0 items-center justify-center">
                                 {subLink.icon}
                             </div>
                             {showLabels && <span
-                                className={`pr-4 text-sm transition-all duration-150`}
+                                className="pr-4 text-sm pointer-events-none"
                             >
                                 {subLink.label}
                             </span>}
