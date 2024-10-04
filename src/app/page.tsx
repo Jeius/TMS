@@ -11,6 +11,8 @@ import QuickActions from './quick-actions'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import AppCalendar from './app-calendar'
+import Announcements from './announcements'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const accountLinks = [
     { href: "#", label: "Profile" },
@@ -49,8 +51,13 @@ export default function Home() {
                 <QuickActions />
             </div>
 
-            <div className="fixed top-[78px] right-10 bottom-5">
-                <AppCalendar />
+            <div className="hidden lg:flex fixed top-[60px] right-0 bottom-0">
+                <ScrollArea>
+                    <div className="flex flex-col space-y-5 px-7 py-5">
+                        <Announcements className="grow transition-all duration-500" />
+                        <AppCalendar />
+                    </div>
+                </ScrollArea>
             </div>
         </div>
     )
