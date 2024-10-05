@@ -16,7 +16,8 @@ import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
-    TooltipTrigger
+    TooltipTrigger,
+    TooltipWrapper
 } from '@/components/ui/tooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
@@ -52,7 +53,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                             onClick={toggleView}
                             className="2xl:hidden size-fit p-1 rounded-md"
                         >
-                            <ArrowRight aria-hidden className="size-5" />
+                            <ArrowRight aria-hidden="true" className="size-5" />
                             <span className="sr-only">Go to Reminders</span>
                         </Button>
                     </TooltipTrigger>
@@ -108,12 +109,12 @@ const RemindersView: React.FC<ReminderViewProps> = ({
                     <TooltipTrigger asChild>
                         <Button
                             id="go-to-calendar"
+                            aria-label="Go to calendar"
                             variant="ghost"
                             onClick={toggleView}
                             className="2xl:hidden size-fit p-1 mr-2 rounded-md"
                         >
-                            <ArrowLeft aria-hidden className="size-5" />
-                            <span className="sr-only">Go to Calendar</span>
+                            <ArrowLeft className="size-5" />
                         </Button>
                     </TooltipTrigger>
                     <CardTitle>Reminders</CardTitle>
@@ -131,39 +132,23 @@ const RemindersView: React.FC<ReminderViewProps> = ({
                         <ScrollArea className="border-y h-full max-h-[320px] w-[250px] 2xl:w-auto">
                             <ul className="flex flex-col items-start justify-start text-sm pb-4">
                                 {Array.from({ length: 20 }).map((_, index) => (
-                                    <li
-                                        key={index}
-                                    >
-                                        Checkbox Reminder {index + 1}
-                                    </li>
+                                    <li key={index}>Checkbox Reminder {index + 1}</li>
                                 ))}
                             </ul>
                         </ScrollArea>
                     </CardContent>
                     <CardFooter className="flex justify-end space-x-1 pb-4 2xl:pb-6 pt-0">
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button id="mark-as-done" variant="ghost" className="size-fit p-2">
-                                    <Check aria-hidden className="size-4" />
-                                    <span className="sr-only">Mark as done</span>
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Mark as done</p>
-                            </TooltipContent>
-                        </Tooltip>
+                        <TooltipWrapper label="Mark as Done">
+                            <Button id="mark-as-done" aria-label="Mark as done" variant="ghost" className="size-fit p-2">
+                                <Check className="size-4" />
+                            </Button>
+                        </TooltipWrapper>
 
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button id="delete-selected" className="size-fit p-2">
-                                    <Trash2 aria-hidden className="size-4" />
-                                    <span className="sr-only">Delete selected</span>
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent className="mr-10">
-                                <p>Delete selected</p>
-                            </TooltipContent>
-                        </Tooltip>
+                        <TooltipWrapper label="Delete Selected" className="mr-10">
+                            <Button id="delete-selected" aria-label="Delete selected" className="size-fit p-2">
+                                <Trash2 className="size-4" />
+                            </Button>
+                        </TooltipWrapper>
                     </CardFooter>
                 </div>
             </Card>
