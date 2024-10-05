@@ -27,4 +27,19 @@ const TooltipContent = React.forwardRef<
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+const TooltipWrapper = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root> & { label: string, className?: string }
+>(({ label, children, className, ...props }) => (
+  <TooltipPrimitive.Root {...props}>
+    <TooltipPrimitive.Trigger asChild>
+      {children}
+    </TooltipPrimitive.Trigger>
+    <TooltipContent className={className}>
+      <p>{label}</p>
+    </TooltipContent>
+  </TooltipPrimitive.Root>
+))
+TooltipWrapper.displayName = "TooltipWrapper"
+
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipWrapper }
