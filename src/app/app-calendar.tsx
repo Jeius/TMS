@@ -20,6 +20,7 @@ import {
     TooltipWrapper
 } from '@/components/ui/tooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { RemindersItems } from './reminders-items'
 
 interface CalendarViewProps extends React.ComponentPropsWithRef<typeof Card> {
     today: Date;
@@ -128,28 +129,9 @@ const RemindersView: React.FC<ReminderViewProps> = ({
                 </CardDescription>
 
                 <div className="flex grow flex-col justify-between">
-                    <CardContent className="2xl:pl-0">
-                        <ScrollArea className="border-y h-full max-h-[320px] w-[250px] 2xl:w-auto">
-                            <ul className="flex flex-col items-start justify-start text-sm pb-4">
-                                {Array.from({ length: 20 }).map((_, index) => (
-                                    <li key={index}>Checkbox Reminder {index + 1}</li>
-                                ))}
-                            </ul>
-                        </ScrollArea>
+                    <CardContent className="2xl:pl-0 pb-0">
+                        <RemindersItems />
                     </CardContent>
-                    <CardFooter className="flex justify-end space-x-1 pb-4 2xl:pb-6 pt-0">
-                        <TooltipWrapper label="Mark as Done">
-                            <Button id="mark-as-done" aria-label="Mark as done" variant="ghost" className="size-fit p-2">
-                                <Check className="size-4" />
-                            </Button>
-                        </TooltipWrapper>
-
-                        <TooltipWrapper label="Delete Selected" className="mr-10">
-                            <Button id="delete-selected" aria-label="Delete selected" className="size-fit p-2">
-                                <Trash2 className="size-4" />
-                            </Button>
-                        </TooltipWrapper>
-                    </CardFooter>
                 </div>
             </Card>
             <TooltipContent>
