@@ -33,10 +33,10 @@ export default function RootLayout({
       >
         <div id="__next">
           <AppHeader />
-          <NavigationSideBar />
           <main className="pb-4 lg:pl-16">
             {children}
           </main>
+          <NavigationSideBar />
         </div>
         <Toaster />
       </body>
