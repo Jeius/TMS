@@ -1,9 +1,9 @@
 
 import React from 'react'
-import { ThesesChartCard } from '@/app/dashboard/theses-chart-card';
-import { Department, Departmentbox } from '@/app/dashboard/department-box';
-import { RecentActivitiesCard } from '@/app/dashboard/recent-activities-card';
-import { StatisticsCard, Statistic } from '@/app/dashboard/stats-card';
+import { ThesesChartCard } from '@/app/analytics/theses-chart-card';
+import { Department, Departmentbox } from '@/app/analytics/department-box';
+import { RecentActivitiesCard } from '@/app/analytics/recent-activities-card';
+import { StatisticsCard, Statistic } from '@/app/analytics/stats-card';
 import {
   Book,
   BookOpenCheckIcon,
