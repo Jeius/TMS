@@ -37,15 +37,14 @@ const AccountLinks = () => {
             )}
         </div>
     ))
-}
-    ;
+};
 
 export default function Home() {
     return (
         <div id="home-page"
-            className="relative flex max-w-none mx-auto justify-center lg:justify-start p-5 space-x-10"
+            className="relative max-w-none m-auto p-5"
         >
-            <div className="flex flex-col w-fit items-center lg:ml-[max(40px,calc(65%-35rem))] xl:ml-[max(40px,calc(57%-40rem))] 2xl:ml-[max(40px,calc(50%-44rem))] space-y-16 transition-all duration-500">
+            <div className="flex flex-col mx-auto w-fit items-center md:items-start lg:ml-[max(40px,calc(65%-37rem))] xl:ml-[max(40px,calc(57%-40rem))] 2xl:ml-[max(40px,calc(50%-44rem))] space-y-16 transition-all duration-500">
                 <Card id="welcome-card" className="w-full bg-primary">
                     <CardHeader className="space-y-1">
                         <CardTitle className="font-bold text-3xl text-secondary">

@@ -143,6 +143,7 @@ const RemindersItems = () => {
 
     const handleMarkDone = () => {
         const selectedReminders = form.getValues("reminders")
+        form.setValue("reminders", [])
         showToast("Done", selectedReminders)
     }
 
@@ -242,7 +243,7 @@ const RemindersItems = () => {
                             </TooltipWrapper>
 
                             <Tooltip>
-                                <ConfirmationDialogWrapper onConfirm={handleDeleteSelected}>
+                                <ConfirmationDialogWrapper dialogTitle="Confirm Delete" onConfirm={handleDeleteSelected}>
                                     <TooltipTrigger asChild>
                                         <Button
                                             aria-label="Delete"
