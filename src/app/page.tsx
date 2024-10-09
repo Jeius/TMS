@@ -22,33 +22,30 @@ const accountLinks = [
 ];
 
 // Component to render account links within a card footer.
-const AccountLinks = () => (
-    <CardFooter className="flex flex-wrap justify-end space-x-1 text-primary-foreground">
-        {accountLinks.map((link, index) => (
-            <div key={index} className='flex space-x-1 items-center'>
-                <Link
-                    href={link.href}
-                    className="text-sm font-semibold no-underline underline-offset-2 hover:underline"
-                >
-                    {link.label}
-                </Link>
-                {/* Separator for visual division between links */}
-                {index !== accountLinks.length - 1 && (
-                    <Separator orientation="vertical" className="h-4 bg-primary-foreground/70" />
-                )}
-            </div>
-        ))}
-    </CardFooter>
-);
+const AccountLinks = () => {
+    return accountLinks.map((link, index) => (
+        <div key={index} className='flex space-x-1 items-center'>
+            <Link
+                href={link.href}
+                className="text-sm font-semibold no-underline underline-offset-2 hover:underline"
+            >
+                {link.label}
+            </Link>
+            {/* Separator for visual division between links */}
+            {index !== accountLinks.length - 1 && (
+                <Separator orientation="vertical" className="h-4 bg-primary-foreground/70" />
+            )}
+        </div>
+    ))
+}
+    ;
 
 export default function Home() {
     return (
         <div id="home-page"
             className="relative flex max-w-none mx-auto justify-center lg:justify-start p-5 space-x-10"
         >
-            {/* Main card section */}
-            <div className="flex flex-col w-fit items-center lg:ml-[max(40px,calc(50%-44rem))] space-y-16">
-                {/* Welcome Card */}
+            <div className="flex flex-col w-fit items-center lg:ml-[max(40px,calc(65%-35rem))] xl:ml-[max(40px,calc(57%-40rem))] 2xl:ml-[max(40px,calc(50%-44rem))] space-y-16 transition-all duration-500">
                 <Card id="welcome-card" className="w-full bg-primary">
                     <CardHeader className="space-y-1">
                         <CardTitle className="font-bold text-3xl text-secondary">
@@ -58,20 +55,32 @@ export default function Home() {
                             Role: [role]
                         </CardDescription>
                     </CardHeader>
-                    <AccountLinks />
+                    <CardFooter className="flex flex-wrap justify-end space-x-1 text-primary-foreground">
+                        <AccountLinks />
+                    </CardFooter>
                 </Card>
 
                 <QuickActions />
-            </div>
 
-            {/* Sidebar section visible only on large screens */}
-            <div id="sidebar" className="hidden lg:flex fixed top-[60px] right-0 bottom-0">
-                <ScrollArea>
-                    <div className="flex flex-col space-y-5 px-7 py-5">
-                        <Announcements className="grow transition-all duration-500" />
-                        <HomeCalendar />
-                    </div>
-                </ScrollArea>
+                {/* Sidebar section visible only on large screens */}
+                <aside id="sidebar" className="relative lg:p-5 lg:fixed lg:top-0 lg:bottom-0 lg:right-0">
+                    <ScrollArea className="size-full inset-y-0 pr-0 lg:pr-5">
+                        <div className="flex flex-col space-y-16 lg:space-y-5">
+                            <Announcements className="grow transition-all duration-500" />
+                            <HomeCalendar />
+                        </div>
+                    </ScrollArea>
+                </aside>
+
+                <div className="flex flex-col items-start space-y-2 justify-center">
+                    <h2 className="font-semibold text-lg pl-2">Progress</h2>
+                    <p>Gantt chart here...</p>
+                </div>
+
+                <div className="flex flex-col items-start space-y-2 justify-center">
+                    <h2 className="font-semibold text-lg pl-2">Recent Activities</h2>
+                    <p>A feed showing what's happening in the system relevant to the user.</p>
+                </div>
             </div>
         </div>
     );

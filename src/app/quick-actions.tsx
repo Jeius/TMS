@@ -39,7 +39,7 @@ interface QuickActionCardProps {
 const QuickActionCard: React.FC<QuickActionCardProps> = ({ href, icon, label }) => (
     <Link href={href} id={`quick-action-${label.toLowerCase().replace(/ /g, "-")}`}>
         <Card className="transition-all duration-300 hover:scale-110 hover:border-primary">
-            <CardContent className="flex min-w-60 flex-col items-center justify-center space-y-2 p-6">
+            <CardContent className="flex sm:min-w-[185px] lg:min-w-60 flex-col items-center justify-center space-y-2 p-6">
                 <div aria-hidden="true" className="flex items-center justify-center size-10 p-2 rounded-lg">
                     {icon}
                 </div>
@@ -73,10 +73,10 @@ export default function QuickActions() {
 
             {/* Carousel View for Smaller Screens */}
             <div id="quick-actions-carousel" className="px-14 md:hidden">
-                <Carousel className="max-w-[300px] sm:max-w-md lg:max-w-none" plugins={[plugin.current]}>
+                <Carousel className="max-w-[250px] sm:max-w-md lg:max-w-none" plugins={[plugin.current]}>
                     <CarouselContent id="carousel-content" className="-ml-1">
                         {quickActions.map((action, index) => (
-                            <CarouselItem key={`quick-action-carousel-${index}`} className="p-1 sm:basis-1/2">
+                            <CarouselItem key={`quick-action-carousel-${index}`} className="p-4 pl-5 sm:basis-1/2">
                                 <QuickActionCard
                                     href={action.href}
                                     icon={action.icon}

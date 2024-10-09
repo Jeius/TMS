@@ -78,11 +78,11 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                         <Button
                             id='go-to-reminders'
                             variant="ghost"
+                            aria-label="Go to Reminders"
                             onClick={toggleView}
-                            className="2xl:hidden size-fit p-1 rounded-md"
+                            className="sm:hidden lg:block 2xl:hidden size-fit p-1 rounded-md"
                         >
                             <ArrowRight aria-hidden="true" className="size-5" />
-                            <span className="sr-only">Go to Reminders</span>
                         </Button>
                     </TooltipTrigger>
                 </CardHeader>
@@ -280,7 +280,7 @@ const RemindersView: React.FC<ReminderViewProps> = ({
                             aria-label="Go to calendar"
                             variant="ghost"
                             onClick={toggleView}
-                            className="2xl:hidden size-fit p-1 mr-2 rounded-md"
+                            className="sm:hidden lg:block 2xl:hidden size-fit p-1 mr-2 rounded-md"
                         >
                             <ArrowLeft className="size-5" />
                         </Button>
@@ -321,7 +321,7 @@ export default function HomeCalendar() {
 
     return (
         <Card id="calendar/reminders-card"
-            className={`flex items-stretch transition-all duration-500 overflow-hidden w-[300px] 2xl:w-[600px] ${isViewToggled ? 'justify-end 2xl:justify-evenly' : 'justify-start 2xl:justify-evenly'}`}
+            className={`flex items-stretch transition-all duration-500 overflow-hidden w-[300px] sm:w-[600px] lg:w-[300px] 2xl:w-[600px] ${isViewToggled ? 'justify-end' : 'justify-start'}`}
         >
             <TooltipProvider>
                 <CalendarView
@@ -331,12 +331,12 @@ export default function HomeCalendar() {
                     date={date}
                     setDate={setDate}
                     toggleView={toggleView}
-                    className={`flex flex-col transition-all duration-500 transform ${isViewToggled ? 'translate-x-[-50%] opacity-0' : 'translate-x-0 opacity-100'} border-none shadow-none 2xl:translate-x-0 2xl:opacity-100`}
+                    className={`flex flex-col transition-all duration-500 transform border-none shadow-none sm:translate-x-0 sm:opacity-100 2xl:translate-x-0 2xl:opacity-100 ${isViewToggled ? 'translate-x-[-50%] opacity-0 lg:translate-x-[-50%] lg:opacity-0' : 'translate-x-0 opacity-100 lg:translate-x-0 lg:opacity-100'}`}
                 />
                 <RemindersView
                     date={date}
                     toggleView={toggleView}
-                    className={`flex flex-col 2xl:grow transition-all duration-500 border-none shadow-none 2xl:translate-x-0 2xl:opacity-100 transform ${isViewToggled ? 'translate-x-0 opacity-100' : 'translate-x-[50%] opacity-0'}`}
+                    className={`flex flex-col sm:grow lg:grow-0 2xl:grow transition-all duration-500 border-none shadow-none transform sm:translate-x-0 sm:opacity-100 2xl:translate-x-0 2xl:opacity-100 ${isViewToggled ? 'translate-x-0 opacity-100 lg:translate-x-0 lg:opacity-100' : 'translate-x-[50%] opacity-0 lg:translate-x-[50%] lg:opacity-0'}`}
                 />
             </TooltipProvider>
         </Card>
