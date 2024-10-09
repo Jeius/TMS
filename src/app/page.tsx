@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import QuickActions from './quick-actions';
 import Announcements from './announcements';
-import AppCalendar from './app-calendar';
+import HomeCalendar from './home-calendar';
 import {
     Card,
     CardDescription,
@@ -69,7 +69,7 @@ export default function Home() {
                 <ScrollArea>
                     <div className="flex flex-col space-y-5 px-7 py-5">
                         <Announcements className="grow transition-all duration-500" />
-                        <AppCalendar />
+                        <HomeCalendar />
                     </div>
                 </ScrollArea>
             </div>
