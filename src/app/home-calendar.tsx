@@ -97,7 +97,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                             className="flex items-center rounded-md border h-[320px]"
                         />
                     </CardContent>
-                    <CardFooter className="flex justify-between pb-4 2xl:pb-6 pt-2">
+                    <CardFooter className="flex justify-between pb-4 pt-2">
                         <Button
                             id="go-to-today"
                             variant="ghost"
@@ -218,7 +218,7 @@ const RemindersItems = () => {
                     )}
                 />
                 {form.watch("reminders").length !== 0 && (
-                    <div className="flex justify-between items-center pb-4 2xl:pb-6 pt-2">
+                    <div className="flex justify-between items-center pb-4 pt-2">
                         <Button
                             aria-label="Mark as done"
                             variant="ghost"
@@ -241,16 +241,21 @@ const RemindersItems = () => {
                                 </Button>
                             </TooltipWrapper>
 
-                            <ConfirmationDialogWrapper onConfirm={handleDeleteSelected}>
-                                <Button
-                                    aria-label="Delete"
-                                    variant="ghost"
-                                    className="size-fit p-2"
-                                    type="button"
-                                >
-                                    <Trash2 aria-hidden="true" className="size-4" />
-                                </Button>
-                            </ConfirmationDialogWrapper>
+                            <Tooltip>
+                                <ConfirmationDialogWrapper onConfirm={handleDeleteSelected}>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                            aria-label="Delete"
+                                            variant="ghost"
+                                            className="size-fit p-2"
+                                            type="button"
+                                        >
+                                            <Trash2 aria-hidden="true" className="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                </ConfirmationDialogWrapper>
+                                <TooltipContent className="mr-5"><span>Delete</span></TooltipContent>
+                            </Tooltip>
                         </div>
                     </div>
                 )}

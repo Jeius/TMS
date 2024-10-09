@@ -7,12 +7,16 @@ export default function Announcements({
 }: React.ComponentPropsWithRef<typeof Card>) {
     return (
         <Card {...props}>
-            <CardHeader>
+            <CardHeader className="pb-4">
                 <CardTitle>Announcements</CardTitle>
             </CardHeader>
             <CardContent>
-                <ScrollArea className="border-y h-full">
-                    contents
+                <ScrollArea className="border-t h-[300px]">
+                    <div className="flex flex-col space-y-2 p-2">
+                        {Array.from({ length: 20 }).map((_, index) => (
+                            <p key={index}>Announcement {index}</p>
+                        ))}
+                    </div>
                 </ScrollArea>
             </CardContent>
         </Card>
