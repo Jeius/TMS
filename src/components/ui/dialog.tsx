@@ -5,6 +5,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Cross2Icon } from "@radix-ui/react-icons"
 
 import { cn } from "@/lib/utils"
+import { Button } from "./button"
 
 const Dialog = DialogPrimitive.Root
 
@@ -108,6 +109,43 @@ const DialogDescription = React.forwardRef<
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
 
+const ConfirmationDialogWrapper = ({
+  dialogTitle = "Confirm Action",
+  dialogDescription = "Are you sure you want to proceed?",
+  confirmButtonLabel = "Yes",
+  confirmButtonType = "submit",
+  cancelButtonLabel = "No",
+  children,
+  onConfirm,
+}: React.ComponentPropsWithRef<typeof Dialog> & {
+  dialogTitle?: string
+  dialogDescription?: string
+  confirmButtonLabel?: string
+  confirmButtonType?: "button" | "submit"
+  cancelButtonLabel?: string
+  onConfirm: () => void
+}) => (
+  <Dialog>
+    <DialogTrigger asChild>{children}</DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>{dialogTitle}</DialogTitle>
+      </DialogHeader>
+      <p>{dialogDescription}</p>
+      <DialogFooter className="flex justify-end space-x-2">
+        <DialogClose asChild>
+          <Button type={confirmButtonType} variant="ghost" onClick={onConfirm}>
+            {confirmButtonLabel}
+          </Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button>{cancelButtonLabel}</Button>
+        </DialogClose>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+)
+
 export {
   Dialog,
   DialogPortal,
@@ -119,4 +157,5 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  ConfirmationDialogWrapper,
 }
