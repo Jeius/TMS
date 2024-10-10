@@ -1,7 +1,6 @@
-
 import React from 'react'
 import { ThesesChartCard } from '@/app/analytics/theses-chart-card';
-import { Department, Departmentbox } from '@/app/analytics/department-box';
+import { Departmentbox } from '@/app/analytics/department-box';
 import { RecentActivitiesCard } from '@/app/analytics/recent-activities-card';
 import { StatisticsCard, Statistic } from '@/app/analytics/stats-card';
 import {
@@ -47,41 +46,16 @@ const getStatistics = (): Statistic[] => {
   ]
 }
 
-const getDepartments = (): Department[] => {
-  return [
-    {
-      value: "ALL",
-      label: "All"
-    },
-    {
-      value: "CA",
-      label: "CA Department",
-    },
-    {
-      value: "CS",
-      label: "CS Department",
-    },
-    {
-      value: "IS",
-      label: "IS Department",
-    },
-    {
-      value: "IT",
-      label: "IT Department",
-    },
-  ]
-}
-
 export default function Dashboard() {
-  const departments = getDepartments()
   const statistics = getStatistics()
+
   return (
     <div className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 items-center box-content m-auto max-w-none">
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between w-full max-w-screen-2xl">
         <h1 className='font-bold text-2xl lg:text-4xl'>
           Overview
         </h1>
-        <Departmentbox departments={departments} />
+        <Departmentbox />
       </div>
 
       <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-3 md:gap-4 w-full max-w-screen-2xl'>
