@@ -1,5 +1,7 @@
 "use client"
 
+"use client"
+
 import React from 'react'
 import { Thesis, columns } from './table-columns'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
