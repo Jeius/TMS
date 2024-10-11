@@ -54,7 +54,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
                     variant={buttonVariant}
                     role="combobox"
                     aria-expanded={open}
-                    className={cn("w-fit p-3 justify-between bg-card text-foreground", buttonClassName)}
+                    size="sm"
+                    className={cn("w-fit justify-between bg-card text-foreground", buttonClassName)}
                 >
                     {selectedValue
                         ? items.find((item) => item.value === selectedValue)?.label
