@@ -12,7 +12,8 @@ function getData(): Thesis[] {
             adviser: "Clark, E.",
             keywords: "quantum computing, applications, research",
             specialization: "Computer Science",
-            dateUploaded: "01/10/2024"
+            dateUploaded: "01/10/2024",
+            department: "Information Technology Department"
         },
         {
             id: "2",
@@ -22,7 +23,8 @@ function getData(): Thesis[] {
             adviser: "Davis, S.",
             keywords: "artificial intelligence, machine learning, technology",
             specialization: "Computer Science, AI",
-            dateUploaded: "05/22/2023"
+            dateUploaded: "05/22/2023",
+            department: "Computer Applications Department"
         },
         {
             id: "3",
@@ -32,7 +34,8 @@ function getData(): Thesis[] {
             adviser: "Wilson, M.",
             keywords: "sustainable energy, renewable resources, environment",
             specialization: "Environmental Science",
-            dateUploaded: "07/30/2022"
+            dateUploaded: "07/30/2022",
+            department: "Information Technology Department"
         },
         {
             id: "4",
@@ -42,7 +45,8 @@ function getData(): Thesis[] {
             adviser: "Anderson, J.",
             keywords: "social media, communication, impact",
             specialization: "Communication Studies",
-            dateUploaded: "03/15/2024"
+            dateUploaded: "03/15/2024",
+            department: "Information Systems Department"
         },
         {
             id: "5",
@@ -52,7 +56,8 @@ function getData(): Thesis[] {
             adviser: "White, L.",
             keywords: "blockchain, technology, potential",
             specialization: "Information Technology",
-            dateUploaded: "10/05/2021"
+            dateUploaded: "10/05/2021",
+            department: "Computer Applications Department"
         },
         {
             id: "6",
@@ -62,7 +67,8 @@ function getData(): Thesis[] {
             adviser: "Lewis, O.",
             keywords: "machine learning, healthcare, data analysis",
             specialization: "Data Science, Healthcare",
-            dateUploaded: "02/18/2023"
+            dateUploaded: "02/18/2023",
+            department: "Information Technology Department"
         },
         {
             id: "7",
@@ -72,7 +78,8 @@ function getData(): Thesis[] {
             adviser: "Adams, E.",
             keywords: "climate change, economics, impact",
             specialization: "Economics",
-            dateUploaded: "08/20/2022"
+            dateUploaded: "08/20/2022",
+            department: "Computer Science Department"
         },
         {
             id: "8",
@@ -82,7 +89,8 @@ function getData(): Thesis[] {
             adviser: "Carter, R.",
             keywords: "nanotechnology, innovations, research",
             specialization: "Nanotechnology",
-            dateUploaded: "04/10/2024"
+            dateUploaded: "04/10/2024",
+            department: "Information Technology Department"
         },
         {
             id: "9",
@@ -92,7 +100,8 @@ function getData(): Thesis[] {
             adviser: "Walker, S.",
             keywords: "globalization, culture, effects",
             specialization: "Cultural Studies",
-            dateUploaded: "06/25/2023"
+            dateUploaded: "06/25/2023",
+            department: "Computer Applications Department"
         },
         {
             id: "10",
@@ -102,7 +111,8 @@ function getData(): Thesis[] {
             adviser: "Allen, B.",
             keywords: "quantum cryptography, developments, security",
             specialization: "Cryptography, Security",
-            dateUploaded: "02/01/2024"
+            dateUploaded: "02/01/2024",
+            department: "Information Technology Department"
         },
         // New data entries
         {
@@ -113,7 +123,8 @@ function getData(): Thesis[] {
             adviser: "Green, H.",
             keywords: "AI, finance, analysis",
             specialization: "Finance, AI",
-            dateUploaded: "09/12/2023"
+            dateUploaded: "09/12/2023",
+            department: "Computer Applications Department"
         },
         {
             id: "12",
@@ -123,7 +134,8 @@ function getData(): Thesis[] {
             adviser: "Mitchell, D.",
             keywords: "renewable energy, technology, sustainability",
             specialization: "Energy Studies",
-            dateUploaded: "01/25/2024"
+            dateUploaded: "01/25/2024",
+            department: "Computer Science Department"
         },
         {
             id: "13",
@@ -133,7 +145,8 @@ function getData(): Thesis[] {
             adviser: "Evans, R.",
             keywords: "virtual reality, technology, advances",
             specialization: "Virtual Reality",
-            dateUploaded: "03/10/2024"
+            dateUploaded: "03/10/2024",
+            department: "Information Technology Department"
         },
         {
             id: "14",
@@ -143,7 +156,8 @@ function getData(): Thesis[] {
             adviser: "White, K.",
             keywords: "genomics, personalized medicine, health",
             specialization: "Genomics",
-            dateUploaded: "08/16/2023"
+            dateUploaded: "08/16/2023",
+            department: "Information Systems Department"
         },
         {
             id: "15",
@@ -153,7 +167,8 @@ function getData(): Thesis[] {
             adviser: "Harris, J.",
             keywords: "ethics, AI, technology",
             specialization: "Ethics",
-            dateUploaded: "12/05/2022"
+            dateUploaded: "12/05/2022",
+            department: "Computer Science Department"
         },
         {
             id: "16",
@@ -163,7 +178,8 @@ function getData(): Thesis[] {
             adviser: "Clark, T.",
             keywords: "quantum computing, future, technology",
             specialization: "Computer Science",
-            dateUploaded: "02/28/2024"
+            dateUploaded: "02/28/2024",
+            department: "Computer Science Department"
         },
         {
             id: "17",
@@ -173,7 +189,8 @@ function getData(): Thesis[] {
             adviser: "Mitchell, C.",
             keywords: "cybersecurity, trends, threats",
             specialization: "Cybersecurity",
-            dateUploaded: "03/22/2024"
+            dateUploaded: "03/22/2024",
+            department: "Information Systems Department"
         },
         {
             id: "18",
@@ -183,7 +200,8 @@ function getData(): Thesis[] {
             adviser: "Robinson, A.",
             keywords: "machine learning, big data, algorithms",
             specialization: "Data Science",
-            dateUploaded: "04/15/2023"
+            dateUploaded: "04/15/2023",
+            department: "Computer Science Department"
         },
         {
             id: "19",
@@ -193,7 +211,8 @@ function getData(): Thesis[] {
             adviser: "Allen, J.",
             keywords: "renewable resources, advancements, environment",
             specialization: "Environmental Science",
-            dateUploaded: "09/10/2022"
+            dateUploaded: "09/10/2022",
+            department: "Information Systems Department"
         },
         {
             id: "20",
@@ -203,7 +222,8 @@ function getData(): Thesis[] {
             adviser: "Green, K.",
             keywords: "computational biology, techniques, research",
             specialization: "Biology",
-            dateUploaded: "01/05/2024"
+            dateUploaded: "01/05/2024",
+            department: "Information Technology Department"
         }
     ];
 }
@@ -213,7 +233,7 @@ export default function Browse() {
     return (
         <div id="browse-page" className="relative max-w-none m-auto p-5">
             <div className="mb-28 h-full">
-                <BrowseTable data={data} className="mt-4 mx-auto hidden sm:block w-fit rounded-md" />
+                <BrowseTable data={data} className="mt-4 hidden sm:block rounded-md" />
                 {/* <Card className="w-full lg:max-w-52 overflow-hidden">
                     <CardContent className="p-0">
                         <AdaptiveResizablePanelGroup
@@ -241,6 +261,5 @@ export default function Browse() {
                 </Card > */}
             </div>
         </div>
-
     )
 }

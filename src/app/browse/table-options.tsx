@@ -15,7 +15,7 @@ import {
 import { ChevronDown, Plus } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 
-interface TableHeaderProps<TData> {
+interface TableOptionsProps<TData> {
     table: Table<TData>
 }
 
@@ -54,7 +54,7 @@ const getSpecializationData = () => {
 
 const ColumnsViewOptions = <TData,>({
     table,
-}: TableHeaderProps<TData>) => {
+}: TableOptionsProps<TData>) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -84,7 +84,7 @@ const ColumnsViewOptions = <TData,>({
                                 checked={column.getIsVisible()}
                                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
                             >
-                                {column.id}
+                                {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
                             </DropdownMenuCheckboxItem>
                         )
                     })}
@@ -93,7 +93,7 @@ const ColumnsViewOptions = <TData,>({
     )
 }
 
-const SortOptions = <TData,>({ table }: TableHeaderProps<TData>) => {
+const SortOptions = <TData,>({ table }: TableOptionsProps<TData>) => {
     const sortValues = [
         { label: "Latest First", value: "latest" },
         { label: "Oldest First", value: "old" },
@@ -116,7 +116,7 @@ const SortOptions = <TData,>({ table }: TableHeaderProps<TData>) => {
             table.getColumn("title")?.toggleSorting(true); // Descending
         } else if (sortValue.value === "latest") {
             table.getColumn("year")?.toggleSorting(true); // Descending (latest first)
-        } else if (sortValue.value === "olde") {
+        } else if (sortValue.value === "old") {
             table.getColumn("year")?.toggleSorting(false); // Ascending (oldest first)
         }
     };
@@ -151,9 +151,9 @@ const SortOptions = <TData,>({ table }: TableHeaderProps<TData>) => {
 }
 
 
-export default function TableHeader<TData>({
+export default function TableOptions<TData>({
     table
-}: TableHeaderProps<TData>) {
+}: TableOptionsProps<TData>) {
     const router = useRouter()
     const searchParams = useSearchParams()
 
@@ -201,8 +201,8 @@ export default function TableHeader<TData>({
     }
 
     return (
-        <div className="flex items-center justify-between overflow-hidden border-b px-4 py-2">
-            <div className="flex space-x-2 mr-20">
+        <div className="flex items-center justify-between overflow-hidden px-4 py-2">
+            <div className="flex space-x-2 mr-60 flex-wrap">
                 <Combobox items={yearData} placeholder="Year" onSelect={handleYearSelect} />
                 <Combobox items={specializationData} placeholder="Specialization" onSelect={handleSpecializationSelect} />
                 <Combobox items={[]} placeholder="Author" onSelect={handleAuthorSelect} />
@@ -211,6 +211,7 @@ export default function TableHeader<TData>({
             </div>
             <div className="flex space-x-2">
                 <SortOptions table={table} />
+                <Separator orientation="vertical" />
                 <ColumnsViewOptions table={table} />
             </div>
         </div>
