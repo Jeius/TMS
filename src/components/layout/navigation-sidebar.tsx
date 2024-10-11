@@ -101,7 +101,7 @@ export default function NavigationSideBar() {
     return (
         <div
             id="navigation-sidebar"
-            className={`fixed inset-y-0 left-0 hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 overflow-y-auto pb-10 pt-20 scroll-bar-hidden ${canExpand ? 'w-60' : 'w-16'}`}
+            className={`fixed z-10 inset-y-0 left-0 hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 overflow-y-auto pb-10 pt-20 scroll-bar-hidden ${canExpand ? 'w-60' : 'w-16'}`}
             onMouseEnter={() => handleExpand(true)}
             onMouseLeave={() => handleExpand(false)}
             onFocus={() => handleExpand(true)}
