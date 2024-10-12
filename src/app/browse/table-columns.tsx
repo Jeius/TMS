@@ -3,6 +3,7 @@ import { Column, ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dot, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export type Thesis = {
     id: string
@@ -37,14 +38,14 @@ export const columns: ColumnDef<Thesis>[] = [
             return (<div className="flex space-x-2 items-center p-2 mr-auto">
                 <Checkbox />
                 <div className="flex flex-col flex-wrap">
-                    <Button variant="link" className="font-bold size-fit text-md text-primary text-wrap text-left p-0">{title}</Button>
+                    <Button variant="link" className="font-bold size-fit text-md text-primary dark:text-secondary/80 text-wrap text-left p-0">{title}</Button>
                     <span>{author}</span>
                     <span className="flex items-center text-xs">
                         {year} <Dot size={25} /> {department}
                     </span>
                 </div>
             </div>)
-        }
+        },
     },
     {
         accessorKey: "author",
@@ -125,16 +126,25 @@ const ColumnHeader = <TData, TValue>({
     hideClose?: boolean
 }) => {
     return (
-        <div className="flex items-center justify-between space-x-2 text-foreground text-sm">
-            <span>{title}</span>
-            {!hideClose && (
-                <Button
-                    variant="ghost"
-                    aria-label="Remove column"
-                    className="size-fit rounded-full p-0.5 hover:bg-transparent hover:text-accent-foreground/50"
-                    onClick={() => column.toggleVisibility(false)}
-                ><X aria-hidden="true" className="size-4" /></Button>
-            )}
-        </div>
+        <TooltipProvider>
+            <div className="flex items-center justify-between space-x-2 text-foreground text-sm">
+                <span>{title}</span>
+                {!hideClose && (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                aria-label="Remove column"
+                                className="rounded-full p-0.5 size-5 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                                onClick={() => column.toggleVisibility(false)}
+                            ><X aria-hidden="true" className="" /></Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Remove column</p>
+                        </TooltipContent>
+                    </Tooltip>
+                )}
+            </div>
+        </TooltipProvider>
     )
 }
