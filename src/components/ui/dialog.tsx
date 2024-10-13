@@ -134,12 +134,12 @@ const ConfirmationDialogWrapper = ({
       <p>{dialogDescription}</p>
       <DialogFooter className="flex justify-end space-x-2">
         <DialogClose asChild>
-          <Button type={confirmButtonType} variant="ghost" onClick={onConfirm}>
+          <Button type={confirmButtonType} variant="destructive" onClick={onConfirm}>
             {confirmButtonLabel}
           </Button>
         </DialogClose>
         <DialogClose asChild>
-          <Button>{cancelButtonLabel}</Button>
+          <Button variant="outline">{cancelButtonLabel}</Button>
         </DialogClose>
       </DialogFooter>
     </DialogContent>
