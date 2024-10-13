@@ -38,7 +38,7 @@ export const columns: ColumnDef<Thesis>[] = [
             return (<div className="flex space-x-2 items-center p-2 mr-auto">
                 <Checkbox />
                 <div className="flex flex-col flex-wrap">
-                    <Button variant="link" className="font-bold size-fit text-md text-primary dark:text-secondary/80 text-wrap text-left p-0">{title}</Button>
+                    <Button variant="link" className="font-bold size-fit text-md text-secondary text-wrap text-left p-0">{title}</Button>
                     <span>{author}</span>
                     <span className="flex items-center text-xs">
                         {year} <Dot size={25} /> {department}

@@ -38,7 +38,7 @@ interface QuickActionCardProps {
 
 const QuickActionCard: React.FC<QuickActionCardProps> = ({ href, icon, label }) => (
     <Link href={href} id={`quick-action-${label.toLowerCase().replace(/ /g, "-")}`}>
-        <Card className="transition-all duration-300 hover:scale-110 hover:border-primary">
+        <Card filter="glass" className="transition-all duration-300 hover:scale-110 hover:border-secondary">
             <CardContent className="flex sm:min-w-[185px] lg:min-w-60 flex-col items-center justify-center space-y-2 p-6">
                 <div aria-hidden="true" className="flex items-center justify-center size-10 p-2 rounded-lg">
                     {icon}
