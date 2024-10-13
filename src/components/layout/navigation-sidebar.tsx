@@ -8,15 +8,16 @@ import { navigationLinks } from "@/lib/navigation-links"
 import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Separator } from "../ui/separator"
+import { cn } from "@/lib/utils"
 
 // Component for Rendering Navigation Links
 const NavigationItems = ({ showLabels = true }: { showLabels?: boolean }) => {
     const pathname = usePathname()
 
     const getLinkHighlight = (label: string) => {
-        if (pathname === "/" && label === "Home") return "bg-primary text-secondary"
-        if (pathname.substring(1) === label.toLowerCase()) return "bg-primary text-secondary"
-        return "hover:bg-accent"
+        if (pathname === "/" && label === "Home") return "font-bold bg-primary text-secondary"
+        if (pathname.substring(1) === label.toLowerCase()) return "font-bold bg-primary text-secondary"
+        return "hover:bg-accent font-medium"
     }
 
     return (
@@ -28,7 +29,7 @@ const NavigationItems = ({ showLabels = true }: { showLabels?: boolean }) => {
                             key={subLink.href}
                             href={subLink.href}
                             id={`sidebar-link-${subLink.label.toLowerCase().replace(/ /g, "-")}`}
-                            className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap font-medium ${getLinkHighlight(subLink.label)}`}
+                            className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap ${getLinkHighlight(subLink.label)}`}
                         >
                             <div aria-hidden="true" className="flex size-9 p-2 shrink-0 items-center justify-center">
                                 {subLink.icon}
@@ -101,7 +102,12 @@ export default function NavigationSideBar() {
     return (
         <div
             id="navigation-sidebar"
-            className={`fixed z-10 inset-y-0 left-0 hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r bg-background shadow-md transition-all duration-150 overflow-y-auto pb-10 pt-20 scroll-bar-hidden ${canExpand ? 'w-60' : 'w-16'}`}
+            className={cn(
+                "fixed z-10 inset-y-0 left-0 hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r",
+                "backdrop-blur-md shadow-md transition-all duration-150 overflow-y-auto pb-10 pt-20 scroll-bar-hidden",
+                "bg-card/50",
+                canExpand ? 'w-60' : 'w-16',
+            )}
             onMouseEnter={() => handleExpand(true)}
             onMouseLeave={() => handleExpand(false)}
             onFocus={() => handleExpand(true)}
