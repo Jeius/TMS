@@ -201,7 +201,7 @@ export default function TableOptions<TData>({
     }
 
     return (
-        <div className="flex items-center justify-between overflow-hidden px-4 py-2 border border-b-0 rounded-t-md bg-card text-card-foreground shadow-black">
+        <div className="flex items-center justify-between overflow-hidden px-4 py-2">
             <div className="flex space-x-2 flex-wrap">
                 <Combobox items={yearData} placeholder="Year" onSelect={handleYearSelect} />
                 <Combobox items={specializationData} placeholder="Specialization" onSelect={handleSpecializationSelect} />
