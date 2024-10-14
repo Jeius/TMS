@@ -59,6 +59,9 @@ const config: Config = {
 			screens: {
 				'xsm': '420px',
 			},
+			boxShadow: {
+				'right': '1px 0 5px rgba(0, 0, 0, 0.1)',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
