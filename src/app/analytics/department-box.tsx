@@ -39,6 +39,6 @@ export function Departmentbox() {
     const departments = getDepartments()
 
     return (
-        <Combobox items={departments} defaultValue="ALL" placeholder="Department" onSelect={setValue} />
+        <Combobox items={departments} defaultValue={value} placeholder="Department" onSelect={setValue} />
     )
 }

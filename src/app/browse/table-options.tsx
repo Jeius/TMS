@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Combobox, ComboboxItem } from "@/components/ui/combobox"
-import { Separator } from "@/components/ui/separator"
 import { Table } from "@tanstack/react-table"
 import React from "react"
 
@@ -15,7 +14,7 @@ import {
 import { ChevronDown, Plus } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 
-interface TableOptionsProps<TData> {
+export interface TableOptionsProps<TData> {
     table: Table<TData>
 }
 

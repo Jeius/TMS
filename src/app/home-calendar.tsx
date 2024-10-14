@@ -139,7 +139,7 @@ const RemindersItems = () => {
         const currentReminders = form.watch("reminders")
         const isAllChecked = REMINDERS.every((reminder) => currentReminders.includes(reminder.id))
         setAllChecked(isAllChecked)
-    }, [form.watch("reminders")])
+    }, [form])
 
     const handleMarkDone = () => {
         const selectedReminders = form.getValues("reminders")
@@ -158,8 +158,8 @@ const RemindersItems = () => {
                 title,
                 description: (
                     <div className="flex flex-col pl-2">{
-                        reminders.map(reminder => (
-                            <span>{reminder}</span>
+                        reminders.map((reminder, index) => (
+                            <span key={index}>{reminder}</span>
                         ))
                     }</div>
                 ),

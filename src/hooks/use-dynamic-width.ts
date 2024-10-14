@@ -5,6 +5,7 @@ export function useDynamicWidth() {
     const elementRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const current = elementRef.current
         const updateWidth = () => {
             if (elementRef.current) {
                 setWidth(`${elementRef.current.offsetWidth}px`);
@@ -22,8 +23,8 @@ export function useDynamicWidth() {
 
         // Clean up the observer when the component unmounts
         return () => {
-            if (elementRef.current) {
-                resizeObserver.unobserve(elementRef.current);
+            if (current) {
+                resizeObserver.unobserve(current);
             }
         };
     }, []);
