@@ -4,7 +4,7 @@ import React from 'react'
 import { Thesis, columns } from './table-columns'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import {
-    ColumnDef,
+
     ColumnFiltersState,
     flexRender,
     getCoreRowModel,
@@ -15,9 +15,12 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import TableOptions from './table-options'
 import { useDynamicWidth } from '@/hooks/use-dynamic-width'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import dynamic from 'next/dynamic'
+import { TableOptionsProps } from '@/app/browse/table-options'
+
+const TableOptions = dynamic(() => import('@/app/browse/table-options')) as React.ComponentType<TableOptionsProps<Thesis>>
 
 type TableProps = React.HtmlHTMLAttributes<HTMLElement> & { data: Thesis[] }
 
@@ -70,18 +73,19 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                 <TableOptions table={table} />
             </div>
             <div className="relative">
-                <ScrollArea ref={scrollAreaRef} className="m-auto max-w-fit overflow-x-auto scroll-smooth whitespace-nowrap shadow border border-t-0">
+                <ScrollArea ref={scrollAreaRef} className="m-auto max-w-fit overflow-x-auto scroll-smooth whitespace-nowrap shadow border">
                     <div ref={childRef} className="flex flex-1 text-sm">
                         <Table className="relative w-min h-full table-fixed sm:static whitespace-normal box-border">
-                            <TableHeader className=" hover:bg-transparent z-10 text-xs">
+                            <TableHeader className="hover:bg-transparent z-10 text-xs">
                                 {table.getHeaderGroups().map((headerGroup) => (
-                                    <TableRow key={headerGroup.id} className="border-t sticky top-0 align-top hover:bg-transparent">
+                                    <TableRow key={headerGroup.id} className="sticky top-0 align-top hover:bg-transparent">
                                         {headerGroup.headers.map((header) => {
                                             const isFirstColumn = header.id === 'title'
                                             return (
                                                 <TableHead
                                                     key={header.id}
-                                                    className={`p-0 bg-gradient-to-t dark:bg-gradient-to-b from-muted to-background ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled ? 'shadow-right' : ''}` : 'border-r last:border-r-0'}`}
+                                                    scope="col"
+                                                    className={`px-4 bg-gradient-to-t dark:bg-gradient-to-b from-muted to-background ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled ? 'shadow-right' : ''}` : ''}`}
                                                     style={{ width: `${header.getSize().toString()}px` }}
                                                 >
                                                     {header.isPlaceholder
@@ -101,7 +105,6 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                     table.getRowModel().rows.map((row) => (
                                         <TableRow
                                             key={row.id}
-                                            data-state={row.getIsSelected() && "selected"}
                                             className="align-top hover:bg-transparent"
                                         >
                                             {row.getVisibleCells().map((cell) => {
@@ -109,8 +112,11 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                 return (
                                                     <TableCell
                                                         key={cell.id}
-                                                        className={`relative overflow-auto p-0 bg-card ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled ? 'shadow-right' : ''}` : 'border-r last:border-r-0'}`}
-                                                        style={{ width: `${cell.column.getSize().toString()}px` }}
+                                                        scope="col"
+                                                        data-column-id={cell.column.id}
+                                                        data-state={row.getIsSelected() && "selected"}
+                                                        className={`left-0 align-top p-4 overflow-auto bg-card data-[state=selected]:bg-primary/40 transition-colors ${isFirstColumn ? `sticky z-[1] ${isScrolled ? 'shadow-right' : ''}` : ''}`}
+                                                        style={{ width: `${cell.column.getSize().toString()}px`, clipPath: isFirstColumn && isScrolled ? "inset(0px 0px 0px -5px)" : "" }}
                                                     >
                                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                     </TableCell>

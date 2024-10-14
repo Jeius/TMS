@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Dot, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import Link from "next/link"
 
 export type Thesis = {
     id: string
@@ -21,9 +22,18 @@ export const columns: ColumnDef<Thesis>[] = [
     {
         accessorKey: "title",
         size: 514,
-        header: ({ column }) => {
-            return (<div className="flex items-center space-x-2 text-foreground min-w-32 px-4 py-3 border-r">
-                <Checkbox id="theses" />
+        enableSorting: false,
+        enableHiding: false,
+        header: ({ table }) => {
+            return (<div className="flex items-center space-x-2 text-foreground min-w-32">
+                <Checkbox id="theses"
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
                 <label
                     htmlFor="theses"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -35,14 +45,25 @@ export const columns: ColumnDef<Thesis>[] = [
             const author = row.getValue("author") as string
             const year = row.getValue("year") as string
             const department = row.getValue("department") as string
-            return (<div className="flex space-x-2 items-center p-4 mr-auto border-r">
-                <Checkbox />
-                <div className="flex flex-col flex-wrap">
-                    <Button variant="link" className="font-bold size-fit text-md text-secondary text-wrap text-left p-0">{title}</Button>
-                    <span>{author}</span>
-                    <span className="flex items-center text-xs">
-                        {year} <Dot size={25} /> {department}
-                    </span>
+
+            return (<div className="flex">
+                <Checkbox className="my-auto mr-2"
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label={`Select ${title}`}
+                />
+                <div className="flex flex-col space-y-1">
+                    <div className="line-clamp-3 text-ellipsis font-bold" data-title={title}>
+                        <Link href={"#"} className="text-secondary text-base hover:underline">
+                            <span className="inline">{title}</span>
+                        </Link>
+                    </div>
+                    <div className="text-xs font-semibold" data-author-list={author}>
+                        <span>{author}</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                        <span>{year}</span> <Dot size={25} aria-hidden="true" /> <span>{department}</span>
+                    </div>
                 </div>
             </div>)
         },
@@ -55,7 +76,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("author") as string
-            return (<div className="p-2">{value}</div>)
+            return (<div>{value}</div>)
         }
     },
     {
@@ -66,7 +87,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = Math.round(row.getValue("year"))
-            return (<div className="p-2 text-center">{value}</div>)
+            return (<div className="text-center">{value}</div>)
         }
     },
     {
@@ -77,7 +98,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("adviser") as string
-            return (<div className="p-2">{value}</div>)
+            return (<div>{value}</div>)
         }
     },
     {
@@ -88,7 +109,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("specialization") as string
-            return (<div className="p-2">{value}</div>)
+            return (<div>{value}</div>)
         }
     },
     {
@@ -99,18 +120,18 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("department") as string
-            return (<div className="p-2">{value}</div>)
+            return (<div>{value}</div>)
         }
     },
     {
         accessorKey: "dateUploaded",
-        size: 150,
+        size: 180,
         header: ({ column }) => {
             return (<ColumnHeader column={column} title="Date Uploaded" />)
         },
         cell: ({ row }) => {
             const value = row.getValue("dateUploaded") as string
-            return (<div className="p-2 text-center">{value}</div>)
+            return (<div className="text-center">{value}</div>)
         }
     },
 ]
@@ -127,7 +148,7 @@ const ColumnHeader = <TData, TValue>({
 }) => {
     return (
         <TooltipProvider>
-            <div className="flex p-2 items-center justify-between space-x-2 text-foreground text-sm">
+            <div className="flex items-center justify-between space-x-2 text-foreground text-sm">
                 <span>{title}</span>
                 {!hideClose && (
                     <Tooltip>
