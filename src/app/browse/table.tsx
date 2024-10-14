@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { Thesis, columns } from './table-columns'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import {
     ColumnDef,
@@ -17,7 +16,6 @@ import {
     VisibilityState,
 } from "@tanstack/react-table"
 import TableOptions from './table-options'
-import { cn } from '@/lib/utils'
 import { useDynamicWidth } from '@/hooks/use-dynamic-width'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
@@ -28,6 +26,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [isScrolled, setIsScrolled] = React.useState(false)
+    const scrollAreaRef = React.useRef<HTMLDivElement>(null)
     const [width, childRef] = useDynamicWidth()
 
     const table = useReactTable({
@@ -53,36 +52,37 @@ export default function BrowseTable({ data, ...props }: TableProps) {
             setIsScrolled(scrollLeft > 0)
         }
 
-        const tableContainer = document.querySelector('.table-container')
-        if (tableContainer) {
-            tableContainer.addEventListener('scroll', handleScroll)
+        const scrollArea = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement
+        if (scrollArea) {
+            scrollArea.addEventListener('scroll', handleScroll)
         }
 
         return () => {
-            if (tableContainer) {
-                tableContainer.removeEventListener('scroll', handleScroll)
+            if (scrollArea) {
+                scrollArea.removeEventListener('scroll', handleScroll)
             }
         }
     }, [])
 
     return (
         <div {...props}>
-            <div className="m-auto max-w-full overflow-hidden bg-card text-card-foreground border rounded-t-xl shadow" style={{ width }}>
+            <div className="m-auto max-w-full overflow-hidden bg-card text-card-foreground border border-b-0 rounded-t-xl shadow" style={{ width }}>
                 <TableOptions table={table} />
             </div>
             <div className="relative">
-                <ScrollArea ref={childRef} className="m-auto max-w-fit scroll-smooth whitespace-nowrap shadow border border-t-0">
-                    <div className="flex max-w-fit flex-1 text-sm">
+                <ScrollArea ref={scrollAreaRef} className="m-auto max-w-fit overflow-x-auto scroll-smooth whitespace-nowrap shadow border border-t-0">
+                    <div ref={childRef} className="flex flex-1 text-sm">
                         <Table className="relative w-min h-full table-fixed sm:static whitespace-normal box-border">
-                            <TableHeader className="sticky hover:bg-transparent top-0 z-10 text-xs">
+                            <TableHeader className="sticky top-0 hover:bg-transparent z-10 text-xs">
                                 {table.getHeaderGroups().map((headerGroup) => (
-                                    <TableRow key={headerGroup.id} className="border-t hover:bg-transparent">
+                                    <TableRow key={headerGroup.id} className="border-t align-top hover:bg-transparent">
                                         {headerGroup.headers.map((header) => {
                                             const isFirstColumn = header.id === 'title'
                                             return (
                                                 <TableHead
                                                     key={header.id}
-                                                    className={`relative bg-gradient-to-t dark:bg-gradient-to-b from-muted/75 to-background border-r last:border-r-0 ${isFirstColumn ? `sticky left-0 z-[1] w-[514px] ${isScrolled ? 'shadow-lg' : ''}` : 'w-[250px]'}`}
+                                                    className={`relative p-0 bg-gradient-to-t dark:bg-gradient-to-b from-muted to-background ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled && 'shadow-right'}` : 'border-r last:border-r-0'}`}
+                                                    style={{ width: `${header.getSize().toString()}px` }}
                                                 >
                                                     {header.isPlaceholder
                                                         ? null
@@ -102,14 +102,16 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                         <TableRow
                                             key={row.id}
                                             data-state={row.getIsSelected() && "selected"}
-                                            className="hover:bg-transparent"
+                                            className="align-top hover:bg-transparent"
                                         >
                                             {row.getVisibleCells().map((cell) => {
                                                 const isFirstColumn = cell.column.id === 'title'
                                                 return (
                                                     <TableCell
                                                         key={cell.id}
-                                                        className={`relative bg-card border-r last:border-r-0 ${isFirstColumn ? `sticky left-0 z-[1] w-[514px] ${isScrolled ? 'shadow-lg' : ''}` : 'w-[250px]'}`}>
+                                                        className={`relative p-0 bg-card ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled && 'shadow-right'}` : 'border-r last:border-r-0'}`}
+                                                        style={{ width: `${cell.column.getSize().toString()}px` }}
+                                                    >
                                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                     </TableCell>
                                                 )
