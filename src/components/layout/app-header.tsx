@@ -110,7 +110,7 @@ const SearchBar = () => (
 
 export default function AppHeader() {
     return (
-        <header id="app-header" className="sticky inset-x-0 top-0 z-50 border-b bg-card/30 dark:bg-black/40 backdrop-blur-md p-2 lg:px-4">
+        <header id="app-header" className="sticky inset-x-0 top-0 z-50 border-b bg-card/30 dark:bg-black/40 backdrop-blur-md shadow p-2 lg:px-4">
             <TooltipProvider>
                 <div className="flex items-center justify-between">
                     <div className="flex grow items-center space-x-2 pl-2">
