@@ -22,7 +22,7 @@ export const columns: ColumnDef<Thesis>[] = [
         accessorKey: "title",
         size: 514,
         header: ({ column }) => {
-            return (<div className="flex items-center space-x-2 text-foreground min-w-32 p-2">
+            return (<div className="flex items-center space-x-2 text-foreground min-w-32 px-4 py-3 border-r">
                 <Checkbox id="theses" />
                 <label
                     htmlFor="theses"
@@ -35,7 +35,7 @@ export const columns: ColumnDef<Thesis>[] = [
             const author = row.getValue("author") as string
             const year = row.getValue("year") as string
             const department = row.getValue("department") as string
-            return (<div className="flex space-x-2 items-center p-2 mr-auto">
+            return (<div className="flex space-x-2 items-center p-4 mr-auto border-r">
                 <Checkbox />
                 <div className="flex flex-col flex-wrap">
                     <Button variant="link" className="font-bold size-fit text-md text-secondary text-wrap text-left p-0">{title}</Button>
@@ -49,68 +49,68 @@ export const columns: ColumnDef<Thesis>[] = [
     },
     {
         accessorKey: "author",
-        size: 384,
+        size: 250,
         header: ({ column }) => {
             return (<ColumnHeader column={column} title="Author" />)
         },
         cell: ({ row }) => {
             const value = row.getValue("author") as string
-            return (<div>{value}</div>)
+            return (<div className="p-2">{value}</div>)
         }
     },
     {
         accessorKey: "year",
-        size: 384,
+        size: 100,
         header: ({ column }) => {
             return (<ColumnHeader column={column} title="Year" />)
         },
         cell: ({ row }) => {
             const value = Math.round(row.getValue("year"))
-            return (<div className="whitespace-nowrap">{value}</div>)
+            return (<div className="p-2 text-center">{value}</div>)
         }
     },
     {
         accessorKey: "adviser",
-        size: 384,
+        size: 250,
         header: ({ column }) => {
             return (<ColumnHeader column={column} title="Adviser" />)
         },
         cell: ({ row }) => {
             const value = row.getValue("adviser") as string
-            return (<div className="whitespace-nowrap">{value}</div>)
+            return (<div className="p-2">{value}</div>)
         }
     },
     {
         accessorKey: "specialization",
-        size: 384,
+        size: 300,
         header: ({ column }) => {
             return (<ColumnHeader column={column} title="Area of Specialization" />)
         },
         cell: ({ row }) => {
             const value = row.getValue("specialization") as string
-            return (<div>{value}</div>)
-        }
-    },
-    {
-        accessorKey: "dateUploaded",
-        size: 384,
-        header: ({ column }) => {
-            return (<ColumnHeader column={column} title="Date Uploaded" />)
-        },
-        cell: ({ row }) => {
-            const value = row.getValue("dateUploaded") as string
-            return (<div className="whitespace-nowrap">{value}</div>)
+            return (<div className="p-2">{value}</div>)
         }
     },
     {
         accessorKey: "department",
-        size: 384,
+        size: 300,
         header: ({ column }) => {
             return (<ColumnHeader column={column} title="Department" />)
         },
         cell: ({ row }) => {
             const value = row.getValue("department") as string
-            return (<div className="whitespace-nowrap">{value}</div>)
+            return (<div className="p-2">{value}</div>)
+        }
+    },
+    {
+        accessorKey: "dateUploaded",
+        size: 150,
+        header: ({ column }) => {
+            return (<ColumnHeader column={column} title="Date Uploaded" />)
+        },
+        cell: ({ row }) => {
+            const value = row.getValue("dateUploaded") as string
+            return (<div className="p-2 text-center">{value}</div>)
         }
     },
 ]
@@ -127,7 +127,7 @@ const ColumnHeader = <TData, TValue>({
 }) => {
     return (
         <TooltipProvider>
-            <div className="flex items-center justify-between space-x-2 text-foreground text-sm">
+            <div className="flex p-2 items-center justify-between space-x-2 text-foreground text-sm">
                 <span>{title}</span>
                 {!hideClose && (
                     <Tooltip>

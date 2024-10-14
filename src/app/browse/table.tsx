@@ -73,15 +73,15 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                 <ScrollArea ref={scrollAreaRef} className="m-auto max-w-fit overflow-x-auto scroll-smooth whitespace-nowrap shadow border border-t-0">
                     <div ref={childRef} className="flex flex-1 text-sm">
                         <Table className="relative w-min h-full table-fixed sm:static whitespace-normal box-border">
-                            <TableHeader className="sticky top-0 hover:bg-transparent z-10 text-xs">
+                            <TableHeader className=" hover:bg-transparent z-10 text-xs">
                                 {table.getHeaderGroups().map((headerGroup) => (
-                                    <TableRow key={headerGroup.id} className="border-t align-top hover:bg-transparent">
+                                    <TableRow key={headerGroup.id} className="border-t sticky top-0 align-top hover:bg-transparent">
                                         {headerGroup.headers.map((header) => {
                                             const isFirstColumn = header.id === 'title'
                                             return (
                                                 <TableHead
                                                     key={header.id}
-                                                    className={`relative p-0 bg-gradient-to-t dark:bg-gradient-to-b from-muted to-background ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled && 'shadow-right'}` : 'border-r last:border-r-0'}`}
+                                                    className={`p-0 bg-gradient-to-t dark:bg-gradient-to-b from-muted to-background ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled ? 'shadow-right' : ''}` : 'border-r last:border-r-0'}`}
                                                     style={{ width: `${header.getSize().toString()}px` }}
                                                 >
                                                     {header.isPlaceholder
@@ -109,7 +109,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                 return (
                                                     <TableCell
                                                         key={cell.id}
-                                                        className={`relative p-0 bg-card ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled && 'shadow-right'}` : 'border-r last:border-r-0'}`}
+                                                        className={`relative overflow-auto p-0 bg-card ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled ? 'shadow-right' : ''}` : 'border-r last:border-r-0'}`}
                                                         style={{ width: `${cell.column.getSize().toString()}px` }}
                                                     >
                                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
