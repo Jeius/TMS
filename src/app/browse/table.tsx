@@ -75,7 +75,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
             <div className="relative">
                 <ScrollArea ref={scrollAreaRef} className="m-auto max-w-fit overflow-x-auto scroll-smooth whitespace-nowrap shadow border">
                     <div ref={childRef} className="flex flex-1 text-sm">
-                        <Table className="relative w-min h-full table-fixed sm:static whitespace-normal box-border border-separate border-spacing-0">
+                        <Table className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
                             <TableHeader className="hover:bg-transparent z-10 text-xs">
                                 {table.getHeaderGroups().map((headerGroup) => (
                                     <TableRow key={headerGroup.id} className="sticky top-0 align-top hover:bg-transparent">

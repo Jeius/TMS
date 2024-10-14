@@ -58,16 +58,15 @@ const ColumnsViewOptions = <TData,>({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
-                    variant="outline"
                     size="sm"
-                    className="ml-auto h-8 flex data-[state=open]:bg-accent"
+                    className="flex bg-gradient-to-b dark:bg-gradient-to-t from-card/60"
                 >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Columns
+                    <Plus className="mr-2" size={16} aria-hidden="true" />
+                    <span>Add Columns</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[150px]">
-                <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+                <DropdownMenuLabel>Add columns</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                     .getAllColumns()
@@ -200,15 +199,18 @@ export default function TableOptions<TData>({
     }
 
     return (
-        <div className="flex items-center justify-between overflow-hidden px-4 py-2">
-            <div className="flex space-x-2 flex-wrap">
+        <div className="flex items-center justify-between overflow-hidden px-4 py-3">
+            <div className="flex gap-2 flex-wrap mr-32">
+                <Combobox items={[]} placeholder="College" onSelect={() => { }} />
+                <Combobox items={[]} placeholder="Department" onSelect={() => { }} />
                 <Combobox items={yearData} placeholder="Year" onSelect={handleYearSelect} />
                 <Combobox items={specializationData} placeholder="Specialization" onSelect={handleSpecializationSelect} />
                 <Combobox items={[]} placeholder="Author" onSelect={handleAuthorSelect} />
                 <Combobox items={[]} placeholder="Adviser" onSelect={handleAdviserSelect} />
-                <Button variant="ghost" size="sm" className="lg:hidden text-primary hover:bg-transparent">More filters</Button>
+                <Combobox items={[]} placeholder="Keywords" onSelect={() => { }} />
+                <Button variant="ghost" size="sm" className="lg:hidden text-secondary hover:text-secondary hover:bg-secondary/15">More filters</Button>
             </div>
-            <div className="flex space-x-2">
+            <div className="flex justify-end gap-2 flex-wrap">
                 <SortOptions table={table} />
                 <ColumnsViewOptions table={table} />
             </div>
