@@ -75,7 +75,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
             <div className="relative">
                 <ScrollArea ref={scrollAreaRef} className="m-auto max-w-fit overflow-x-auto scroll-smooth whitespace-nowrap shadow border">
                     <div ref={childRef} className="flex flex-1 text-sm">
-                        <Table className="relative w-min h-full table-fixed sm:static whitespace-normal box-border">
+                        <Table className="relative w-min h-full table-fixed sm:static whitespace-normal box-border border-separate border-spacing-0">
                             <TableHeader className="hover:bg-transparent z-10 text-xs">
                                 {table.getHeaderGroups().map((headerGroup) => (
                                     <TableRow key={headerGroup.id} className="sticky top-0 align-top hover:bg-transparent">
@@ -115,8 +115,8 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                         scope="col"
                                                         data-column-id={cell.column.id}
                                                         data-state={row.getIsSelected() && "selected"}
-                                                        className={`left-0 align-top p-4 overflow-auto bg-card data-[state=selected]:bg-primary/40 transition-colors ${isFirstColumn ? `sticky z-[1] ${isScrolled ? 'shadow-right' : ''}` : ''}`}
-                                                        style={{ width: `${cell.column.getSize().toString()}px`, clipPath: isFirstColumn && isScrolled ? "inset(0px 0px 0px -5px)" : "" }}
+                                                        className={`left-0 align-top border-t p-4 overflow-auto bg-card data-[state=selected]:bg-primary/40 transition-colors ${isFirstColumn ? `md:sticky z-[1] ${isScrolled ? 'shadow-right' : ''}` : ''}`}
+                                                        style={{ width: `${cell.column.getSize().toString()}px`, clipPath: isFirstColumn && isScrolled ? "inset(0px -50px 0px 0px)" : "" }}
                                                     >
                                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                     </TableCell>

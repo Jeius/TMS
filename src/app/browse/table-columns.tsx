@@ -25,18 +25,19 @@ export const columns: ColumnDef<Thesis>[] = [
         enableSorting: false,
         enableHiding: false,
         header: ({ table }) => {
-            return (<div className="flex items-center space-x-2 text-foreground min-w-32">
+            return (<div className="flex items-center space-x-3 text-foreground min-w-32">
                 <Checkbox id="theses"
                     checked={
                         table.getIsAllPageRowsSelected() ||
                         (table.getIsSomePageRowsSelected() && "indeterminate")
                     }
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    className="ml-1"
                     aria-label="Select all"
                 />
                 <label
                     htmlFor="theses"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >Theses</label>
             </div>)
         },
@@ -47,7 +48,7 @@ export const columns: ColumnDef<Thesis>[] = [
             const department = row.getValue("department") as string
 
             return (<div className="flex">
-                <Checkbox className="my-auto mr-2"
+                <Checkbox className="my-auto ml-1 mr-3"
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
                     aria-label={`Select ${title}`}
@@ -148,7 +149,7 @@ const ColumnHeader = <TData, TValue>({
 }) => {
     return (
         <TooltipProvider>
-            <div className="flex items-center justify-between space-x-2 text-foreground text-sm">
+            <div className="flex items-center justify-between space-x-2">
                 <span>{title}</span>
                 {!hideClose && (
                     <Tooltip>
