@@ -36,7 +36,7 @@ type ScrollProps = { value?: number, isScrolled: boolean }
 export default function BrowseTable({ data, ...props }: TableProps) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({ author: false, year: false, department: false, dateUploaded: false })
     const [scrollLeft, setScrollLeft] = useState<ScrollProps>({ isScrolled: false })
     const [scrollTop, setScrollTop] = useState<ScrollProps>({ isScrolled: false })
     const [width, childRef] = useDynamicWidth()
