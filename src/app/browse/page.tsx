@@ -236,7 +236,7 @@ export default function Browse() {
                 <div className="mb-28 h-full">
                     <div className="mx-auto space-y-2 lg:space-y-4"></div>
                     <div className="gap 5 max-sm:mt-5 max-sm:flex max-sm:flex-col">
-                        <BrowseTable data={data} className="mt-4 hidden sm:block" />
+                        <BrowseTable data={data} className="hidden sm:block" />
                     </div>
                     {/* <Card className="w-full lg:max-w-52 overflow-hidden">
                     <CardContent className="p-0">
