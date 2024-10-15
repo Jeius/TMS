@@ -45,7 +45,7 @@ export default function Home() {
             className="relative max-w-none m-auto p-5"
         >
             <div className="flex flex-col mx-auto w-fit items-center md:items-start lg:ml-[max(40px,calc(65%-37rem))] xl:ml-[max(40px,calc(57%-40rem))] 2xl:ml-[max(40px,calc(50%-44rem))] space-y-16 transition-all duration-500">
-                <Card id="welcome-card" filter="glass" colorType="gradient" className="w-full">
+                <Card id="welcome-card" filter="glass" colorType="gradient" className="w-full bg-primary">
                     <CardHeader className="space-y-1">
                         <CardTitle className="font-bold text-3xl text-secondary">
                             Welcome, [user]

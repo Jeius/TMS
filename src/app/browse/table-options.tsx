@@ -59,7 +59,7 @@ const ColumnsViewOptions = <TData,>({
             <DropdownMenuTrigger asChild>
                 <Button
                     size="sm"
-                    className="flex bg-gradient-to-b dark:bg-gradient-to-t from-card/60"
+                    className="flex bg-gradient-to-b from-white/60 dark:bg-gradient-to-t dark:from-black/40"
                 >
                     <Plus className="mr-2" size={16} aria-hidden="true" />
                     <span>Add Columns</span>

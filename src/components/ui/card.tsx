@@ -4,14 +4,14 @@ import { cn } from "@/lib/utils"
 import { cva, VariantProps } from "class-variance-authority"
 
 const cardVariants = cva(
-  "rounded-xl border shadow",
+  "rounded-xl border shadow bg-card text-card-foreground",
   {
     variants: {
       colorType: {
         solid:
-          "bg-card text-card-foreground",
+          "",
         gradient:
-          "bg-gradient-to-br from-primary to-card text-card-foreground",
+          "bg-gradient-to-br from-white/60 dark:bg-gradient-to-tl dark:from-black/40",
       },
       filter: {
         default: "",

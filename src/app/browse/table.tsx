@@ -85,7 +85,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                 <TableHead
                                                     key={header.id}
                                                     scope="col"
-                                                    className={`px-4 bg-gradient-to-t dark:bg-gradient-to-b from-muted to-background ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled ? 'shadow-right' : ''}` : ''}`}
+                                                    className={`px-4 bg-muted bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? `sticky left-0 z-[1] ${isScrolled ? 'shadow-right' : ''}` : ''}`}
                                                     style={{ width: `${header.getSize().toString()}px` }}
                                                 >
                                                     {header.isPlaceholder
