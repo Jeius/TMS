@@ -10,7 +10,8 @@
           "text-wrap"
         ]
       }
-    ]
+    ],
+    "no-inline-styles": "off"
   },
   "browserslist": [
     "defaults",
