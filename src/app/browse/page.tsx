@@ -238,31 +238,6 @@ export default function Browse() {
                     <div className="gap 5 max-sm:mt-5 max-sm:flex max-sm:flex-col">
                         <BrowseTable data={data} className="hidden sm:block" />
                     </div>
-                    {/* <Card className="w-full lg:max-w-52 overflow-hidden">
-                    <CardContent className="p-0">
-                        <AdaptiveResizablePanelGroup
-                            direction="vertical"
-                            changeDirectionAt='lg'
-                            className="min-h-[200px] lg:min-h-[840px] w-full"
-                        >
-                            <ResizablePanel
-                                defaultSize={200}
-                                className="flex-grow min-w-56 lg:min-w-0 min-h-32"
-                            >
-                                <div className="px-4"><Departments /></div>
-                            </ResizablePanel>
-
-                            <ResizableHandle withHandle className="border-2" />
-
-                            <ResizablePanel
-                                defaultSize={200}
-                                className="flex-grow min-w-56 lg:min-w-0 min-h-32"
-                            >
-                                <div className="px-4"><MyLibrary /></div>
-                            </ResizablePanel>
-                        </AdaptiveResizablePanelGroup>
-                    </CardContent>
-                </Card > */}
                 </div>
             </div>
         </div>
