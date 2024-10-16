@@ -72,7 +72,7 @@ const ColumnsViewOptions = <TData,>({
                     .getAllColumns()
                     .filter(
                         (column) =>
-                            typeof column.accessorFn !== "undefined" && column.getCanHide()
+                            typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible()
                     )
                     .map((column) => {
                         return (

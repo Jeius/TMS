@@ -3,7 +3,7 @@ import { Column, ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dot, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import Link from "next/link"
 
 export type Thesis = {
@@ -148,25 +148,23 @@ const ColumnHeader = <TData, TValue>({
     hideClose?: boolean
 }) => {
     return (
-        <TooltipProvider>
+        <Tooltip>
             <div className="flex items-center justify-between space-x-2">
                 <span>{title}</span>
                 {!hideClose && (
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                aria-label="Remove column"
-                                className="rounded-full p-0.5 size-5 text-muted-foreground hover:text-foreground hover:bg-transparent"
-                                onClick={() => column.toggleVisibility(false)}
-                            ><X aria-hidden="true" className="" /></Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Remove column</p>
-                        </TooltipContent>
-                    </Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            aria-label="Remove column"
+                            className="rounded-full p-0.5 size-5 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                            onClick={() => column.toggleVisibility(false)}
+                        ><X aria-hidden="true" className="" /></Button>
+                    </TooltipTrigger>
                 )}
             </div>
-        </TooltipProvider>
+            <TooltipContent side="bottom" className="z-[999]">
+                <p>Remove column</p>
+            </TooltipContent>
+        </Tooltip>
     )
 }
