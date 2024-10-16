@@ -5,6 +5,7 @@ import { Dot, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import Link from "next/link"
+import { MDiv } from "framer-motion-nextjs-elements"
 
 export type Thesis = {
     id: string
@@ -77,7 +78,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("author") as string
-            return (<div>{value}</div>)
+            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
         }
     },
     {
@@ -88,7 +89,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = Math.round(row.getValue("year"))
-            return (<div className="text-center">{value}</div>)
+            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="text-center">{value}</MDiv>)
         }
     },
     {
@@ -99,7 +100,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("adviser") as string
-            return (<div>{value}</div>)
+            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
         }
     },
     {
@@ -110,7 +111,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("specialization") as string
-            return (<div>{value}</div>)
+            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
         }
     },
     {
@@ -121,7 +122,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("department") as string
-            return (<div>{value}</div>)
+            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
         }
     },
     {
@@ -132,7 +133,7 @@ export const columns: ColumnDef<Thesis>[] = [
         },
         cell: ({ row }) => {
             const value = row.getValue("dateUploaded") as string
-            return (<div className="text-center">{value}</div>)
+            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="text-center">{value}</MDiv>)
         }
     },
 ]
@@ -149,7 +150,11 @@ const ColumnHeader = <TData, TValue>({
 }) => {
     return (
         <Tooltip>
-            <div className="flex items-center justify-between space-x-2">
+            <MDiv
+                className="flex items-center justify-between space-x-2"
+                initial={{ x: 60, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+            >
                 <span>{title}</span>
                 {!hideClose && (
                     <TooltipTrigger asChild>
@@ -161,8 +166,8 @@ const ColumnHeader = <TData, TValue>({
                         ><X aria-hidden="true" className="" /></Button>
                     </TooltipTrigger>
                 )}
-            </div>
-            <TooltipContent side="bottom" className="z-[999]">
+            </MDiv>
+            <TooltipContent side="bottom">
                 <p>Remove column</p>
             </TooltipContent>
         </Tooltip>

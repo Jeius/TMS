@@ -117,12 +117,10 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                         <div className="flex flex-1 text-sm">
                             <Table className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
                                 <TableHeader
-                                    className="sticky top-0 z-10 text-xs hover:bg-transparent transition-transform ease-out"
-                                    style={{
-                                        boxShadow: scrollState.top.isScrolled ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined,
-                                    }}
                                     motion
                                     animate={{ y: scrollState.top.value }}
+                                    className="sticky top-0 z-10 text-xs hover:bg-transparent"
+                                    style={{ boxShadow: scrollState.top.isScrolled ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined }}
                                 >
                                     {table.getHeaderGroups().map((headerGroup) => (
                                         <TableRow key={headerGroup.id} className="align-top border-0 hover:bg-transparent">
@@ -132,15 +130,12 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                     <TableHead
                                                         key={header.id}
                                                         scope="col"
-                                                        motion
                                                         data-scroll-state={scrollState.left.isScrolled && "scrolled"}
                                                         className={`px-4 bg-muted border-b bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "sticky left-0 z-[1] data-[scroll-state=scrolled]:shadow-right" : ""}`}
                                                         style={{
                                                             width: `${header.getSize()}px`,
                                                             borderTop: scrollState.top.isScrolled ? "1px solid hsl(var(--border))" : "",
                                                         }}
-                                                        initial={{ x: 60, opacity: 0 }}
-                                                        animate={{ x: 0, opacity: 1 }}
                                                     >
                                                         {!header.isPlaceholder &&
                                                             flexRender(header.column.columnDef.header, header.getContext())
@@ -164,11 +159,8 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                             data-column-id={cell.column.id}
                                                             data-state={row.getIsSelected() && "selected"}
                                                             data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                            className={`left-0 align-top border-b p-4 overflow-auto bg-card data-[state=selected]:bg-primary/40 transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:shadow-right" : ""}`}
+                                                            className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-primary/40 transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:shadow-right" : ""}`}
                                                             style={{ width: `${cell.column.getSize()}px` }}
-                                                            motion
-                                                            initial={{ x: 60, opacity: 0 }}
-                                                            animate={{ x: 0, opacity: 1 }}
                                                         >
                                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                         </TableCell>
