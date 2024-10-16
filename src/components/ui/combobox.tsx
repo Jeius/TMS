@@ -21,9 +21,9 @@ export type ComboboxItem = {
     label: string
 }
 
-type ComboboxProps = {
+type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
     items: ComboboxItem[]
-    onSelect: (value: string) => void
+    onMenuSelect?: (value: string) => void
     placeholder?: string
     defaultValue?: string
     buttonClassName?: string
@@ -32,18 +32,19 @@ type ComboboxProps = {
 
 export const Combobox: React.FC<ComboboxProps> = ({
     items,
-    onSelect,
+    onMenuSelect = () => { },
     placeholder = "Item",
     defaultValue = "",
     buttonClassName = "",
-    buttonVariant = "outline"
+    buttonVariant = "outline",
+    ...props
 }) => {
     const [open, setOpen] = React.useState(false)
     const [selectedValue, setSelectedValue] = React.useState(defaultValue)
 
     const handleSelect = (value: string) => {
         setSelectedValue(value === selectedValue ? "" : value) // Toggle selection
-        onSelect(value === selectedValue ? "" : value)
+        onMenuSelect(value === selectedValue ? "" : value)
         setOpen(false)
     }
 
@@ -56,6 +57,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
                     aria-expanded={open}
                     size="sm"
                     className={cn("w-fit justify-between bg-card text-foreground", buttonClassName)}
+                    {...props}
                 >
                     {selectedValue
                         ? items.find((item) => item.value === selectedValue)?.label

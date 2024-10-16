@@ -66,7 +66,7 @@ const ColumnsViewOptions = <TData,>({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[150px]">
-                <DropdownMenuLabel>Add columns</DropdownMenuLabel>
+                <DropdownMenuLabel>Select Columns</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                     .getAllColumns()
@@ -154,6 +154,7 @@ export default function TableOptions<TData>({
 }: TableOptionsProps<TData>) {
     const router = useRouter()
     const searchParams = useSearchParams()
+    const [showMoreFilters, setShowMoreFilters] = React.useState(false)
 
     const yearData = getYearData();
     const specializationData = getSpecializationData();
@@ -198,17 +199,30 @@ export default function TableOptions<TData>({
         router.push(`?${currentParams.toString()}`);
     }
 
+    const handleFilterSelect = () => {
+        setShowMoreFilters(!showMoreFilters)
+    }
+
     return (
         <div className="flex items-center justify-between overflow-hidden px-4 py-3">
             <div className="flex gap-2 flex-wrap mr-32">
-                <Combobox items={[]} placeholder="College" onSelect={() => { }} />
-                <Combobox items={[]} placeholder="Department" onSelect={() => { }} />
-                <Combobox items={yearData} placeholder="Year" onSelect={handleYearSelect} />
-                <Combobox items={specializationData} placeholder="Specialization" onSelect={handleSpecializationSelect} />
-                <Combobox items={[]} placeholder="Author" onSelect={handleAuthorSelect} />
-                <Combobox items={[]} placeholder="Adviser" onSelect={handleAdviserSelect} />
-                <Combobox items={[]} placeholder="Keywords" onSelect={() => { }} />
-                <Button variant="ghost" size="sm" className="lg:hidden text-secondary hover:text-secondary hover:bg-secondary/15">More filters</Button>
+                <Combobox items={[]} placeholder="College" />
+                <Combobox items={[]} placeholder="Department" />
+                <Combobox items={yearData} placeholder="Year" onMenuSelect={handleYearSelect} />
+                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={specializationData} placeholder="Specialization" onMenuSelect={handleSpecializationSelect} />
+                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={[]} placeholder="Author" onMenuSelect={handleAuthorSelect} />
+                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={[]} placeholder="Adviser" onMenuSelect={handleAdviserSelect} />
+                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={[]} placeholder="Keywords" />
+                <Button variant="ghost" size="sm"
+                    className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
+                    onClick={handleFilterSelect}
+                >
+                    {showMoreFilters ? (
+                        <span>Less filters</span>
+                    ) : (
+                        <span>More filters</span>
+                    )}
+                </Button>
             </div>
             <div className="flex justify-end gap-2 flex-wrap">
                 <SortOptions table={table} />

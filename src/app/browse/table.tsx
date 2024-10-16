@@ -26,7 +26,7 @@ import {
     VisibilityState,
 } from "@tanstack/react-table"
 import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { FileStackIcon, Plus } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
 
@@ -193,7 +193,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                 key={column.id}
                                                 variant="ghost"
                                                 size="sm"
-                                                className="flex cursor-pointer items-center space-x-2 capitalize w-full"
+                                                className="flex items-center space-x-2 capitalize w-full"
                                                 onClick={() => { column.toggleVisibility(true) }}
                                             >
                                                 <Plus aria-hidden="true" focusable="false" size={16} />
@@ -207,6 +207,19 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                         </div>
                         <ScrollBar orientation="horizontal" className="z-10" />
                     </ScrollArea>
+                </div>
+
+                <div
+                    className="mx-auto w-full rounded-b-xl border border-t-0 px-5 py-3 bg-card shadow"
+                    style={{ maxWidth: width }}
+                >
+                    <Button size="lg"
+                        variant="gradient"
+                        className="mx-auto flex space-x-2 font-sans font-bold"
+                    >
+                        <FileStackIcon aria-hidden="true" focusable="false" />
+                        <span>Load more theses</span>
+                    </Button>
                 </div>
             </div>
         </TooltipProvider>
