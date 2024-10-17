@@ -1,13 +1,13 @@
 "use client"
-import { Column, ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, Row, Table } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dot, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import Link from "next/link"
-import { MDiv } from "framer-motion-nextjs-elements"
-import { useAnimate, usePresence } from "framer-motion"
+import { HTMLMotionProps, motion, useAnimate, usePresence } from "framer-motion"
 import React from "react"
+import { cn } from "@/lib/utils"
 
 export type Thesis = {
     id: string
@@ -75,112 +75,123 @@ export const columns: ColumnDef<Thesis>[] = [
     {
         accessorKey: "author",
         size: 250,
-        header: ({ column }) => {
-            return (<ColumnHeader column={column} title="Author" />)
+        header: ({ table }) => {
+            return (<ColumnHeader table={table} accessorKey="author" />)
         },
         cell: ({ row }) => {
-            const value = row.getValue("author") as string
-            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
+            return (<ColumnCell accessorKey="author" row={row} />)
         }
     },
     {
         accessorKey: "year",
         size: 100,
-        header: ({ column }) => {
-            return (<ColumnHeader column={column} title="Year" />)
+        header: ({ table }) => {
+            return (<ColumnHeader table={table} accessorKey="year" />)
         },
         cell: ({ row }) => {
-            const value = Math.round(row.getValue("year"))
-            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="text-center">{value}</MDiv>)
+            return (<ColumnCell accessorKey="year" row={row} />)
         }
     },
     {
         accessorKey: "adviser",
         size: 250,
-        header: ({ column }) => {
-            return (<ColumnHeader column={column} title="Adviser" />)
+        header: ({ table }) => {
+            return (<ColumnHeader table={table} accessorKey="adviser" />)
         },
         cell: ({ row }) => {
-            const value = row.getValue("adviser") as string
-            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
+            return (<ColumnCell accessorKey="adviser" row={row} />)
         }
     },
     {
         accessorKey: "specialization",
         size: 300,
-        header: ({ column }) => {
-            return (<ColumnHeader column={column} title="Area of Specialization" />)
+        header: ({ table }) => {
+            return (<ColumnHeader table={table} accessorKey="specialization" />)
         },
         cell: ({ row }) => {
-            const value = row.getValue("specialization") as string
-            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
+            return (<ColumnCell accessorKey="specialization" row={row} />)
         }
     },
     {
         accessorKey: "department",
         size: 300,
-        header: ({ column }) => {
-            return (<ColumnHeader column={column} title="Department" />)
+        header: ({ table }) => {
+            return (<ColumnHeader table={table} accessorKey="department" />)
         },
         cell: ({ row }) => {
-            const value = row.getValue("department") as string
-            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>{value}</MDiv>)
+            return (<ColumnCell accessorKey="department" row={row} />)
         }
     },
     {
         accessorKey: "dateUploaded",
         size: 180,
-        header: ({ column }) => {
-            return (<ColumnHeader column={column} title="Date Uploaded" />)
+        header: ({ table }) => {
+            return (<ColumnHeader table={table} accessorKey="dateUploaded" />)
         },
         cell: ({ row }) => {
-            const value = row.getValue("dateUploaded") as string
-            return (<MDiv initial={{ x: 60, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="text-center">{value}</MDiv>)
+            return (<ColumnCell accessorKey="dateUploaded" row={row} />)
         }
     },
 ]
 
+interface ColumnCellProps<TData> extends HTMLMotionProps<"div"> {
+    row: Row<TData>;
+    accessorKey: string;
+}
 
-const ColumnHeader = <TData, TValue>({
-    column,
-    title,
-    hideClose = false,
-}: {
-    column: Column<TData, TValue>
-    title: string
-    hideClose?: boolean
-}) => {
-    const [isPresent, safeToRemove] = usePresence()
-    const [scope, animate] = useAnimate()
+const ColumnCell = React.forwardRef<HTMLDivElement, ColumnCellProps<any>>(
+    ({ accessorKey, row, ...props }, ref) => (
+        <motion.div
+            ref={ref}
+            {...props}
+        >
+            {row.getValue(accessorKey)}
+        </motion.div>
+    )
+);
 
-    React.useEffect(() => {
-        if (!isPresent) {
-            animate(scope.current, { x: -60, opacity: 0 });
-            safeToRemove();
-        }
-    });
+ColumnCell.displayName = "ColumnCell";
 
-    return (
+
+interface ColumnHeaderProps<TData> extends HTMLMotionProps<"div"> {
+    table: Table<TData>;
+    accessorKey: string;
+    hideClose?: boolean;
+}
+
+const ColumnHeader = React.forwardRef<HTMLDivElement, ColumnHeaderProps<any>>(
+    ({ accessorKey, table, hideClose = false, className, ...props }, ref) => (
         <Tooltip>
-            <div
-                className="flex items-center justify-between space-x-2"
-                ref={scope}
+            <motion.div
+                ref={ref}
+                className={cn("flex items-center justify-between space-x-2", className)}
+                {...props}
             >
-                <span>{title}</span>
+                <span className="capitalize">
+                    {accessorKey.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                </span>
                 {!hideClose && (
                     <TooltipTrigger asChild>
                         <Button
                             variant="ghost"
                             aria-label="Remove column"
                             className="rounded-full p-0.5 size-5 text-muted-foreground hover:text-foreground hover:bg-transparent"
-                            onClick={() => column.toggleVisibility(false)}
-                        ><X aria-hidden="true" className="" /></Button>
+                            onClick={() =>
+                                table?.getColumn(accessorKey)?.toggleVisibility(false)
+                            }
+                        >
+                            <X aria-hidden="true" />
+                        </Button>
                     </TooltipTrigger>
                 )}
-            </div>
+            </motion.div>
             <TooltipContent>
                 <p>Remove column</p>
             </TooltipContent>
         </Tooltip>
     )
-}
+);
+
+ColumnHeader.displayName = "ColumnHeader"
+
+export { ColumnCell, ColumnHeader }
