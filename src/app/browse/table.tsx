@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
 import dynamic from 'next/dynamic'
 import { Thesis, columns } from './table-columns'
 import { useDynamicWidth } from '@/hooks/use-dynamic-width'
@@ -29,6 +29,7 @@ import { Button } from '@/components/ui/button'
 import { FileStackIcon, Plus } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { debounce } from 'lodash';
+import { useAnimate, useWillChange } from 'framer-motion'
 
 const TableOptions = dynamic(() => import('@/app/browse/table-options')) as React.ComponentType<TableOptionsProps<Thesis>>
 
@@ -48,6 +49,8 @@ export default function BrowseTable({ data, ...props }: TableProps) {
         top: { isScrolled: false },
     })
     const [width, childRef] = useDynamicWidth()
+    const [scope, animate] = useAnimate()
+    const willChange = useWillChange()
 
     // React Table instance setup
     const table = useReactTable({
@@ -63,28 +66,23 @@ export default function BrowseTable({ data, ...props }: TableProps) {
         state: { sorting, columnFilters, columnVisibility },
     })
 
-    const handleScrollLeft = useCallback(debounce((e: Event) => {
+    const handleScrollLeft = debounce((e: Event) => {
         const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
         scrollLeft !== scrollState.left.value && setScrollState(prevState => ({
             ...prevState,
             left: { value: scrollLeft, isScrolled: scrollLeft > 0 }
         }));
-    }), []);
+    });
 
-    const handleScrollDown = useMemo(() => {
-        return debounce(() => {
-            const currentRect = childRef.current?.getBoundingClientRect();
-            const headerRect = document.getElementById("app-header")?.getBoundingClientRect();
+    const handleScrollDown = debounce(() => {
+        const currentRect = childRef.current?.getBoundingClientRect();
+        const headerRect = document.getElementById("app-header")?.getBoundingClientRect();
 
-            if (currentRect && headerRect) {
-                const scrollTop = Math.max(0, headerRect.height - currentRect.top);
-                scrollTop !== scrollState.top.value && setScrollState(prevState => ({
-                    ...prevState,
-                    top: { value: scrollTop, isScrolled: scrollTop > 0 }
-                }));
-            }
-        });
-    }, [childRef.current]);
+        if (currentRect && headerRect) {
+            const scrollTop = Math.max(0, headerRect.height - currentRect.top);
+            animate("thead", { y: scrollTop, boxShadow: scrollTop > 0 ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined });
+        }
+    });
 
     // Set up event listeners for scrolling
     React.useEffect(() => {
@@ -121,12 +119,9 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                         className="m-auto max-w-fit scroll-smooth whitespace-nowrap bg-card shadow border"
                     >
                         <div className="flex flex-1 text-sm">
-                            <Table className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
+                            <Table ref={scope} className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
                                 <TableHeader
-                                    motion
-                                    animate={{ y: scrollState.top.value }}
                                     className="sticky top-0 z-10 text-xs hover:bg-transparent"
-                                    style={{ boxShadow: scrollState.top.isScrolled ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined }}
                                 >
                                     {table.getHeaderGroups().map((headerGroup) => (
                                         <TableRow key={headerGroup.id} className="align-top border-0 hover:bg-transparent">
