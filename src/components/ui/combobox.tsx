@@ -16,18 +16,12 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-export type ComboboxItem = {
-    value: string
-    label: string
-}
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
-    items: ComboboxItem[]
+    items?: string[]
     onMenuSelect?: (value: string) => void
     placeholder?: string
     defaultValue?: string
-    buttonClassName?: string
-    buttonVariant?: "link" | "outline" | "default" | "destructive" | "secondary" | "ghost" | null | undefined
 }
 
 export const Combobox: React.FC<ComboboxProps> = ({
@@ -35,8 +29,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
     onMenuSelect = () => { },
     placeholder = "Item",
     defaultValue = "",
-    buttonClassName = "",
-    buttonVariant = "outline",
+    className,
+    variant = "outline",
     ...props
 }) => {
     const [open, setOpen] = React.useState(false)
@@ -52,16 +46,18 @@ export const Combobox: React.FC<ComboboxProps> = ({
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    variant={buttonVariant}
+                    variant={variant}
                     role="combobox"
                     aria-expanded={open}
                     size="sm"
-                    className={cn("w-fit justify-between bg-card text-foreground", buttonClassName)}
+                    className={cn("w-fit justify-between text-foreground", className)}
                     {...props}
                 >
-                    {selectedValue
-                        ? items.find((item) => item.value === selectedValue)?.label
-                        : placeholder}
+                    <span className="capitalize">
+                        {selectedValue
+                            ? items?.find((item) => item === selectedValue)
+                            : placeholder}
+                    </span>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -71,19 +67,19 @@ export const Combobox: React.FC<ComboboxProps> = ({
                     <CommandList className="max-h-52">
                         <CommandEmpty>Nothing found...</CommandEmpty>
                         <CommandGroup>
-                            {items.map((item) => (
+                            {items?.map((item) => (
                                 <CommandItem
-                                    key={item.value}
-                                    value={item.value}
+                                    key={item}
+                                    value={item}
                                     onSelect={handleSelect}
                                 >
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            selectedValue === item.value ? "opacity-100" : "opacity-0"
+                                            selectedValue === item ? "opacity-100" : "opacity-0"
                                         )}
                                     />
-                                    {item.label}
+                                    <span className="capitalize">{item}</span>
                                 </CommandItem>
                             ))}
                         </CommandGroup>

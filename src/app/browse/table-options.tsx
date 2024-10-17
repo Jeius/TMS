@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Combobox, ComboboxItem } from "@/components/ui/combobox"
+import { Combobox } from "@/components/ui/combobox"
 import { Table } from "@tanstack/react-table"
 import React from "react"
 
@@ -19,35 +19,16 @@ export interface TableOptionsProps<TData> {
 }
 
 const getYearData = () => {
-    return (Array.from({ length: 100 }).map((_, index) =>
-    ({
-        value: (2024 - index + 1).toString(),
-        label: (2024 - index + 1).toString()
-    } as ComboboxItem)))
+    return (Array.from({ length: 100 }).map((_, index) => ((2024 - index + 1).toString())))
 }
 
 const getSpecializationData = () => {
     return [
-        {
-            value: "machine learning",
-            label: "Machine Learning",
-        },
-        {
-            value: "robotics",
-            label: "Robotics",
-        },
-        {
-            value: "network security",
-            label: "Network Security",
-        },
-        {
-            value: "database management",
-            label: "Database Management",
-        },
-        {
-            value: "python",
-            label: "Python",
-        },
+        "machine learning",
+        "robotics",
+        "network security",
+        "database management",
+        "python",
     ]
 }
 
@@ -159,69 +140,51 @@ export default function TableOptions<TData>({
     const yearData = getYearData();
     const specializationData = getSpecializationData();
 
-    const handleYearSelect = (value: string) => {
-        const currentParams = new URLSearchParams(searchParams.toString());
+    const filters = [
+        { key: "college", label: "College", values: [] as string[] },
+        { key: "department", label: "Department", values: [] as string[] },
+        { key: "year", label: "Year", values: yearData },
+        { key: "sp", label: "Specialization", values: specializationData },
+        { key: "author", label: "Author", values: [] as string[] },
+        { key: "adviser", label: "Adviser", values: [] as string[] },
+        { key: "keywords", label: "Keywords", values: [] as string[] },
+    ]
+
+    // Helper function to update URL parameters
+    const handleFilterChange = (key: string, value: string) => {
+        const currentParams = new URLSearchParams(searchParams.toString())
         if (value) {
-            currentParams.set("approved", value);
+            currentParams.set(key, value)
         } else {
-            currentParams.delete("approved")
+            currentParams.delete(key)
         }
-        router.push(`?${currentParams.toString()}`);
+        router.push(`?${currentParams.toString()}`)
     }
 
-    const handleSpecializationSelect = (value: string) => {
-        const currentParams = new URLSearchParams(searchParams.toString());
-        if (value) {
-            currentParams.set("sp", value);
-        } else {
-            currentParams.delete("sp")
-        }
-        router.push(`?${currentParams.toString()}`);
-    }
-
-    const handleAuthorSelect = (value: string) => {
-        const currentParams = new URLSearchParams(searchParams.toString());
-        if (value) {
-            currentParams.set("author", value);
-        } else {
-            currentParams.delete("author")
-        }
-        router.push(`?${currentParams.toString()}`);
-    }
-
-    const handleAdviserSelect = (value: string) => {
-        const currentParams = new URLSearchParams(searchParams.toString());
-        if (value) {
-            currentParams.set("adviser", value);
-        } else {
-            currentParams.delete("adviser")
-        }
-        router.push(`?${currentParams.toString()}`);
-    }
-
-    const handleFilterSelect = () => {
-        setShowMoreFilters(!showMoreFilters)
-    }
+    const toggleMoreFilters = () => setShowMoreFilters(prev => !prev)
 
     return (
         <div className="flex items-center justify-between overflow-hidden px-4 py-3">
             <div className="flex gap-2 flex-wrap mr-32">
-                <Combobox items={[]} placeholder="College" />
-                <Combobox items={[]} placeholder="Department" />
-                <Combobox items={yearData} placeholder="Year" onMenuSelect={handleYearSelect} />
-                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={specializationData} placeholder="Specialization" onMenuSelect={handleSpecializationSelect} />
-                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={[]} placeholder="Author" onMenuSelect={handleAuthorSelect} />
-                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={[]} placeholder="Adviser" onMenuSelect={handleAdviserSelect} />
-                <Combobox data-state={showMoreFilters && "visible"} className="hidden data-[state=visible]:flex" items={[]} placeholder="Keywords" />
-                <Button variant="ghost" size="sm"
+                {filters.map((filter, index) => {
+                    const className = index > 2 ? showMoreFilters ? "flex" : "hidden" : undefined
+                    return (
+                        <Combobox
+                            key={crypto.randomUUID()}
+                            items={filter.values}
+                            className={className}
+                            placeholder={filter.label}
+                            onMenuSelect={(value) => handleFilterChange(filter.key, value)}
+                        />
+                    )
+                })}
+                <Button
+                    variant="ghost"
+                    size="sm"
                     className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
-                    onClick={handleFilterSelect}
+                    onClick={toggleMoreFilters}
                 >
-                    {showMoreFilters ? (
-                        <span>Less filters</span>
-                    ) : (
-                        <span>More filters</span>
-                    )}
+                    {showMoreFilters ? "Less filters" : "More filters"}
                 </Button>
             </div>
             <div className="flex justify-end gap-2 flex-wrap">
