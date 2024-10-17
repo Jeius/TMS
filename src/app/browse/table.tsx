@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { Thesis, columns } from './table-columns'
 import { useDynamicWidth } from '@/hooks/use-dynamic-width'
@@ -28,7 +28,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { FileStackIcon, Plus } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
-
+import { debounce } from 'lodash';
 
 const TableOptions = dynamic(() => import('@/app/browse/table-options')) as React.ComponentType<TableOptionsProps<Thesis>>
 
@@ -63,22 +63,28 @@ export default function BrowseTable({ data, ...props }: TableProps) {
         state: { sorting, columnFilters, columnVisibility },
     })
 
-    // Handle horizontal scroll for left-sticky column
-    const handleScrollLeft = (e: Event) => {
-        const scrollLeft = (e.target as HTMLDivElement).scrollLeft
-        setScrollState(prevState => ({ ...prevState, left: { value: scrollLeft, isScrolled: scrollLeft > 0 } }))
-    }
+    const handleScrollLeft = useCallback(debounce((e: Event) => {
+        const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
+        scrollLeft !== scrollState.left.value && setScrollState(prevState => ({
+            ...prevState,
+            left: { value: scrollLeft, isScrolled: scrollLeft > 0 }
+        }));
+    }), []);
 
-    // Handle vertical scroll for header transformation
-    const handleScrollDown = () => {
-        const currentRect = childRef.current?.getBoundingClientRect()
-        const headerRect = document.getElementById("app-header")?.getBoundingClientRect()
+    const handleScrollDown = useMemo(() => {
+        return debounce(() => {
+            const currentRect = childRef.current?.getBoundingClientRect();
+            const headerRect = document.getElementById("app-header")?.getBoundingClientRect();
 
-        if (currentRect && headerRect) {
-            const scrollTop = Math.max(0, headerRect.height - currentRect.top)
-            setScrollState(prevState => ({ ...prevState, top: { value: scrollTop, isScrolled: scrollTop > 0 } }))
-        }
-    }
+            if (currentRect && headerRect) {
+                const scrollTop = Math.max(0, headerRect.height - currentRect.top);
+                scrollTop !== scrollState.top.value && setScrollState(prevState => ({
+                    ...prevState,
+                    top: { value: scrollTop, isScrolled: scrollTop > 0 }
+                }));
+            }
+        });
+    }, [childRef.current]);
 
     // Set up event listeners for scrolling
     React.useEffect(() => {
@@ -95,7 +101,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
             }
             window.removeEventListener('scroll', handleScrollDown)
         }
-    }, [childRef])
+    }, [])
 
     return (
         <TooltipProvider>
@@ -131,9 +137,9 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                         key={header.id}
                                                         scope="col"
                                                         data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                        className={`px-4 bg-muted border-b bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "sticky left-0 z-[1] data-[scroll-state=scrolled]:shadow-right" : ""}`}
+                                                        className={`left-0 px-4 bg-muted/65 backdrop-blur-md border-b bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
                                                         style={{
-                                                            width: `${header.getSize()}px`,
+                                                            width: header.column.getSize(),
                                                             borderTop: scrollState.top.isScrolled ? "1px solid hsl(var(--border))" : "",
                                                         }}
                                                     >
@@ -159,7 +165,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                             data-column-id={cell.column.id}
                                                             data-state={row.getIsSelected() && "selected"}
                                                             data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                            className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-primary/40 transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:shadow-right" : ""}`}
+                                                            className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
                                                             style={{ width: `${cell.column.getSize()}px` }}
                                                         >
                                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -177,7 +183,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                     )}
                                 </TableBody>
                             </Table>
-                            <div className="block md:mr-24 p-2 sm:w-full sm:max-w-xs min-w-[288px] border-l">
+                            <div className="block lg:mr-24 p-2 sm:w-full sm:max-w-xs min-w-[215px] lg:min-w-[288px] border-l">
                                 <div className="py-3 px-4 font-semibold">
                                     <span>Add Columns</span>
                                 </div>
@@ -215,7 +221,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                 >
                     <Button size="lg"
                         variant="gradient"
-                        className="mx-auto flex space-x-2 font-sans font-bold"
+                        className="p-2 sm:p-4 mx-auto flex space-x-2 font-sans font-bold"
                     >
                         <FileStackIcon aria-hidden="true" focusable="false" />
                         <span>Load more theses</span>
