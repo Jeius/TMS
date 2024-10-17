@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import Link from "next/link"
 import { MDiv } from "framer-motion-nextjs-elements"
+import { useAnimate, usePresence } from "framer-motion"
+import React from "react"
 
 export type Thesis = {
     id: string
@@ -148,12 +150,21 @@ const ColumnHeader = <TData, TValue>({
     title: string
     hideClose?: boolean
 }) => {
+    const [isPresent, safeToRemove] = usePresence()
+    const [scope, animate] = useAnimate()
+
+    React.useEffect(() => {
+        if (!isPresent) {
+            animate(scope.current, { x: -60, opacity: 0 });
+            safeToRemove();
+        }
+    });
+
     return (
         <Tooltip>
-            <MDiv
+            <div
                 className="flex items-center justify-between space-x-2"
-                initial={{ x: 60, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
+                ref={scope}
             >
                 <span>{title}</span>
                 {!hideClose && (
@@ -166,8 +177,8 @@ const ColumnHeader = <TData, TValue>({
                         ><X aria-hidden="true" className="" /></Button>
                     </TooltipTrigger>
                 )}
-            </MDiv>
-            <TooltipContent side="bottom">
+            </div>
+            <TooltipContent>
                 <p>Remove column</p>
             </TooltipContent>
         </Tooltip>

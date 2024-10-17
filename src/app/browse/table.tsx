@@ -29,28 +29,24 @@ import { Button } from '@/components/ui/button'
 import { FileStackIcon, Plus } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { debounce } from 'lodash';
-import { useAnimate, useWillChange } from 'framer-motion'
+import { AnimatePresence, useAnimate } from 'framer-motion'
 
 const TableOptions = dynamic(() => import('@/app/browse/table-options')) as React.ComponentType<TableOptionsProps<Thesis>>
 
 type TableProps = React.HtmlHTMLAttributes<HTMLElement> & { data: Thesis[] }
 
 type ScrollState = {
-    left: { value?: number, isScrolled: boolean },
-    top: { value?: number, isScrolled: boolean }
+    left: { value?: number, isScrolled?: boolean },
+    top: { value?: number, isScrolled?: boolean }
 }
 
 export default function BrowseTable({ data, ...props }: TableProps) {
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({ author: false, year: false, department: false, dateUploaded: false })
-    const [scrollState, setScrollState] = React.useState<ScrollState>({
-        left: { isScrolled: false },
-        top: { isScrolled: false },
-    })
-    const [width, childRef] = useDynamicWidth()
-    const [scope, animate] = useAnimate()
-    const willChange = useWillChange()
+    const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({ author: false, year: false, department: false, dateUploaded: false });
+    const [scrollState, setScrollState] = React.useState<ScrollState>({ left: {}, top: {} });
+    const [width, childRef] = useDynamicWidth();
+    const [scope, animate] = useAnimate();
 
     // React Table instance setup
     const table = useReactTable({
@@ -80,14 +76,22 @@ export default function BrowseTable({ data, ...props }: TableProps) {
 
         if (currentRect && headerRect) {
             const scrollTop = Math.max(0, headerRect.height - currentRect.top);
-            animate("thead", { y: scrollTop, boxShadow: scrollTop > 0 ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined });
+            animate("thead", {
+                y: scrollTop,
+                boxShadow: scrollTop > 0 ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined,
+            }, {
+                duration: 0.05,
+                damping: 80
+            });
         }
     });
 
     // Set up event listeners for scrolling
     React.useEffect(() => {
-        window.addEventListener('scroll', handleScrollDown)
+        animate([["td"], ["th"]], { x: [60, 0], opacity: [0, 1] }, { damping: 80 });
 
+        // Add event listeners
+        window.addEventListener('scroll', handleScrollDown)
         const scrollArea = childRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement
         if (scrollArea) {
             scrollArea.addEventListener('scroll', handleScrollLeft)
@@ -119,65 +123,67 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                         className="m-auto max-w-fit scroll-smooth whitespace-nowrap bg-card shadow border"
                     >
                         <div className="flex flex-1 text-sm">
-                            <Table ref={scope} className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
-                                <TableHeader
-                                    className="sticky top-0 z-10 text-xs hover:bg-transparent"
-                                >
-                                    {table.getHeaderGroups().map((headerGroup) => (
-                                        <TableRow key={headerGroup.id} className="align-top border-0 hover:bg-transparent">
-                                            {headerGroup.headers.map((header) => {
-                                                const isFirstColumn = header.id === 'title'
-                                                return (
-                                                    <TableHead
-                                                        key={header.id}
-                                                        scope="col"
-                                                        data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                        className={`left-0 px-4 bg-muted/65 backdrop-blur-md border-b bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
-                                                        style={{
-                                                            width: header.column.getSize(),
-                                                            borderTop: scrollState.top.isScrolled ? "1px solid hsl(var(--border))" : "",
-                                                        }}
-                                                    >
-                                                        {!header.isPlaceholder &&
-                                                            flexRender(header.column.columnDef.header, header.getContext())
-                                                        }
-                                                    </TableHead>
-                                                )
-                                            })}
-                                        </TableRow>
-                                    ))}
-                                </TableHeader>
-                                <TableBody>
-                                    {table.getRowModel().rows.length ? (
-                                        table.getRowModel().rows.map((row) => (
-                                            <TableRow key={row.id} className="align-top hover:bg-transparent">
-                                                {row.getVisibleCells().map((cell) => {
-                                                    const isFirstColumn = cell.column.id === 'title'
+                            <AnimatePresence>
+                                <Table ref={scope} className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
+                                    <TableHeader
+                                        className="sticky top-0 z-10 text-xs hover:bg-transparent"
+                                    >
+                                        {table.getHeaderGroups().map((headerGroup) => (
+                                            <TableRow key={headerGroup.id} className="align-top border-0 hover:bg-transparent">
+                                                {headerGroup.headers.map((header) => {
+                                                    const isFirstColumn = header.id === 'title'
                                                     return (
-                                                        <TableCell
-                                                            key={cell.id}
+                                                        <TableHead
+                                                            key={header.id}
                                                             scope="col"
-                                                            data-column-id={cell.column.id}
-                                                            data-state={row.getIsSelected() && "selected"}
                                                             data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                            className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
-                                                            style={{ width: `${cell.column.getSize()}px` }}
+                                                            className={`left-0 px-4 bg-muted border-b bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
+                                                            style={{
+                                                                width: header.column.getSize(),
+                                                                borderTop: scrollState.top.isScrolled ? "1px solid hsl(var(--border))" : "",
+                                                            }}
                                                         >
-                                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                        </TableCell>
+                                                            {!header.isPlaceholder &&
+                                                                flexRender(header.column.columnDef.header, header.getContext())
+                                                            }
+                                                        </TableHead>
                                                     )
                                                 })}
                                             </TableRow>
-                                        ))
-                                    ) : (
-                                        <TableRow>
-                                            <TableCell colSpan={columns.length} className="h-24 text-center">
-                                                No records.
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
+                                        ))}
+                                    </TableHeader>
+                                    <TableBody>
+                                        {table.getRowModel().rows.length ? (
+                                            table.getRowModel().rows.map((row) => (
+                                                <TableRow key={row.id} className="align-top hover:bg-transparent">
+                                                    {row.getVisibleCells().map((cell) => {
+                                                        const isFirstColumn = cell.column.id === 'title'
+                                                        return (
+                                                            <TableCell
+                                                                key={cell.id}
+                                                                scope="col"
+                                                                data-column-id={cell.column.id}
+                                                                data-state={row.getIsSelected() && "selected"}
+                                                                data-scroll-state={scrollState.left.isScrolled && "scrolled"}
+                                                                className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
+                                                                style={{ width: `${cell.column.getSize()}px` }}
+                                                            >
+                                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                            </TableCell>
+                                                        )
+                                                    })}
+                                                </TableRow>
+                                            ))
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                                    No records.
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </AnimatePresence>
                             <div className="block lg:mr-24 p-2 sm:w-full sm:max-w-xs min-w-[215px] lg:min-w-[288px] border-l">
                                 <div className="py-3 px-4 font-semibold">
                                     <span>Add Columns</span>
