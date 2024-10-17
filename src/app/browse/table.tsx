@@ -29,7 +29,7 @@ import { Button } from '@/components/ui/button'
 import { FileStackIcon, Plus } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { debounce } from 'lodash';
-import { AnimatePresence, useAnimate } from 'framer-motion'
+import { AnimatePresence, motion, useAnimate } from 'framer-motion'
 
 const TableOptions = dynamic(() => import('@/app/browse/table-options')) as React.ComponentType<TableOptionsProps<Thesis>>
 
@@ -88,8 +88,6 @@ export default function BrowseTable({ data, ...props }: TableProps) {
 
     // Set up event listeners for scrolling
     React.useEffect(() => {
-        animate([["td"], ["th"]], { x: [60, 0], opacity: [0, 1] }, { damping: 80 });
-
         // Add event listeners
         window.addEventListener('scroll', handleScrollDown)
         const scrollArea = childRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement
@@ -109,46 +107,54 @@ export default function BrowseTable({ data, ...props }: TableProps) {
         <TooltipProvider>
             <div {...props}>
                 {/* Table options and filters */}
-                <div
+                <motion.div
                     className="m-auto max-w-full overflow-hidden bg-card text-card-foreground border border-b-0 rounded-t-xl shadow"
-                    style={{ width }}
+                    animate={{ width }}
                 >
                     <TableOptions table={table} />
-                </div>
+                </motion.div>
 
                 {/* Scrollable table area */}
                 <div className="relative">
-                    <ScrollArea
-                        ref={childRef}
-                        className="m-auto max-w-fit scroll-smooth whitespace-nowrap bg-card shadow border"
-                    >
-                        <div className="flex flex-1 text-sm">
-                            <AnimatePresence>
-                                <Table ref={scope} className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
+                    <motion.div layout className="m-auto bg-card shadow border max-w-fit overflow-hidden">
+                        <ScrollArea
+                            ref={childRef}
+                            className="m-auto scroll-smooth whitespace-nowrap"
+                        >
+                            <div ref={scope} className="flex flex-1 text-sm">
+                                <Table className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
                                     <TableHeader
                                         className="sticky top-0 z-10 text-xs hover:bg-transparent"
                                     >
                                         {table.getHeaderGroups().map((headerGroup) => (
                                             <TableRow key={headerGroup.id} className="align-top border-0 hover:bg-transparent">
-                                                {headerGroup.headers.map((header) => {
-                                                    const isFirstColumn = header.id === 'title'
-                                                    return (
-                                                        <TableHead
-                                                            key={header.id}
-                                                            scope="col"
-                                                            data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                            className={`left-0 px-4 bg-muted border-b bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
-                                                            style={{
-                                                                width: header.column.getSize(),
-                                                                borderTop: scrollState.top.isScrolled ? "1px solid hsl(var(--border))" : "",
-                                                            }}
-                                                        >
-                                                            {!header.isPlaceholder &&
-                                                                flexRender(header.column.columnDef.header, header.getContext())
-                                                            }
-                                                        </TableHead>
-                                                    )
-                                                })}
+                                                <AnimatePresence mode="popLayout">
+                                                    {headerGroup.headers.map((header) => {
+                                                        const isFirstColumn = header.id === 'title'
+                                                        return (
+                                                            <TableHead
+                                                                key={header.id}
+                                                                scope="col"
+                                                                layout
+                                                                motion
+                                                                initial={{ x: 100, opacity: 0 }}
+                                                                animate={{ x: 0, opacity: 1 }}
+                                                                exit={{ y: 60, opacity: 0 }}
+                                                                transition={{ type: "tween" }}
+                                                                data-scroll-state={scrollState.left.isScrolled && "scrolled"}
+                                                                className={`left-0 px-4 border-b bg-muted bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
+                                                                style={{
+                                                                    width: header.column.getSize(),
+                                                                    borderTop: scrollState.top.isScrolled ? "1px solid hsl(var(--border))" : "",
+                                                                }}
+                                                            >
+                                                                {!header.isPlaceholder &&
+                                                                    flexRender(header.column.columnDef.header, header.getContext())
+                                                                }
+                                                            </TableHead>
+                                                        )
+                                                    })}
+                                                </AnimatePresence>
                                             </TableRow>
                                         ))}
                                     </TableHeader>
@@ -156,22 +162,29 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                         {table.getRowModel().rows.length ? (
                                             table.getRowModel().rows.map((row) => (
                                                 <TableRow key={row.id} className="align-top hover:bg-transparent">
-                                                    {row.getVisibleCells().map((cell) => {
-                                                        const isFirstColumn = cell.column.id === 'title'
-                                                        return (
-                                                            <TableCell
-                                                                key={cell.id}
-                                                                scope="col"
-                                                                data-column-id={cell.column.id}
-                                                                data-state={row.getIsSelected() && "selected"}
-                                                                data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                                className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
-                                                                style={{ width: `${cell.column.getSize()}px` }}
-                                                            >
-                                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                            </TableCell>
-                                                        )
-                                                    })}
+                                                    <AnimatePresence mode="popLayout">
+                                                        {row.getVisibleCells().map((cell) => {
+                                                            const isFirstColumn = cell.column.id === 'title'
+                                                            return (
+                                                                <TableCell
+                                                                    key={cell.id}
+                                                                    layout
+                                                                    motion
+                                                                    initial={{ x: 100, opacity: 0 }}
+                                                                    animate={{ x: 0, opacity: 1 }}
+                                                                    exit={{ y: 60, opacity: 0 }}
+                                                                    transition={{ type: "tween" }}
+                                                                    scope="col"
+                                                                    data-column-id={cell.column.id}
+                                                                    data-state={row.getIsSelected() && "selected"}
+                                                                    data-scroll-state={scrollState.left.isScrolled && "scrolled"}
+                                                                    className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
+                                                                >
+                                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                                </TableCell>
+                                                            )
+                                                        })}
+                                                    </AnimatePresence>
                                                 </TableRow>
                                             ))
                                         ) : (
@@ -183,42 +196,42 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                         )}
                                     </TableBody>
                                 </Table>
-                            </AnimatePresence>
-                            <div className="block lg:mr-24 p-2 sm:w-full sm:max-w-xs min-w-[215px] lg:min-w-[288px] border-l">
-                                <div className="py-3 px-4 font-semibold">
-                                    <span>Add Columns</span>
-                                </div>
-                                {table
-                                    .getAllColumns()
-                                    .filter(
-                                        (column) =>
-                                            typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible()
-                                    )
-                                    .map((column) => {
-                                        return (
-                                            <Button
-                                                key={column.id}
-                                                variant="ghost"
-                                                size="sm"
-                                                className="flex items-center space-x-2 capitalize w-full"
-                                                onClick={() => { column.toggleVisibility(true) }}
-                                            >
-                                                <Plus aria-hidden="true" focusable="false" size={16} />
-                                                <span className="line-clamp-2 w-full overflow-hidden text-left text-ellipsis">
-                                                    {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                                                </span>
-                                            </Button>
+                                <div className="block lg:mr-24 p-2 sm:w-full sm:max-w-xs min-w-[215px] lg:min-w-[288px] border-l">
+                                    <div className="py-3 px-4 font-semibold">
+                                        <span>Add Columns</span>
+                                    </div>
+                                    {table
+                                        .getAllColumns()
+                                        .filter(
+                                            (column) =>
+                                                typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible()
                                         )
-                                    })}
+                                        .map((column) => {
+                                            return (
+                                                <Button
+                                                    key={column.id}
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="flex items-center space-x-2 capitalize w-full"
+                                                    onClick={() => { column.toggleVisibility(true) }}
+                                                >
+                                                    <Plus aria-hidden="true" focusable="false" size={16} />
+                                                    <span className="line-clamp-2 w-full overflow-hidden text-left text-ellipsis">
+                                                        {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                                                    </span>
+                                                </Button>
+                                            )
+                                        })}
+                                </div>
                             </div>
-                        </div>
-                        <ScrollBar orientation="horizontal" className="z-10" />
-                    </ScrollArea>
+                            <ScrollBar orientation="horizontal" className="z-10" />
+                        </ScrollArea>
+                    </motion.div>
                 </div>
 
-                <div
-                    className="mx-auto w-full rounded-b-xl border border-t-0 px-5 py-3 bg-card shadow"
-                    style={{ maxWidth: width }}
+                <motion.div
+                    className="mx-auto rounded-b-xl border border-t-0 px-5 py-3 bg-card shadow"
+                    animate={{ width: width }}
                 >
                     <Button size="lg"
                         variant="gradient"
@@ -227,7 +240,7 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                         <FileStackIcon aria-hidden="true" focusable="false" />
                         <span>Load more theses</span>
                     </Button>
-                </div>
+                </motion.div>
             </div>
         </TooltipProvider>
     )
