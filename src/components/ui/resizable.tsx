@@ -3,7 +3,7 @@
 import { DragHandleDots2Icon } from "@radix-ui/react-icons"
 import * as ResizablePrimitive from "react-resizable-panels"
 
-import { cn, screens } from "@/lib/utils"
+import { cn, Screens } from "@/lib/utils"
 import { useDeviceSize } from "@/hooks/use-device-size"
 import React from "react"
 
@@ -32,7 +32,7 @@ const AdaptiveResizablePanelGroup = ({
   const [currentDirection, setCurrentDirection] = React.useState(direction)
 
   React.useEffect(() => {
-    const isVertical = deviceSize.width >= screens[changeDirectionAt] ? direction === "vertical" : false
+    const isVertical = deviceSize.width >= Screens[changeDirectionAt] ? direction === "vertical" : false
     const newDirection = isVertical ? "vertical" : "horizontal"
     setCurrentDirection(newDirection)
   }, [deviceSize.width, changeDirectionAt, direction])

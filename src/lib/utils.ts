@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const screens = {
+export const Screens = {
   'sm': 640,
   'md': 768,
   'lg': 1024,
