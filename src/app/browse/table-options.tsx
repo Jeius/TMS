@@ -165,7 +165,7 @@ export default function TableOptions<TData>({
 
     return (
         <div className="flex items-center justify-between overflow-hidden px-4 py-3">
-            <div className="flex gap-2 flex-wrap mr-32">
+            <div className="flex gap-2 flex-wrap mr-5 sm:mr-20 md:mr-32">
                 {filters.map((filter, index) => {
                     const className = index > 2 ? showMoreFilters ? "flex" : "hidden" : undefined
                     return (
