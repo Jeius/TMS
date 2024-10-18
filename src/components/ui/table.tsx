@@ -1,8 +1,7 @@
+"use client"
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
-import { MBody, MCaption, MTable, MTd, MTfoot, MTh, MThead, MTr } from "framer-motion-nextjs-elements"
-import { HTMLMotionProps } from "framer-motion"
+import { HTMLMotionProps, motion as M } from "framer-motion"
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -10,7 +9,7 @@ const Table = React.forwardRef<
 >(({ className, motion = false, ...props }, ref) => {
   const defaultClassName = "w-full caption-bottom text-sm";
   return motion ? (
-    <MTable ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.table ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <table ref={ref} className={cn(defaultClassName, className)} {...props} />
   );
@@ -23,7 +22,7 @@ const TableHeader = React.forwardRef<
 >(({ className, motion = false, ...props }, ref) => {
   const defaultClassName = "[&_tr]:border-b";
   return motion ? (
-    <MThead ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.thead ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <thead ref={ref} className={cn(defaultClassName, className)} {...props} />
   );
@@ -36,7 +35,7 @@ const TableBody = React.forwardRef<
 >(({ className, motion = false, ...props }, ref) => {
   const defaultClassName = "[&_tr:last-child]:border-0";
   return motion ? (
-    <MBody ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.tbody ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <tbody ref={ref} className={cn(defaultClassName, className)} {...props} />
   );
@@ -49,7 +48,7 @@ const TableFooter = React.forwardRef<
 >(({ className, motion = false, ...props }, ref) => {
   const defaultClassName = "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0"
   return motion ? (
-    <MTfoot ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.tfoot ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <tfoot ref={ref} className={cn(defaultClassName, className)} {...props} />
   );
@@ -62,7 +61,7 @@ const TableCell = React.forwardRef<
 >(({ className, motion = false, ...props }, ref) => {
   const defaultClassName = "p-2 align-middle border-r";
   return motion ? (
-    <MTd ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.td ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <td ref={ref} className={cn(defaultClassName, className)} {...props} />
   );
@@ -75,7 +74,7 @@ const TableCaption = React.forwardRef<
 >(({ className, motion = false, ...props }, ref) => {
   const defaultClassName = "mt-4 text-sm text-muted-foreground";
   return motion ? (
-    <MCaption ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.caption ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <caption ref={ref} className={cn(defaultClassName, className)} {...props} />
   );
@@ -89,7 +88,7 @@ const TableRow = React.forwardRef<
   const defaultClassName = "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted [&_td:last-child]:border-r-0 [&_th:last-child]:border-r-0";
 
   return motion ? (
-    <MTr ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.tr ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <tr ref={ref} className={cn(defaultClassName, className)} {...props} />
   );
@@ -102,7 +101,7 @@ const TableHead = React.forwardRef<
 >(({ className, motion = false, ...props }, ref) => {
   const defaultClassName = "h-10 px-2 border-r text-left align-middle font-semibold text-sm text-foreground"
   return motion ? (
-    <MTh ref={ref} className={cn(defaultClassName, className)} {...props} />
+    <M.th ref={ref} className={cn(defaultClassName, className)} {...props} />
   ) : (
     <th ref={ref} className={cn(defaultClassName, className)} {...props} />
   )
