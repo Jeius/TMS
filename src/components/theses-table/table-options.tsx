@@ -3,17 +3,10 @@ import { Combobox } from "@/components/ui/combobox"
 import { Table } from "@tanstack/react-table"
 import React from "react"
 
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ChevronDown, Plus } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { VisibilityMenu } from "@/components/theses-table/column-visibility"
 import { AnimatePresence, motion } from "framer-motion"
+import { useRouter, useSearchParams } from "next/navigation"
+import { SelectMenu, SelectMenuItem } from "../select-menu"
 
 export interface TableOptionsProps<TData> {
     table: Table<TData>
@@ -33,48 +26,9 @@ const getSpecializationData = () => {
     ]
 }
 
-const ColumnsViewOptions = <TData,>({
-    table,
-}: TableOptionsProps<TData>) => {
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    size="sm"
-                    variant="gradient"
-                >
-                    <Plus className="mr-2" size={16} aria-hidden="true" />
-                    <span>Add Columns</span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[150px]">
-                <DropdownMenuLabel>Select Columns</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {table
-                    .getAllColumns()
-                    .filter(
-                        (column) =>
-                            typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible()
-                    )
-                    .map((column) => {
-                        return (
-                            <DropdownMenuCheckboxItem
-                                key={column.id}
-                                className="capitalize"
-                                checked={column.getIsVisible()}
-                                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                            >
-                                {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                            </DropdownMenuCheckboxItem>
-                        )
-                    })}
-            </DropdownMenuContent>
-        </DropdownMenu>
-    )
-}
 
 const SortOptions = <TData,>({ table }: TableOptionsProps<TData>) => {
-    const sortValues = [
+    const sortItems: SelectMenuItem[] = [
         { label: "Latest First", value: "latest" },
         { label: "Oldest First", value: "old" },
         { label: "A - Z", value: "alpha" },
@@ -83,48 +37,26 @@ const SortOptions = <TData,>({ table }: TableOptionsProps<TData>) => {
 
     const router = useRouter()
     const searchParams = useSearchParams()
-    const selectedValue = sortValues.find(e => e.value === searchParams.get("sort"))
+    const defaultValue = sortItems?.find(item => item.value === searchParams.get("sort"))?.value;
 
-    const handleSortChange = (sortValue: typeof sortValues[0]) => {
+    const handleSortChange = (sortItem: string) => {
         const currentParams = new URLSearchParams(searchParams.toString());
-        currentParams.set("sort", sortValue.value);
+        currentParams.set("sort", sortItem);
         router.push(`?${currentParams.toString()}`);
 
-        if (sortValue.value === "alpha") {
+        if (sortItem === "alpha") {
             table.getColumn("title")?.toggleSorting(false); // Ascending
-        } else if (sortValue.value === "-alpha") {
+        } else if (sortItem === "-alpha") {
             table.getColumn("title")?.toggleSorting(true); // Descending
-        } else if (sortValue.value === "latest") {
+        } else if (sortItem === "latest") {
             table.getColumn("year")?.toggleSorting(true); // Descending (latest first)
-        } else if (sortValue.value === "old") {
+        } else if (sortItem === "old") {
             table.getColumn("year")?.toggleSorting(false); // Ascending (oldest first)
         }
     };
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="-ml-3 h-8 data-[state=open]:bg-accent"
-                >
-                    Sort by: {selectedValue?.label}
-                    <ChevronDown className="size-4 ml-1" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-                {sortValues.map((option) => (
-                    <DropdownMenuCheckboxItem
-                        key={option.value}
-                        checked={selectedValue?.value === option.value}
-                        onCheckedChange={() => handleSortChange(option)}
-                    >
-                        {option.label}
-                    </DropdownMenuCheckboxItem>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <SelectMenu items={sortItems} defaultValue={defaultValue} title="Sort by:" placeholder="Sort by:" onValueChanged={handleSortChange} />
     )
 }
 
@@ -210,7 +142,7 @@ export default function TableOptions<TData>({
             </div>
             <motion.div layout transition={{ type: "tween" }} className="flex justify-end gap-2 flex-wrap">
                 <motion.div layout transition={{ type: "tween" }}><SortOptions table={table} /></motion.div>
-                <motion.div layout transition={{ type: "tween" }}><ColumnsViewOptions table={table} /></motion.div>
+                <motion.div layout transition={{ type: "tween" }}><VisibilityMenu table={table} /></motion.div>
             </motion.div>
         </div>
     )
