@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown, Plus } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { AnimatePresence, motion } from "framer-motion"
 
 export interface TableOptionsProps<TData> {
     table: Table<TData>
@@ -101,31 +102,29 @@ const SortOptions = <TData,>({ table }: TableOptionsProps<TData>) => {
     };
 
     return (
-        <div className="flex items-center space-x-2">
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="-ml-3 h-8 data-[state=open]:bg-accent"
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="-ml-3 h-8 data-[state=open]:bg-accent"
+                >
+                    Sort by: {selectedValue?.label}
+                    <ChevronDown className="size-4 ml-1" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+                {sortValues.map((option) => (
+                    <DropdownMenuCheckboxItem
+                        key={option.value}
+                        checked={selectedValue?.value === option.value}
+                        onCheckedChange={() => handleSortChange(option)}
                     >
-                        Sort by: {selectedValue?.label}
-                        <ChevronDown className="size-4 ml-1" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                    {sortValues.map((option) => (
-                        <DropdownMenuCheckboxItem
-                            key={option.value}
-                            checked={selectedValue?.value === option.value}
-                            onCheckedChange={() => handleSortChange(option)}
-                        >
-                            {option.label}
-                        </DropdownMenuCheckboxItem>
-                    ))}
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
+                        {option.label}
+                    </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
 
@@ -150,6 +149,9 @@ export default function TableOptions<TData>({
         { key: "keywords", label: "Keywords", values: [] as string[] },
     ]
 
+    const initialFilters = filters.slice(0, 3)
+    const extensionFilters = filters.slice(3)
+
     // Helper function to update URL parameters
     const handleFilterChange = (key: string, value: string) => {
         const currentParams = new URLSearchParams(searchParams.toString())
@@ -164,33 +166,52 @@ export default function TableOptions<TData>({
     const toggleMoreFilters = () => setShowMoreFilters(prev => !prev)
 
     return (
-        <div className="flex items-center justify-between overflow-hidden px-4 py-3">
+        <div className="flex items-end justify-between overflow-hidden px-4 py-3">
             <div className="flex gap-2 flex-wrap mr-5 sm:mr-20 md:mr-32">
-                {filters.map((filter, index) => {
-                    const className = index > 2 ? showMoreFilters ? "flex" : "hidden" : undefined
-                    return (
-                        <Combobox
-                            key={crypto.randomUUID()}
-                            items={filter.values}
-                            className={className}
-                            placeholder={filter.label}
-                            onMenuSelect={(value) => handleFilterChange(filter.key, value)}
-                        />
-                    )
-                })}
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
-                    onClick={toggleMoreFilters}
-                >
-                    {showMoreFilters ? "Less filters" : "More filters"}
-                </Button>
+                {initialFilters.map(filter => (
+                    <Combobox
+                        key={crypto.randomUUID()}
+                        items={filter.values}
+                        className="flex"
+                        placeholder={filter.label}
+                        onMenuSelect={(value) => handleFilterChange(filter.key, value)}
+                    />
+                ))}
+                <AnimatePresence mode="popLayout">
+                    {showMoreFilters && extensionFilters.map(filter => {
+                        return (
+                            <motion.div key={crypto.randomUUID()}
+                                layout
+                                initial={{ x: -60, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -60, opacity: 0 }}
+                                transition={{ type: "tween" }}
+                            >
+                                <Combobox
+                                    items={filter.values}
+                                    className="flex"
+                                    placeholder={filter.label}
+                                    onMenuSelect={(value) => handleFilterChange(filter.key, value)}
+                                />
+                            </motion.div>
+                        )
+                    })}
+                </AnimatePresence>
+                <motion.div layout transition={{ type: "tween" }}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
+                        onClick={toggleMoreFilters}
+                    >
+                        {showMoreFilters ? "Less filters" : "More filters"}
+                    </Button>
+                </motion.div>
             </div>
-            <div className="flex justify-end gap-2 flex-wrap">
-                <SortOptions table={table} />
-                <ColumnsViewOptions table={table} />
-            </div>
+            <motion.div layout transition={{ type: "tween" }} className="flex justify-end gap-2 flex-wrap">
+                <motion.div layout transition={{ type: "tween" }}><SortOptions table={table} /></motion.div>
+                <motion.div layout transition={{ type: "tween" }}><ColumnsViewOptions table={table} /></motion.div>
+            </motion.div>
         </div>
     )
 }
