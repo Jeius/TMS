@@ -108,18 +108,19 @@ export default function BrowseTable({ data, ...props }: TableProps) {
             <div {...props}>
                 {/* Table options and filters */}
                 <motion.div
-                    className="m-auto max-w-full overflow-hidden bg-card text-card-foreground border border-b-0 rounded-t-xl shadow"
+                    className="m-auto max-w-full box-content overflow-hidden bg-card text-card-foreground border border-b-0 rounded-t-xl shadow"
                     animate={{ width }}
+                    transition={{ type: "tween" }}
                 >
                     <TableOptions table={table} />
                 </motion.div>
 
                 {/* Scrollable table area */}
                 <div className="relative">
-                    <motion.div layout className="m-auto bg-card shadow border max-w-fit overflow-hidden">
+                    <motion.div layout transition={{ type: "tween" }} className="m-auto bg-card shadow border max-w-fit overflow-hidden">
                         <ScrollArea
                             ref={childRef}
-                            className="m-auto scroll-smooth whitespace-nowrap"
+                            className="scroll-smooth whitespace-nowrap"
                         >
                             <div ref={scope} className="flex flex-1 text-sm">
                                 <Table className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
@@ -135,14 +136,14 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                             <TableHead
                                                                 key={header.id}
                                                                 scope="col"
-                                                                layout
-                                                                motion
-                                                                initial={{ x: 100, opacity: 0 }}
-                                                                animate={{ x: 0, opacity: 1 }}
-                                                                exit={{ y: 60, opacity: 0 }}
-                                                                transition={{ type: "tween" }}
+                                                                layout={!isFirstColumn ? true : undefined}
+                                                                motion={!isFirstColumn}
+                                                                initial={{ opacity: 0 }}
+                                                                animate={{ opacity: 1 }}
+                                                                exit={{ opacity: 0, y: 30 }}
+                                                                transition={{ type: "spring", bounce: 0.2 }}
                                                                 data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                                                                className={`left-0 px-4 border-b bg-muted bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
+                                                                className={`left-0 px-4 border-b bg-muted bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45 ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : "z-0"}`}
                                                                 style={{
                                                                     width: header.column.getSize(),
                                                                     borderTop: scrollState.top.isScrolled ? "1px solid hsl(var(--border))" : "",
@@ -168,12 +169,12 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                                             return (
                                                                 <TableCell
                                                                     key={cell.id}
-                                                                    layout
-                                                                    motion
-                                                                    initial={{ x: 100, opacity: 0 }}
-                                                                    animate={{ x: 0, opacity: 1 }}
-                                                                    exit={{ y: 60, opacity: 0 }}
-                                                                    transition={{ type: "tween" }}
+                                                                    layout={!isFirstColumn ? true : undefined}
+                                                                    motion={!isFirstColumn}
+                                                                    initial={{ opacity: 0 }}
+                                                                    animate={{ opacity: 1 }}
+                                                                    exit={{ opacity: 0, y: 30 }}
+                                                                    transition={{ type: "spring", bounce: 0.2 }}
                                                                     scope="col"
                                                                     data-column-id={cell.column.id}
                                                                     data-state={row.getIsSelected() && "selected"}
@@ -196,32 +197,34 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                                         )}
                                     </TableBody>
                                 </Table>
-                                <div className="block lg:mr-24 p-2 sm:w-full sm:max-w-xs min-w-[215px] lg:min-w-[288px] border-l">
-                                    <div className="py-3 px-4 font-semibold">
-                                        <span>Add Columns</span>
-                                    </div>
-                                    {table
-                                        .getAllColumns()
-                                        .filter(
-                                            (column) =>
-                                                typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible()
-                                        )
-                                        .map((column) => {
-                                            return (
-                                                <Button
-                                                    key={column.id}
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="flex items-center space-x-2 capitalize w-full"
-                                                    onClick={() => { column.toggleVisibility(true) }}
-                                                >
-                                                    <Plus aria-hidden="true" focusable="false" size={16} />
-                                                    <span className="line-clamp-2 w-full overflow-hidden text-left text-ellipsis">
-                                                        {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                                                    </span>
-                                                </Button>
+                                <div className="block border-l bg-card z-10">
+                                    <div className="lg:mr-24 p-2 sm:w-full sm:max-w-xs min-w-[215px] lg:min-w-[288px]">
+                                        <div className="py-3 px-4 font-semibold">
+                                            <span>Add Columns</span>
+                                        </div>
+                                        {table
+                                            .getAllColumns()
+                                            .filter(
+                                                (column) =>
+                                                    typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible()
                                             )
-                                        })}
+                                            .map((column) => {
+                                                return (
+                                                    <Button
+                                                        key={column.id}
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="flex items-center space-x-2 capitalize w-full"
+                                                        onClick={() => { column.toggleVisibility(true) }}
+                                                    >
+                                                        <Plus aria-hidden="true" focusable="false" size={16} />
+                                                        <span className="line-clamp-2 w-full overflow-hidden text-left text-ellipsis">
+                                                            {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                                                        </span>
+                                                    </Button>
+                                                )
+                                            })}
+                                    </div>
                                 </div>
                             </div>
                             <ScrollBar orientation="horizontal" className="z-10" />
@@ -230,8 +233,9 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                 </div>
 
                 <motion.div
-                    className="mx-auto rounded-b-xl border border-t-0 px-5 py-3 bg-card shadow"
-                    animate={{ width: width }}
+                    className="m-auto max-w-full box-content overflow-hidden rounded-b-xl border border-t-0 py-3 bg-card text-card-foreground shadow"
+                    animate={{ width }}
+                    transition={{ type: "tween" }}
                 >
                     <Button size="lg"
                         variant="gradient"
