@@ -4,41 +4,15 @@ import { Combobox } from "@/components/ui/combobox"
 import * as React from "react"
 
 
-export type Department = {
-    value: string
-    label: string
-}
-
-const getDepartments = (): Department[] => {
-    return [
-        {
-            value: "ALL",
-            label: "All Departments"
-        },
-        {
-            value: "CA",
-            label: "Computer Applications",
-        },
-        {
-            value: "CS",
-            label: "Computer Science",
-        },
-        {
-            value: "IS",
-            label: "Information Systems",
-        },
-        {
-            value: "IT",
-            label: "Information Technology",
-        },
-    ]
+const getDepartments = () => {
+    return ["all", "computer Applications", "computer Science", "information Systems", "information Technology"];
 }
 
 export function Departmentbox() {
-    const [value, setValue] = React.useState("ALL")
+    const [value, setValue] = React.useState("all")
     const departments = getDepartments()
 
     return (
-        <Combobox items={departments} defaultValue={value} placeholder="Department" onSelect={setValue} />
+        <Combobox items={departments} defaultValue={value} placeholder="Department" onMenuSelect={setValue} />
     )
 }
