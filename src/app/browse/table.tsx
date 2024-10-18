@@ -29,7 +29,7 @@ import { Button } from '@/components/ui/button'
 import { FileStackIcon, Plus } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { debounce } from 'lodash';
-import { AnimatePresence, motion, useAnimate } from 'framer-motion'
+import { AnimatePresence, useAnimate } from 'framer-motion'
 
 const TableOptions = dynamic(() => import('@/app/browse/table-options')) as React.ComponentType<TableOptionsProps<Thesis>>
 
@@ -107,17 +107,15 @@ export default function BrowseTable({ data, ...props }: TableProps) {
         <TooltipProvider>
             <div {...props}>
                 {/* Table options and filters */}
-                <motion.div
+                <div style={{ width }}
                     className="m-auto max-w-full box-content overflow-hidden bg-card text-card-foreground border border-b-0 rounded-t-xl shadow"
-                    animate={{ width }}
-                    transition={{ type: "tween" }}
                 >
                     <TableOptions table={table} />
-                </motion.div>
+                </div>
 
                 {/* Scrollable table area */}
                 <div className="relative">
-                    <motion.div layout transition={{ type: "tween" }} className="m-auto bg-card shadow border max-w-fit overflow-hidden">
+                    <div className="m-auto bg-card shadow border max-w-fit overflow-hidden">
                         <ScrollArea
                             ref={childRef}
                             className="scroll-smooth whitespace-nowrap"
@@ -229,22 +227,21 @@ export default function BrowseTable({ data, ...props }: TableProps) {
                             </div>
                             <ScrollBar orientation="horizontal" className="z-10" />
                         </ScrollArea>
-                    </motion.div>
+                    </div>
                 </div>
 
-                <motion.div
+                <div
                     className="m-auto max-w-full box-content overflow-hidden rounded-b-xl border border-t-0 py-3 bg-card text-card-foreground shadow"
-                    animate={{ width }}
-                    transition={{ type: "tween" }}
+                    style={{ width }}
                 >
                     <Button size="lg"
                         variant="gradient"
-                        className="p-2 sm:p-4 mx-auto flex space-x-2 font-sans font-bold"
+                        className="p-2 sm:p-4 mx-auto flex space-x-2 font-sans"
                     >
                         <FileStackIcon aria-hidden="true" focusable="false" />
-                        <span>Load more theses</span>
+                        <strong>Load more theses</strong>
                     </Button>
-                </motion.div>
+                </div>
             </div>
         </TooltipProvider>
     )
