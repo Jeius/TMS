@@ -7,18 +7,18 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger
-} from '../ui/sheet';
+} from '../../ui/sheet';
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Separator } from '../ui/separator';
+import { Separator } from '../../ui/separator';
 import { navigationLinks } from '@/lib/navigation-links';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,11 +28,9 @@ export default function AppMenu() {
     const pathname = usePathname();
 
     const highlightLabel = (label: string) => {
-        if (pathname === "/" && label === "Home")
-            return "bg-primary text-secondary"
-        if (pathname.substring(1) === label.toLowerCase())
-            return "bg-primary text-secondary"
-        return "hover:bg-accent"
+        if (pathname === "/" && label === "Home") return "font-bold bg-primary text-secondary"
+        if (pathname.substring(1) === label.toLowerCase()) return "font-bold bg-primary text-secondary"
+        return "hover:bg-accent font-medium"
     }
     return (
         <TooltipProvider>
@@ -50,9 +48,9 @@ export default function AppMenu() {
                         <p>Menu</p>
                     </TooltipContent>
                 </Tooltip>
-                <SheetContent className="w-64 sm:w-72 z-[110]" side="left">
+                <SheetContent onCloseAutoFocus={e => e.preventDefault()} className="w-64 sm:w-72 z-[110]" side="left">
                     <SheetHeader>
-                        <SheetTitle className="flex items-center space-x-2 justify-start">
+                        <SheetTitle className="flex mt-4 items-center space-x-2 justify-start">
                             <Image
                                 src={`/images/msuiit-logo-275x280.png`}
                                 alt='IIT'
@@ -72,7 +70,7 @@ export default function AppMenu() {
                                             key={subLink.href}
                                             href={subLink.href}
                                             data-test-id={`sidebar-${subLink.label.toLowerCase()}`}
-                                            className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap font-medium ${highlightLabel(subLink.label)}`}
+                                            className={`flex w-full items-center justify-start relative rounded-md whitespace-nowrap ${highlightLabel(subLink.label)}`}
                                         >
                                             <div className="flex size-9 p-2 shrink-0 items-center justify-center">
                                                 {subLink.icon}
