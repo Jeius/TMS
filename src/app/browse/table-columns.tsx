@@ -5,7 +5,7 @@ import { Dot, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import Link from "next/link"
-import { HTMLMotionProps, motion, useAnimate, usePresence } from "framer-motion"
+import { HTMLMotionProps, motion } from "framer-motion"
 import React from "react"
 import { cn } from "@/lib/utils"
 
@@ -51,21 +51,21 @@ export const columns: ColumnDef<Thesis>[] = [
             const department = row.getValue("department") as string
 
             return (<div className="flex">
-                <Checkbox className="my-auto ml-1 mr-3"
+                <Checkbox className="my-auto ml-1"
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
                     aria-label={`Select ${title}`}
                 />
-                <div className="flex flex-col space-y-1">
-                    <div className="line-clamp-3 text-ellipsis font-bold" data-title={title}>
-                        <Link href={"#"} className="text-secondary text-base hover:underline">
-                            <span className="inline">{title}</span>
-                        </Link>
-                    </div>
-                    <div className="text-xs font-semibold" data-author-list={author}>
+                <div className="flex flex-col space-y-1 p-2">
+                    <Button variant="link" data-title={title} asChild
+                        className="text-secondary size-fit text-base p-1 line-clamp-3 text-ellipsis font-bold"
+                    >
+                        <Link href={"#"}>{title}</Link>
+                    </Button>
+                    <div className="px-1 text-xs font-semibold" data-author-list={author}>
                         <span>{author}</span>
                     </div>
-                    <div className="flex items-center text-sm">
+                    <div className="px-1 flex items-center text-sm">
                         <span>{year}</span> <Dot size={25} aria-hidden="true" /> <span>{department}</span>
                     </div>
                 </div>
@@ -143,6 +143,9 @@ const ColumnCell = React.forwardRef<HTMLDivElement, ColumnCellProps<any>>(
     ({ accessorKey, row, ...props }, ref) => (
         <motion.div
             ref={ref}
+            initial={{ x: 60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ type: "spring", bounce: 0.22 }}
             {...props}
         >
             {row.getValue(accessorKey)}
@@ -165,6 +168,9 @@ const ColumnHeader = React.forwardRef<HTMLDivElement, ColumnHeaderProps<any>>(
             <motion.div
                 ref={ref}
                 className={cn("flex items-center justify-between space-x-2", className)}
+                initial={{ x: 60, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: "spring", bounce: 0.2 }}
                 {...props}
             >
                 <span className="capitalize">
