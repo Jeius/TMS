@@ -1,5 +1,5 @@
+import { Combobox, ComboboxItem } from "@/components/combobox"
 import { Button } from "@/components/ui/button"
-import { Combobox } from "@/components/ui/combobox"
 import { Table } from "@tanstack/react-table"
 import React from "react"
 
@@ -13,16 +13,18 @@ export interface TableOptionsProps<TData> {
 }
 
 const getYearData = () => {
-    return (Array.from({ length: 100 }).map((_, index) => ((2024 - index + 1).toString())))
+    return (Array.from({ length: 50 }).map((_, index) => (
+        { value: (2024 - index + 1).toString(), label: (2024 - index + 1).toString() }
+    )))
 }
 
-const getSpecializationData = () => {
+const getSpecializationData = (): ComboboxItem[] => {
     return [
-        "machine learning",
-        "robotics",
-        "network security",
-        "database management",
-        "python",
+        { value: "ML", label: "Machine Learning" },
+        { value: "robotics", label: "Robotics" },
+        { value: "NS", label: "Network Security" },
+        { value: "DM", label: "Database Management" },
+        { value: "python", label: "Python" },
     ]
 }
 
@@ -71,15 +73,7 @@ export default function TableOptions<TData>({
     const yearData = getYearData();
     const specializationData = getSpecializationData();
 
-    const filters = [
-        { key: "college", label: "College", values: [] as string[] },
-        { key: "department", label: "Department", values: [] as string[] },
-        { key: "year", label: "Year", values: yearData },
-        { key: "sp", label: "Specialization", values: specializationData },
-        { key: "author", label: "Author", values: [] as string[] },
-        { key: "adviser", label: "Adviser", values: [] as string[] },
-        { key: "keywords", label: "Keywords", values: [] as string[] },
-    ]
+    const filters = getFilters(yearData, specializationData)
 
     const initialFilters = filters.slice(0, 3)
     const extensionFilters = filters.slice(3)
@@ -106,7 +100,7 @@ export default function TableOptions<TData>({
                         items={filter.values}
                         className="flex"
                         placeholder={filter.label}
-                        onMenuSelect={(value) => handleFilterChange(filter.key, value)}
+                        onValueChanged={(value) => handleFilterChange(filter.key, value)}
                     />
                 ))}
                 <AnimatePresence mode="popLayout">
@@ -123,7 +117,7 @@ export default function TableOptions<TData>({
                                     items={filter.values}
                                     className="flex"
                                     placeholder={filter.label}
-                                    onMenuSelect={(value) => handleFilterChange(filter.key, value)}
+                                    onValueChanged={(value) => handleFilterChange(filter.key, value)}
                                 />
                             </motion.div>
                         )
@@ -140,10 +134,22 @@ export default function TableOptions<TData>({
                     </Button>
                 </motion.div>
             </div>
-            <motion.div layout transition={{ type: "tween" }} className="flex justify-end gap-2 flex-wrap">
+            <motion.div layout transition={{ type: "tween" }} className="flex justify-end items-center gap-2 flex-wrap">
                 <motion.div layout transition={{ type: "tween" }}><SortOptions table={table} /></motion.div>
                 <motion.div layout transition={{ type: "tween" }}><VisibilityMenu table={table} /></motion.div>
             </motion.div>
         </div>
     )
+}
+
+function getFilters(yearData: ComboboxItem[], specializationData: ComboboxItem[]) {
+    return [
+        { key: "college", label: "College", values: [] },
+        { key: "department", label: "Department", values: [] },
+        { key: "year", label: "Year", values: yearData },
+        { key: "sp", label: "Specialization", values: specializationData },
+        { key: "author", label: "Author", values: [] },
+        { key: "adviser", label: "Adviser", values: [] },
+        { key: "keywords", label: "Keywords", values: [] },
+    ]
 }

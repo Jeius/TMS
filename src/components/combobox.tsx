@@ -1,6 +1,3 @@
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
     Command,
@@ -15,30 +12,37 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { Check, ChevronsUpDown } from "lucide-react"
+import * as React from "react"
 
+export type ComboboxItem = {
+    value?: string;
+    label?: string;
+}
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
-    items?: string[]
-    onMenuSelect?: (value: string) => void
+    items?: ComboboxItem[]
+    onValueChanged?: (value: string) => void
     placeholder?: string
     defaultValue?: string
 }
 
 export const Combobox: React.FC<ComboboxProps> = ({
-    items,
-    onMenuSelect = () => { },
+    items = [],
     placeholder = "Item",
     defaultValue = "",
     className,
     variant = "outline",
+    onValueChanged = () => { },
     ...props
 }) => {
     const [open, setOpen] = React.useState(false)
     const [selectedValue, setSelectedValue] = React.useState(defaultValue)
 
     const handleSelect = (value: string) => {
-        setSelectedValue(value === selectedValue ? "" : value) // Toggle selection
-        onMenuSelect(value === selectedValue ? "" : value)
+        setSelectedValue(value === selectedValue ? "" : value)
+        onValueChanged(value === selectedValue ? "" : value)
         setOpen(false)
     }
 
@@ -55,7 +59,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
                 >
                     <span className="capitalize">
                         {selectedValue
-                            ? items?.find((item) => item === selectedValue)
+                            ? items?.find((item) => item === selectedValue)?.label
                             : placeholder}
                     </span>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -69,8 +73,8 @@ export const Combobox: React.FC<ComboboxProps> = ({
                         <CommandGroup>
                             {items?.map((item) => (
                                 <CommandItem
-                                    key={item}
-                                    value={item}
+                                    key={item.value}
+                                    value={item.value}
                                     onSelect={handleSelect}
                                 >
                                     <Check
@@ -79,7 +83,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
                                             selectedValue === item ? "opacity-100" : "opacity-0"
                                         )}
                                     />
-                                    <span className="capitalize">{item}</span>
+                                    <span className="capitalize">{item.label}</span>
                                 </CommandItem>
                             ))}
                         </CommandGroup>
