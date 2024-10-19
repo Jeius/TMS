@@ -1,9 +1,10 @@
+import AppHeader from "@/components/layout/app-header";
+import NavigationSideBar from "@/components/layout/navigation-sidebar";
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../styles/globals.css";
-import NavigationSideBar from "@/components/layout/navigation-sidebar";
-import AppHeader from "@/components/layout/app-header";
-import { Toaster } from "@/components/ui/toaster";
+import QueryProviderWrapper from "./query-provider-wrapper";
 
 const geistSans = localFont({
   src: "../styles/fonts/GeistVF.woff",
@@ -31,14 +32,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div id="__next">
-          <AppHeader />
-          <main className="pb-4 lg:pl-16">
-            {children}
-          </main>
-          <NavigationSideBar />
-        </div>
-        <Toaster />
+        <QueryProviderWrapper>
+          <div id="__next">
+            <AppHeader />
+            <main className="pb-4 lg:pl-16">
+              {children}
+            </main>
+            <NavigationSideBar />
+          </div>
+          <Toaster />
+        </QueryProviderWrapper>
       </body>
     </html>
   );
