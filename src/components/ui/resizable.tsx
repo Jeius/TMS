@@ -3,8 +3,8 @@
 import { DragHandleDots2Icon } from "@radix-ui/react-icons"
 import * as ResizablePrimitive from "react-resizable-panels"
 
+import { useDeviceSize } from "@/lib/hooks/use-device-size"
 import { cn, Screens } from "@/lib/utils"
-import { useDeviceSize } from "@/hooks/use-device-size"
 import React from "react"
 
 const ResizablePanelGroup = ({
@@ -70,4 +70,5 @@ const ResizableHandle = ({
   </ResizablePrimitive.PanelResizeHandle>
 )
 
-export { ResizablePanelGroup, AdaptiveResizablePanelGroup, ResizablePanel, ResizableHandle }
+export { AdaptiveResizablePanelGroup, ResizableHandle, ResizablePanel, ResizablePanelGroup }
+
