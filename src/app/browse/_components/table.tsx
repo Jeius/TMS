@@ -1,5 +1,5 @@
 import { columns } from '@/app/analytics/recent-activities-columns';
-import { TableOptionsProps } from '@/components/theses-table/table-options';
+import { TableOptionsProps } from '@/app/browse/_components/table-options';
 import { useDynamicWidth } from '@/hooks/use-dynamic-width';
 import { Table as T } from '@tanstack/react-table';
 import { useAnimate } from 'framer-motion';
@@ -7,15 +7,15 @@ import { debounce } from 'lodash';
 import { FileStackIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import { Button } from '../ui/button';
-import { ScrollArea, ScrollBar } from '../ui/scroll-area';
-import { Table, TableBody, TableCell, TableHeader, TableRow, } from '../ui/table';
-import { TooltipProvider } from '../ui/tooltip';
+import { Button } from '../../../components/ui/button';
+import { ScrollArea, ScrollBar } from '../../../components/ui/scroll-area';
+import { Table, TableBody, TableCell, TableHeader, TableRow, } from '../../../components/ui/table';
+import { TooltipProvider } from '../../../components/ui/tooltip';
 import AnimatedTableCell from './animated-table-cell';
 import AnimatedTableHead from './animated-table-head';
 import { VisibilityColumn } from './column-visibility';
 
-const TableOptions = dynamic(() => import('@/components/theses-table/table-options')) as React.ComponentType<TableOptionsProps<any>>
+const TableOptions = dynamic(() => import('@/app/browse/_components/table-options')) as React.ComponentType<TableOptionsProps<any>>
 
 type ThesesTableProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
     table: T<TData>;

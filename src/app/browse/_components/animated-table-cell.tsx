@@ -1,7 +1,6 @@
-import { AnimatePresence } from 'framer-motion'
-import React from 'react'
-import { TableCell } from '../ui/table'
-import { flexRender, Row } from '@tanstack/react-table'
+import { flexRender, Row } from '@tanstack/react-table';
+import { AnimatePresence } from 'framer-motion';
+import { TableCell } from '../../../components/ui/table';
 
 type AnimatedTableCellProps<TData> = {
     row: Row<TData>;

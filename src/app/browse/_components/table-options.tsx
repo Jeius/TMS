@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button"
 import { Table } from "@tanstack/react-table"
 import React from "react"
 
-import { VisibilityMenu } from "@/components/theses-table/column-visibility"
+import { VisibilityMenu } from "@/app/browse/_components/column-visibility"
 import { AnimatePresence, motion } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
-import { SelectMenu, SelectMenuItem } from "../select-menu"
+import { SelectMenu, SelectMenuItem } from "../../../components/select-menu"
 
 export interface TableOptionsProps<TData> {
     table: Table<TData>

@@ -1,6 +1,6 @@
 "use client"
 
-import ThesesTable from '@/components/theses-table/table'
+import ThesesTable from '@/app/browse/_components/table'
 import {
     ColumnFiltersState,
     getCoreRowModel,

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Table } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../../components/ui/dropdown-menu';
 
 export function VisibilityColumn<TData>({ table }: { table: Table<TData> }) {
     return (
