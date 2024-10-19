@@ -4,11 +4,12 @@ import { Table } from "@tanstack/react-table"
 import React from "react"
 
 import { VisibilityMenu } from "@/app/browse/_components/column-visibility"
+import { cn } from "@/lib/utils"
 import { AnimatePresence, motion } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
 import { SelectMenu, SelectMenuItem } from "../../../components/select-menu"
 
-export interface TableOptionsProps<TData> {
+export type TableOptionsProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
     table: Table<TData>
 }
 
@@ -64,7 +65,7 @@ const SortOptions = <TData,>({ table }: TableOptionsProps<TData>) => {
 
 
 export default function TableOptions<TData>({
-    table
+    table, className, ...props
 }: TableOptionsProps<TData>) {
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -92,52 +93,55 @@ export default function TableOptions<TData>({
     const toggleMoreFilters = () => setShowMoreFilters(prev => !prev)
 
     return (
-        <div className="flex items-end justify-between overflow-hidden px-4 py-3">
-            <div className="flex gap-2 flex-wrap mr-5 sm:mr-20 md:mr-32">
-                {initialFilters.map(filter => (
-                    <Combobox
-                        key={crypto.randomUUID()}
-                        items={filter.values}
-                        className="flex"
-                        placeholder={filter.label}
-                        onValueChanged={(value) => handleFilterChange(filter.key, value)}
-                    />
-                ))}
-                <AnimatePresence mode="popLayout">
-                    {showMoreFilters && extensionFilters.map(filter => {
-                        return (
-                            <motion.div key={crypto.randomUUID()}
-                                layout
-                                initial={{ x: -60, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                exit={{ x: -60, opacity: 0 }}
-                                transition={{ type: "tween" }}
-                            >
-                                <Combobox
-                                    items={filter.values}
-                                    className="flex"
-                                    placeholder={filter.label}
-                                    onValueChanged={(value) => handleFilterChange(filter.key, value)}
-                                />
-                            </motion.div>
-                        )
-                    })}
-                </AnimatePresence>
-                <motion.div layout transition={{ type: "tween" }}>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
-                        onClick={toggleMoreFilters}
-                    >
-                        {showMoreFilters ? "Less filters" : "More filters"}
-                    </Button>
+        <div className={cn("w-full max-w-full overflow-hidden bg-card text-card-foreground border-b-0", className)} {...props}>
+            <div className="flex items-end justify-between overflow-hidden px-4 py-3">
+                <div className="flex gap-2 flex-wrap mr-5 sm:mr-20 md:mr-32">
+                    {initialFilters.map(filter => (
+                        <motion.div layout key={filter.key} transition={{ type: "tween" }}>
+                            <Combobox
+                                items={filter.values}
+                                className="flex"
+                                placeholder={filter.label}
+                                onValueChanged={(value) => handleFilterChange(filter.key, value)}
+                            />
+                        </motion.div>
+                    ))}
+                    <AnimatePresence mode="popLayout">
+                        {showMoreFilters && extensionFilters.map(filter => {
+                            return (
+                                <motion.div key={filter.key}
+                                    layout
+                                    initial={{ x: -60, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    exit={{ x: -60, opacity: 0 }}
+                                    transition={{ type: "tween" }}
+                                >
+                                    <Combobox
+                                        items={filter.values}
+                                        className="flex"
+                                        placeholder={filter.label}
+                                        onValueChanged={(value) => handleFilterChange(filter.key, value)}
+                                    />
+                                </motion.div>
+                            )
+                        })}
+                    </AnimatePresence>
+                    <motion.div layout transition={{ type: "tween" }}>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
+                            onClick={toggleMoreFilters}
+                        >
+                            {showMoreFilters ? "Less filters" : "More filters"}
+                        </Button>
+                    </motion.div>
+                </div>
+                <motion.div layout transition={{ type: "tween" }} className="flex justify-end items-center gap-2 flex-wrap">
+                    <motion.div layout transition={{ type: "tween" }}><SortOptions table={table} /></motion.div>
+                    <motion.div layout transition={{ type: "tween" }}><VisibilityMenu table={table} /></motion.div>
                 </motion.div>
             </div>
-            <motion.div layout transition={{ type: "tween" }} className="flex justify-end items-center gap-2 flex-wrap">
-                <motion.div layout transition={{ type: "tween" }}><SortOptions table={table} /></motion.div>
-                <motion.div layout transition={{ type: "tween" }}><VisibilityMenu table={table} /></motion.div>
-            </motion.div>
         </div>
     )
 }

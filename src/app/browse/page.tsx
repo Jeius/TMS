@@ -1,6 +1,5 @@
-import BrowseTable from './table'
-import React from 'react'
-import { Thesis } from './table-columns'
+import { Thesis } from "@/utils/types";
+import ThesesTable from './_components/theses-table';
 
 function getData(): Thesis[] {
     return [
@@ -234,9 +233,8 @@ export default function Browse() {
         <div id="browse-page" className="p-5 m-auto max-w-none">
             <div style={{ minHeight: "calc(-110px + 100vh)" }}>
                 <div className="mb-28 h-full">
-                    <div className="mx-auto space-y-2 lg:space-y-4"></div>
                     <div className="gap 5 max-sm:mt-5 max-sm:flex max-sm:flex-col">
-                        <BrowseTable data={data} />
+                        <ThesesTable data={data} />
                     </div>
                 </div>
             </div>
