@@ -10,11 +10,9 @@ const NavigationItems = dynamic(() => import("@/components/layout/navigation/nav
 
 export default function NavigationSideBar() {
     const queryClient = useQueryClient();
-    const { data: open = false } = useQuery<boolean>({ queryKey: ["navigation", "sidebar"] });
+    const { data: open } = useQuery<boolean>({ queryKey: ["navigation", "sidebar"] });
     const width = open ? "240px" : "64px";
-    const setOpen = (value: boolean) => {
-        if (open !== value) queryClient.setQueryData(["navigation", "sidebar"], value);
-    };
+    const setOpen = (value: boolean) => { queryClient.setQueryData(["navigation", "sidebar"], value) };
 
     return (
         <motion.div

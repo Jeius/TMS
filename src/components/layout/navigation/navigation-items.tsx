@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
     BookCopy,
     BookOpenCheck,
@@ -38,17 +38,15 @@ const toolLinks = [
 
 export default function NavigationItems() {
     const pathname = usePathname();
-    const queryClient = useQueryClient();
     const navigationLinks = [primaryLinks, userLinks, toolLinks];
 
-    const { data: isMenuOpen } = useQuery<boolean>({
+    const { data: isMenuOpen, refetch: refetchMenu } = useQuery<boolean>({
         queryKey: ["navigation", "menu"],
-        queryFn: () => queryClient.getQueryData<boolean>(["navigation", "menu"]) ?? false,
+        queryFn: () => false,
     });
 
     const { data: isSidebarOpen } = useQuery<boolean>({
         queryKey: ["navigation", "sidebar"],
-        queryFn: () => queryClient.getQueryData<boolean>(["navigation", "sidebar"]) ?? false,
     });
 
     const highlight = (label: string) => {
@@ -57,8 +55,7 @@ export default function NavigationItems() {
     };
 
     const handleClick = () => {
-        queryClient.invalidateQueries({ queryKey: ["navigation", "menu"] });
-        queryClient.invalidateQueries({ queryKey: ["navigation", "sidebar"] });
+        isMenuOpen && refetchMenu();
     };
 
     return (
