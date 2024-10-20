@@ -44,8 +44,8 @@ export default function Home() {
         <div id="home-page"
             className="relative max-w-none m-auto p-5"
         >
-            <div className="absolute left-0 bottom-16"><BlurryBlob firstBlobColor="bg-primary" secondBlobColor="bg-secondary" /></div>
-            <div className="absolute right-0 top-60"><BlurryBlob className="size-40" firstBlobColor="bg-primary" secondBlobColor="bg-secondary" /></div>
+            <div className="fixed left-0 bottom-16"><BlurryBlob firstBlobColor="bg-primary" secondBlobColor="bg-secondary" /></div>
+            <div className="fixed right-0 top-96"><BlurryBlob className="size-40" firstBlobColor="bg-primary" secondBlobColor="bg-secondary" /></div>
             <div className="flex flex-col mx-auto w-fit items-center md:items-start lg:ml-[max(40px,calc(65%-37rem))] xl:ml-[max(40px,calc(57%-40rem))] 2xl:ml-[max(40px,calc(50%-44rem))] space-y-16 transition-all duration-500">
                 <Card id="welcome-card" filter="glass" colorType="gradient" className="w-full bg-primary">
                     <CardHeader className="space-y-1">
