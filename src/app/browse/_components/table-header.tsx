@@ -94,8 +94,8 @@ export default function TableOptions<TData>({
 
     return (
         <div className={cn("w-full max-w-full overflow-hidden bg-card text-card-foreground border-b-0", className)} {...props}>
-            <div className="flex items-end justify-between overflow-hidden px-4 py-3">
-                <div className="flex gap-2 flex-wrap mr-5 sm:mr-20 md:mr-32">
+            <div className="overflow-hidden px-4 py-3 flex flex-col items-center space-y-10 xs:space-y-0 xs:flex-row xs:items-end sm:justify-between ">
+                <div className="flex gap-2 flex-wrap xs:mr-5 sm:mr-20 md:mr-32">
                     {initialFilters.map(filter => (
                         <motion.div layout key={filter.key} transition={{ type: "tween" }}>
                             <Combobox
@@ -137,7 +137,7 @@ export default function TableOptions<TData>({
                         </Button>
                     </motion.div>
                 </div>
-                <motion.div layout transition={{ type: "tween" }} className="flex justify-end items-center gap-2 flex-wrap">
+                <motion.div layout transition={{ type: "tween" }} className="flex justify-between w-full 2xs:w-auto 2xs:justify-end items-center gap-2 flex-wrap">
                     <motion.div layout transition={{ type: "tween" }}><SortOptions table={table} /></motion.div>
                     <motion.div layout transition={{ type: "tween" }}><VisibilityMenu table={table} /></motion.div>
                 </motion.div>
