@@ -57,7 +57,16 @@ const config: Config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			screens: {
-				'xsm': '420px',
+				'xs': '520px',
+				'2xs': '380px',
+			},
+			width: {
+				'xs': '520px',
+				'2xs': '380px',
+			},
+			height: {
+				'xs': '520px',
+				'2xs': '380px',
 			},
 			boxShadow: {
 				'right': '1px 0 5px rgba(0, 0, 0, 0.1)',
