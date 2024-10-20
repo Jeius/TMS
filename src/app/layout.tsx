@@ -1,21 +1,11 @@
-import AppHeader from "@/components/layout/app-header";
-import NavigationSideBar from "@/components/layout/navigation-sidebar";
+import AppHeader from "@/components/layout/header/app-header";
+import NavigationSideBar from "@/components/layout/navigation/navigation-sidebar";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import QueryProvider from "../components/providers/query-provider";
 import "../styles/globals.css";
-import QueryProviderWrapper from "./query-provider-wrapper";
-
-const geistSans = localFont({
-  src: "../styles/fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../styles/fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "Thesis Management System",
@@ -30,18 +20,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${GeistSans.className} antialiased`}
       >
-        <QueryProviderWrapper>
-          <div id="__next">
-            <AppHeader />
-            <main className="pb-4 lg:pl-16">
-              {children}
-            </main>
-            <NavigationSideBar />
-          </div>
-          <Toaster />
-        </QueryProviderWrapper>
+        <QueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <div id="__next">
+              <AppHeader />
+              <main className="pb-4 lg:pl-16">
+                {children}
+              </main>
+              <NavigationSideBar />
+            </div>
+            <Toaster />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
