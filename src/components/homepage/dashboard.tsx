@@ -44,7 +44,7 @@ export default function DashBoard() {
                     </div>
                 </div>
             </div>
-            <aside ref={sideBarRef} id="sidebar" className="fixed right-0 py-5 pr-1 hidden md:block"
+            <aside ref={sideBarRef} id="sidebar" className="fixed right-0 py-5 pr-1 hidden lg:block"
                 style={{ top: headerBottom, height: sideBarHeight }}
             >
                 <ScrollArea id="sidebar-scroll-area" className="h-full pr-3">

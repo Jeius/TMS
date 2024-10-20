@@ -322,7 +322,7 @@ export default function HomeCalendar() {
 
     return (
         <Card id="calendar/reminders-card"
-            className={`flex items-stretch transition-all duration-500 overflow-hidden w-[300px] sm:w-[600px] lg:w-[300px] 2xl:w-[600px] ${isViewToggled ? 'justify-end' : 'justify-start'}`}
+            className={`flex items-stretch transition-all duration-500 overflow-hidden w-[300px] 2xl:w-[600px] ${isViewToggled ? 'justify-end' : 'justify-start'}`}
         >
             <TooltipProvider>
                 <CalendarView
