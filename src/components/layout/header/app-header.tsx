@@ -1,11 +1,10 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import AppMenu from './header/app-menu';
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotificationMenu from './header/notification-menu';
-import UserMenu from './header/user-menu';
-import SearchBar from './header/searchbar';
+import Image from 'next/image';
+import Link from 'next/link';
+import NavigationMenu from './navigation-menu';
+import NotificationMenu from './notification-menu';
+import SearchBar from './searchbar';
+import UserMenu from './user-menu';
 
 export default function AppHeader() {
     return (
@@ -14,7 +13,7 @@ export default function AppHeader() {
                 <div className="flex items-center justify-between">
                     <div className="flex grow items-center space-x-2 pl-2">
                         <div id="navigation-menu" className="block lg:hidden">
-                            <AppMenu />
+                            <NavigationMenu />
                         </div>
                         <Link
                             id="app-title"
