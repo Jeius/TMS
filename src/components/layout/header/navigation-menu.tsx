@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Menu } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -45,7 +45,7 @@ export default function NavigationMenu() {
     const setOpen = (value: boolean) => { queryClient.setQueryData(["navigation", "menu"], value) };
 
     return (
-        <TooltipProvider>
+        <div id="navigation-menu" className="block lg:hidden">
             <Sheet open={open} onOpenChange={setOpen}>
                 <MenuButton />
                 <SheetContent
@@ -63,6 +63,6 @@ export default function NavigationMenu() {
                     </div>
                 </SheetContent>
             </Sheet>
-        </TooltipProvider>
+        </div>
     );
 }
