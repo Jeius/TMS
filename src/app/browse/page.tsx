@@ -230,7 +230,7 @@ function getData(): Thesis[] {
 export default function Browse() {
     const data = getData()
     return (
-        <div id="browse-page" className="p-5 m-auto max-w-none">
+        <div id="browse-page" className="p-3 sm:p-5 m-auto max-w-none">
             <div style={{ minHeight: "calc(-110px + 100vh)" }}>
                 <div className="mb-28 h-full">
                     <div className="gap 5 max-sm:mt-5 max-sm:flex max-sm:flex-col">

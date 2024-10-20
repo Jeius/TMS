@@ -13,7 +13,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { motion } from "framer-motion"
+import { Check, ChevronDown } from "lucide-react"
 import * as React from "react"
 
 export type ComboboxItem = {
@@ -28,7 +29,7 @@ type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
     defaultValue?: string
 }
 
-export const Combobox: React.FC<ComboboxProps> = ({
+export function Combobox({
     items = [],
     placeholder = "Item",
     defaultValue = "",
@@ -36,7 +37,7 @@ export const Combobox: React.FC<ComboboxProps> = ({
     variant = "outline",
     onValueChanged = () => { },
     ...props
-}) => {
+}: ComboboxProps) {
     const [open, setOpen] = React.useState(false)
     const [selectedValue, setSelectedValue] = React.useState(defaultValue)
 
@@ -53,22 +54,27 @@ export const Combobox: React.FC<ComboboxProps> = ({
                     variant={variant}
                     role="combobox"
                     aria-expanded={open}
+                    data-selected={open}
                     size="sm"
-                    className={cn("w-fit justify-between text-foreground", className)}
+                    className={cn("w-min justify-between text-foreground font-semibold", className)}
                     {...props}
                 >
-                    <span className="capitalize">
+                    <span className="capitalize mr-2">
                         {selectedValue
-                            ? items?.find((item) => item === selectedValue)?.label
+                            ? items?.find((item) => item.value === selectedValue)?.label
                             : placeholder}
                     </span>
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    <motion.div
+                        animate={{ rotate: open ? 180 : 0, transformOrigin: "center" }}
+                    >
+                        <ChevronDown size={16} className="opacity-50" />
+                    </motion.div>
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="max-w-fit z-40 p-0">
                 <Command>
-                    <CommandInput placeholder={`Select ${placeholder.toLowerCase()}...`} />
-                    <CommandList className="max-h-52">
+                    <CommandInput className="text-xs font-semibold" placeholder={`Search ${placeholder.toLowerCase()}...`} />
+                    <CommandList className="max-h-52 p-2">
                         <CommandEmpty>Nothing found...</CommandEmpty>
                         <CommandGroup>
                             {items?.map((item) => (
@@ -80,10 +86,9 @@ export const Combobox: React.FC<ComboboxProps> = ({
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            selectedValue === item ? "opacity-100" : "opacity-0"
-                                        )}
-                                    />
-                                    <span className="capitalize">{item.label}</span>
+                                            selectedValue === item.value ? "opacity-100" : "opacity-0"
+                                        )} />
+                                    <span className="capitalize whitespace-nowrap text-xs font-semibold">{item.label}</span>
                                 </CommandItem>
                             ))}
                         </CommandGroup>
