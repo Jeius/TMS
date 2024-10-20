@@ -1,11 +1,5 @@
 
-import React from 'react';
-import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import QuickActions from './quick-actions';
-import Announcements from './announcements';
-import HomeCalendar from './home-calendar';
+import BlurryBlob from '@/components/ui/blurry-blob';
 import {
     Card,
     CardDescription,
@@ -13,6 +7,12 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import Announcements from './announcements';
+import HomeCalendar from './home-calendar';
+import QuickActions from './quick-actions';
 
 // Array of account links for easy modification and mapping.
 const accountLinks = [
@@ -44,6 +44,8 @@ export default function Home() {
         <div id="home-page"
             className="relative max-w-none m-auto p-5"
         >
+            <div className="absolute left-0 bottom-16"><BlurryBlob firstBlobColor="bg-primary" secondBlobColor="bg-secondary" /></div>
+            <div className="absolute right-0 top-60"><BlurryBlob className="size-40" firstBlobColor="bg-primary" secondBlobColor="bg-secondary" /></div>
             <div className="flex flex-col mx-auto w-fit items-center md:items-start lg:ml-[max(40px,calc(65%-37rem))] xl:ml-[max(40px,calc(57%-40rem))] 2xl:ml-[max(40px,calc(50%-44rem))] space-y-16 transition-all duration-500">
                 <Card id="welcome-card" filter="glass" colorType="gradient" className="w-full bg-primary">
                     <CardHeader className="space-y-1">
