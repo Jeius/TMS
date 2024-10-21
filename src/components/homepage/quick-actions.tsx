@@ -80,7 +80,9 @@ export default function QuickActions() {
             </div>
 
             <div id="quick-actions-carousel" className="px-14 md:hidden">
-                <Carousel className="w-full" style={{ maxWidth: windowWidth - 155 }} plugins={[plugin.current]}>
+                <Carousel className="w-full" plugins={[plugin.current]}
+                    style={{ maxWidth: Math.max(windowWidth - 155, 160) }}
+                >
                     <CarouselContent id="carousel-content" className="flex items-center py-2 gap-2">
                         {quickActions.map((action, index) => (
                             <CarouselItem key={`quick-action-carousel-${index}`} className="xs:basis-1/2">
