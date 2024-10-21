@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export function useDynamicWidth() {
-    const [width, setWidth] = useState<string>('auto');
-    const elementRef = useRef<HTMLDivElement>(null);
+    const [width, setWidth] = useState<number | undefined>();
+    const elementRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         const current = elementRef.current
         const updateWidth = () => {
             if (elementRef.current) {
-                setWidth(`${elementRef.current.offsetWidth}px`);
+                setWidth(elementRef.current.offsetWidth);
             }
         };
 
