@@ -40,9 +40,8 @@ function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) 
                     id='calendar'
                     key="calendar"
                     className={cn("flex flex-col w-full p-5 space-y-4 justify-center", className)}
-                    initial={{ x: -60, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -60, opacity: 0 }}
+                    initial={false}
+                    animate={{ x: [-60, 0], opacity: [0, 1] }}
                     {...props}
                 >
                     <CardHeader className="flex p-0 flex-row justify-between space-y-0 items-center">

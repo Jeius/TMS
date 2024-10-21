@@ -2,31 +2,35 @@
 
 import { useDynamicWidth } from '@/lib/hooks/use-dynamic-width'
 import { useElementRect } from '@/lib/hooks/use-element-rect'
+import { useIsMounted } from '@/lib/hooks/use-is-mounted'
 import useWindowSize from '@/lib/hooks/use-window-size'
-import dynamic from 'next/dynamic'
-import React from 'react'
+import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import { ScrollArea } from '../ui/scroll-area'
 import Announcements from './announcements'
 import HomeCalendar from './home-calendar'
+import QuickActions from './quick-actions'
 import WelcomeCard from './welcome-card'
-
-const QuickActions = dynamic(() => import('./quick-actions'), { ssr: false });
 
 export default function DashBoard() {
     const [sideBarWidth, sideBarRef] = useDynamicWidth();
     const { height: windowHeight } = useWindowSize();
     const headerRect = useElementRect("app-header");
+    const isMounted = useIsMounted();
 
-    const sideBarHeight = React.useMemo(() => {
-        if (headerRect?.height) {
-            return windowHeight - headerRect.height;
+    const [sideBarHeight, setSideBarHeight] = useState<number | 'auto'>('auto');
+    const [sideBarTop, setSideBarTop] = useState<number>(0);
+
+    useEffect(() => {
+        if (headerRect) {
+            setSideBarHeight(windowHeight - headerRect.height);
+            setSideBarTop(headerRect.bottom || 0);
         }
-        return windowHeight;
-    }, [windowHeight, headerRect?.height]);
+    }, [windowHeight, headerRect]);
 
     return (
         <div className="relative flex">
-            <div className="grow" style={{ paddingRight: sideBarWidth }}>
+            <motion.div className="grow" animate={{ paddingRight: sideBarWidth }}>
                 <div className="flex flex-col mx-auto w-fit items-center md:items-start space-y-16">
                     <WelcomeCard />
                     <QuickActions />
@@ -40,9 +44,10 @@ export default function DashBoard() {
                         <p>A feed showing what's happening in the system relevant to the user.</p>
                     </div>
                 </div>
-            </div>
-            <aside ref={sideBarRef} id="sidebar" className="fixed right-0 pt-5 pr-1 hidden lg:block"
-                style={{ top: headerRect?.bottom || 0, height: sideBarHeight }}
+            </motion.div>
+            <motion.aside ref={sideBarRef} id="sidebar" className="fixed right-0 pt-5 pr-1 hidden lg:block"
+                initial={{ opacity: 0 }}
+                animate={{ top: sideBarTop, height: sideBarHeight, opacity: 1 }}
             >
                 <ScrollArea id="sidebar-scroll-area" className="h-full pr-3">
                     <div className="flex flex-col space-y-5 pb-5">
@@ -50,7 +55,7 @@ export default function DashBoard() {
                         <HomeCalendar />
                     </div>
                 </ScrollArea>
-            </aside>
+            </motion.aside>
         </div>
     );
 }

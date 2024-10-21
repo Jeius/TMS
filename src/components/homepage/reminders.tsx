@@ -207,9 +207,8 @@ export default function RemindersView({ open: isOpen, className, ...props }: Rem
                     id='reminders'
                     key="reminders"
                     className={cn("flex flex-col w-full p-5", className)}
-                    initial={{ x: 60, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 60, opacity: 0 }}
+                    initial={false}
+                    animate={{ x: [60, 0], opacity: [0, 1] }}
                     {...props}
                 >
                     <CardHeader className="flex p-0 flex-row space-y-0 items-center">
