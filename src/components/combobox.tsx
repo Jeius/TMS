@@ -65,7 +65,9 @@ export function Combobox({
                             : placeholder}
                     </span>
                     <motion.div
-                        animate={{ rotate: open ? 180 : 0, transformOrigin: "center" }}
+                        style={{ transformOrigin: "center" }}
+                        animate={{ rotate: open ? 180 : 0 }}
+                        aria-hidden="true"
                     >
                         <ChevronDown size={16} className="opacity-50" />
                     </motion.div>
