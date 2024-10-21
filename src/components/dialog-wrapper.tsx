@@ -1,3 +1,5 @@
+import useWindowSize from "@/lib/hooks/use-window-size";
+import React from "react";
 import { Button } from "./ui/button";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
@@ -18,15 +20,20 @@ export default function DialogWrapper({
     cancelButtonLabel = "No",
     children, onConfirm,
 }: DialogWrapperProps) {
+    const { width } = useWindowSize();
+    const getMaxWidth = React.useMemo(() => Math.min(width * 0.7, 512), [width]);
+
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent>
+            <DialogContent onCloseAutoFocus={e => e.preventDefault()}
+                className="rounded-xl" style={{ maxWidth: getMaxWidth }}
+            >
                 <DialogHeader>
                     <DialogTitle>{dialogTitle}</DialogTitle>
                 </DialogHeader>
                 <p>{dialogDescription}</p>
-                <DialogFooter className="flex justify-end space-x-2">
+                <DialogFooter className="flex justify-end">
                     <DialogClose asChild>
                         <Button type={confirmButtonType} variant="destructive" onClick={onConfirm}>
                             {confirmButtonLabel}
