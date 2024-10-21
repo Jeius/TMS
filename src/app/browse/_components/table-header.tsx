@@ -104,7 +104,7 @@ export default function TableHeader<TData>({
     const toggleMoreFilters = () => setShowMoreFilters(prev => !prev)
 
     return (
-        <div className={cn("w-full max-w-full overflow-hidden bg-card text-card-foreground border-b-0", className)} {...props}>
+        <div className={cn("w-full max-w-full overflow-hidden bg-card text-card-foreground", className)} {...props}>
             <div className="overflow-hidden px-4 py-3 flex flex-col items-center space-y-10 xs:space-y-0 xs:flex-row xs:items-end sm:justify-between ">
                 <div className="flex gap-2 flex-wrap xs:mr-5 sm:mr-20 md:mr-32">
                     {initialFilters.map(filter => (

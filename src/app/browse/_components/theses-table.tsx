@@ -50,7 +50,7 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
                 <div className="flex flex-col m-auto bg-card shadow border rounded-xl max-w-fit overflow-hidden">
                     <TableHeader table={table} style={{ maxWidth: width }} />
                     <ThesesTableContent table={table} />
-                    <div style={{ maxWidth: width }} className="w-full max-w-full overflow-hidden border-t-0 p-3 bg-card text-card-foreground">
+                    <div style={{ maxWidth: width }} className="w-full max-w-full overflow-hidden p-3 bg-card text-card-foreground">
                         <Button size="lg"
                             variant="gradient"
                             className="p-2 sm:p-4 mx-auto flex space-x-2 font-sans"

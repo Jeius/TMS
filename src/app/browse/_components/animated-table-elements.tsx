@@ -21,7 +21,7 @@ export function AnimatedTableHead<TData, TValue>({
                         scope="col"
                         layout={!isFirstColumn ? true : undefined}
                         motion={!isFirstColumn}
-                        initial={{ opacity: 0 }}
+                        initial={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, y: 30 }}
                         transition={{ type: 'spring', bounce: 0.2 }}
@@ -53,7 +53,7 @@ export function AnimatedTableCell<TData>({ row, scrollState, firstColumnId }: An
                         key={cell.id}
                         layout={!isFirstColumn ? true : undefined}
                         motion={!isFirstColumn}
-                        initial={{ opacity: 0 }}
+                        initial={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, y: 30 }}
                         transition={{ type: "spring", bounce: 0.2 }}

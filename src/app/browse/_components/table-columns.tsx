@@ -108,7 +108,7 @@ type ColumnCellProps<TData> = HTMLMotionProps<"div"> & {
 function ColumnCell<TData>({ accessorKey, row, ...props }: ColumnCellProps<TData>) {
     return (
         <motion.div
-            initial={{ x: 60, opacity: 0 }}
+            initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ type: "spring", bounce: 0.22 }}
             {...props}
@@ -129,7 +129,7 @@ function ColumnHeader<TData>({ accessorKey, table, hideClose = false, className,
         <Tooltip>
             <motion.div
                 className={cn("flex items-center justify-between space-x-2", className)}
-                initial={{ x: 60, opacity: 0 }}
+                initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ type: "spring", bounce: 0.2 }}
                 {...props}
