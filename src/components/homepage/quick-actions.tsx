@@ -7,7 +7,6 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import useWindowSize from "@/lib/hooks/use-window-size"
 import { cn } from "@/lib/utils"
 import Autoplay from "embla-carousel-autoplay"
 import {
@@ -32,13 +31,13 @@ const quickActions = [
     { href: "#", label: "Borrow Thesis", icon: <BookCopy aria-hidden="true" focusable="false" size={30} /> },
 ]
 
-type QuickActionCardProps = {
+type QuickActionCardProps = React.ComponentPropsWithRef<typeof Link> & {
     href: string
     icon: React.ReactNode
     label: string
 };
 
-function QuickActionCard({ href, icon, label }: QuickActionCardProps) {
+function QuickActionCard({ href, icon, label, ...props }: QuickActionCardProps) {
     return (
         <Button asChild variant="outline"
             className={cn(
@@ -47,9 +46,7 @@ function QuickActionCard({ href, icon, label }: QuickActionCardProps) {
                 "hover:scale-105 transition-transform"
             )}
         >
-            <Link href={href} id={`quick-action-${label.toLowerCase().replace(/ /g, "-")}`}
-                className="flex flex-col space-y-4"
-            >
+            <Link href={href} className="flex flex-col space-y-4"{...props}>
                 {icon}
                 <span className="text-sm font-semibold">{label}</span>
             </Link>
@@ -58,20 +55,20 @@ function QuickActionCard({ href, icon, label }: QuickActionCardProps) {
 }
 
 export default function QuickActions() {
-    const plugin = React.useRef(Autoplay({ delay: 2500, stopOnInteraction: true }))
-    const { width: windowWidth } = useWindowSize();
+    const plugin = React.useRef(Autoplay({ delay: 2500, stopOnInteraction: true }));
 
     return (
-        <div id="quick-actions" className="flex flex-col items-start space-y-2 justify-center">
+        <div id="quick-actions" className="flex flex-col space-y-2 w-full">
             <h2 className="font-semibold text-lg pl-2">Quick Actions</h2>
 
             <div
                 id="quick-actions-grid"
                 className="hidden md:grid grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4"
             >
-                {quickActions.map((action, index) => (
+                {quickActions.map((action) => (
                     <QuickActionCard
-                        key={`quick-action-grid-${index}`}
+                        key={`quick-action-grid-${action.label.toLowerCase().replace(/ /g, "-")}`}
+                        id={`quick-action-grid-${action.label.toLowerCase().replace(/ /g, "-")}`}
                         href={action.href}
                         icon={action.icon}
                         label={action.label}
@@ -79,14 +76,13 @@ export default function QuickActions() {
                 ))}
             </div>
 
-            <div id="quick-actions-carousel" className="px-14 md:hidden">
-                <Carousel className="w-full" plugins={[plugin.current]}
-                    style={{ maxWidth: Math.max(windowWidth - 155, 160) }}
-                >
-                    <CarouselContent id="carousel-content" className="flex items-center py-2 gap-2">
+            <div id="quick-actions-carousel" className="px-14 md:hidden w-full">
+                <Carousel className="w-full" plugins={[plugin.current]} >
+                    <CarouselContent id="carousel-content" className="flex items-center p-2 gap-2">
                         {quickActions.map((action, index) => (
                             <CarouselItem key={`quick-action-carousel-${index}`} className="xs:basis-1/2">
                                 <QuickActionCard
+                                    id={`quick-action-carousel-${action.label.toLowerCase().replace(/ /g, "-")}`}
                                     href={action.href}
                                     icon={action.icon}
                                     label={action.label}

@@ -29,9 +29,9 @@ export default function DashBoard() {
     }, [windowHeight, headerRect]);
 
     return (
-        <div className="relative flex">
-            <motion.div className="grow" animate={{ paddingRight: sideBarWidth }}>
-                <div className="flex flex-col mx-auto w-fit items-center md:items-start space-y-16">
+        <div className="relative">
+            <motion.div animate={{ paddingRight: sideBarWidth }}>
+                <div className="flex flex-col max-w-full md:mx-auto md:w-fit items-center space-y-16">
                     <WelcomeCard />
                     <QuickActions />
                     <div className="flex flex-col items-start space-y-2 justify-center">
