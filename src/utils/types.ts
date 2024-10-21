@@ -1,3 +1,4 @@
+import { z } from "zod"
 
 export type Thesis = {
     id: string
@@ -10,3 +11,7 @@ export type Thesis = {
     dateUploaded: string
     department: string
 }
+
+export const RemindersFormSchema = z.object({
+    reminders: z.array(z.string()),
+})
