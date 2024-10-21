@@ -1,10 +1,11 @@
 "use client"
 
-import { cn } from "@/lib/utils";
+import useWindowSize from "@/lib/hooks/use-window-size";
+import { cn, Screens } from "@/lib/utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { HTMLMotionProps, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
@@ -39,7 +40,7 @@ function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) 
                 <motion.div
                     id='calendar'
                     key="calendar"
-                    className={cn("flex flex-col w-full p-5 space-y-4 justify-center", className)}
+                    className={cn("flex flex-col w-min mx-auto p-5 space-y-4 justify-center", className)}
                     initial={false}
                     animate={{ x: [-60, 0], opacity: [0, 1] }}
                     {...props}
@@ -100,12 +101,26 @@ function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) 
     );
 }
 
-export default function HomeCalendar() {
-    const [open, setOpen] = React.useState(true);
+export default function HomeCalendar({ className, ...props }: React.ComponentPropsWithRef<typeof Card>) {
+    const [open, setOpen] = React.useState(false);
+    const { width } = useWindowSize();
+
+    useEffect(() => {
+        if (width >= Screens["2xl"]) {
+            setOpen(true);
+            return;
+        }
+        if (width <= Screens["lg"] && width >= Screens["md"]) {
+            setOpen(true);
+            return;
+        }
+        setOpen(false);
+    }, [width]);
 
     return (
         <Card id="calendar/reminders-card" data-open={open}
-            className={`flex bg-card/75 backdrop-blur-md transition-all duration-500 overflow-hidden h-[450px] w-[300px] data-[open=true]:w-[600px]`}
+            className={cn("flex bg-card/75 overflow-hidden backdrop-blur-md h-[450px] w-[300px] data-[open=true]:w-[600px]", className)}
+            {...props}
         >
             <CalendarView open={open} />
             <RemindersView open={open} />

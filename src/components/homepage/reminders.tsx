@@ -196,7 +196,7 @@ type ReminderViewProps = HTMLMotionProps<"div"> & { open?: boolean };
 export default function RemindersView({ open: isOpen, className, ...props }: ReminderViewProps) {
     const queryClient = useQueryClient()
     const { data: date } = useQuery<Date>({ queryKey: ["calendar", "date"] })
-    const { data: isCalendarInView } = useQuery<boolean>({ queryKey: ["calendar", "view"] })
+    const { data: isCalendarInView = true } = useQuery<boolean>({ queryKey: ["calendar", "view"] })
 
     const toggleView = () => queryClient.setQueryData(["calendar", "view"], !isCalendarInView)
 

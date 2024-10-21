@@ -32,6 +32,9 @@ export default function DashBoard() {
                 <div className="flex flex-col max-w-full md:mx-auto md:w-fit items-center space-y-16">
                     <WelcomeCard />
                     <QuickActions />
+                    <Announcements className="lg:hidden w-full bg-card/75 backdrop-blur-md" />
+                    <HomeCalendar className="lg:hidden w-full data-[open=true]:w-full justify-center" />
+
                     <div className="flex flex-col items-start space-y-2 justify-center">
                         <h2 className="font-semibold text-lg pl-2">Progress</h2>
                         <p>Gantt chart here...</p>
@@ -50,7 +53,7 @@ export default function DashBoard() {
             >
                 <ScrollArea id="sidebar-scroll-area" className="h-full pr-3">
                     <div className="flex flex-col space-y-5 pb-5">
-                        <Announcements className="grow transition-all duration-500 bg-card/75 backdrop-blur-md" />
+                        <Announcements className="bg-card/75 backdrop-blur-md" />
                         <HomeCalendar />
                     </div>
                 </ScrollArea>
