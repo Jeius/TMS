@@ -7,6 +7,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import useWindowSize from "@/lib/hooks/use-window-size"
 import { cn } from "@/lib/utils"
 import Autoplay from "embla-carousel-autoplay"
 import {
@@ -58,16 +59,7 @@ function QuickActionCard({ href, icon, label }: QuickActionCardProps) {
 
 export default function QuickActions() {
     const plugin = React.useRef(Autoplay({ delay: 2500, stopOnInteraction: true }))
-    const [carouselWidth, setCarouselWidth] = React.useState(0);
-
-    React.useEffect(() => {
-        const updateWidth = () => {
-            setCarouselWidth(window.innerWidth - 135);
-        }
-        updateWidth();
-        window.addEventListener("resize", updateWidth);
-        return () => window.removeEventListener("resize", updateWidth);
-    }, []);
+    const { width: windowWidth } = useWindowSize();
 
     return (
         <div id="quick-actions" className="flex flex-col items-start space-y-2 justify-center">
@@ -88,7 +80,7 @@ export default function QuickActions() {
             </div>
 
             <div id="quick-actions-carousel" className="px-14 md:hidden">
-                <Carousel className="w-full" style={{ maxWidth: carouselWidth }} plugins={[plugin.current]}>
+                <Carousel className="w-full" style={{ maxWidth: windowWidth - 155 }} plugins={[plugin.current]}>
                     <CarouselContent id="carousel-content" className="flex items-center py-2 gap-2">
                         {quickActions.map((action, index) => (
                             <CarouselItem key={`quick-action-carousel-${index}`} className="xs:basis-1/2">
