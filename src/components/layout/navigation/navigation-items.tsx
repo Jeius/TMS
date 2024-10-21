@@ -68,6 +68,7 @@ export default function NavigationItems() {
                         >
                             <Link href={subLink.href} onClick={handleClick}
                                 id={`sidebar-link-${subLink.label.toLowerCase().replace(/ /g, "-")}`}
+                                title={`sidebar-link-${subLink.label.toLowerCase().replace(/ /g, "-")}`}
                             >
                                 <div aria-hidden="true" className="flex size-9 p-2 shrink-0 items-center justify-center">
                                     {subLink.icon}
