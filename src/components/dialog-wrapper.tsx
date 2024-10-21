@@ -1,7 +1,7 @@
 import useWindowSize from "@/lib/hooks/use-window-size";
 import React from "react";
 import { Button } from "./ui/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 type DialogWrapperProps = React.ComponentPropsWithRef<typeof Dialog> & {
     dialogTitle?: string
@@ -26,13 +26,14 @@ export default function DialogWrapper({
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent onCloseAutoFocus={e => e.preventDefault()}
+            <DialogContent
+                onCloseAutoFocus={e => e.preventDefault()}
                 className="rounded-xl" style={{ maxWidth: getMaxWidth }}
             >
                 <DialogHeader>
                     <DialogTitle>{dialogTitle}</DialogTitle>
                 </DialogHeader>
-                <p>{dialogDescription}</p>
+                <DialogDescription>{dialogDescription}</DialogDescription>
                 <DialogFooter className="flex justify-end">
                     <DialogClose asChild>
                         <Button type={confirmButtonType} variant="destructive" onClick={onConfirm}>
