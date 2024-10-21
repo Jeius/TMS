@@ -61,7 +61,7 @@ export function AnimatedTableCell<TData>({ row, scrollState, firstColumnId }: An
                         data-column-id={cell.column.id}
                         data-state={row.getIsSelected() && "selected"}
                         data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                        className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
+                        className={`left-0 align-top border-b p-4 overflow-hidden bg-card/30 data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
                     >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

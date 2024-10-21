@@ -5,14 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TooltipWrapper } from "@/components/ui/tooltip";
-import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { accountLinks } from "@/utils/data/test/navigation-links";
 import Link from "next/link";
 
-const menuItems = [
-    { href: "/profile", label: "Profile", icon: <UserIcon aria-hidden="true" focusable="false" size={15} /> },
-    { href: "/settings", label: "Settings", icon: <SettingsIcon aria-hidden="true" focusable="false" size={15} /> },
-    { href: "#", label: "Logout", icon: <LogOutIcon aria-hidden="true" focusable="false" size={15} /> },
-];
+
 
 export default function UserMenu() {
     return (
@@ -41,7 +37,7 @@ export default function UserMenu() {
                 onCloseAutoFocus={e => e.preventDefault()}
             >
                 <div className="flex flex-col space-y-1">
-                    {menuItems.map((item, index) => (
+                    {accountLinks.map((item, index) => (
                         <Button key={index} size="sm" variant="ghost" className="justify-start" asChild>
                             <Link href={item.href} className="flex space-x-3 items-center justify-between">
                                 <span>{item.label}</span> {item.icon}

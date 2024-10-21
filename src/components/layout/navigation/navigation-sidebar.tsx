@@ -18,7 +18,7 @@ export default function NavigationSideBar() {
             id="navigation-sidebar"
             className={cn(
                 "fixed z-10 inset-y-0 left-0 hidden lg:flex flex-col justify-start items-center overflow-x-hidden border-r",
-                "backdrop-blur-md shadow-md overflow-y-auto pb-10 pt-20 px-3 scroll-bar-hidden bg-card/50 w-[64px]"
+                "backdrop-blur-lg shadow-md overflow-y-auto pb-10 pt-20 px-3 scroll-bar-hidden bg-card/60 w-[64px]"
             )}
             animate={{ width: width }}
             transition={{ type: "spring", duration: 0.2 }}

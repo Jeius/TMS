@@ -2,7 +2,6 @@
 
 import { useDynamicWidth } from '@/lib/hooks/use-dynamic-width'
 import { useElementRect } from '@/lib/hooks/use-element-rect'
-import { useIsMounted } from '@/lib/hooks/use-is-mounted'
 import useWindowSize from '@/lib/hooks/use-window-size'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
@@ -16,15 +15,14 @@ export default function DashBoard() {
     const [sideBarWidth, sideBarRef] = useDynamicWidth();
     const { height: windowHeight } = useWindowSize();
     const headerRect = useElementRect("app-header");
-    const isMounted = useIsMounted();
 
-    const [sideBarHeight, setSideBarHeight] = useState<number | 'auto'>('auto');
-    const [sideBarTop, setSideBarTop] = useState<number>(0);
+    const [sideBarHeight, setSideBarHeight] = useState<number | "auto">("auto");
+    const [sideBarTop, setSideBarTop] = useState<number>();
 
     useEffect(() => {
         if (headerRect) {
             setSideBarHeight(windowHeight - headerRect.height);
-            setSideBarTop(headerRect.bottom || 0);
+            setSideBarTop(headerRect.bottom);
         }
     }, [windowHeight, headerRect]);
 
@@ -45,13 +43,14 @@ export default function DashBoard() {
                     </div>
                 </div>
             </motion.div>
-            <motion.aside ref={sideBarRef} id="sidebar" className="fixed right-0 pt-5 pr-1 hidden lg:block"
-                initial={{ opacity: 0 }}
-                animate={{ top: sideBarTop, height: sideBarHeight, opacity: 1 }}
+            <motion.aside ref={sideBarRef} id="sidebar" className="fixed pt-5 pr-1 hidden lg:block"
+                initial={{ top: 58, right: -30, opacity: 0 }}
+                animate={{ top: sideBarTop, height: sideBarHeight, right: 0, opacity: 1 }}
+                transition={{ type: "tween", duration: 0.25, delay: 0.3 }}
             >
                 <ScrollArea id="sidebar-scroll-area" className="h-full pr-3">
                     <div className="flex flex-col space-y-5 pb-5">
-                        <Announcements className="grow transition-all duration-500" />
+                        <Announcements className="grow transition-all duration-500 bg-card/75 backdrop-blur-md" />
                         <HomeCalendar />
                     </div>
                 </ScrollArea>

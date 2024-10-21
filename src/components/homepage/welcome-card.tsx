@@ -1,31 +1,7 @@
+import { accountLinks } from '@/utils/data/test/navigation-links';
 import Link from 'next/link';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Separator } from '../ui/separator';
-
-// Array of account links for easy modification and mapping.
-const accountLinks = [
-    { href: "#", label: "Profile" },
-    { href: "#", label: "Account Management" },
-    { href: "#", label: "Logout" },
-];
-
-// Component to render account links within a card footer.
-const AccountLinks = () => {
-    return accountLinks.map((link, index) => (
-        <div key={index} className='flex space-x-1 items-center'>
-            <Link
-                href={link.href}
-                className="text-sm font-semibold no-underline underline-offset-2 hover:underline"
-            >
-                {link.label}
-            </Link>
-            {/* Separator for visual division between links */}
-            {index !== accountLinks.length - 1 && (
-                <Separator orientation="vertical" className="h-4" />
-            )}
-        </div>
-    ))
-};
 
 export default function WelcomeCard() {
     return (
@@ -38,8 +14,21 @@ export default function WelcomeCard() {
                     Role: [role]
                 </CardDescription>
             </CardHeader>
-            <CardFooter className="flex flex-wrap justify-end space-x-1">
-                <AccountLinks />
+            <CardFooter className="flex flex-wrap justify-end gap-2">
+                {accountLinks.map((link, index) => (
+                    <div key={index} className='flex items-center space-x-2'>
+                        <Link
+                            href={link.href}
+                            className="flex items-center space-x-2 text-sm font-semibold no-underline underline-offset-2 hover:underline"
+                        >
+                            <span>{link.label}</span> {link.icon}
+                        </Link>
+
+                        {index !== accountLinks.length - 1 && (
+                            <Separator orientation="vertical" className="h-4 bg-primary-foreground/60" />
+                        )}
+                    </div>
+                ))}
             </CardFooter>
         </Card>
     )

@@ -47,10 +47,10 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
     return (
         <TooltipProvider>
             <div id="theses-table" className={cn("relative", className)} {...props}>
-                <div className="flex flex-col m-auto bg-card shadow border rounded-xl max-w-fit overflow-hidden">
+                <div className="flex flex-col m-auto bg-card/75 backdrop-blur-md shadow border rounded-xl max-w-fit overflow-hidden">
                     <TableHeader table={table} style={{ maxWidth: width }} />
                     <ThesesTableContent table={table} />
-                    <div style={{ maxWidth: width }} className="w-full max-w-full overflow-hidden p-3 bg-card text-card-foreground">
+                    <div style={{ maxWidth: width }} className="w-full max-w-full overflow-hidden p-3 text-card-foreground">
                         <Button size="lg"
                             variant="gradient"
                             className="p-2 sm:p-4 mx-auto flex space-x-2 font-sans"

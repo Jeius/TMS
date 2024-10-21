@@ -101,11 +101,11 @@ function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) 
 }
 
 export default function HomeCalendar() {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
 
     return (
         <Card id="calendar/reminders-card" data-open={open}
-            className={`flex transition-all duration-500 overflow-hidden h-[450px] w-[300px] data-[open=true]:w-[600px]`}
+            className={`flex bg-card/75 backdrop-blur-md transition-all duration-500 overflow-hidden h-[450px] w-[300px] data-[open=true]:w-[600px]`}
         >
             <CalendarView open={open} />
             <RemindersView open={open} />
