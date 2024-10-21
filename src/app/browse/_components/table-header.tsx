@@ -9,10 +9,6 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
 import { SelectMenu, SelectMenuItem } from "../../../components/select-menu"
 
-export type TableOptionsProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
-    table: Table<TData>
-}
-
 const getYearData = () => {
     return (Array.from({ length: 50 }).map((_, index) => (
         { value: (2024 - index + 1).toString(), label: (2024 - index + 1).toString() }
@@ -29,8 +25,20 @@ const getSpecializationData = (): ComboboxItem[] => {
     ]
 }
 
+function getFilters(yearData: ComboboxItem[], specializationData: ComboboxItem[]) {
+    return [
+        { key: "college", label: "College", values: [] },
+        { key: "department", label: "Department", values: [] },
+        { key: "year", label: "Year", values: yearData },
+        { key: "sp", label: "Specialization", values: specializationData },
+        { key: "author", label: "Author", values: [] },
+        { key: "adviser", label: "Adviser", values: [] },
+        { key: "keywords", label: "Keywords", values: [] },
+    ]
+}
 
-const SortOptions = <TData,>({ table }: TableOptionsProps<TData>) => {
+
+const SortOptions = <TData,>({ table }: { table: Table<TData> }) => {
     const sortItems: SelectMenuItem[] = [
         { label: "Latest First", value: "latest" },
         { label: "Oldest First", value: "old" },
@@ -63,8 +71,11 @@ const SortOptions = <TData,>({ table }: TableOptionsProps<TData>) => {
     )
 }
 
+export type TableOptionsProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
+    table: Table<TData>
+}
 
-export default function TableOptions<TData>({
+export default function TableHeader<TData>({
     table, className, ...props
 }: TableOptionsProps<TData>) {
     const router = useRouter()
@@ -144,16 +155,4 @@ export default function TableOptions<TData>({
             </div>
         </div>
     )
-}
-
-function getFilters(yearData: ComboboxItem[], specializationData: ComboboxItem[]) {
-    return [
-        { key: "college", label: "College", values: [] },
-        { key: "department", label: "Department", values: [] },
-        { key: "year", label: "Year", values: yearData },
-        { key: "sp", label: "Specialization", values: specializationData },
-        { key: "author", label: "Author", values: [] },
-        { key: "adviser", label: "Adviser", values: [] },
-        { key: "keywords", label: "Keywords", values: [] },
-    ]
 }
