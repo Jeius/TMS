@@ -1,19 +1,16 @@
 import { Button } from "@/components/ui/button";
+import { useIsMounted } from "@/lib/hooks/use-is-mounted";
 import { useQuery } from "@tanstack/react-query";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import React from "react";
 
 export default function ThemeToggle() {
     const { data: isMenuOpen } = useQuery<boolean>({ queryKey: ["navigation", "menu"] });
     const { data: isSidebarOpen } = useQuery<boolean>({ queryKey: ["navigation", "sidebar"] });
     const { theme, setTheme } = useTheme();
-    const [mounted, setMounted] = React.useState(false);
+    const isMounted = useIsMounted();
 
-    // Ensure theme state is accessible after mounting
-    React.useEffect(() => setMounted(true), []);
-
-    if (!mounted) return null; // Prevents rendering until mounted
+    if (!isMounted) return null; // Prevents rendering until mounted
 
     const handleClick = () => setTheme(theme === "dark" ? "light" : "dark");
 
