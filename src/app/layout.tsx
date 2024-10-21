@@ -18,10 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${GeistSans.className} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${GeistSans.className} antialiased`}>
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <div id="__next">
