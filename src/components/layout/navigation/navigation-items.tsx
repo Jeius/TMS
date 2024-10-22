@@ -1,25 +1,20 @@
+import ThemeToggle from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import { primaryLinks, toolLinks, userLinks } from "@/utils/data/test/navigation-links";
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
+type NavigationItemsProps = React.HTMLAttributes<HTMLDivElement> & {
+    open?: boolean, onOpenChanged?: (value: boolean) => void,
+}
 
-export default function NavigationItems() {
+export default function NavigationItems({ className, open, onOpenChanged: setOpen, ...props }: NavigationItemsProps) {
     const pathname = usePathname();
     const navigationLinks = [primaryLinks, userLinks, toolLinks];
-
-    const { data: isMenuOpen, refetch: refetchMenu } = useQuery<boolean>({
-        queryKey: ["navigation", "menu"],
-        queryFn: () => false,
-    });
-
-    const { data: isSidebarOpen } = useQuery<boolean>({
-        queryKey: ["navigation", "sidebar"],
-    });
 
     const highlight = (label: string) => {
         const currentPath = pathname === "/" ? "home" : pathname.substring(1);
@@ -27,38 +22,46 @@ export default function NavigationItems() {
     };
 
     const handleClick = () => {
-        isMenuOpen && refetchMenu();
+        setOpen && setOpen(false);
     };
 
     return (
-        <ScrollArea className="flex grow flex-col w-full items-center overflow-x-visible justify-start">
-            {navigationLinks.map((linkGroup, groupIndex) => (
-                <React.Fragment key={`link-group-${groupIndex}`}>
-                    {linkGroup.map(subLink => (
-                        <Button key={subLink.href} variant="ghost" asChild
-                            className={`p-0 h-fit my-1 w-full justify-start rounded-md whitespace-nowrap ${highlight(subLink.label)}`}
-                        >
-                            <Link href={subLink.href} onClick={handleClick}
-                                id={`sidebar-link-${subLink.label.toLowerCase().replace(/ /g, "-")}`}
-                                title={`sidebar-link-${subLink.label.toLowerCase().replace(/ /g, "-")}`}
+        <div className={cn("flex flex-col space-y-1 w-full h-full justify-between", className)} {...props}>
+            <ScrollArea className="flex grow flex-col w-full items-center justify-start">
+                {navigationLinks.map((linkGroup, groupIndex) => (
+                    <React.Fragment key={`link-group-${groupIndex}`}>
+                        {linkGroup.map(subLink => (
+                            <Button key={subLink.href} variant="ghost" asChild
+                                className={`p-0 h-fit my-1 w-full justify-start rounded-md whitespace-nowrap ${highlight(subLink.label)}`}
                             >
-                                <div aria-hidden="true" className="flex size-9 p-2 shrink-0 items-center justify-center">
-                                    {subLink.icon}
-                                </div>
-                                {(isSidebarOpen || isMenuOpen) && (
-                                    <span className="pr-4 text-sm pointer-events-none">
-                                        {subLink.label}
-                                    </span>
-                                )}
-                            </Link>
-                        </Button>
-                    ))}
+                                <Link href={subLink.href} onClick={handleClick}
+                                    id={`sidebar-link-${subLink.label.toLowerCase().replace(/ /g, "-")}`}
+                                    title={`sidebar-link-${subLink.label.toLowerCase().replace(/ /g, "-")}`}
+                                >
+                                    <div aria-hidden="true" className="flex size-9 p-2 shrink-0 items-center justify-center">
+                                        {subLink.icon}
+                                    </div>
+                                    {open && (
+                                        <span className="pr-4 text-sm pointer-events-none">
+                                            {subLink.label}
+                                        </span>
+                                    )}
+                                </Link>
+                            </Button>
+                        ))}
 
-                    {groupIndex !== navigationLinks.length - 1 && (
-                        <Separator className='my-1' orientation="horizontal" />
-                    )}
-                </React.Fragment>
-            ))}
-        </ScrollArea>
+                        {groupIndex !== navigationLinks.length - 1 && (
+                            <Separator className='my-1' orientation="horizontal" />
+                        )}
+                    </React.Fragment>
+                ))}
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+
+            <div className="flex flex-col w-full">
+                <Separator className='my-1' orientation="horizontal" />
+                <ThemeToggle open={open} />
+            </div>
+        </div>
     );
 }

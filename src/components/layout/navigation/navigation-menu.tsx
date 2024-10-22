@@ -3,11 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Menu } from "lucide-react";
 import Image from 'next/image';
-import NavigationFooter from "../navigation/navigation-footer";
-import NavigationItems from "../navigation/navigation-items";
+import { useState } from "react";
+import NavigationItems from "./navigation-items";
 
 
 const LogoTitle = () => (
@@ -38,9 +37,7 @@ const MenuButton = () => (
 );
 
 export default function NavigationMenu() {
-    const queryClient = useQueryClient();
-    const { data: open = false } = useQuery<boolean>({ queryKey: ["navigation", "menu"] });
-    const setOpen = (value: boolean) => { queryClient.setQueryData(["navigation", "menu"], value) };
+    const [open, setOpen] = useState(false);
 
     return (
         <div id="navigation-menu" className="block lg:hidden">
@@ -56,9 +53,8 @@ export default function NavigationMenu() {
                         <LogoTitle />
                     </SheetHeader>
 
-                    <div className="flex grow flex-col w-full items-center justify-end space-y-1">
-                        <NavigationItems />
-                        <NavigationFooter />
+                    <div className="grow w-full overflow-y-auto">
+                        <NavigationItems open={open} onOpenChanged={setOpen} />
                     </div>
                 </SheetContent>
             </Sheet>

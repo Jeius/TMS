@@ -1,7 +1,7 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Image from 'next/image';
 import Link from 'next/link';
-import NavigationMenu from './navigation-menu';
+import NavigationMenu from '../navigation/navigation-menu';
 import NotificationMenu from './notification-menu';
 import SearchBar from './searchbar';
 import UserMenu from './user-menu';

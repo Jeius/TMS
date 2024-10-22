@@ -1,12 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useIsMounted } from "@/lib/hooks/use-is-mounted";
-import { useQuery } from "@tanstack/react-query";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
-export default function ThemeToggle() {
-    const { data: isMenuOpen } = useQuery<boolean>({ queryKey: ["navigation", "menu"] });
-    const { data: isSidebarOpen } = useQuery<boolean>({ queryKey: ["navigation", "sidebar"] });
+export default function ThemeToggle({ open }: { open?: boolean }) {
     const { theme, setTheme } = useTheme();
     const isMounted = useIsMounted();
 
@@ -21,7 +18,7 @@ export default function ThemeToggle() {
             <div aria-hidden="true" className="flex size-9 p-2 shrink-0 items-center justify-center">
                 {theme === "dark" ? <MoonIcon /> : <SunIcon />}
             </div>
-            {(isMenuOpen || isSidebarOpen) && (
+            {open && (
                 <span className="pr-4 text-sm capitalize">{theme} Mode</span>
             )}
         </Button>
