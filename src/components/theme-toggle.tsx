@@ -1,27 +1,9 @@
 import { setThemeCookies } from "@/utils/actions/theme";
-import { useEffect, useState } from "react";
+import { useTheme } from "./providers/theme-provider";
 import { Switch } from "./ui/switch";
 
-function getTheme() {
-    const storedTheme = localStorage.getItem('theme');
-
-    if (storedTheme) {
-        return storedTheme;
-    }
-
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDark ? 'dark' : 'light';
-}
-
-
 export default function ThemeToggle({ open }: { open?: boolean }) {
-    const [theme, setTheme] = useState<string>();
-
-    useEffect(() => {
-        const currentTheme = getTheme();
-        setTheme(currentTheme);
-    }, []);
-
+    const { theme, setTheme } = useTheme();
     const handleClick = (isChecked: boolean) => setTheme(isChecked ? "light" : "dark");
 
     return (
