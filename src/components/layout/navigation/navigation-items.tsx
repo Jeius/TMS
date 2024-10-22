@@ -1,9 +1,13 @@
+"use client"
+
 import ThemeToggle from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useIsMounted } from "@/lib/hooks/use-is-mounted";
 import { cn } from "@/lib/utils";
 import { primaryLinks, toolLinks, userLinks } from "@/utils/data/test/navigation-links";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -15,6 +19,7 @@ type NavigationItemsProps = React.HTMLAttributes<HTMLDivElement> & {
 export default function NavigationItems({ className, open, onOpenChanged: setOpen, ...props }: NavigationItemsProps) {
     const pathname = usePathname();
     const navigationLinks = [primaryLinks, userLinks, toolLinks];
+    const isMounted = useIsMounted();
 
     const highlight = (label: string) => {
         const currentPath = pathname === "/" ? "home" : pathname.substring(1);
@@ -24,6 +29,7 @@ export default function NavigationItems({ className, open, onOpenChanged: setOpe
     const handleClick = () => {
         setOpen && setOpen(false);
     };
+
 
     return (
         <div className={cn("flex flex-col space-y-1 w-full h-full justify-between", className)} {...props}>
@@ -55,13 +61,17 @@ export default function NavigationItems({ className, open, onOpenChanged: setOpe
                         )}
                     </React.Fragment>
                 ))}
-                <ScrollBar orientation="horizontal" />
             </ScrollArea>
 
-            <div className="flex flex-col w-full">
-                <Separator className='my-1' orientation="horizontal" />
-                <ThemeToggle open={open} />
-            </div>
+            {isMounted && (
+                <motion.div initial={{ y: 15, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: "tween" }}
+                    className="flex flex-col w-full">
+                    <Separator className='my-1' orientation="horizontal" />
+                    <ThemeToggle open={open} />
+                </motion.div>
+            )}
         </div>
     );
 }
