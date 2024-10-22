@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { Separator } from "./ui/separator";
 
-export type SelectMenuItem = {
+type SelectMenuItem = {
     value: string;
     label: string;
 };
@@ -24,7 +24,7 @@ type SelectMenuProps = {
     onValueChanged?: (value: string) => void;
 }
 
-export const SelectMenu = React.forwardRef<
+const SelectMenu = React.forwardRef<
     React.ElementRef<typeof SelectTrigger>,
     React.ComponentPropsWithoutRef<typeof SelectTrigger> & SelectMenuProps
 >(({
@@ -58,3 +58,9 @@ export const SelectMenu = React.forwardRef<
         </SelectContent>
     </Select>
 ))
+
+SelectMenu.displayName = "SelectMenu";
+
+export { SelectMenu };
+export type { SelectMenuItem };
+

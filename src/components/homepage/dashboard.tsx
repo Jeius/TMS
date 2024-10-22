@@ -42,7 +42,7 @@ export default function DashBoard() {
 
                     <div className="flex flex-col items-start space-y-2 justify-center">
                         <h2 className="font-semibold text-lg pl-2">Recent Activities</h2>
-                        <p>A feed showing what's happening in the system relevant to the user.</p>
+                        <p>A feed showing what&apos;s happening in the system relevant to the user.</p>
                     </div>
                 </div>
             </motion.div>

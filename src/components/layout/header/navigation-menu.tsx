@@ -5,11 +5,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Menu } from "lucide-react";
-import dynamic from "next/dynamic";
 import Image from 'next/image';
 import NavigationFooter from "../navigation/navigation-footer";
+import NavigationItems from "../navigation/navigation-items";
 
-const NavigationItems = dynamic(() => import("../navigation/navigation-items"));
 
 const LogoTitle = () => (
     <SheetTitle className="flex mt-4 items-center space-x-2 justify-start">
@@ -19,7 +18,7 @@ const LogoTitle = () => (
             width={40}
             height={40}
         />
-        <h1 className="text-sm text-left font-bold">Thesis Management System</h1>
+        <span className="text-sm text-left font-bold">Thesis Management System</span>
     </SheetTitle>
 );
 
@@ -27,9 +26,8 @@ const MenuButton = () => (
     <Tooltip>
         <TooltipTrigger asChild>
             <SheetTrigger asChild>
-                <Button className="size-fit p-2" variant="ghost">
-                    <Menu aria-hidden />
-                    <span className="sr-only">Open Menu</span>
+                <Button className="size-fit p-2" variant="ghost" aria-label="Open Menu">
+                    <Menu aria-hidden="true" focusable="false" />
                 </Button>
             </SheetTrigger>
         </TooltipTrigger>
@@ -41,7 +39,7 @@ const MenuButton = () => (
 
 export default function NavigationMenu() {
     const queryClient = useQueryClient();
-    const { data: open } = useQuery<boolean>({ queryKey: ["navigation", "menu"] });
+    const { data: open = false } = useQuery<boolean>({ queryKey: ["navigation", "menu"] });
     const setOpen = (value: boolean) => { queryClient.setQueryData(["navigation", "menu"], value) };
 
     return (
@@ -52,6 +50,7 @@ export default function NavigationMenu() {
                     onCloseAutoFocus={(e) => e.preventDefault()}
                     className="flex flex-col w-64 sm:w-72 z-[110]"
                     side="left"
+                    aria-describedby={undefined}
                 >
                     <SheetHeader>
                         <LogoTitle />

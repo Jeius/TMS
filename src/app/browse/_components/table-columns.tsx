@@ -30,14 +30,14 @@ const createColumns = (columnsData: ColumnsData[]) => {
         return {
             accessorKey,
             size,
-            header: ({ table }: any) => (
+            header: ({ table }: { table: Table<Thesis> }) => (
                 isMainColumn ? (
                     <MainColumnHeader table={table} />
                 ) : (
                     <ColumnHeader table={table} accessorKey={accessorKey} />
                 )
             ),
-            cell: ({ row }: any) => (
+            cell: ({ row }: { row: Row<Thesis> }) => (
                 isMainColumn ? (
                     <MainColumnCell row={row} />
                 ) : (

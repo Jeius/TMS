@@ -32,8 +32,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion'
 import { ArrowLeft, CheckCheck, Trash2 } from 'lucide-react'
-import React from 'react'
-import { useForm } from "react-hook-form"
+import { useEffect, useState } from 'react'
+import { ControllerRenderProps, useForm } from "react-hook-form"
 import { z } from "zod"
 
 
@@ -55,12 +55,12 @@ function RemindersItems() {
         },
     })
 
-    const [allChecked, setAllChecked] = React.useState(false)
+    const [allChecked, setAllChecked] = useState(false)
 
-    React.useEffect(() => {
+    useEffect(() => {
         const currentReminders = form.watch("reminders");
         setAllChecked(currentReminders.length === REMINDERS.length);
-    }, [form.watch("reminders")]);
+    }, [form]);
 
 
     const handleMarkDone = () => {
@@ -97,7 +97,11 @@ function RemindersItems() {
     }
 
     function ReminderItem({ id, label }: { id: string; label: string }) {
-        const renderFormItem = ({ field }: any) => (
+        const renderFormItem = ({ field }: {
+            field: ControllerRenderProps<{
+                reminders: string[];
+            }, "reminders">
+        }) => (
             <FormItem className="flex items-center w-full space-x-3 space-y-0 hover:bg-accent p-1.5 rounded-md">
                 <FormControl>
                     <Checkbox

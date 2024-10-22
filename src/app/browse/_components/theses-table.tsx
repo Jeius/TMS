@@ -18,7 +18,7 @@ import {
     VisibilityState,
 } from "@tanstack/react-table"
 import { FileStackIcon } from 'lucide-react'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { columns } from './table-columns'
 
 type TableProps = React.HtmlHTMLAttributes<HTMLDivElement> & { data: Thesis[] }
@@ -48,7 +48,9 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
         <TooltipProvider>
             <div id="theses-table" className={cn("relative", className)} {...props}>
                 <div className="flex flex-col m-auto bg-card/75 backdrop-blur-md shadow border rounded-xl max-w-fit overflow-hidden">
-                    <TableHeader table={table} style={{ maxWidth: width }} />
+                    <Suspense>
+                        <TableHeader table={table} style={{ maxWidth: width }} />
+                    </Suspense>
                     <ThesesTableContent table={table} />
                     <div style={{ maxWidth: width }} className="w-full max-w-full overflow-hidden p-3 text-card-foreground">
                         <Button size="lg"

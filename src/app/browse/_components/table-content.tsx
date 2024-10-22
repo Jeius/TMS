@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Table as Tb } from '@tanstack/react-table';
 import { useAnimate } from 'framer-motion';
 import { debounce } from 'lodash';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatedTableCell, AnimatedTableHead } from './animated-table-elements';
 import { VisibilityColumn } from './column-visibility';
 
@@ -15,7 +15,7 @@ type ThesesTableContentProps<TData> = {
 
 export default function ThesesTableContent<TData>({ table }: ThesesTableContentProps<TData>) {
     const [scope, animate] = useAnimate();
-    const [scrollState, setScrollState] = React.useState({ left: { value: 0, isScrolled: false } });
+    const [scrollState, setScrollState] = useState({ left: { value: 0, isScrolled: false } });
     const { refetch: updateWidth } = useQuery({
         queryKey: ["tableWidth"], refetchOnMount: false, staleTime: Infinity,
         queryFn: () => {
@@ -26,34 +26,34 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
         },
     });
 
-    const handleScrollLeft = debounce((e: Event) => {
-        const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
-        setScrollState(prevState => ({
-            ...prevState,
-            left: { value: scrollLeft, isScrolled: scrollLeft > 0 }
-        }));
-    }, 200, { leading: true });
-
-    const handleScrollTop = debounce(() => {
-        const currentRect = scope.current?.getBoundingClientRect();
-        const headerRect = document.getElementById("app-header")?.getBoundingClientRect();
-        if (currentRect && headerRect) {
-            const scrollTop = Math.max(0, headerRect.height - currentRect.top);
-            animate("thead", {
-                y: scrollTop,
-                boxShadow: scrollTop > 0 ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined,
-            }, { type: "tween", duration: 0 });
-        }
-    }, 0);
-
-    React.useEffect(() => {
+    useEffect(() => {
         const current = scope.current;
         const resizeObserver = new ResizeObserver(() => { updateWidth() });
         scope.current && resizeObserver.observe(scope.current);
         return () => { current && resizeObserver.unobserve(current) };
-    }, [scope]);
+    }, [scope, updateWidth]);
 
-    React.useEffect(() => {
+    useEffect(() => {
+        const handleScrollLeft = debounce((e: Event) => {
+            const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
+            setScrollState(prevState => ({
+                ...prevState,
+                left: { value: scrollLeft, isScrolled: scrollLeft > 0 }
+            }));
+        }, 200, { leading: true });
+
+        const handleScrollTop = debounce(() => {
+            const currentRect = scope.current?.getBoundingClientRect();
+            const headerRect = document.getElementById("app-header")?.getBoundingClientRect();
+            if (currentRect && headerRect) {
+                const scrollTop = Math.max(0, headerRect.height - currentRect.top);
+                animate("thead", {
+                    y: scrollTop,
+                    boxShadow: scrollTop > 0 ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined,
+                }, { type: "tween", duration: 0 });
+            }
+        }, 0);
+
         window.addEventListener('scroll', handleScrollTop);
         const scrollArea = scope.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
         scrollArea && scrollArea.addEventListener('scroll', handleScrollLeft);
@@ -61,7 +61,7 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
             scrollArea && scrollArea.removeEventListener('scroll', handleScrollLeft);
             window.removeEventListener('scroll', handleScrollTop);
         };
-    }, []);
+    }, [scope, animate]);
 
     return (
         <ScrollArea
