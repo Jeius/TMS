@@ -39,11 +39,12 @@ type QuickActionCardProps = React.ComponentPropsWithRef<typeof Link> & {
 
 function QuickActionCard({ href, icon, label, ...props }: QuickActionCardProps) {
     return (
-        <Button asChild variant="outline"
+        <Button asChild variant="glass"
             className={cn(
-                "h-32 w-full md:w-56 lg:w-64 bg-card/70 backdrop-blur-md rounded-xl",
+                "h-32 w-full md:w-56 lg:w-64 bg-card/70 dark:bg-card/70 rounded-xl",
                 "hover:bg-card/60 hover:border-secondary hover:text-secondary",
-                "hover:scale-105 transition-transform"
+                "hover:scale-105 focus-visible:scale-105 focus-visible:text-secondary",
+                "transition-transform border"
             )}
         >
             <Link href={href} className="flex flex-col space-y-4"{...props}>
