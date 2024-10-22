@@ -4,23 +4,20 @@ import { cn } from "@/lib/utils"
 import { cva, VariantProps } from "class-variance-authority"
 
 const cardVariants = cva(
-  "rounded-xl border shadow bg-card text-card-foreground",
+  "rounded-xl border shadow text-card-foreground",
   {
     variants: {
-      colorType: {
-        solid:
-          "",
+      variant: {
+        default:
+          "bg-card",
         gradient:
-          "bg-gradient-to-br from-white/60 dark:bg-gradient-to-tl dark:from-black/40",
-      },
-      filter: {
-        default: "",
-        glass: "backdrop-blur-md bg-opacity-35 dark:bg-opacity-40",
+          "bg-card bg-gradient-to-br from-white/60 dark:bg-gradient-to-tl dark:from-black/40",
+        glass: "backdrop-blur-md bg-card/70 dark:bg-card/75",
+        gradientGlass: "backdrop-blur-md bg-card/70 dark:bg-card/75 bg-gradient-to-br from-white/60 dark:bg-gradient-to-tl dark:from-black/40",
       },
     },
     defaultVariants: {
-      colorType: "solid",
-      filter: "default",
+      variant: "default",
     },
   }
 )
@@ -34,10 +31,10 @@ export interface CardProps
 const Card = React.forwardRef<
   HTMLDivElement,
   CardProps
->(({ className, colorType, filter, ...props }, ref) => (
+>(({ className, variant, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn(cardVariants({ colorType, filter, className }))}
+    className={cn(cardVariants({ variant, className }))}
     {...props}
   />
 ))
@@ -99,4 +96,5 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
+
