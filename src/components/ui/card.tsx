@@ -12,8 +12,8 @@ const cardVariants = cva(
           "bg-card",
         gradient:
           "bg-card bg-gradient-to-br from-white/60 dark:bg-gradient-to-tl dark:from-black/40",
-        glass: "backdrop-blur-md bg-card/70 dark:bg-card/75",
-        gradientGlass: "backdrop-blur-md bg-card/70 dark:bg-card/75 bg-gradient-to-br from-white/60 dark:bg-gradient-to-tl dark:from-black/40",
+        glass: "backdrop-blur-md bg-card/70 dark:bg-card/80",
+        gradientGlass: "backdrop-blur-md bg-card/70 dark:bg-card/80 bg-gradient-to-br from-white/60 dark:bg-gradient-to-tl dark:from-black/40",
       },
     },
     defaultVariants: {

@@ -95,7 +95,7 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
                 </Table>
                 {table.getAllColumns().filter(column => column.getCanHide() && !column.getIsVisible()).length
                     ? (
-                        <div className="block border-l border-y bg-card/30 z-10 lg:pr-20">
+                        <div className="block border-l border-y bg-card/80 z-10 lg:pr-20">
                             <VisibilityColumn table={table} />
                         </div>
                     ) : (null)}

@@ -118,8 +118,8 @@ export default function HomeCalendar({ className, ...props }: React.ComponentPro
     }, [width]);
 
     return (
-        <Card id="calendar/reminders-card" data-open={open}
-            className={cn("flex bg-card/75 overflow-hidden backdrop-blur-md h-[450px] w-[300px] data-[open=true]:w-[600px]", className)}
+        <Card id="calendar/reminders-card" data-open={open} variant="glass"
+            className={cn("flex overflow-hidden h-[450px] w-[300px] data-[open=true]:w-[600px]", className)}
             {...props}
         >
             <CalendarView open={open} />
