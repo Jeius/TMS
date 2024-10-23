@@ -7,7 +7,227 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ThemePreference {
+  LIGHT
+  DARK
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REVISION_REQUIRED
+}
+
+enum ThesisStatus {
+  PROPOSAL_SUBMITTED
+  UNDER_REVIEW
+  FINAL_MANUSCRIPT
+  APPROVED
+  REJECTED
+}
+
 model User {
-  id   String  @id
-  type String?
+  id       String       @id @default(uuid())
+  email    String       @unique
+  password String
+  name     String
+  profile  UserProfile?
+
+  @@map("User")
+}
+
+model UserProfile {
+  id               String            @id @default(uuid())
+  user             User              @relation(fields: [user_id], references: [id])
+  user_id          String            @unique
+  role             UserRole          @relation(fields: [role_id], references: [id])
+  role_id          String
+  idNumber         String            @unique @db.VarChar(15)
+  themePreference  ThemePreference   @default(LIGHT)
+  bio              String?           @db.VarChar(500)
+  profileImage     String?           @db.VarChar(255)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  thesesAuthored   Thesis[]          @relation("AuthorTheses")
+  thesesAdvised    Thesis[]          @relation("AdvisedTheses")
+  thesesPanel      Thesis[]          @relation("PanelTheses")
+  messagesSent     ChatMessage[]     @relation("UserSender")
+  messagesReceived ChatMessage[]     @relation("UserReceiver")
+  notifications    Notification[]
+  activityLogs     ActivityLog[]
+  reviewFeedbacks  ReviewFeedback[]
+  accessControls   AccessControl[]
+  thesisReviews    ThesisReview[]
+  defenseSchedules DefenseSchedule[] @relation("PanelSchedule")
+}
+
+model UserRole {
+  id           String        @id @default(uuid())
+  name         String        @unique
+  userProfiles UserProfile[]
+}
+
+model Thesis {
+  id                String                 @id @default(uuid())
+  title             String
+  abstract          String
+  proposalFile      File                   @relation("FileProposal", fields: [proposalFile_id], references: [id])
+  proposalFile_id   String
+  finalFile         File?                  @relation("FileFinal", fields: [finalFile_id], references: [id])
+  finalFile_id      String?
+  status            ThesisStatus
+  author            UserProfile            @relation("AuthorTheses", fields: [author_id], references: [id])
+  author_id         String
+  adviser           UserProfile?           @relation("AdvisedTheses", fields: [adviser_id], references: [id])
+  adviser_id        String?
+  panelMembers      UserProfile[]          @relation("PanelTheses")
+  department        Department             @relation(fields: [department_id], references: [id])
+  department_id     String
+  college           College                @relation(fields: [college_id], references: [id])
+  college_id        String
+  specializations   ThesisSpecialization[] @relation("Specialization")
+  fileVersions      FileVersion[]
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  plagiarismReports PlagiarismReport[]
+  reviewFeedbacks   ReviewFeedback[]
+  accessControls    AccessControl[]
+  thesisReviews     ThesisReview[]
+  defenseSchedules  DefenseSchedule[]
+  thesisMilestones  ThesisMilestone[]
+}
+
+model ThesisSpecialization {
+  id     String   @id @default(uuid())
+  name   String   @unique
+  theses Thesis[] @relation("Specialization")
+
+  @@map("Specialization")
+}
+
+model College {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  departments Department[]
+  theses      Thesis[]
+}
+
+model Department {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  college    College  @relation(fields: [college_id], references: [id])
+  college_id String
+  theses     Thesis[]
+}
+
+model File {
+  id                String             @id @default(uuid())
+  filePath          String
+  fileType          String
+  thesisProposal    Thesis[]           @relation("FileProposal")
+  thesisFinal       Thesis[]           @relation("FileFinal")
+  fileVersions      FileVersion[]
+  plagiarismReports PlagiarismReport[]
+}
+
+model ChatMessage {
+  id          String      @id @default(uuid())
+  content     String
+  sender      UserProfile @relation("UserSender", fields: [sender_id], references: [id])
+  sender_id   String
+  receiver    UserProfile @relation("UserReceiver", fields: [receiver_id], references: [id])
+  receiver_id String
+  createdAt   DateTime    @default(now())
+}
+
+model Notification {
+  id           String      @id @default(uuid())
+  content      String
+  isRead       Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  recipient    UserProfile @relation(fields: [recipient_id], references: [id])
+  recipient_id String
+}
+
+model FileVersion {
+  id         String   @id @default(uuid())
+  thesis     Thesis   @relation(fields: [thesis_id], references: [id])
+  thesis_id  String
+  file       File     @relation(fields: [file_id], references: [id])
+  file_id    String
+  version    Int
+  uploadedAt DateTime @default(now())
+}
+
+model ActivityLog {
+  id         String      @id @default(uuid())
+  user       UserProfile @relation(fields: [user_id], references: [id])
+  user_id    String
+  action     String
+  targetType String
+  targetId   String
+  createdAt  DateTime    @default(now())
+}
+
+model PlagiarismReport {
+  id              String   @id @default(uuid())
+  thesis          Thesis   @relation(fields: [thesis_id], references: [id])
+  thesis_id       String
+  similarityScore Float
+  reportFile      File     @relation(fields: [reportFile_id], references: [id])
+  reportFile_id   String
+  checkedAt       DateTime @default(now())
+}
+
+model ReviewFeedback {
+  id          String      @id @default(uuid())
+  thesis      Thesis      @relation(fields: [thesis_id], references: [id])
+  thesis_id   String
+  reviewer    UserProfile @relation(fields: [reviewer_id], references: [id])
+  reviewer_id String
+  content     String
+  createdAt   DateTime    @default(now())
+}
+
+model AccessControl {
+  id         String      @id @default(uuid())
+  user       UserProfile @relation(fields: [user_id], references: [id])
+  user_id    String
+  thesis     Thesis      @relation(fields: [thesis_id], references: [id])
+  thesis_id  String
+  canEdit    Boolean     @default(false)
+  canApprove Boolean     @default(false)
+  canView    Boolean     @default(true)
+}
+
+model ThesisReview {
+  id          String       @id @default(uuid())
+  status      ReviewStatus
+  thesis      Thesis       @relation(fields: [thesis_id], references: [id])
+  thesis_id   String
+  reviewer    UserProfile  @relation(fields: [reviewer_id], references: [id])
+  reviewer_id String
+  feedback    String?
+  createdAt   DateTime     @default(now())
+}
+
+model DefenseSchedule {
+  id           String        @id @default(uuid())
+  thesis       Thesis        @relation(fields: [thesis_id], references: [id])
+  thesis_id    String
+  date         DateTime
+  venue        String
+  panelMembers UserProfile[] @relation("PanelSchedule")
+  createdAt    DateTime      @default(now())
+}
+
+model ThesisMilestone {
+  id        String   @id @default(uuid())
+  thesis    Thesis   @relation(fields: [thesis_id], references: [id])
+  thesis_id String
+  title     String
+  startDate DateTime
+  endDate   DateTime
+  completed Boolean  @default(false)
 }
