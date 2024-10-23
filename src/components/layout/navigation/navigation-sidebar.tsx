@@ -24,7 +24,7 @@ export default function NavigationSideBar() {
             onFocus={() => setOpen(true)}
             onBlur={() => setOpen(false)}
         >
-            <NavigationItems open={open} onOpenChanged={setOpen} />
+            <NavigationItems open={open} />
         </motion.div>
     );
 }
