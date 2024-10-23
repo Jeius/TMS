@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { useIsMounted } from "@/lib/hooks/use-is-mounted";
 import { cn } from "@/lib/utils";
 import { primaryLinks, toolLinks, userLinks } from "@/utils/data/test/navigation-links";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -64,13 +63,10 @@ export default function NavigationItems({ className, open, onOpenChanged: setOpe
             </ScrollArea>
 
             {isMounted && (
-                <motion.div initial={{ y: 15, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ type: "tween" }}
-                    className="flex flex-col w-full">
+                <div className="flex flex-col w-full">
                     <Separator className='my-1' orientation="horizontal" />
                     <ThemeToggle open={open} />
-                </motion.div>
+                </div>
             )}
         </div>
     );

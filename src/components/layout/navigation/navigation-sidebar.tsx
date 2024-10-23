@@ -17,8 +17,12 @@ export default function NavigationSideBar() {
                 "fixed z-10 inset-y-0 left-0 hidden lg:block border-r bg-card/60",
                 "backdrop-blur-lg shadow-md pb-10 pt-20 px-3 w-[64px]"
             )}
-            animate={{ width: width }}
-            transition={{ type: "spring", duration: 0.2 }}
+            initial={{ x: -60, opacity: 0 }}
+            animate={{ width: width, x: 0, opacity: 1 }}
+            transition={{
+                type: "spring", duration: 0.2,
+                x: { type: "spring", duration: 0.4 },
+            }}
             onMouseEnter={() => setOpen(true)}
             onMouseLeave={() => setOpen(false)}
             onFocus={() => setOpen(true)}

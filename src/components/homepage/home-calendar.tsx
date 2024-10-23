@@ -103,27 +103,33 @@ function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) 
 
 export default function HomeCalendar({ className, ...props }: React.ComponentPropsWithRef<typeof Card>) {
     const [open, setOpen] = React.useState(false);
-    const { width } = useWindowSize();
+    const { width: windowWidth } = useWindowSize();
+    const width = open ? 600 : 300;
 
     useEffect(() => {
-        if (width >= Screens["2xl"]) {
-            setOpen(true);
+        if (windowWidth >= Screens["2xl"]) {
+            !open && setOpen(true);
             return;
         }
-        if (width <= Screens["lg"] && width >= Screens["md"]) {
-            setOpen(true);
+        if (windowWidth <= Screens["lg"] && windowWidth >= Screens["md"]) {
+            !open && setOpen(true);
             return;
         }
-        setOpen(false);
-    }, [width]);
+        open && setOpen(false);
+    }, [windowWidth, open]);
 
     return (
-        <Card id="calendar/reminders-card" data-open={open} variant="glass"
-            className={cn("flex overflow-hidden h-[450px] w-[300px] data-[open=true]:w-[600px]", className)}
-            {...props}
+        <motion.div
+            animate={{ width: width }}
+            transition={{ type: "tween", duration: 0.2, }}
         >
-            <CalendarView open={open} />
-            <RemindersView open={open} />
-        </Card>
+            <Card id="calendar/reminders-card" variant="glass"
+                className={cn("flex overflow-hidden w-full h-[450px]", className)}
+                {...props}
+            >
+                <CalendarView open={open} />
+                <RemindersView open={open} />
+            </Card>
+        </motion.div>
     );
 }
