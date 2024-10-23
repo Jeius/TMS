@@ -1,15 +1,20 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["auth", "public"]
 }
 
 enum ThemePreference {
   LIGHT
   DARK
+
+  @@map("theme_preference")
+  @@schema("public")
 }
 
 enum ReviewStatus {
@@ -17,6 +22,9 @@ enum ReviewStatus {
   APPROVED
   REJECTED
   REVISION_REQUIRED
+
+  @@map("review_status")
+  @@schema("public")
 }
 
 enum ThesisStatus {
@@ -25,10 +33,13 @@ enum ThesisStatus {
   FINAL_MANUSCRIPT
   APPROVED
   REJECTED
+
+  @@map("thesis_status")
+  @@schema("public")
 }
 
 model User {
-  id           String       @id @default(uuid())
+  id           String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   email        String       @unique
   password     String
   name         String
@@ -38,11 +49,12 @@ model User {
   updatedAt    DateTime     @updatedAt
   profile      UserProfile?
 
-  @@map("User")
+  @@map("users")
+  @@schema("public")
 }
 
 model UserProfile {
-  id               String            @id @default(uuid())
+  id               String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user             User              @relation(fields: [user_id], references: [id])
   user_id          String            @unique
   role             UserRole          @relation(fields: [role_id], references: [id])
@@ -64,16 +76,22 @@ model UserProfile {
   accessControls   AccessControl[]
   thesisReviews    ThesisReview[]
   defenseSchedules DefenseSchedule[] @relation("PanelSchedule")
+
+  @@map("user_profiles")
+  @@schema("public")
 }
 
 model UserRole {
-  id           String        @id @default(uuid())
+  id           String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name         String        @unique
   userProfiles UserProfile[]
+
+  @@map("user_roles")
+  @@schema("public")
 }
 
 model Thesis {
-  id                String                 @id @default(uuid())
+  id                String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   title             String
   abstract          String
   proposalFile      File                   @relation("FileProposal", fields: [proposalFile_id], references: [id])
@@ -100,102 +118,133 @@ model Thesis {
   thesisReviews     ThesisReview[]
   defenseSchedules  DefenseSchedule[]
   thesisMilestones  ThesisMilestone[]
+
+  @@map("theses")
+  @@schema("public")
 }
 
 model ThesisSpecialization {
-  id     String   @id @default(uuid())
+  id     String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name   String   @unique
   theses Thesis[] @relation("Specialization")
 
-  @@map("Specialization")
+  @@map("specializations")
+  @@schema("public")
 }
 
 model College {
-  id          String       @id @default(uuid())
+  id          String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name        String       @unique
   departments Department[]
   theses      Thesis[]
+
+  @@map("colleges")
+  @@schema("public")
 }
 
 model Department {
-  id         String   @id @default(uuid())
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name       String   @unique
   college    College  @relation(fields: [college_id], references: [id])
   college_id String
   theses     Thesis[]
+
+  @@map("departments")
+  @@schema("public")
 }
 
 model File {
-  id                String             @id @default(uuid())
+  id                String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   filePath          String
   fileType          String
   thesisProposal    Thesis[]           @relation("FileProposal")
   thesisFinal       Thesis[]           @relation("FileFinal")
   fileVersions      FileVersion[]
   plagiarismReports PlagiarismReport[]
+
+  @@map("files")
+  @@schema("public")
 }
 
 model ChatMessage {
-  id          String      @id @default(uuid())
+  id          String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   content     String
   sender      UserProfile @relation("UserSender", fields: [sender_id], references: [id])
   sender_id   String
   receiver    UserProfile @relation("UserReceiver", fields: [receiver_id], references: [id])
   receiver_id String
   createdAt   DateTime    @default(now())
+
+  @@map("chat_messages")
+  @@schema("public")
 }
 
 model Notification {
-  id           String      @id @default(uuid())
+  id           String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   content      String
   isRead       Boolean     @default(false)
   createdAt    DateTime    @default(now())
   recipient    UserProfile @relation(fields: [recipient_id], references: [id])
   recipient_id String
+
+  @@map("notifications")
+  @@schema("public")
 }
 
 model FileVersion {
-  id         String   @id @default(uuid())
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis     Thesis   @relation(fields: [thesis_id], references: [id])
   thesis_id  String
   file       File     @relation(fields: [file_id], references: [id])
   file_id    String
   version    Int
   uploadedAt DateTime @default(now())
+
+  @@map("file_versions")
+  @@schema("public")
 }
 
 model ActivityLog {
-  id         String      @id @default(uuid())
+  id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user       UserProfile @relation(fields: [user_id], references: [id])
   user_id    String
   action     String
   targetType String
   targetId   String
   createdAt  DateTime    @default(now())
+
+  @@map("activity_logs")
+  @@schema("public")
 }
 
 model PlagiarismReport {
-  id              String   @id @default(uuid())
+  id              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis          Thesis   @relation(fields: [thesis_id], references: [id])
   thesis_id       String
   similarityScore Float
   reportFile      File     @relation(fields: [reportFile_id], references: [id])
   reportFile_id   String
   checkedAt       DateTime @default(now())
+
+  @@map("plagiarism_reports")
+  @@schema("public")
 }
 
 model ReviewFeedback {
-  id          String      @id @default(uuid())
+  id          String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis      Thesis      @relation(fields: [thesis_id], references: [id])
   thesis_id   String
   reviewer    UserProfile @relation(fields: [reviewer_id], references: [id])
   reviewer_id String
   content     String
   createdAt   DateTime    @default(now())
+
+  @@map("review_feedbacks")
+  @@schema("public")
 }
 
 model AccessControl {
-  id         String      @id @default(uuid())
+  id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user       UserProfile @relation(fields: [user_id], references: [id])
   user_id    String
   thesis     Thesis      @relation(fields: [thesis_id], references: [id])
@@ -203,10 +252,13 @@ model AccessControl {
   canEdit    Boolean     @default(false)
   canApprove Boolean     @default(false)
   canView    Boolean     @default(true)
+
+  @@map("access_controls")
+  @@schema("public")
 }
 
 model ThesisReview {
-  id          String       @id @default(uuid())
+  id          String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   status      ReviewStatus
   thesis      Thesis       @relation(fields: [thesis_id], references: [id])
   thesis_id   String
@@ -214,24 +266,33 @@ model ThesisReview {
   reviewer_id String
   feedback    String?
   createdAt   DateTime     @default(now())
+
+  @@map("thesis_reviews")
+  @@schema("public")
 }
 
 model DefenseSchedule {
-  id           String        @id @default(uuid())
+  id           String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis       Thesis        @relation(fields: [thesis_id], references: [id])
   thesis_id    String
   date         DateTime
   venue        String
   panelMembers UserProfile[] @relation("PanelSchedule")
   createdAt    DateTime      @default(now())
+
+  @@map("defense_schedules")
+  @@schema("public")
 }
 
 model ThesisMilestone {
-  id        String   @id @default(uuid())
+  id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis    Thesis   @relation(fields: [thesis_id], references: [id])
   thesis_id String
   title     String
   startDate DateTime
   endDate   DateTime
   completed Boolean  @default(false)
+
+  @@map("thesis_milestones")
+  @@schema("public")
 }
