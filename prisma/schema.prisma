@@ -40,30 +40,30 @@ enum ThesisStatus {
 }
 
 model User {
-  id           String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  email        String       @unique
-  password     String
-  name         String
-  phone        String?      @unique
-  lastSignedIn DateTime?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  profile      UserProfile?
+  id                String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  email             String       @unique @db.VarChar(255)
+  encryptedPassword String       @db.VarChar(255)
+  phone             String?      @unique @db.VarChar(255)
+  lastSignedIn      DateTime?    @db.Timestamp()
+  createdAt         DateTime     @default(now()) @db.Timestamp()
+  updatedAt         DateTime     @updatedAt @db.Timestamp()
+  profile           UserProfile?
 
   @@map("users")
   @@schema("public")
 }
 
 model UserProfile {
-  id               String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user             User              @relation(fields: [user_id], references: [id])
-  user_id          String            @unique
+  id               String            @id @db.Uuid
+  user             User              @relation(fields: [id], references: [id])
   role             UserRole          @relation(fields: [role_id], references: [id])
-  role_id          String
+  role_id          String            @db.Uuid
+  firstName        String            @db.VarChar(100)
+  lastName         String            @db.VarChar(100)
   idNumber         String            @unique @db.VarChar(15)
   themePreference  ThemePreference   @default(LIGHT)
   bio              String?           @db.VarChar(500)
-  profileImage     String?           @db.VarChar(255)
+  avatar           String?           @db.VarChar(255)
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   thesesAuthored   Thesis[]          @relation("AuthorTheses")
@@ -96,19 +96,19 @@ model Thesis {
   title             String
   abstract          String
   proposalFile      File                   @relation("FileProposal", fields: [proposalFile_id], references: [id])
-  proposalFile_id   String
+  proposalFile_id   String                 @db.Uuid
   finalFile         File?                  @relation("FileFinal", fields: [finalFile_id], references: [id])
-  finalFile_id      String?
+  finalFile_id      String?                @db.Uuid
   status            ThesisStatus
   author            UserProfile            @relation("AuthorTheses", fields: [author_id], references: [id])
-  author_id         String
+  author_id         String                 @db.Uuid
   adviser           UserProfile?           @relation("AdvisedTheses", fields: [adviser_id], references: [id])
-  adviser_id        String?
+  adviser_id        String?                @db.Uuid
   panelMembers      UserProfile[]          @relation("PanelTheses")
   department        Department             @relation(fields: [department_id], references: [id])
-  department_id     String
+  department_id     String                 @db.Uuid
   college           College                @relation(fields: [college_id], references: [id])
-  college_id        String
+  college_id        String                 @db.Uuid
   specializations   ThesisSpecialization[] @relation("Specialization")
   fileVersions      FileVersion[]
   createdAt         DateTime               @default(now())
@@ -147,7 +147,7 @@ model Department {
   id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name       String   @unique
   college    College  @relation(fields: [college_id], references: [id])
-  college_id String
+  college_id String   @db.Uuid
   theses     Thesis[]
 
   @@map("departments")
@@ -171,9 +171,9 @@ model ChatMessage {
   id          String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   content     String
   sender      UserProfile @relation("UserSender", fields: [sender_id], references: [id])
-  sender_id   String
+  sender_id   String      @db.Uuid
   receiver    UserProfile @relation("UserReceiver", fields: [receiver_id], references: [id])
-  receiver_id String
+  receiver_id String      @db.Uuid
   createdAt   DateTime    @default(now())
 
   @@map("chat_messages")
@@ -195,9 +195,9 @@ model Notification {
 model FileVersion {
   id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis     Thesis   @relation(fields: [thesis_id], references: [id])
-  thesis_id  String
+  thesis_id  String   @db.Uuid
   file       File     @relation(fields: [file_id], references: [id])
-  file_id    String
+  file_id    String   @db.Uuid
   version    Int
   uploadedAt DateTime @default(now())
 
@@ -208,7 +208,7 @@ model FileVersion {
 model ActivityLog {
   id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user       UserProfile @relation(fields: [user_id], references: [id])
-  user_id    String
+  user_id    String      @db.Uuid
   action     String
   targetType String
   targetId   String
@@ -221,10 +221,10 @@ model ActivityLog {
 model PlagiarismReport {
   id              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis          Thesis   @relation(fields: [thesis_id], references: [id])
-  thesis_id       String
+  thesis_id       String   @db.Uuid
   similarityScore Float
   reportFile      File     @relation(fields: [reportFile_id], references: [id])
-  reportFile_id   String
+  reportFile_id   String   @db.Uuid
   checkedAt       DateTime @default(now())
 
   @@map("plagiarism_reports")
@@ -234,9 +234,9 @@ model PlagiarismReport {
 model ReviewFeedback {
   id          String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis      Thesis      @relation(fields: [thesis_id], references: [id])
-  thesis_id   String
+  thesis_id   String      @db.Uuid
   reviewer    UserProfile @relation(fields: [reviewer_id], references: [id])
-  reviewer_id String
+  reviewer_id String      @db.Uuid
   content     String
   createdAt   DateTime    @default(now())
 
@@ -247,9 +247,9 @@ model ReviewFeedback {
 model AccessControl {
   id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user       UserProfile @relation(fields: [user_id], references: [id])
-  user_id    String
+  user_id    String      @db.Uuid
   thesis     Thesis      @relation(fields: [thesis_id], references: [id])
-  thesis_id  String
+  thesis_id  String      @db.Uuid
   canEdit    Boolean     @default(false)
   canApprove Boolean     @default(false)
   canView    Boolean     @default(true)
@@ -262,9 +262,9 @@ model ThesisReview {
   id          String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   status      ReviewStatus
   thesis      Thesis       @relation(fields: [thesis_id], references: [id])
-  thesis_id   String
+  thesis_id   String       @db.Uuid
   reviewer    UserProfile  @relation(fields: [reviewer_id], references: [id])
-  reviewer_id String
+  reviewer_id String       @db.Uuid
   feedback    String?
   createdAt   DateTime     @default(now())
 
@@ -275,7 +275,7 @@ model ThesisReview {
 model DefenseSchedule {
   id           String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis       Thesis        @relation(fields: [thesis_id], references: [id])
-  thesis_id    String
+  thesis_id    String        @db.Uuid
   date         DateTime
   venue        String
   panelMembers UserProfile[] @relation("PanelSchedule")
@@ -288,7 +288,7 @@ model DefenseSchedule {
 model ThesisMilestone {
   id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis    Thesis   @relation(fields: [thesis_id], references: [id])
-  thesis_id String
+  thesis_id String   @db.Uuid
   title     String
   startDate DateTime
   endDate   DateTime
