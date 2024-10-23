@@ -3,7 +3,7 @@
 import { setThemeCookies } from "@/utils/actions/theme";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-interface ThemeContextProps {
+type ThemeContextProps = {
     theme: string;
     setTheme: (theme: string) => void;
 }
@@ -25,19 +25,21 @@ export function useTheme() {
     return context;
 }
 
-export function ThemeProvider({ children, initialTheme }: { children: React.ReactNode; initialTheme?: string }) {
-    const [theme, setTheme] = useState<string>(() => initialTheme ?? getSystemTheme());
+type ThemeProviderProps = {
+    children: React.ReactNode;
+    initialTheme?: string;
+};
+
+export function ThemeProvider({ children, initialTheme }: ThemeProviderProps) {
+    const systemTheme = getSystemTheme();
+    const [theme, setTheme] = useState<string>(initialTheme ?? systemTheme);
 
     useEffect(() => {
         if (!initialTheme) {
-            const systemTheme = getSystemTheme();
             setTheme(systemTheme);
-
-            const formData = new FormData();
-            formData.set("theme", systemTheme);
-            setThemeCookies(formData);
+            setThemeCookies(systemTheme);
         }
-    }, [initialTheme]);
+    }, [initialTheme, systemTheme]);
 
     return (
         <ThemeContext.Provider value={{ theme, setTheme }}>
