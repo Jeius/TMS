@@ -21,7 +21,7 @@ export default function RootLayout({
   const theme = cookies().get("theme")?.value;
 
   return (
-    <html lang="en" className={theme === "dark" ? "dark" : undefined} suppressHydrationWarning>
+    <html lang="en" className={theme === "dark" ? "dark" : undefined}>
       <body className={`${GeistSans.className} antialiased`}>
         <QueryProvider>
           <ThemeProvider initialTheme={theme} >
