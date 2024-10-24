@@ -1,314 +1,357 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-  schemas   = ["public"]
 }
 
 model User {
-  instance_id                 String?      @db.Uuid
-  id                          String       @id @db.Uuid
-  aud                         String?      @db.VarChar(255)
-  role                        String?      @db.VarChar(255)
-  email                       String?      @unique @db.VarChar(255)
-  encrypted_password          String?      @db.VarChar(255)
-  email_confirmed_at          DateTime?    @db.Timestamptz(6)
-  invited_at                  DateTime?    @db.Timestamptz(6)
-  confirmation_token          String?      @db.VarChar(255)
-  confirmation_sent_at        DateTime?    @db.Timestamptz(6)
-  recovery_token              String?      @db.VarChar(255)
-  recovery_sent_at            DateTime?    @db.Timestamptz(6)
-  email_change_token_new      String?      @db.VarChar(255)
-  email_change                String?      @db.VarChar(255)
-  email_change_sent_at        DateTime?    @db.Timestamptz(6)
-  last_sign_in_at             DateTime?    @db.Timestamptz(6)
-  raw_app_meta_data           Json?
-  raw_user_meta_data          Json?
-  is_super_admin              Boolean?
-  created_at                  DateTime?    @db.Timestamptz(6)
-  updated_at                  DateTime?    @db.Timestamptz(6)
-  phone                       String?      @unique
-  phone_confirmed_at          DateTime?    @db.Timestamptz(6)
-  phone_change                String?      @default("")
-  phone_change_token          String?      @default("") @db.VarChar(255)
-  phone_change_sent_at        DateTime?    @db.Timestamptz(6)
-  confirmed_at                DateTime?    @db.Timestamptz(6)
-  email_change_token_current  String?      @default("") @db.VarChar(255)
-  email_change_confirm_status Int?         @default(0) @db.SmallInt
-  banned_until                DateTime?    @db.Timestamptz(6)
-  reauthentication_token      String?      @default("") @db.VarChar(255)
-  reauthentication_sent_at    DateTime?    @db.Timestamptz(6)
-  is_sso_user                 Boolean      @default(false)
-  deleted_at                  DateTime?    @db.Timestamptz(6)
-  is_anonymous                Boolean      @default(false)
-  UserProfile                 UserProfile?
+  instance_id                                            String?          @db.Uuid
+  id                                                     String           @id @db.Uuid
+  aud                                                    String?          @db.VarChar(255)
+  role                                                   String?          @db.VarChar(255)
+  email                                                  String?          @unique @db.VarChar(255)
+  encrypted_password                                     String?          @db.VarChar(255)
+  email_confirmed_at                                     DateTime?        @db.Timestamptz(6)
+  invited_at                                             DateTime?        @db.Timestamptz(6)
+  confirmation_token                                     String?          @db.VarChar(255)
+  confirmation_sent_at                                   DateTime?        @db.Timestamptz(6)
+  recovery_token                                         String?          @db.VarChar(255)
+  recovery_sent_at                                       DateTime?        @db.Timestamptz(6)
+  email_change_token_new                                 String?          @db.VarChar(255)
+  email_change                                           String?          @db.VarChar(255)
+  email_change_sent_at                                   DateTime?        @db.Timestamptz(6)
+  last_sign_in_at                                        DateTime?        @db.Timestamptz(6)
+  raw_app_meta_data                                      Json?
+  raw_user_meta_data                                     Json?
+  is_super_admin                                         Boolean?
+  created_at                                             DateTime?        @db.Timestamptz(6)
+  updated_at                                             DateTime?        @db.Timestamptz(6)
+  phone                                                  String?          @unique
+  phone_confirmed_at                                     DateTime?        @db.Timestamptz(6)
+  phone_change                                           String?          @default("")
+  phone_change_token                                     String?          @default("") @db.VarChar(255)
+  phone_change_sent_at                                   DateTime?        @db.Timestamptz(6)
+  confirmed_at                                           DateTime?        @db.Timestamptz(6)
+  email_change_token_current                             String?          @default("") @db.VarChar(255)
+  email_change_confirm_status                            Int?             @default(0) @db.SmallInt
+  banned_until                                           DateTime?        @db.Timestamptz(6)
+  reauthentication_token                                 String?          @default("") @db.VarChar(255)
+  reauthentication_sent_at                               DateTime?        @db.Timestamptz(6)
+  is_sso_user                                            Boolean          @default(false)
+  deleted_at                                             DateTime?        @db.Timestamptz(6)
+  is_anonymous                                           Boolean          @default(false)
+  advisers                                               Advisers[]
+  authors                                                Author[]
+  panelists                                              Panelist[]
+  profiles                                               Profile?
+  review_feedbacks_review_feedbacks_feedbacker_idTousers ReviewFeedback[] @relation("review_feedbacks_feedbacker_idTousers")
+  reviews                                                Review[]
 
   @@index([instance_id])
   @@index([is_anonymous])
   @@map("users")
-  @@schema("public")
-}
-
-model UserProfile {
-  id                  String            @id @db.Uuid
-  role_id             String?           @db.Uuid
-  firstName           String?           @db.VarChar(100)
-  lastName            String?           @db.VarChar(100)
-  idNumber            String?           @unique @db.VarChar(15)
-  themePreference     ThemePreference   @default(LIGHT)
-  bio                 String?           @db.VarChar(500)
-  avatar              String?           @db.VarChar(255)
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime?
-  accessControls      AccessControl[]
-  activityLogs        ActivityLog[]
-  messagesReceived    ChatMessage[]     @relation("UserReceiver")
-  messagesSent        ChatMessage[]     @relation("UserSender")
-  notifications       Notification[]
-  reviewFeedbacks     ReviewFeedback[]
-  thesesAdvised       Thesis[]          @relation("AdvisedTheses")
-  thesesAuthored      Thesis[]          @relation("AuthorTheses")
-  thesisReviews       ThesisReview[]
-  user                User              @relation(fields: [id], references: [id])
-  role                UserRole?         @relation(fields: [role_id], references: [id], onDelete: Restrict)
-  defense_schedules   DefenseSchedule[] @relation("panel_schedules")
-  theses_panel_theses Thesis[]          @relation("panel_theses")
-
-  @@map("user_profiles")
-  @@schema("public")
-}
-
-model UserRole {
-  id           String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name         String        @unique
-  userProfiles UserProfile[]
-
-  @@map("user_roles")
-  @@schema("public")
 }
 
 model Thesis {
-  id                         String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  title                      String
-  abstract                   String
-  proposalFile_id            String             @db.Uuid
-  finalFile_id               String?            @db.Uuid
-  status                     ThesisStatus
-  author_id                  String             @db.Uuid
-  adviser_id                 String?            @db.Uuid
-  department_id              String             @db.Uuid
-  college_id                 String             @db.Uuid
-  createdAt                  DateTime           @default(now())
-  updatedAt                  DateTime           @updatedAt
-  specializations            specializations[]
-  accessControls             AccessControl[]
-  defenseSchedules           DefenseSchedule[]
-  fileVersions               FileVersion[]
-  plagiarismReports          PlagiarismReport[]
-  reviewFeedbacks            ReviewFeedback[]
-  adviser                    UserProfile?       @relation("AdvisedTheses", fields: [adviser_id], references: [id])
-  author                     UserProfile        @relation("AuthorTheses", fields: [author_id], references: [id])
-  college                    College            @relation(fields: [college_id], references: [id])
-  department                 Department         @relation(fields: [department_id], references: [id])
-  finalFile                  File?              @relation("FileFinal", fields: [finalFile_id], references: [id])
-  proposalFile               File               @relation("FileProposal", fields: [proposalFile_id], references: [id])
-  thesisMilestones           ThesisMilestone[]
-  thesisReviews              ThesisReview[]
-  user_profiles_panel_theses UserProfile[]      @relation("panel_theses")
+  id                                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title                                String                 @unique
+  abstract                             String?
+  proposal_file_id                     String?                @db.Uuid
+  final_file_id                        String?                @db.Uuid
+  status                               ThesisStatus?
+  department_id                        String?                @db.Uuid
+  college_id                           String?                @db.Uuid
+  created_at                           DateTime               @default(now())
+  updated_at                           DateTime?
+  deleted_at                           DateTime?              @db.Timestamp(6)
+  accessControls                       AccessControl[]
+  advisers                             Advisers[]
+  authors                              Author[]
+  defenseSchedules                     DefenseSchedule[]
+  fileVersions                         FileVersion[]
+  milestones                           Milestone[]
+  panelists                            Panelist[]
+  plagiarismReports                    PlagiarismReport[]
+  reviews                              Review[]
+  specializations                      ThesisSpecialization[]
+  college                              College?               @relation(fields: [college_id], references: [id], onDelete: Restrict)
+  department                           Department?            @relation(fields: [department_id], references: [id], onDelete: Restrict)
+  files_theses_final_file_idTofiles    File?                  @relation("theses_final_file_idTofiles", fields: [final_file_id], references: [id], map: "theses_finalFile_id_fkey")
+  files_theses_proposal_file_idTofiles File?                  @relation("theses_proposal_file_idTofiles", fields: [proposal_file_id], references: [id], onDelete: Restrict, map: "theses_proposalFile_id_fkey")
 
   @@map("theses")
-  @@schema("public")
 }
 
 model ThesisSpecialization {
-  id              String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name            String            @unique
-  specializations specializations[]
+  id                  String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  thesis_id           String            @db.Uuid
+  tag_id              BigInt
+  created_at          DateTime          @default(now()) @db.Timestamp(6)
+  deleted_at          DateTime?         @db.Timestamp(6)
+  specialization_tags SpecializationTag @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  theses              Thesis            @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
   @@map("specializations")
-  @@schema("public")
 }
 
 model College {
   id          String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name        String       @unique
+  created_at  DateTime     @default(now()) @db.Timestamp(6)
+  deleted_at  DateTime?    @db.Timestamp(6)
+  updated_at  DateTime?    @db.Timestamp(6)
   departments Department[]
   theses      Thesis[]
 
   @@map("colleges")
-  @@schema("public")
 }
 
 model Department {
-  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name       String   @unique
-  college_id String   @db.Uuid
-  college    College  @relation(fields: [college_id], references: [id])
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name       String    @unique
+  college_id String    @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+  college    College   @relation(fields: [college_id], references: [id])
   theses     Thesis[]
 
   @@map("departments")
-  @@schema("public")
 }
 
 model File {
-  id                String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  filePath          String
-  fileType          String
-  fileVersions      FileVersion[]
-  plagiarismReports PlagiarismReport[]
-  thesisFinal       Thesis[]           @relation("FileFinal")
-  thesisProposal    Thesis[]           @relation("FileProposal")
+  id                                    String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  file_path                             String
+  file_type                             String             @db.VarChar
+  created_at                            DateTime           @default(now()) @db.Timestamp(6)
+  deleted_at                            DateTime?          @db.Timestamp(6)
+  fileVersions                          FileVersion[]
+  plagiarism_reports                    PlagiarismReport[]
+  theses_theses_final_file_idTofiles    Thesis[]           @relation("theses_final_file_idTofiles")
+  theses_theses_proposal_file_idTofiles Thesis[]           @relation("theses_proposal_file_idTofiles")
 
   @@map("files")
-  @@schema("public")
 }
 
 model ChatMessage {
-  id          String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   content     String
-  sender_id   String      @db.Uuid
-  receiver_id String      @db.Uuid
-  createdAt   DateTime    @default(now())
-  receiver    UserProfile @relation("UserReceiver", fields: [receiver_id], references: [id])
-  sender      UserProfile @relation("UserSender", fields: [sender_id], references: [id])
+  sender_id   String    @db.Uuid
+  receiver_id String    @db.Uuid
+  created_at  DateTime  @default(now())
+  deleted_at  DateTime? @db.Timestamp(6)
+  updated_at  DateTime? @db.Timestamp(6)
+  receiver    Profile   @relation("UserReceiver", fields: [receiver_id], references: [id])
+  sender      Profile   @relation("UserSender", fields: [sender_id], references: [id])
 
   @@map("chat_messages")
-  @@schema("public")
 }
 
 model Notification {
-  id           String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id           String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   content      String
-  isRead       Boolean     @default(false)
-  createdAt    DateTime    @default(now())
-  recipient_id String      @db.Uuid
-  recipient    UserProfile @relation(fields: [recipient_id], references: [id])
+  is_read      Boolean            @default(false)
+  created_at   DateTime           @default(now())
+  recipient_id String             @db.Uuid
+  title        String             @db.VarChar
+  deleted_at   DateTime?          @db.Timestamp(6)
+  type         Notification_type?
+  recipient    Profile            @relation(fields: [recipient_id], references: [id])
 
   @@map("notifications")
-  @@schema("public")
 }
 
 model FileVersion {
-  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  thesis_id  String   @db.Uuid
-  file_id    String   @db.Uuid
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  thesis_id  String    @db.Uuid
+  file_id    String    @db.Uuid
   version    Int
-  uploadedAt DateTime @default(now())
-  file       File     @relation(fields: [file_id], references: [id])
-  thesis     Thesis   @relation(fields: [thesis_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime? @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  file       File      @relation(fields: [file_id], references: [id])
+  thesis     Thesis    @relation(fields: [thesis_id], references: [id])
 
   @@map("file_versions")
-  @@schema("public")
 }
 
 model ActivityLog {
-  id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id    String      @db.Uuid
-  action     String
-  targetType String
-  targetId   String
-  createdAt  DateTime    @default(now())
-  user       UserProfile @relation(fields: [user_id], references: [id])
+  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id     String    @db.Uuid
+  action      String
+  target_type String
+  target_id   String
+  created_at  DateTime  @default(now())
+  deleted_at  DateTime? @db.Timestamp(6)
+  user        Profile   @relation(fields: [user_id], references: [id])
 
   @@map("activity_logs")
-  @@schema("public")
 }
 
 model PlagiarismReport {
-  id              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  thesis_id       String   @db.Uuid
-  similarityScore Float
-  reportFile_id   String   @db.Uuid
-  checkedAt       DateTime @default(now())
-  reportFile      File     @relation(fields: [reportFile_id], references: [id])
-  thesis          Thesis   @relation(fields: [thesis_id], references: [id])
+  id               String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  thesis_id        String    @db.Uuid
+  similarity_score Float
+  report_file_id   String    @db.Uuid
+  created_at       DateTime  @default(now())
+  deleted_at       DateTime? @db.Timestamp(6)
+  files            File      @relation(fields: [report_file_id], references: [id])
+  thesis           Thesis    @relation(fields: [thesis_id], references: [id])
 
   @@map("plagiarism_reports")
-  @@schema("public")
 }
 
 model ReviewFeedback {
-  id          String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  thesis_id   String      @db.Uuid
-  reviewer_id String      @db.Uuid
-  content     String
-  createdAt   DateTime    @default(now())
-  reviewer    UserProfile @relation(fields: [reviewer_id], references: [id])
-  thesis      Thesis      @relation(fields: [thesis_id], references: [id])
+  id                                          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  review_id                                   String    @db.Uuid
+  content                                     String
+  created_at                                  DateTime  @default(now())
+  deleted_at                                  DateTime? @db.Timestamp(6)
+  feedbacker_id                               String    @db.Uuid
+  users_review_feedbacks_feedbacker_idTousers User      @relation("review_feedbacks_feedbacker_idTousers", fields: [feedbacker_id], references: [id])
+  users_review_feedbacks_review_idTousers     Review    @relation("review_feedbacks_review_idTousers", fields: [review_id], references: [id], map: "review_feedbacks_reviewer_id_fkey")
 
   @@map("review_feedbacks")
-  @@schema("public")
 }
 
 model AccessControl {
-  id         String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id    String      @db.Uuid
-  thesis_id  String      @db.Uuid
-  canEdit    Boolean     @default(false)
-  canApprove Boolean     @default(false)
-  canView    Boolean     @default(true)
-  thesis     Thesis      @relation(fields: [thesis_id], references: [id])
-  user       UserProfile @relation(fields: [user_id], references: [id])
+  id          String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id     String  @db.Uuid
+  thesis_id   String  @db.Uuid
+  can_edit    Boolean @default(false)
+  can_approve Boolean @default(false)
+  can_view    Boolean @default(true)
+  thesis      Thesis  @relation(fields: [thesis_id], references: [id])
+  user        Profile @relation(fields: [user_id], references: [id])
 
   @@map("access_controls")
-  @@schema("public")
-}
-
-model ThesisReview {
-  id          String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  status      ReviewStatus
-  thesis_id   String       @db.Uuid
-  reviewer_id String       @db.Uuid
-  feedback    String?
-  createdAt   DateTime     @default(now())
-  reviewer    UserProfile  @relation(fields: [reviewer_id], references: [id])
-  thesis      Thesis       @relation(fields: [thesis_id], references: [id])
-
-  @@map("thesis_reviews")
-  @@schema("public")
 }
 
 model DefenseSchedule {
-  id            String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  thesis_id     String        @db.Uuid
-  date          DateTime
-  venue         String
-  createdAt     DateTime      @default(now())
-  thesis        Thesis        @relation(fields: [thesis_id], references: [id])
-  user_profiles UserProfile[] @relation("panel_schedules")
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  thesis_id  String    @db.Uuid
+  date       DateTime
+  venue      String
+  created_at DateTime  @default(now())
+  deleted_at DateTime? @db.Timestamp(6)
+  thesis     Thesis    @relation(fields: [thesis_id], references: [id])
 
   @@map("defense_schedules")
-  @@schema("public")
 }
 
-model ThesisMilestone {
-  id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  thesis_id String   @db.Uuid
-  title     String
-  startDate DateTime
-  endDate   DateTime
-  completed Boolean  @default(false)
-  thesis    Thesis   @relation(fields: [thesis_id], references: [id])
+model Advisers {
+  thesis_id  String       @db.Uuid
+  adviser_id String       @db.Uuid
+  role       Adviser_role
+  created_at DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at DateTime?    @db.Timestamp(6)
+  deleted_at DateTime?    @db.Timestamp(6)
+  users      User         @relation(fields: [adviser_id], references: [id], onDelete: Cascade)
+  theses     Thesis       @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
-  @@map("thesis_milestones")
-  @@schema("public")
+  @@id([thesis_id, adviser_id, role])
+  @@map("advisers")
 }
 
-model specializations {
-  A               String               @db.Uuid
-  B               String               @db.Uuid
-  theses          Thesis               @relation(fields: [A], references: [id], onDelete: Cascade, map: "_Specialization_A_fkey")
-  specializations ThesisSpecialization @relation(fields: [B], references: [id], onDelete: Cascade, map: "_Specialization_B_fkey")
+model Author {
+  thesis_id  String    @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  author_id  String    @db.Uuid
+  updated_at DateTime? @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  users      User      @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  theses     Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade, map: "thesis_participants_thesis_id_fkey")
 
-  @@unique([A, B], map: "_Specialization_AB_unique")
-  @@index([B], map: "_Specialization_B_index")
-  @@map("_specializations")
-  @@schema("public")
+  @@id([thesis_id, author_id])
+  @@map("authors")
+}
+
+model Milestone {
+  id         String    @id(map: "thesis_milestones_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  thesis_id  String    @db.Uuid
+  title      String
+  start_date DateTime  @db.Date
+  end_date   DateTime  @db.Date
+  completed  Boolean   @default(false)
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  theses     Thesis    @relation(fields: [thesis_id], references: [id], map: "thesis_milestones_thesis_id_fkey")
+
+  @@map("milestones")
+}
+
+model Panelist {
+  thesis_id   String    @db.Uuid
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  panelist_id String    @db.Uuid
+  deleted_at  DateTime? @db.Timestamp(6)
+  updated_at  DateTime? @db.Timestamp(6)
+  users       User      @relation(fields: [panelist_id], references: [id], onDelete: Cascade)
+  theses      Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
+
+  @@id([thesis_id, panelist_id])
+  @@map("panelists")
+}
+
+model Profile {
+  id               String          @id(map: "user_profiles_pkey") @db.Uuid
+  role_id          String?         @db.Uuid
+  first_name       String?         @db.VarChar(100)
+  last_name        String?         @db.VarChar(100)
+  id_number        String?         @unique(map: "user_profiles_idNumber_key") @db.VarChar(15)
+  theme_preference ThemePreference @default(DARK)
+  bio              String?         @db.VarChar(500)
+  avatar           String?         @db.VarChar(255)
+  created_at       DateTime        @default(now())
+  updated_at       DateTime?
+  accessControls   AccessControl[]
+  activityLogs     ActivityLog[]
+  messagesReceived ChatMessage[]   @relation("UserReceiver")
+  messagesSent     ChatMessage[]   @relation("UserSender")
+  notifications    Notification[]
+  users            User            @relation(fields: [id], references: [id], onDelete: Cascade)
+  roles            Role?           @relation(fields: [role_id], references: [id])
+
+  @@map("profiles")
+}
+
+model Review {
+  id                                                 String           @id(map: "thesis_reviews_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  status                                             ReviewStatus?
+  thesis_id                                          String           @db.Uuid
+  reviewer_id                                        String           @db.Uuid
+  feedback                                           String?
+  created_at                                         DateTime         @default(now())
+  deleted_at                                         DateTime?        @db.Timestamp(6)
+  review_feedbacks_review_feedbacks_review_idTousers ReviewFeedback[] @relation("review_feedbacks_review_idTousers")
+  users                                              User             @relation(fields: [reviewer_id], references: [id])
+  theses                                             Thesis           @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Role {
+  id         String    @id(map: "user_roles_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name       String    @unique(map: "user_roles_name_key")
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  profiles   Profile[]
+
+  @@map("roles")
+}
+
+model SpecializationTag {
+  id              BigInt                 @id @default(autoincrement())
+  name            String                 @unique @db.VarChar
+  created_at      DateTime               @default(now()) @db.Timestamptz(6)
+  deleted_at      DateTime?              @db.Timestamp(6)
+  specializations ThesisSpecialization[]
+
+  @@map("specialization_tags")
 }
 
 enum ThemePreference {
@@ -316,7 +359,6 @@ enum ThemePreference {
   DARK
 
   @@map("theme_preference")
-  @@schema("public")
 }
 
 enum ReviewStatus {
@@ -326,7 +368,6 @@ enum ReviewStatus {
   REVISION_REQUIRED
 
   @@map("review_status")
-  @@schema("public")
 }
 
 enum ThesisStatus {
@@ -337,5 +378,26 @@ enum ThesisStatus {
   REJECTED
 
   @@map("thesis_status")
-  @@schema("public")
+}
+
+enum Adviser_role {
+  ADVISER
+  CO_ADVISER
+
+  @@map("adviser_role")
+}
+
+enum Notification_type {
+  THESIS_SUBMISSION
+  THESIS_APPROVAL
+  THESIS_REJECTION
+  REVIEW_FEEDBACK
+  MESSAGE_RECEIVED
+  DEFENSE_SCHEDULED
+  PLAGIARISM_REPORT_AVAILABLE
+  DEADLINE_REMINDER
+  SYSTEM_ALERT
+  ACCESS_GRANTED
+
+  @@map("notification_type")
 }
