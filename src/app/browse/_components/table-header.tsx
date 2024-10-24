@@ -1,4 +1,4 @@
-import { Combobox, ComboboxItem } from "@/components/combobox"
+import { Combobox } from "@/components/combobox"
 import { Button } from "@/components/ui/button"
 import { Table } from "@tanstack/react-table"
 import React from "react"
@@ -11,21 +11,15 @@ import { SelectMenu, SelectMenuItem } from "../../../components/select-menu"
 
 const getYearData = () => {
     return (Array.from({ length: 50 }).map((_, index) => (
-        { value: (2024 - index + 1).toString(), label: (2024 - index + 1).toString() }
-    )))
+        (2024 - index + 1).toString()
+    )));
 }
 
-const getSpecializationData = (): ComboboxItem[] => {
-    return [
-        { value: "ML", label: "Machine Learning" },
-        { value: "robotics", label: "Robotics" },
-        { value: "NS", label: "Network Security" },
-        { value: "DM", label: "Database Management" },
-        { value: "python", label: "Python" },
-    ]
+const getSpecializationData = () => {
+    return (Array.from({ length: 50 }).map((_, index) => `Specialization ${index}`));
 }
 
-function getFilters(yearData: ComboboxItem[], specializationData: ComboboxItem[]) {
+function getFilters(yearData: string[], specializationData: string[]) {
     return [
         { key: "college", label: "College", values: [] },
         { key: "department", label: "Department", values: [] },
@@ -87,10 +81,14 @@ export default function TableHeader<TData>({
 
     const filters = getFilters(yearData, specializationData)
 
-    const initialFilters = filters.slice(0, 3)
-    const extensionFilters = filters.slice(3)
+    const newFilters = filters.map(filter => {
+        return { ...filter, defaultValue: searchParams.get(filter.key) ?? "" }
+    });
 
-    // Helper function to update URL parameters
+    const initialFilters = newFilters.slice(0, 3)
+    const extensionFilters = newFilters.slice(3)
+
+
     const handleFilterChange = (key: string, value: string) => {
         const currentParams = new URLSearchParams(searchParams.toString())
         if (value) {
@@ -113,6 +111,7 @@ export default function TableHeader<TData>({
                                 items={filter.values}
                                 className="flex"
                                 placeholder={filter.label}
+                                defaultValue={filter.defaultValue}
                                 onValueChanged={(value) => handleFilterChange(filter.key, value)}
                             />
                         </motion.div>
@@ -131,6 +130,7 @@ export default function TableHeader<TData>({
                                         items={filter.values}
                                         className="flex"
                                         placeholder={filter.label}
+                                        defaultValue={filter.defaultValue}
                                         onValueChanged={(value) => handleFilterChange(filter.key, value)}
                                     />
                                 </motion.div>

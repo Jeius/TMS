@@ -1,39 +1,47 @@
 "use client"
 
-import { Combobox, ComboboxItem } from "@/components/combobox";
-import * as React from "react";
+import { Combobox } from "@/components/combobox";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
-const getDepartments = (): ComboboxItem[] => {
+const getDepartments = () => {
     return [
-        {
-            value: "ALL",
-            label: "All Departments"
-        },
-        {
-            value: "CA",
-            label: "Computer Applications",
-        },
-        {
-            value: "CS",
-            label: "Computer Science",
-        },
-        {
-            value: "IS",
-            label: "Information Systems",
-        },
-        {
-            value: "IT",
-            label: "Information Technology",
-        },
+        "All Departments",
+        "Computer Applications",
+        "Computer Science",
+        "Information Systems",
+        "Information Technology",
     ]
 }
 
 export function Departmentbox() {
-    const [value, setValue] = React.useState("")
-    const departments = getDepartments()
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const departments = getDepartments();
+    const defaultValue = searchParams.get("department") ?? "";
+
+    const filter = {
+        key: "department",
+        label: "Department",
+        values: departments,
+    }
+
+    const handleFilterChange = (key: string, value: string) => {
+        const currentParams = new URLSearchParams(searchParams.toString())
+        if (value) {
+            currentParams.set(key, value)
+        } else {
+            currentParams.delete(key)
+        }
+        router.push(`?${currentParams.toString()}`)
+    }
 
     return (
-        <Combobox items={departments} defaultValue={value} placeholder="Department" onValueChanged={setValue} />
+        <Combobox
+            items={departments}
+            defaultValue={defaultValue}
+            placeholder="Department"
+            onValueChanged={(value) => handleFilterChange(filter.key, value)}
+        />
     )
 }
