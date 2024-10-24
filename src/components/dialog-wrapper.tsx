@@ -1,50 +1,62 @@
 import useWindowSize from "@/lib/hooks/use-window-size";
 import React from "react";
-import { Button } from "./ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "./ui/alert-dialog";
 
-type DialogWrapperProps = React.ComponentPropsWithRef<typeof Dialog> & {
-    dialogTitle?: string
-    dialogDescription?: string
-    confirmButtonLabel?: string
-    confirmButtonType?: "button" | "submit"
-    cancelButtonLabel?: string
-    onConfirm: () => void
+type AlertDialogWrapperProps = {
+    dialogTitle?: string;
+    dialogDescription?: string;
+    confirmLabel?: string;
+    cancelLabel?: string;
+    onConfirm?: () => void;
+    children?: React.ReactNode;
 };
 
-export default function DialogWrapper({
+export default function AlertDialogWrapper({
     dialogTitle = "Confirm Action",
-    dialogDescription = "Are you sure you want to proceed?",
-    confirmButtonLabel = "Yes",
-    confirmButtonType = "submit",
-    cancelButtonLabel = "No",
-    children, onConfirm,
-}: DialogWrapperProps) {
+    dialogDescription = "This action cannot be undone. Are you sure you want to proceed?",
+    confirmLabel = "Yes",
+    cancelLabel = "No",
+    onConfirm,
+    children,
+}: AlertDialogWrapperProps) {
     const { width } = useWindowSize();
     const getMaxWidth = React.useMemo(() => Math.min(width * 0.7, 512), [width]);
 
+    const handleConfirm = () => {
+        onConfirm?.();
+    };
+
     return (
-        <Dialog>
-            <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent
-                onCloseAutoFocus={e => e.preventDefault()}
-                className="rounded-xl" style={{ maxWidth: getMaxWidth }}
+        <AlertDialog>
+            <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+            <AlertDialogContent
+                onCloseAutoFocus={(e) => e.preventDefault()}
+                className="rounded-xl"
+                style={{ maxWidth: getMaxWidth }}
             >
-                <DialogHeader>
-                    <DialogTitle>{dialogTitle}</DialogTitle>
-                </DialogHeader>
-                <DialogDescription>{dialogDescription}</DialogDescription>
-                <DialogFooter className="flex justify-end">
-                    <DialogClose asChild>
-                        <Button type={confirmButtonType} variant="destructive" onClick={onConfirm}>
-                            {confirmButtonLabel}
-                        </Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                        <Button variant="outline">{cancelButtonLabel}</Button>
-                    </DialogClose>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    )
+                <AlertDialogHeader>
+                    <AlertDialogTitle>{dialogTitle}</AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogDescription>{dialogDescription}</AlertDialogDescription>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>
+                        {cancelLabel}
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={handleConfirm}>
+                        {confirmLabel}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import DialogWrapper from '@/components/dialog-wrapper'
+import AlertDialogWrapper from '@/components/dialog-wrapper'
 import { Button } from '@/components/ui/button'
 import {
     CardContent,
@@ -172,7 +172,7 @@ function RemindersItems() {
                                 </TooltipWrapper>
 
                                 <Tooltip>
-                                    <DialogWrapper dialogTitle="Confirm Delete" onConfirm={handleDeleteSelected}>
+                                    <AlertDialogWrapper dialogTitle="Confirm Delete" onConfirm={handleDeleteSelected}>
                                         <TooltipTrigger asChild>
                                             <Button
                                                 aria-label="Delete"
@@ -183,7 +183,7 @@ function RemindersItems() {
                                                 <Trash2 aria-hidden="true" className="size-4" />
                                             </Button>
                                         </TooltipTrigger>
-                                    </DialogWrapper>
+                                    </AlertDialogWrapper>
                                     <TooltipContent className="mr-5"><span>Delete</span></TooltipContent>
                                 </Tooltip>
                             </div>
