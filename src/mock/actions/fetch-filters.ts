@@ -14,7 +14,7 @@ export const fetchMockSpecializations = async () => {
     { id: 8, name: "Cloud Computing" },
     { id: 9, name: "Quantum Computing" },
     { id: 10, name: "Bioinformatics" }
-  ];
+  ].map(item => item.name);
 };
 
 export const fetchMockColleges = async () => {
@@ -31,7 +31,7 @@ export const fetchMockColleges = async () => {
     { id: 8, name: "College of Law" },
     { id: 9, name: "College of Architecture" },
     { id: 10, name: "College of Social Sciences" }
-  ];
+  ].map(item => item.name);
 };
 
 
@@ -49,7 +49,7 @@ export const fetchMockDepartments = async () => {
     { id: 4, name: "Secondary Education" },
     { id: 5, name: "Computer Science" },
     { id: 5, name: "Information Systems" }
-  ];
+  ].map(item => item.name);
 };
 
 export const fetchMockPublicationYears = async () => {
@@ -61,7 +61,7 @@ export const fetchMockPublicationYears = async () => {
     { id: 3, name: "2021" },
     { id: 4, name: "2022" },
     { id: 5, name: "2023" }
-  ];
+  ].map(item => item.name);
 };
 
 export const fetchMockAuthors = async () => {
@@ -78,7 +78,7 @@ export const fetchMockAuthors = async () => {
     { id: 8, name: "Gomez, S." },
     { id: 9, name: "Ramos, T." },
     { id: 10, name: "Delos Santos, L." }
-  ];
+  ].map(item => item.name);
 };
 
 export const fetchMockAdvisers = async () => {
@@ -95,7 +95,7 @@ export const fetchMockAdvisers = async () => {
     { id: 8, name: "Prof. Rivera, S." },
     { id: 9, name: "Dr. Navarro, F." },
     { id: 10, name: "Prof. Castillo, V." }
-  ];
+  ].map(item => item.name);
 };
 
 export const fetchMockPanelists = async () => {
@@ -112,7 +112,7 @@ export const fetchMockPanelists = async () => {
     { id: 8, name: "Prof. Suarez, H." },
     { id: 9, name: "Dr. Cabrera, E." },
     { id: 10, name: "Prof. Garcia, O." }
-  ];
+  ].map(item => item.name);
 };
 
 export async function fetchFilters(filter: string) {

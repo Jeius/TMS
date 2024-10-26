@@ -1,36 +1,12 @@
-import { Combobox } from "@/components/combobox"
-import { Button } from "@/components/ui/button"
 import { Table } from "@tanstack/react-table"
 import React from "react"
 
 import { VisibilityMenu } from "@/app/browse/_components/column-visibility"
+import Filters from "@/components/filters"
 import { cn } from "@/lib/utils"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
 import { SelectMenu, SelectMenuItem } from "../../../components/select-menu"
-
-const getYearData = () => {
-    return (Array.from({ length: 50 }).map((_, index) => (
-        (2024 - index + 1).toString()
-    )));
-}
-
-const getSpecializationData = () => {
-    return (Array.from({ length: 50 }).map((_, index) => `Specialization ${index}`));
-}
-
-function getFilters(yearData: string[], specializationData: string[]) {
-    return [
-        { key: "college", label: "College", values: [] },
-        { key: "department", label: "Department", values: [] },
-        { key: "year", label: "Year", values: yearData },
-        { key: "sp", label: "Specialization", values: specializationData },
-        { key: "author", label: "Author", values: [] },
-        { key: "adviser", label: "Adviser", values: [] },
-        { key: "keywords", label: "Keywords", values: [] },
-    ]
-}
-
 
 const SortOptions = <TData,>({ table }: { table: Table<TData> }) => {
     const sortItems: SelectMenuItem[] = [
@@ -72,81 +48,11 @@ export type TableOptionsProps<TData> = React.HTMLAttributes<HTMLDivElement> & {
 export default function TableHeader<TData>({
     table, className, ...props
 }: TableOptionsProps<TData>) {
-    const router = useRouter()
-    const searchParams = useSearchParams()
-    const [showMoreFilters, setShowMoreFilters] = React.useState(false)
-
-    const yearData = getYearData();
-    const specializationData = getSpecializationData();
-
-    const filters = getFilters(yearData, specializationData)
-
-    const newFilters = filters.map(filter => {
-        return { ...filter, defaultValue: searchParams.get(filter.key) ?? "" }
-    });
-
-    const initialFilters = newFilters.slice(0, 3)
-    const extensionFilters = newFilters.slice(3)
-
-
-    const handleFilterChange = (key: string, value: string) => {
-        const currentParams = new URLSearchParams(searchParams.toString())
-        if (value) {
-            currentParams.set(key, value)
-        } else {
-            currentParams.delete(key)
-        }
-        router.push(`?${currentParams.toString()}`)
-    }
-
-    const toggleMoreFilters = () => setShowMoreFilters(prev => !prev)
-
     return (
         <div className={cn("w-full max-w-full overflow-hidden text-card-foreground", className)} {...props}>
             <div className="overflow-hidden px-4 py-3 flex flex-col items-center space-y-10 xs:space-y-0 xs:flex-row xs:items-end sm:justify-between ">
-                <div className="flex gap-2 flex-wrap xs:mr-5 sm:mr-20 md:mr-32">
-                    {initialFilters.map(filter => (
-                        <motion.div layout key={filter.key} transition={{ type: "tween" }}>
-                            <Combobox
-                                items={filter.values}
-                                className="flex"
-                                placeholder={filter.label}
-                                defaultValue={filter.defaultValue}
-                                onValueChanged={(value) => handleFilterChange(filter.key, value)}
-                            />
-                        </motion.div>
-                    ))}
-                    <AnimatePresence mode="popLayout">
-                        {showMoreFilters && extensionFilters.map(filter => {
-                            return (
-                                <motion.div key={filter.key}
-                                    layout
-                                    initial={{ x: -60, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    exit={{ x: -60, opacity: 0 }}
-                                    transition={{ type: "tween" }}
-                                >
-                                    <Combobox
-                                        items={filter.values}
-                                        className="flex"
-                                        placeholder={filter.label}
-                                        defaultValue={filter.defaultValue}
-                                        onValueChanged={(value) => handleFilterChange(filter.key, value)}
-                                    />
-                                </motion.div>
-                            )
-                        })}
-                    </AnimatePresence>
-                    <motion.div layout transition={{ type: "tween" }}>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
-                            onClick={toggleMoreFilters}
-                        >
-                            {showMoreFilters ? "Less filters" : "More filters"}
-                        </Button>
-                    </motion.div>
+                <div className="xs:mr-5 sm:mr-20 md:mr-32">
+                    <Filters />
                 </div>
                 <motion.div layout transition={{ type: "tween" }} className="flex justify-between w-full 2xs:w-auto 2xs:justify-end items-center gap-2 flex-wrap">
                     <motion.div layout transition={{ type: "tween" }}><SortOptions table={table} /></motion.div>
@@ -156,3 +62,4 @@ export default function TableHeader<TData>({
         </div>
     )
 }
+

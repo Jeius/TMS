@@ -6,11 +6,13 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons"
+import { useQuery } from "@tanstack/react-query"
 import { motion } from "framer-motion"
 import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon } from "lucide-react"
 import * as React from "react"
 import { useEffect, useRef, useState } from "react"
 import { ScrollArea } from "./ui/scroll-area"
+import { Skeleton } from "./ui/skeleton"
 
 export type ComboboxItem = {
     value?: string;
@@ -18,15 +20,13 @@ export type ComboboxItem = {
 }
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
-    items?: string[]
     onValueChanged?: (value: string) => void
-    placeholder?: string
+    placeholder: string
     defaultValue?: string
 }
 
 export function Combobox({
-    items = [],
-    placeholder = "Item",
+    placeholder,
     defaultValue = "",
     className,
     variant = "outline",
@@ -37,6 +37,8 @@ export function Combobox({
     const [selectedValue, setSelectedValue] = useState(defaultValue);
     const [searchTerm, setSearchTerm] = useState("");
     const firstItemRef = useRef<HTMLButtonElement | null>(null);
+
+    const { data: items = [], isLoading, refetch } = useQuery<string[]>({ queryKey: [placeholder] });
 
     const filteredItems = items.filter(
         item => item.toLowerCase().split(" ").join("").includes(
@@ -67,6 +69,7 @@ export function Combobox({
                     data-selected={open}
                     size="sm"
                     className={cn("w-min justify-between text-foreground font-semibold", className)}
+                    onClick={() => refetch()}
                     {...props}
                 >
                     <span className="capitalize mr-2">
@@ -99,26 +102,31 @@ export function Combobox({
                     />
                 </div>
                 <ScrollArea className="flex flex-col h-min max-h-52 space-y-1 p-2">
-                    {filteredItems?.length === 0 ? (
-                        <p className="w-40 text-xs text-center py-4">No results found...</p>
+                    {isLoading ? (
+                        <div className="w-40">
+                            {Array.from({ length: 5 }).map(_ => (
+                                <Skeleton key={crypto.randomUUID()} className="mb-2 h-8 w-full" />
+                            ))}
+                        </div>
                     ) : (
-                        filteredItems.map((item, index) => (
-                            <Button
-                                key={item}
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleSelect(item)}
-                                ref={index === 0 ? firstItemRef : null}
-                                className="w-full justify-start"
-                            >
-                                <Check
-                                    className={cn(
+                        filteredItems?.length === 0
+                            ? <p className="w-40 text-xs text-center py-4">No results found...</p>
+                            : filteredItems?.map((item, index) => (
+                                <Button
+                                    key={item}
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleSelect(item)}
+                                    ref={index === 0 ? firstItemRef : null}
+                                    className="w-full justify-start"
+                                >
+                                    <Check className={cn(
                                         "mr-2 h-4 w-4",
                                         selectedValue === item ? "opacity-100" : "opacity-0"
                                     )} />
-                                <span className="capitalize whitespace-nowrap text-xs font-semibold">{item}</span>
-                            </Button>
-                        ))
+                                    <span className="capitalize whitespace-nowrap text-xs font-semibold">{item}</span>
+                                </Button>
+                            ))
                     )}
                 </ScrollArea>
             </PopoverContent>

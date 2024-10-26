@@ -1,5 +1,5 @@
-import { setThemeCookies } from "@/utils/actions/theme";
-import { useTheme } from "./providers/theme-provider";
+import { setThemeCookies } from "@/server/actions/theme";
+import { useTheme } from "../lib/providers/theme-provider";
 import { Switch } from "./ui/switch";
 
 export default function ThemeToggle({ open }: { open?: boolean }) {

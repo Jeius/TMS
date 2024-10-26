@@ -1,6 +1,6 @@
 "use client"
 
-import { setThemeCookies } from "@/utils/actions/theme";
+import { setThemeCookies } from "@/server/actions/theme";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeContextProps = {

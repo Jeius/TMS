@@ -1,11 +1,11 @@
 import AppHeader from "@/components/layout/header/app-header";
 import NavigationSideBar from "@/components/layout/navigation/navigation-sidebar";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/lib/providers/providers";
+import { ThemeProvider } from "@/lib/providers/theme-provider";
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import QueryProvider from "../components/providers/query-provider";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={theme === "dark" ? "dark" : undefined}>
       <body className={`${GeistSans.className} antialiased`}>
-        <QueryProvider>
+        <Providers>
           <ThemeProvider initialTheme={theme} >
             <div id="__next">
               <AppHeader />
@@ -34,7 +34,7 @@ export default function RootLayout({
             </div>
             <Toaster />
           </ThemeProvider>
-        </QueryProvider>
+        </Providers>
       </body>
     </html>
   );
