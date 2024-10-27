@@ -1,19 +1,25 @@
 "use server";
 
 import { encodedRedirect } from "@/lib/encoded-redirect";
-import { createClient } from "@/lib/supabase/server";
+import { supabaseServerClient } from "@/lib/supabase/server";
+import { SignInSchema, SignUpSchema } from "@/lib/types";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import * as z from "zod";
 
-export const signUpAction = async (formData: FormData) => {
-    const email = formData.get("email")?.toString();
-    const password = formData.get("password")?.toString();
-    const supabase = await createClient();
+export const signUpAction = async (data: z.infer<typeof SignUpSchema>) => {
+    const result = SignUpSchema.safeParse(data);
+
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors;
+        console.log("Validation errors:", errors);
+        return { error: "Invalid form submission", details: errors };
+    }
+
+    const { email, password } = result.data;
+    const supabase = await supabaseServerClient();
     const origin = (await headers()).get("origin");
 
-    if (!email || !password) {
-        return { error: "Email and password are required" };
-    }
 
     const { error } = await supabase.auth.signUp({
         email,
@@ -25,20 +31,26 @@ export const signUpAction = async (formData: FormData) => {
 
     if (error) {
         console.error(error.code + " " + error.message);
-        return encodedRedirect("error", "/sign-up", error.message);
+        return { error: "Authentication error", details: error.message };
     } else {
-        return encodedRedirect(
-            "success",
-            "/sign-up",
-            "Thanks for signing up! Please check your email for a verification link.",
-        );
+        return {
+            success: "Signed up successfully",
+            details: "Thanks for signing up! Please check your email for a verification link."
+        };
     }
 };
 
-export const signInAction = async (formData: FormData) => {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const supabase = await createClient();
+export const signInAction = async (data: z.infer<typeof SignInSchema>) => {
+    const result = SignInSchema.safeParse(data);
+
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors;
+        console.log("Validation errors:", errors);
+        return { error: "Invalid form submission", details: errors };
+    }
+
+    const { email, password } = result.data;
+    const supabase = await supabaseServerClient();
 
     const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -46,15 +58,15 @@ export const signInAction = async (formData: FormData) => {
     });
 
     if (error) {
-        return encodedRedirect("error", "/sign-in", error.message);
+        return { error: "Authentication error", details: error.message };
+    } else {
+        return { success: "Signed in" };
     }
-
-    return redirect("/protected");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
     const email = formData.get("email")?.toString();
-    const supabase = await createClient();
+    const supabase = await supabaseServerClient();
     const origin = (await headers()).get("origin");
     const callbackUrl = formData.get("callbackUrl")?.toString();
 
@@ -87,7 +99,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
 };
 
 export const resetPasswordAction = async (formData: FormData) => {
-    const supabase = await createClient();
+    const supabase = await supabaseServerClient();
 
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
@@ -124,7 +136,7 @@ export const resetPasswordAction = async (formData: FormData) => {
 };
 
 export const signOutAction = async () => {
-    const supabase = await createClient();
+    const supabase = await supabaseServerClient();
     await supabase.auth.signOut();
     return redirect("/sign-in");
 };
