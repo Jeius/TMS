@@ -26,8 +26,8 @@ import {
     TooltipWrapper
 } from '@/components/ui/tooltip'
 import { toast } from "@/lib/hooks/use-toast"
+import { RemindersFormSchema } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { RemindersFormSchema } from '@/utils/types'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion'

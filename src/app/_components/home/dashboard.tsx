@@ -1,11 +1,11 @@
 "use client"
 
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { useDynamicWidth } from '@/lib/hooks/use-dynamic-width'
 import { useElementRect } from '@/lib/hooks/use-element-rect'
 import useWindowSize from '@/lib/hooks/use-window-size'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { ScrollArea } from '../ui/scroll-area'
 import Announcements from './announcements'
 import HomeCalendar from './home-calendar'
 import QuickActions from './quick-actions'

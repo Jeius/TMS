@@ -1,16 +1,6 @@
 "use client"
 
-import { Button } from "../../components/ui/button"
-import {
-    Area,
-    AreaChart,
-    Bar,
-    BarChart,
-    CartesianGrid,
-    LabelList,
-    XAxis,
-    YAxis
-} from "recharts"
+import { Button } from "@/components/ui/button"
 import {
     Card,
     CardContent,
@@ -25,6 +15,16 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
+import {
+    Area,
+    AreaChart,
+    Bar,
+    BarChart,
+    CartesianGrid,
+    LabelList,
+    XAxis,
+    YAxis
+} from "recharts"
 
 
 const chartData = [

@@ -115,7 +115,7 @@ export const fetchMockPanelists = async () => {
   ].map(item => item.name);
 };
 
-export async function fetchFilters(filter: string) {
+export async function fetchFilterValues(filter: string) {
   const filters = [
     { filter: "college", action: fetchMockColleges },
     { filter: "department", action: fetchMockDepartments },

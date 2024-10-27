@@ -1,6 +1,6 @@
 "use server"
 
-import { Thesis } from "@/utils/types";
+import { Thesis } from "@/lib/types";
 
 export async function getTheses(): Promise<Thesis[]> {
     await new Promise((resolve) => setTimeout(resolve, 1000));

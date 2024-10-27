@@ -4,8 +4,8 @@ import ThesesTableContent from '@/app/browse/_components/table-content'
 import TableHeader from '@/app/browse/_components/table-header'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { Thesis } from "@/lib/types"
 import { cn } from '@/lib/utils'
-import { Thesis } from "@/utils/types"
 import { useQuery } from '@tanstack/react-query'
 import {
     ColumnFiltersState,

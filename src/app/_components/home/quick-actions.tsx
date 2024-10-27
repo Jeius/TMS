@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import {
     Carousel,
     CarouselContent,
@@ -12,7 +13,6 @@ import { quickActionsLinks } from "@/utils/data/test/navigation-links"
 import Autoplay from "embla-carousel-autoplay"
 import Link from "next/link"
 import React from "react"
-import { Button } from "../ui/button"
 
 type QuickActionCardProps = React.ComponentPropsWithRef<typeof Link> & {
     href: string

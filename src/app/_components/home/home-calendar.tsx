@@ -1,15 +1,15 @@
 "use client"
 
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import useWindowSize from "@/lib/hooks/use-window-size";
 import { cn, Screens } from "@/lib/utils";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { HTMLMotionProps, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import React, { useEffect, useMemo } from "react";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import RemindersView from "./reminders";
 
 type CalendarViewProps = HTMLMotionProps<"div"> & { open?: boolean };

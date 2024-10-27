@@ -1,4 +1,4 @@
-import { columns } from '@/app/analytics/recent-activities-columns';
+import { columns } from '@/app/analytics/_components/recent-activities-columns';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/components/ui/table';
 import { useQuery } from '@tanstack/react-query';
