@@ -27,9 +27,7 @@ export default function RootLayout({
           <ThemeProvider initialTheme={theme} >
             <div id="__next">
               <AppHeader />
-              <main className="pb-4 lg:pl-16">
-                {children}
-              </main>
+              {children}
               <NavigationSideBar />
             </div>
             <Toaster />
