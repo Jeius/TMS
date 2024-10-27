@@ -1,5 +1,8 @@
 "use client"
 
+import SubmitButton, { Status } from "@/components/animated/submit-button";
+import { CustomFormMessage } from "@/components/form-message";
+import { Form } from "@/components/ui/form";
 import { Message, SignInSchema } from "@/lib/types";
 import { wait } from "@/lib/utils";
 import { signInAction } from "@/server/actions/auth";
@@ -8,9 +11,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import SubmitButton, { Status } from "../animated/submit-button";
-import { CustomFormMessage } from "../form-message";
-import { Form } from "../ui/form";
 import { EmailField, PasswordField } from "./form-fields";
 
 export default function SignIn() {
@@ -34,10 +34,7 @@ export default function SignIn() {
             setStatus("success");
             setMessage({ success: result.success })
             await wait(3000);
-            form.reset();
-            setStatus(undefined);
             router.push("/");
-
         } else {
             setStatus("failed");
             setMessage({ error: (result.details ?? result.error ?? "").toString() })
@@ -49,7 +46,7 @@ export default function SignIn() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col min-w-64 max-w-64 justify-center space-y-8 mx-auto"
+                className="flex flex-col w-full justify-center space-y-8 mx-auto"
             >
                 <EmailField formControl={form.control} name="email" label="Email" />
                 <PasswordField formControl={form.control} name="password" label="Password" />

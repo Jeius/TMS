@@ -1,5 +1,8 @@
 "use client"
 
+import SubmitButton, { Status } from "@/components/animated/submit-button";
+import { CustomFormMessage } from "@/components/form-message";
+import { Form } from "@/components/ui/form";
 import { Message, SignUpSchema } from "@/lib/types";
 import { wait } from "@/lib/utils";
 import { signUpAction } from "@/server/actions/auth";
@@ -7,9 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import SubmitButton, { Status } from "../animated/submit-button";
-import { CustomFormMessage } from "../form-message";
-import { Form } from "../ui/form";
 import { EmailField, PasswordField } from "./form-fields";
 
 export default function SignUp() {
@@ -46,7 +46,7 @@ export default function SignUp() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col min-w-64 max-w-64 justify-center space-y-8 mx-auto"
+                className="flex flex-col justify-center space-y-8 mx-auto"
             >
                 <EmailField formControl={form.control} name="email" label="Email" />
                 <PasswordField formControl={form.control} name="password" label="Password" />

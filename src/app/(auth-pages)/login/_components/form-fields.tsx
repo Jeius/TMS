@@ -1,9 +1,9 @@
+import { Button } from "@/components/ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Control } from "react-hook-form";
-import { Button } from "../ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
 
 type FormFieldProps = {
     formControl: Control<any>
@@ -19,7 +19,13 @@ export function EmailField({ formControl, name, label }: FormFieldProps) {
             <FormItem>
                 <FormLabel>{label}</FormLabel>
                 <FormControl>
-                    <Input placeholder="[your.name]@g.msuiit.edu.ph" required autoComplete="email" {...field} />
+                    <Input
+                        placeholder="name@example.com"
+                        className="bg-card"
+                        autoComplete="email"
+                        required
+                        {...field}
+                    />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -41,6 +47,7 @@ export function PasswordField({ formControl, name, label }: FormFieldProps) {
                             <Input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="your password"
+                                className="bg-card"
                                 required
                                 {...field}
                             />
