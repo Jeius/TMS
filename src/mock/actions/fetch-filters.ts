@@ -127,5 +127,5 @@ export async function fetchFilterValues(filter: string) {
   ]
   const fetcher = filters.find(item => item.filter === filter)?.action;
 
-  return fetcher && await fetcher();
+  return (fetcher && await fetcher()) ?? [];
 }

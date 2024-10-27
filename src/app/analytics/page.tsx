@@ -1,9 +1,7 @@
-import { RecentActivitiesCard } from '@/app/analytics/recent-activities-card';
-import { Statistic, StatisticsCard } from '@/app/analytics/stats-card';
-import { ThesesChartCard } from '@/app/analytics/theses-chart-card';
+import { RecentActivitiesCard } from '@/app/analytics/_components/recent-activities-card';
+import { Statistic, StatisticsCard } from '@/app/analytics/_components/stats-card';
+import { ThesesChartCard } from '@/app/analytics/_components/theses-chart-card';
 import Filters from '@/components/filters';
-import { fetchFilters } from '@/mock/actions/fetch-filters';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import {
   Book,
   BookOpenCheckIcon,
@@ -47,19 +45,10 @@ const getStatistics = (): Statistic[] => {
   ]
 }
 
-export default async function Dashboard() {
+const FILTERS = ["college", "department"];
+
+export default async function Analytics() {
   const statistics = getStatistics()
-  const filters = ["college", "department"];
-  const queryClient = new QueryClient();
-
-  queryClient.setQueryData(["filters"], filters);
-
-  await Promise.all(filters.map(filter =>
-    queryClient.prefetchQuery({
-      queryKey: [filter],
-      queryFn: () => fetchFilters(filter)
-    })
-  ));
 
   return (
     <div className="flex flex-col p-4 gap-y-4 md:p-5 md:gap-y-5 items-center box-content m-auto max-w-none">
@@ -67,9 +56,7 @@ export default async function Dashboard() {
         <h1 className='font-bold text-2xl lg:text-4xl'>
           Overview
         </h1>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <Filters showInitial={filters.length} hideShowMore />
-        </HydrationBoundary>
+        <Filters showInitial={FILTERS.length} filters={FILTERS} hideShowMore />
       </div>
 
       <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-3 md:gap-4 w-full max-w-screen-2xl'>

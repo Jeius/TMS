@@ -23,6 +23,7 @@ type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
     onValueChanged?: (value: string) => void
     placeholder: string
     defaultValue?: string
+    itemsFn: (() => Promise<string[]>) | (() => string[])
 }
 
 export function Combobox({
@@ -31,6 +32,7 @@ export function Combobox({
     className,
     variant = "outline",
     onValueChanged = () => { },
+    itemsFn,
     ...props
 }: ComboboxProps) {
     const [open, setOpen] = useState(false);
@@ -38,7 +40,13 @@ export function Combobox({
     const [searchTerm, setSearchTerm] = useState("");
     const firstItemRef = useRef<HTMLButtonElement | null>(null);
 
-    const { data: items = [], isLoading, refetch } = useQuery<string[]>({ queryKey: [placeholder] });
+    const { data: items = [], isLoading, refetch } = useQuery<string[]>({
+        queryKey: [placeholder],
+        queryFn: itemsFn,
+        staleTime: 60 * 1000,
+        refetchOnMount: true,
+        refetchInterval: 60 * 1000,
+    });
 
     const filteredItems = items.filter(
         item => item.toLowerCase().split(" ").join("").includes(
@@ -69,12 +77,12 @@ export function Combobox({
                     data-selected={open}
                     size="sm"
                     className={cn("w-min justify-between text-foreground font-semibold", className)}
-                    onClick={() => refetch()}
+                    onClick={() => !open && refetch()}
                     {...props}
                 >
                     <span className="capitalize mr-2">
                         {selectedValue
-                            ? items.find((item) => item === selectedValue)
+                            ? items.find((item) => item === selectedValue) ?? selectedValue
                             : placeholder}
                     </span>
                     <motion.div
