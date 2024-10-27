@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TooltipWrapper } from "@/components/ui/tooltip";
+import { signOutAction } from "@/server/actions/auth";
 import { accountLinks } from "@/utils/data/test/navigation-links";
+import { LogOutIcon } from "lucide-react";
 import Link from "next/link";
-
-
 
 export default function UserMenu() {
     return (
@@ -44,6 +44,13 @@ export default function UserMenu() {
                             </Link>
                         </Button>
                     ))}
+                    <Button size="sm" variant="ghost"
+                        className="flex space-x-3 justify-between"
+                        onClick={async () => await signOutAction()}
+                    >
+                        <span>Logout</span>
+                        <LogOutIcon aria-hidden="true" focusable="false" size={15} />
+                    </Button>
                 </div>
             </PopoverContent>
         </Popover>

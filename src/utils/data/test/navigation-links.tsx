@@ -1,4 +1,4 @@
-import { BookCopy, BookOpen, BookOpenCheck, CalendarDays, CalendarFold, ChartLine, FilePlus2, House, Library, LogOutIcon, MessageCircle, Search, Send, SettingsIcon, UserIcon } from "lucide-react";
+import { BookCopy, BookOpen, BookOpenCheck, CalendarDays, CalendarFold, ChartLine, FilePlus2, House, Library, MessageCircle, Search, Send, SettingsIcon, UserIcon } from "lucide-react";
 
 export const primaryLinks = [
     { href: '/', label: 'Home', icon: <House /> },
@@ -21,7 +21,6 @@ export const toolLinks = [
 export const accountLinks = [
     { href: "/profile", label: "Profile", icon: <UserIcon aria-hidden="true" focusable="false" size={15} /> },
     { href: "/settings", label: "Settings", icon: <SettingsIcon aria-hidden="true" focusable="false" size={15} /> },
-    { href: "#", label: "Logout", icon: <LogOutIcon aria-hidden="true" focusable="false" size={15} /> },
 ];
 
 export const quickActionsLinks = [

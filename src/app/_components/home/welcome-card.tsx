@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { signOutAction } from '@/server/actions/auth';
 import { accountLinks } from '@/utils/data/test/navigation-links';
+import { LogOutIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function WelcomeCard() {
@@ -27,11 +29,16 @@ export default function WelcomeCard() {
                             </Link>
                         </Button>
 
-                        {index !== accountLinks.length - 1 && (
-                            <Separator orientation="vertical" className="h-4 bg-primary-foreground/60" />
-                        )}
+                        <Separator orientation="vertical" className="h-4 bg-primary-foreground/60" />
                     </div>
                 ))}
+                <Button size="sm" variant="link"
+                    className="size-min p-1 text-card-foreground flex items-center space-x-2 font-semibold"
+                    onClick={async () => await signOutAction()}
+                >
+                    <span>Logout</span>
+                    <LogOutIcon aria-hidden="true" focusable="false" size={15} />
+                </Button>
             </CardFooter>
         </Card>
     )

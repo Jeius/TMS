@@ -1,4 +1,7 @@
+
+import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { supabaseServerClient } from "@/lib/supabase/server";
 import Image from 'next/image';
 import Link from 'next/link';
 import NavigationMenu from '../navigation/navigation-menu';
@@ -6,7 +9,13 @@ import NotificationMenu from './notification-menu';
 import SearchBar from './searchbar';
 import UserMenu from './user-menu';
 
-export default function AppHeader() {
+
+export default async function AppHeader() {
+    const supabase = await supabaseServerClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
     return (
         <TooltipProvider>
             <header id="app-header"
@@ -31,7 +40,13 @@ export default function AppHeader() {
                     <div className="flex items-center space-x-2 pl-2">
                         <SearchBar />
                         <NotificationMenu />
-                        <UserMenu />
+                        {user ? (
+                            <UserMenu />
+                        ) : (
+                            <Button asChild>
+                                <Link href="/login">Login</Link>
+                            </Button>
+                        )}
                     </div>
                 </div>
             </header>
