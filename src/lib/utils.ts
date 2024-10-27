@@ -20,3 +20,7 @@ export function booleanToString(value: boolean) {
 export function stringToBoolean(value?: string | null) {
   return value?.toLowerCase() === "true";
 }
+
+export async function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
