@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import EmailForm from './email-form';
 
 export default function ForgotPassword() {
@@ -6,7 +6,7 @@ export default function ForgotPassword() {
         <main className="p-5 sm:p-10">
             <Card variant="glass" className="mx-auto max-w-[480px] sm:p-5" >
                 <CardHeader>
-                    <CardTitle>Forgot Password</CardTitle>
+                    <h1 className="text-2xl font-medium">Forgot Password</h1>
                     <CardDescription>Enter your email and a link will be sent to reset your password.</CardDescription>
                 </CardHeader>
                 <CardContent>

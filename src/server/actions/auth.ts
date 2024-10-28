@@ -19,22 +19,21 @@ export async function signUpAction(data: z.infer<typeof SignUpSchema>): Promise<
     const supabase = await supabaseServerClient();
     const origin = (await headers()).get("origin");
 
-
-    const { error } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-            emailRedirectTo: `${origin}/auth/callback`,
-        },
     });
 
-    if (error) {
-        console.error(error.code + " " + error.message);
-        return { error: "Authentication error", details: error.message };
+    if (signUpError) {
+        if (signUpError.message.includes("already registered")) {
+            return { error: "This email is already registered. Please use another one." };
+        }
+        console.error(signUpError.code + " " + signUpError.message);
+        return { error: "Authentication error", details: signUpError.message };
     } else {
         return {
             success: "Signed up successfully",
-            details: "Thanks for signing up! Please check your email for a verification link."
+            details: `Please verify your account via the confirmation link sent to ${email}.`
         };
     }
 }
@@ -76,16 +75,14 @@ export async function forgotPasswordAction(data: z.infer<typeof EmailSchema>): P
     const supabase = await supabaseServerClient();
     const origin = (await headers()).get("origin");
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${origin}/auth/callback?redirect_to=/private/reset-password`,
-    });
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
 
     if (error) {
         console.error(error.message);
         return { error: "Could not reset password", details: error.message };
     }
 
-    return { success: "Submitted successfully", details: "Check your email for a link to reset your password." };
+    return { success: "Submitted successfully", details: `A confirmation link has been sent to ${email}` };
 }
 
 export async function resetPasswordAction(data: z.infer<typeof ConfirmPasswordSchema>): Promise<AuthActionResponse> {

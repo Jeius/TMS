@@ -5,6 +5,7 @@ import { FormBanner } from '@/components/form/form-banner';
 import { EmailField } from '@/components/form/form-fields';
 import { Form } from '@/components/ui/form';
 import { EmailSchema, Message } from '@/lib/types';
+import { wait } from '@/lib/utils';
 import { forgotPasswordAction } from '@/server/actions/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
@@ -27,14 +28,19 @@ export default function EmailForm() {
 
         if (result.success) {
             setStatus("success");
-            setMessage({ success: result.details ?? result.success })
+            setMessage({ success: result.details ?? result.success });
+            form.reset();
+            await wait(2000);
+            setStatus(undefined);
         } else {
             setStatus("failed");
-            setMessage({ error: result.details ?? result.error })
+            setMessage({ error: result.details ?? result.error });
+            await wait(2000);
+            setStatus(undefined);
         }
     };
 
-    const emailValue = form.watch("email")
+    const emailValue = form.watch("email");
 
     useEffect(() => {
         if (form.getFieldState("email").isTouched) {

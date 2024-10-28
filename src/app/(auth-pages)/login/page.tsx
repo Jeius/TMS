@@ -1,5 +1,6 @@
 import { Account } from "@/components/animated/account";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
+import { supabaseServerClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import SignIn from "./_components/sign-in";
 import SignUp from "./_components/sign-up";
@@ -42,14 +43,27 @@ function SignInTab() {
     );
 }
 
-export default function Login({ searchParams }: { [key: string]: string | string[] | undefined }) {
-    const defaultTab = searchParams && searchParams === "signUp" ? 1 : 0;
+export default async function Login() {
+    const supabase = await supabaseServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
     return (
         <main className="p-5 sm:p-10">
             <Card variant="glass" className="mx-auto max-w-[480px] sm:p-5">
-                <div className="w-full m-auto overflow-hidden p-5 pb-0">
-                    <Account firstTab={<SignInTab />} secondTab={<SignUpTab />} />
-                </div>
+                {user ? (
+                    <>
+                        <CardHeader>
+                            <h1 className="text-xl">Sign In Unavailable</h1>
+                            <CardDescription>
+                                You are already signed in.
+                            </CardDescription>
+                        </CardHeader>
+                    </>
+                ) : (
+                    <div className="w-full m-auto overflow-hidden p-5 pb-0">
+                        <Account firstTab={<SignInTab />} secondTab={<SignUpTab />} />
+                    </div>
+                )}
             </Card>
         </main >
     )

@@ -30,7 +30,7 @@ export default function SubmitButton({
             size="lg"
             type="submit"
             data-state={status}
-            disabled={isSubmitting}
+            disabled={isSubmitting || (status !== undefined)}
             className={cn(
                 "group relative h-10 w-full overflow-hidden font-semibold duration-300 disabled:opacity-100",
                 "data-[state=failed]:bg-destructive data-[state=failed]:hover:bg-destructive/80",

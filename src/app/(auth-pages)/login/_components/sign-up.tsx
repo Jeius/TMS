@@ -5,6 +5,7 @@ import { FormBanner } from "@/components/form/form-banner";
 import { EmailField, PasswordField } from "@/components/form/form-fields";
 import { Form } from "@/components/ui/form";
 import { Message, SignUpSchema } from "@/lib/types";
+import { wait } from "@/lib/utils";
 import { signUpAction } from "@/server/actions/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -34,6 +35,8 @@ export default function SignUp() {
         } else {
             setStatus("failed");
             setMessage({ error: result.details ?? result.error });
+            await wait(2000);
+            setStatus(undefined);
         }
     };
 
