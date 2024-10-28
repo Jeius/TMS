@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TooltipWrapper } from '@/components/ui/tooltip';
+import { accountLinks } from '@/lib/navigation-links';
 import { signOutAction } from '@/server/actions/auth';
-import { accountLinks } from '@/utils/data/test/navigation-links';
 import { LogOutIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -37,18 +37,25 @@ export default function UserMenu() {
                 onCloseAutoFocus={e => e.preventDefault()}
             >
                 <div className="flex flex-col space-y-1">
-                    {accountLinks.map((item, index) => (
-                        <Button key={index} size="sm" variant="ghost" className="justify-start" asChild>
-                            <Link href={item.href} className="flex space-x-3 items-center justify-between">
-                                <span>{item.label}</span> {item.icon}
+                    {accountLinks.map(({ href, label, icon: Icon }) => (
+                        <Button asChild
+                            key={label}
+                            size="sm"
+                            variant="ghost"
+                            aria-label={label}
+                            className="flex space-x-3 items-center justify-between" >
+                            <Link href={href}>
+                                <span>{label}</span>
+                                <Icon size={16} />
                             </Link>
                         </Button>
                     ))}
                     <Button size="sm" variant="ghost"
+                        aria-label='Sign out'
                         className="flex space-x-3 justify-between"
                         onClick={async () => await signOutAction()}
                     >
-                        <span>Logout</span>
+                        <span>Sign out</span>
                         <LogOutIcon aria-hidden="true" focusable="false" size={15} />
                     </Button>
                 </div>

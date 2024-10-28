@@ -8,30 +8,31 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from '@/components/ui/carousel'
+import { quickActionsLinks } from '@/lib/navigation-links'
 import { cn } from '@/lib/utils'
-import { quickActionsLinks } from '@/utils/data/test/navigation-links'
 import Autoplay from 'embla-carousel-autoplay'
+import { LucideProps } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
 type QuickActionCardProps = React.ComponentPropsWithRef<typeof Link> & {
     href: string
-    icon: React.ReactNode
+    icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
     label: string
 };
 
-function QuickActionCard({ href, icon, label, ...props }: QuickActionCardProps) {
+function QuickActionCard({ href, icon: Icon, label, ...props }: QuickActionCardProps) {
     return (
         <Button asChild variant="glass"
             className={cn(
                 'h-32 w-full md:w-56 lg:w-64 bg-card/70 dark:bg-card/80 rounded-xl hover:bg-card/70',
-                'hover:border-secondary hover:text-secondary transition-transform border',
-                'hover:scale-105 focus-visible:scale-105 focus-visible:text-secondary',
+                'hover:border-secondary hover:text-secondary transition-transform border text-card-foreground',
+                'hover:scale-105 focus-visible:scale-105 focus-visible:text-secondary flex-col space-y-5',
             )}
         >
-            <Link href={href} className="flex flex-col space-y-4"{...props}>
-                {icon}
-                <span className="text-sm font-semibold">{label}</span>
+            <Link href={href}{...props}>
+                <Icon />
+                <span className="font-semibold">{label}</span>
             </Link>
         </Button>
     )
@@ -48,13 +49,13 @@ export default function QuickActions() {
                 id="quick-actions-grid"
                 className="hidden md:grid grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4"
             >
-                {quickActionsLinks.map((action) => (
+                {quickActionsLinks.map(({ href, label, icon: Icon }) => (
                     <QuickActionCard
-                        key={`quick-action-grid-${action.label.toLowerCase().replace(/ /g, '-')}`}
-                        id={`quick-action-grid-${action.label.toLowerCase().replace(/ /g, '-')}`}
-                        href={action.href}
-                        icon={action.icon}
-                        label={action.label}
+                        key={`quick-action-grid-${label.toLowerCase().replace(/ /g, '-')}`}
+                        id={`quick-action-grid-${label.toLowerCase().replace(/ /g, '-')}`}
+                        href={href}
+                        icon={Icon}
+                        label={label}
                     />
                 ))}
             </div>
@@ -62,13 +63,14 @@ export default function QuickActions() {
             <div id="quick-actions-carousel" className="px-14 md:hidden w-full">
                 <Carousel className="w-full" plugins={[plugin.current]} >
                     <CarouselContent id="carousel-content" className="flex items-center p-2 gap-2">
-                        {quickActionsLinks.map((action, index) => (
-                            <CarouselItem key={`quick-action-carousel-${index}`} className="xs:basis-1/2">
+                        {quickActionsLinks.map(({ href, label, icon: Icon }) => (
+                            <CarouselItem key={`quick-action-carousel-${label.toLowerCase().replace(/ /g, '-')}`}
+                                className="xs:basis-1/2">
                                 <QuickActionCard
-                                    id={`quick-action-carousel-${action.label.toLowerCase().replace(/ /g, '-')}`}
-                                    href={action.href}
-                                    icon={action.icon}
-                                    label={action.label}
+                                    id={`quick-action-carousel-${label.toLowerCase().replace(/ /g, '-')}`}
+                                    href={href}
+                                    icon={Icon}
+                                    label={label}
                                 />
                             </CarouselItem>
                         ))}
