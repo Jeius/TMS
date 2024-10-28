@@ -1,7 +1,7 @@
 import { Message } from "@/lib/types";
 
 
-export function CustomFormMessage({ message }: { message: Message }) {
+export function FormBanner({ message }: { message: Message }) {
   return (
     <div className="flex flex-col gap-2 w-full max-w-md text-sm">
       {"success" in message && (
@@ -13,9 +13,6 @@ export function CustomFormMessage({ message }: { message: Message }) {
         <div className="text-destructive-foreground border-l-2 px-4 border-destructive bg-gradient-to-r from-destructive/60 dark:from-destructive/10">
           {message.error}
         </div>
-      )}
-      {"message" in message && (
-        <div className="text-foreground border-l-2 px-4">{message.message}</div>
       )}
     </div>
   );
