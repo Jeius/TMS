@@ -1,17 +1,18 @@
 "use client"
 
 import SubmitButton, { Status } from "@/components/animated/submit-button";
-import { CustomFormMessage } from "@/components/form-message";
+import { FormBanner } from "@/components/form/form-banner";
+import { EmailField, PasswordField } from "@/components/form/form-fields";
+import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Message, SignInSchema } from "@/lib/types";
-import { wait } from "@/lib/utils";
 import { signInAction } from "@/server/actions/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { EmailField, PasswordField } from "./form-fields";
 
 export default function SignIn() {
     const [status, setStatus] = useState<Status | undefined>();
@@ -32,16 +33,23 @@ export default function SignIn() {
 
         if (result.success) {
             setStatus("success");
-            setMessage({ success: result.success })
-            await wait(3000);
+            setMessage({ success: result.details ?? result.success })
             router.push("/");
         } else {
             setStatus("failed");
-            setMessage({ error: (result.details ?? result.error ?? "").toString() })
-            await wait(3000);
-            setStatus(undefined);
+            setMessage({ error: result.details ?? result.error })
         }
     };
+
+    const emailValue = form.watch("email");
+    const passwordValue = form.watch("password");
+
+    useEffect(() => {
+        if (form.getFieldState("email").isTouched || form.getFieldState("password")) {
+            setStatus(undefined);
+            setMessage(undefined);
+        }
+    }, [emailValue, passwordValue]);
 
     return (
         <Form {...form}>
@@ -50,7 +58,10 @@ export default function SignIn() {
             >
                 <EmailField formControl={form.control} name="email" label="Email" />
                 <PasswordField formControl={form.control} name="password" label="Password" />
-                {message && <CustomFormMessage message={message} />}
+                <Button variant="link" size="sm" className="text-muted-foreground w-fit p-0 hover:text-foreground hover:no-underline" asChild>
+                    <Link href="/forgot-password">Forgot password</Link>
+                </Button>
+                {message && <FormBanner message={message} />}
                 <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Sign In</SubmitButton>
             </form>
         </Form>

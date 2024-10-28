@@ -1,16 +1,15 @@
 "use client"
 
 import SubmitButton, { Status } from "@/components/animated/submit-button";
-import { CustomFormMessage } from "@/components/form-message";
+import { FormBanner } from "@/components/form/form-banner";
+import { EmailField, PasswordField } from "@/components/form/form-fields";
 import { Form } from "@/components/ui/form";
 import { Message, SignUpSchema } from "@/lib/types";
-import { wait } from "@/lib/utils";
 import { signUpAction } from "@/server/actions/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { EmailField, PasswordField } from "./form-fields";
 
 export default function SignUp() {
     const [status, setStatus] = useState<Status | undefined>();
@@ -31,17 +30,27 @@ export default function SignUp() {
 
         if (result.success) {
             setStatus("success");
-            setMessage({ success: result.details })
-            await wait(3000);
-            form.reset();
-            setStatus(undefined);
+            setMessage({ success: result.details ?? result.success });
         } else {
             setStatus("failed");
-            setMessage({ error: result.details.toString() })
-            await wait(3000);
-            setStatus(undefined);
+            setMessage({ error: result.details ?? result.error });
         }
     };
+
+    const emailValue = form.watch("email");
+    const passwordValue = form.watch("password");
+    const confirmPasswordValue = form.watch("confirmPassword");
+
+    useEffect(() => {
+        if (
+            form.getFieldState("email").isTouched ||
+            form.getFieldState("password") ||
+            form.getFieldState("confirmPassword")
+        ) {
+            setStatus(undefined);
+            setMessage(undefined);
+        }
+    }, [emailValue, passwordValue, confirmPasswordValue]);
 
     return (
         <Form {...form}>
@@ -51,7 +60,7 @@ export default function SignUp() {
                 <EmailField formControl={form.control} name="email" label="Email" />
                 <PasswordField formControl={form.control} name="password" label="Password" />
                 <PasswordField formControl={form.control} name="confirmPassword" label="Confirm Password" />
-                {message && <CustomFormMessage message={message} />}
+                {message && <FormBanner message={message} />}
                 <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Sign Up</SubmitButton>
             </form>
         </Form>
