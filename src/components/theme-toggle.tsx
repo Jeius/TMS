@@ -1,5 +1,4 @@
-import { setThemeCookies } from "@/server/actions/theme";
-import { useTheme } from "../context/theme-provider";
+import { useTheme } from "next-themes";
 import { Switch } from "./ui/switch";
 
 export default function ThemeToggle({ open }: { open?: boolean }) {
@@ -8,7 +7,6 @@ export default function ThemeToggle({ open }: { open?: boolean }) {
     const handleClick = (isChecked: boolean) => {
         const themeValue = isChecked ? "light" : "dark"
         setTheme(themeValue)
-        setThemeCookies(themeValue);
     };
 
     return (

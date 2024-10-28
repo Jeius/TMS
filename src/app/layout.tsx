@@ -1,9 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/context/providers";
-import { ThemeProvider } from "@/context/theme-provider";
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import "../styles/globals.css";
 import AppHeader from "./_components/header/app-header";
 import NavigationSideBar from "./_components/navigation/navigation-sidebar";
@@ -18,20 +16,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const theme = cookies().get("theme")?.value;
 
   return (
-    <html lang="en" className={theme === "dark" ? "dark" : undefined}>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${GeistSans.className} antialiased`}>
         <Providers>
-          <ThemeProvider initialTheme={theme} >
-            <div id="__next">
-              <AppHeader />
-              {children}
-              <NavigationSideBar />
-            </div>
-            <Toaster />
-          </ThemeProvider>
+          <div id="__next">
+            <AppHeader />
+            {children}
+            <NavigationSideBar />
+          </div>
+          <Toaster />
         </Providers>
       </body>
     </html>
