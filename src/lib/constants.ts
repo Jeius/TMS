@@ -1,1 +1,1 @@
-export const AUTHROUTES = ['/login', '/signup'];
+export const AUTHROUTES = ['/login', '/reset-password', '/forgot-password'];

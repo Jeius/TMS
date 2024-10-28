@@ -1,19 +1,18 @@
 "use server";
 
-import { encodedRedirect } from "@/lib/encoded-redirect";
 import { supabaseServerClient } from "@/lib/supabase/server";
-import { SignInSchema, SignUpSchema } from "@/lib/types";
+import { AuthActionResponse, ConfirmPasswordSchema, EmailSchema, SignInSchema, SignUpSchema } from "@/lib/types";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import * as z from "zod";
 
-export const signUpAction = async (data: z.infer<typeof SignUpSchema>) => {
+export async function signUpAction(data: z.infer<typeof SignUpSchema>): Promise<AuthActionResponse> {
     const result = SignUpSchema.safeParse(data);
 
     if (!result.success) {
         const errors = result.error.flatten().fieldErrors;
         console.log("Validation errors:", errors);
-        return { error: "Invalid form submission", details: errors };
+        return { error: "Invalid form submission" };
     }
 
     const { email, password } = result.data;
@@ -38,15 +37,15 @@ export const signUpAction = async (data: z.infer<typeof SignUpSchema>) => {
             details: "Thanks for signing up! Please check your email for a verification link."
         };
     }
-};
+}
 
-export const signInAction = async (data: z.infer<typeof SignInSchema>) => {
+export async function signInAction(data: z.infer<typeof SignInSchema>): Promise<AuthActionResponse> {
     const result = SignInSchema.safeParse(data);
 
     if (!result.success) {
         const errors = result.error.flatten().fieldErrors;
         console.log("Validation errors:", errors);
-        return { error: "Invalid form submission", details: errors };
+        return { error: "Invalid form submission" };
     }
 
     const { email, password } = result.data;
@@ -60,80 +59,58 @@ export const signInAction = async (data: z.infer<typeof SignInSchema>) => {
     if (error) {
         return { error: "Authentication error", details: error.message };
     } else {
-        return { success: "Signed in" };
+        return { success: "Signed in successfully" };
     }
-};
+}
 
-export const forgotPasswordAction = async (formData: FormData) => {
-    const email = formData.get("email")?.toString();
+export async function forgotPasswordAction(data: z.infer<typeof EmailSchema>): Promise<AuthActionResponse> {
+    const result = EmailSchema.safeParse(data);
+
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors;
+        console.log("Validation errors:", errors);
+        return { error: "Invalid form submission" };
+    }
+
+    const { email } = result.data;
     const supabase = await supabaseServerClient();
     const origin = (await headers()).get("origin");
-    const callbackUrl = formData.get("callbackUrl")?.toString();
-
-    if (!email) {
-        return encodedRedirect("error", "/forgot-password", "Email is required");
-    }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${origin}/auth/callback?redirect_to=/protected/reset-password`,
+        redirectTo: `${origin}/auth/callback?redirect_to=/private/reset-password`,
     });
 
     if (error) {
         console.error(error.message);
-        return encodedRedirect(
-            "error",
-            "/forgot-password",
-            "Could not reset password",
-        );
+        return { error: "Could not reset password", details: error.message };
     }
 
-    if (callbackUrl) {
-        return redirect(callbackUrl);
+    return { success: "Submitted successfully", details: "Check your email for a link to reset your password." };
+}
+
+export async function resetPasswordAction(data: z.infer<typeof ConfirmPasswordSchema>): Promise<AuthActionResponse> {
+    const result = ConfirmPasswordSchema.safeParse(data);
+
+    if (!result.success) {
+        const errors = result.error.flatten().fieldErrors;
+        console.log("Validation errors:", errors);
+        return { error: "Invalid form submission" };
     }
 
-    return encodedRedirect(
-        "success",
-        "/forgot-password",
-        "Check your email for a link to reset your password.",
-    );
-};
+    const { password } = result.data;
 
-export const resetPasswordAction = async (formData: FormData) => {
     const supabase = await supabaseServerClient();
-
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
-
-    if (!password || !confirmPassword) {
-        encodedRedirect(
-            "error",
-            "/protected/reset-password",
-            "Password and confirm password are required",
-        );
-    }
-
-    if (password !== confirmPassword) {
-        encodedRedirect(
-            "error",
-            "/protected/reset-password",
-            "Passwords do not match",
-        );
-    }
 
     const { error } = await supabase.auth.updateUser({
         password: password,
     });
 
     if (error) {
-        encodedRedirect(
-            "error",
-            "/protected/reset-password",
-            "Password update failed",
-        );
+        return { error: "Password update failed", details: error.message };
     }
 
-    encodedRedirect("success", "/protected/reset-password", "Password updated");
-};
+    return { success: "Password updated" };
+}
 
 export const signOutAction = async () => {
     const supabase = await supabaseServerClient();
