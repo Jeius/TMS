@@ -1,0 +1,1 @@
+export const AUTHROUTES = ['/login', '/signup'];
