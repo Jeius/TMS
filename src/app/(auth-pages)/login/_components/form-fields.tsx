@@ -57,7 +57,7 @@ export function PasswordField({ formControl, name, label }: FormFieldProps) {
                                 variant="ghost"
                                 type="button"
                                 aria-label={showPassword ? "Hide Password" : "Show Password"}
-                                className="p-1.5 rounded-full size-fit text-muted"
+                                className="p-1.5 rounded-full size-fit text-muted-foreground"
                                 onClick={() => setShowPassword((prev) => !prev)}
                             >
                                 {showPassword ? <EyeClosedIcon aria-hidden="true" /> : <EyeOpenIcon aria-hidden="true" />}

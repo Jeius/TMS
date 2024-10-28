@@ -39,13 +39,18 @@ export default async function AppHeader() {
                     </div>
                     <div className="flex items-center space-x-2 pl-2">
                         <SearchBar />
-                        <NotificationMenu />
+                        {user && <NotificationMenu />}
                         {user ? (
                             <UserMenu />
                         ) : (
-                            <Button asChild>
-                                <Link href="/login">Login</Link>
-                            </Button>
+                            <div className="flex items-center sm:pl-5 space-x-2">
+                                <Button variant="outline" size="sm" asChild>
+                                    <Link href="/login?signUp=true">Sign up</Link>
+                                </Button>
+                                <Button asChild>
+                                    <Link href="/login">Sign in</Link>
+                                </Button>
+                            </div>
                         )}
                     </div>
                 </div>

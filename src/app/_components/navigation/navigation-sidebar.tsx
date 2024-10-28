@@ -1,19 +1,16 @@
 "use client";
 
+import { AUTHROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import NavigationItems from "./navigation-items";
 
-const AUTHROUTES = ['/login', '/signup'];
-
 export default function NavigationSideBar() {
-    const pathname = usePathname()
     const [open, setOpen] = useState(false);
     const width = open ? 240 : 64;
-
-    // Check if current route is an auth route
+    const pathname = usePathname()
     const isAuthRoute = AUTHROUTES.includes(pathname);
 
     return (

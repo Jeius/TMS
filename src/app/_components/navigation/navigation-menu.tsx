@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { AUTHROUTES } from "@/lib/constants";
 import { Menu } from "lucide-react";
 import Image from 'next/image';
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import NavigationItems from "./navigation-items";
 
@@ -38,26 +40,30 @@ const MenuButton = () => (
 
 export default function NavigationMenu() {
     const [open, setOpen] = useState(false);
+    const pathname = usePathname()
+    const isAuthRoute = AUTHROUTES.includes(pathname);
 
     return (
-        <div id="navigation-menu" className="block lg:hidden">
-            <Sheet open={open} onOpenChange={setOpen}>
-                <MenuButton />
-                <SheetContent
-                    onCloseAutoFocus={(e) => e.preventDefault()}
-                    className="flex flex-col w-64 sm:w-72 z-[110]"
-                    side="left"
-                    aria-describedby={undefined}
-                >
-                    <SheetHeader>
-                        <LogoTitle />
-                    </SheetHeader>
+        !isAuthRoute && (
+            <div id="navigation-menu" className="block lg:hidden">
+                <Sheet open={open} onOpenChange={setOpen}>
+                    <MenuButton />
+                    <SheetContent
+                        onCloseAutoFocus={(e) => e.preventDefault()}
+                        className="flex flex-col w-64 sm:w-72 z-[110]"
+                        side="left"
+                        aria-describedby={undefined}
+                    >
+                        <SheetHeader>
+                            <LogoTitle />
+                        </SheetHeader>
 
-                    <div className="grow w-full overflow-y-auto">
-                        <NavigationItems open={open} onOpenChanged={setOpen} />
-                    </div>
-                </SheetContent>
-            </Sheet>
-        </div>
+                        <div className="grow w-full overflow-y-auto">
+                            <NavigationItems open={open} onOpenChanged={setOpen} />
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        )
     );
 }

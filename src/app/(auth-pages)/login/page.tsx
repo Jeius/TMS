@@ -28,6 +28,12 @@ function SignInTab() {
         <>
             <CardHeader>
                 <h1 className="text-2xl font-medium">Sign In</h1>
+                <p className="text-sm text text-foreground">
+                    Don't have an account?{" "}
+                    <Link className="text-secondary font-medium underline" href="/login?signUp=true">
+                        Sign up
+                    </Link>
+                </p>
             </CardHeader>
             <CardContent>
                 <SignIn />
