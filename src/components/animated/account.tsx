@@ -18,7 +18,7 @@ export function Account({ firstTab, secondTab }: {
         } else {
             currentParams.delete('signUp');
         }
-        router.push(`?${currentParams.toString()}`);
+        router.replace(`?${currentParams.toString()}`);
     };
 
     return (

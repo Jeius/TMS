@@ -31,7 +31,7 @@ export async function signUpAction(data: z.infer<typeof SignUpSchema>): Promise<
     } else {
         return {
             success: 'Signed up successfully',
-            details: `Please verify your account via the confirmation link sent to ${email}.`
+            details: `Please verify your account! Confirmation link was sent to "${email}".`
         };
     }
 }

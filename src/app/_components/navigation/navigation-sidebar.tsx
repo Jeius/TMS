@@ -1,6 +1,6 @@
 'use client';
 
-import { AUTHROUTES } from '@/lib/constants';
+import { NAVIGATIONROUTES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -11,10 +11,10 @@ export default function NavigationSideBar() {
     const [open, setOpen] = useState(false);
     const width = open ? 240 : 64;
     const pathname = usePathname()
-    const isAuthRoute = AUTHROUTES.includes(pathname);
+    const isNavigationRoute = Object.values(NAVIGATIONROUTES).includes(pathname);
 
     return (
-        !isAuthRoute && (
+        isNavigationRoute && (
             <motion.div
                 id="navigation-sidebar"
                 className={cn(

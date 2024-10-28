@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { AUTHROUTES } from '@/lib/constants';
+import { NAVIGATIONROUTES } from '@/lib/constants';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -41,10 +41,10 @@ const MenuButton = () => (
 export default function NavigationMenu() {
     const [open, setOpen] = useState(false);
     const pathname = usePathname()
-    const isAuthRoute = AUTHROUTES.includes(pathname);
+    const isNavigationRoute = Object.values(NAVIGATIONROUTES).includes(pathname);
 
     return (
-        !isAuthRoute && (
+        isNavigationRoute && (
             <div id="navigation-menu" className="block lg:hidden">
                 <Sheet open={open} onOpenChange={setOpen}>
                     <MenuButton />
