@@ -35,7 +35,8 @@ export default function SignIn() {
         if (result.success) {
             setStatus('success');
             setMessage({ success: result.details ?? result.success })
-            router.push('/');
+            await wait(500);
+            router.back();
         } else {
             setStatus('failed');
             setMessage({ error: result.details ?? result.error })
@@ -59,8 +60,8 @@ export default function SignIn() {
             <form onSubmit={form.handleSubmit(onSubmit)}
                 className="flex flex-col w-full justify-center space-y-8 mx-auto"
             >
-                <EmailField formControl={form.control} name="email" label="Email" />
-                <PasswordField formControl={form.control} name="password" label="Password" />
+                <EmailField control={form.control} name="email" label="Email" />
+                <PasswordField control={form.control} name="password" label="Password" />
                 <Button variant="link" size="sm" className="text-muted-foreground w-fit p-0 hover:text-foreground hover:no-underline" asChild>
                     <Link href="/forgot-password">Forgot password</Link>
                 </Button>

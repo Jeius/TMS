@@ -3,41 +3,52 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { Control } from 'react-hook-form';
+import { Control, FieldValues, Path } from 'react-hook-form';
 
-type FormFieldProps = {
-    formControl: Control<any>
-    name: string
-    label: string
+type FormFieldProps<TFieldValues extends FieldValues, TName extends Path<TFieldValues>> = {
+    control: Control<TFieldValues>; // Ensure control is required here
+    name: TName;
+    label: string;
+};
+
+export function EmailField<TFieldValues extends FieldValues, TName extends Path<TFieldValues>>({
+    label,
+    control,
+    name,
+}: FormFieldProps<TFieldValues, TName>) {
+    return (
+        <FormField
+            control={control}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>{label}</FormLabel>
+                    <FormControl>
+                        <Input
+                            placeholder="name@example.com"
+                            className="bg-card"
+                            autoComplete="email"
+                            required
+                            {...field}
+                        />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+        />
+    );
 }
 
-export function EmailField({ formControl, name, label }: FormFieldProps) {
-    return <FormField
-        control={formControl}
-        name={name}
-        render={({ field }) => (
-            <FormItem>
-                <FormLabel>{label}</FormLabel>
-                <FormControl>
-                    <Input
-                        placeholder="name@example.com"
-                        className="bg-card"
-                        autoComplete="email"
-                        required
-                        {...field}
-                    />
-                </FormControl>
-                <FormMessage />
-            </FormItem>
-        )} />;
-}
-
-export function PasswordField({ formControl, name, label }: FormFieldProps) {
+export function PasswordField<TFieldValues extends FieldValues, TName extends Path<TFieldValues>>({
+    label,
+    control,
+    name,
+}: FormFieldProps<TFieldValues, TName>) {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <FormField
-            control={formControl}
+            control={control}
             name={name}
             render={({ field }) => (
                 <FormItem>

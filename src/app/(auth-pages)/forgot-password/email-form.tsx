@@ -54,7 +54,7 @@ export default function EmailForm() {
             <form onSubmit={form.handleSubmit(onSubmit)}
                 className="flex flex-col w-full justify-center space-y-8 mx-auto"
             >
-                <EmailField formControl={form.control} name="email" label="Email" />
+                <EmailField control={form.control} name="email" label="Email" />
                 {message && <FormBanner message={message} />}
                 <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Submit</SubmitButton>
             </form>

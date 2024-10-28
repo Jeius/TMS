@@ -60,9 +60,9 @@ export default function SignUp() {
             <form onSubmit={form.handleSubmit(onSubmit)}
                 className="flex flex-col justify-center space-y-8 mx-auto"
             >
-                <EmailField formControl={form.control} name="email" label="Email" />
-                <PasswordField formControl={form.control} name="password" label="Password" />
-                <PasswordField formControl={form.control} name="confirmPassword" label="Confirm Password" />
+                <EmailField control={form.control} name="email" label="Email" />
+                <PasswordField control={form.control} name="password" label="Password" />
+                <PasswordField control={form.control} name="confirmPassword" label="Confirm Password" />
                 {message && <FormBanner message={message} />}
                 <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Sign Up</SubmitButton>
             </form>

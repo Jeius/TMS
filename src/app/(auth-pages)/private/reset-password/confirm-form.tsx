@@ -57,8 +57,8 @@ export default function ConfirmForm() {
                     <form onSubmit={form.handleSubmit(onSubmit)}
                         className="flex flex-col w-full justify-center space-y-8 mx-auto"
                     >
-                        <PasswordField formControl={form.control} name="password" label="New Password" />
-                        <PasswordField formControl={form.control} name="confirmPassword" label="Confirm New Password" />
+                        <PasswordField control={form.control} name="password" label="New Password" />
+                        <PasswordField control={form.control} name="confirmPassword" label="Confirm New Password" />
                         {message && <FormBanner message={message} />}
                         <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Submit</SubmitButton>
                     </form>
