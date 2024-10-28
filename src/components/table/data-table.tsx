@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import React from "react"
-import { cn } from "@/lib/utils"
-import { ScrollArea, ScrollBar } from "../ui/scroll-area"
-import { DataTablePagination } from "./pagination"
-import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "./column-toggle"
+import React from 'react'
+import { cn } from '@/lib/utils'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
+import { DataTablePagination } from './pagination'
+import { Input } from '@/components/ui/input'
+import { DataTableViewOptions } from './column-toggle'
 
 import {
     ColumnDef,
@@ -18,7 +18,7 @@ import {
     SortingState,
     useReactTable,
     VisibilityState,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table'
 
 import {
     Table,
@@ -27,7 +27,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table'
 
 
 interface DataTableProps<TData, TValue> {
@@ -77,16 +77,16 @@ export function DataTable<TData, TValue>({
                     <div className="flex items-center py-4">
                         <Input
                             placeholder="Filter by keywords..."
-                            value={(table.getColumn("specialization")?.getFilterValue() as string[]) ?? ""}
+                            value={(table.getColumn('specialization')?.getFilterValue() as string[]) ?? ''}
                             onChange={(event) =>
-                                table.getColumn("specialization")?.setFilterValue(event.target.value)
+                                table.getColumn('specialization')?.setFilterValue(event.target.value)
                             }
                             className="max-w-sm"
                         />
                     </div>}
                 {showVisibilityToogle && <DataTableViewOptions table={table} />}
             </div>
-            <ScrollArea className={cn("rounded-md border mx-auto mb-3 w-full", classname)}>
+            <ScrollArea className={cn('rounded-md border mx-auto mb-3 w-full', classname)}>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -111,7 +111,7 @@ export function DataTable<TData, TValue>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
+                                    data-state={row.getIsSelected() && 'selected'}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

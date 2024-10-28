@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
     Card,
     CardContent,
@@ -8,13 +8,13 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card'
 import {
     ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
-} from "@/components/ui/chart"
+} from '@/components/ui/chart'
 import {
     Area,
     AreaChart,
@@ -24,7 +24,7 @@ import {
     LabelList,
     XAxis,
     YAxis
-} from "recharts"
+} from 'recharts'
 
 
 const chartData = [
@@ -43,8 +43,8 @@ const chartData = [
 
 const chartConfig = {
     theses: {
-        label: "Theses",
-        color: "hsl(var(--chart-1))",
+        label: 'Theses',
+        color: 'hsl(var(--chart-1))',
     },
 } satisfies ChartConfig
 

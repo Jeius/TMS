@@ -1,44 +1,44 @@
-"use client"
-import { ColumnDef } from "@tanstack/react-table"
+'use client'
+import { ColumnDef } from '@tanstack/react-table'
 
 export type Activity = {
     id: string
     title: string
     author: string[]
-    action: "Uploaded" | "Updated" | "Approved" | "Borrowed"
+    action: 'Uploaded' | 'Updated' | 'Approved' | 'Borrowed'
     age: string
 }
 
 export const columns: ColumnDef<Activity>[] = [
     {
-        accessorKey: "action",
-        header: "",
+        accessorKey: 'action',
+        header: '',
         cell: ({ row }) => {
-            const value = row.getValue("action") as string
+            const value = row.getValue('action') as string
             return (<div className="border rounded-md py-1 px-2 w-fit bg-background">{value}</div>)
         }
     },
     {
-        accessorKey: "title",
-        header: "Title",
+        accessorKey: 'title',
+        header: 'Title',
         cell: ({ row }) => {
-            const value = row.getValue("title") as string
+            const value = row.getValue('title') as string
             return (<div className="max-w-64 truncate">{value}</div>)
         }
     },
     {
-        accessorKey: "author",
-        header: "Author",
+        accessorKey: 'author',
+        header: 'Author',
         cell: ({ row }) => {
-            const value = row.getValue("author") as string[]
-            return (<div className="whitespace-nowrap">{value.join(", ")}</div>)
+            const value = row.getValue('author') as string[]
+            return (<div className="whitespace-nowrap">{value.join(', ')}</div>)
         }
     },
     {
-        accessorKey: "age",
-        header: "",
+        accessorKey: 'age',
+        header: '',
         cell: ({ row }) => {
-            const value = row.getValue("age") as string
+            const value = row.getValue('age') as string
             return (<div className="whitespace-nowrap">{value} ago</div>)
         }
     }

@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -10,15 +10,15 @@ export const Screens: { [value: string]: number } = {
   md: 768,
   lg: 1024,
   xl: 1280,
-  "2xl": 1536,
+  '2xl': 1536,
 }
 
 export function booleanToString(value: boolean) {
-  return value ? "true" : "false";
+  return value ? 'true' : 'false';
 }
 
 export function stringToBoolean(value?: string | null) {
-  return value?.toLowerCase() === "true";
+  return value?.toLowerCase() === 'true';
 }
 
 export async function wait(ms: number) {

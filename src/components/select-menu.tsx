@@ -7,9 +7,9 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
-import React from "react";
-import { Separator } from "./ui/separator";
+} from '@/components/ui/select';
+import React from 'react';
+import { Separator } from './ui/separator';
 
 type SelectMenuItem = {
     value: string;
@@ -29,8 +29,8 @@ const SelectMenu = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof SelectTrigger> & SelectMenuProps
 >(({
     items = [],
-    defaultValue = "",
-    placeholder = "Select item..",
+    defaultValue = '',
+    placeholder = 'Select item..',
     title,
     onValueChanged = () => { }
 }, ref) => (
@@ -59,7 +59,7 @@ const SelectMenu = React.forwardRef<
     </Select>
 ))
 
-SelectMenu.displayName = "SelectMenu";
+SelectMenu.displayName = 'SelectMenu';
 
 export { SelectMenu };
 export type { SelectMenuItem };

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useDynamicWidth } from '@/lib/hooks/use-dynamic-width'
@@ -14,9 +14,9 @@ import WelcomeCard from './welcome-card'
 export default function DashBoard() {
     const [sideBarWidth, sideBarRef] = useDynamicWidth();
     const { height: windowHeight } = useWindowSize();
-    const headerRect = useElementRect("app-header");
+    const headerRect = useElementRect('app-header');
 
-    const [sideBarHeight, setSideBarHeight] = useState<number | "auto">("auto");
+    const [sideBarHeight, setSideBarHeight] = useState<number | 'auto'>('auto');
     const [sideBarTop, setSideBarTop] = useState<number>();
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export default function DashBoard() {
             <motion.aside ref={sideBarRef} id="sidebar" className="fixed pt-5 pr-1 hidden lg:block"
                 initial={{ top: 58, right: -30, opacity: 0 }}
                 animate={{ top: sideBarTop, height: sideBarHeight, right: 0, opacity: 1 }}
-                transition={{ type: "tween", duration: 0.25, delay: 0.3 }}
+                transition={{ type: 'tween', duration: 0.25, delay: 0.3 }}
             >
                 <ScrollArea id="sidebar-scroll-area" className="h-full pr-3">
                     <div className="flex flex-col space-y-5 pb-5">

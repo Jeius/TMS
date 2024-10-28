@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from 'zod';
 
 export type Thesis = {
     id: string
@@ -27,31 +27,31 @@ export type Message =
     | { error?: string };
 
 export const EmailSchema = z.object({
-    email: z.string().email("Invalid email address"),
+    email: z.string().email('Invalid email address'),
 });
 
 export const ConfirmPasswordSchema = z
     .object({
-        password: z.string().min(8, "Password must be at least 8 characters long"),
+        password: z.string().min(8, 'Password must be at least 8 characters long'),
         confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        path: ["confirmPassword"],
-        message: "Passwords do not match",
+        path: ['confirmPassword'],
+        message: 'Passwords do not match',
     });
 
 export const SignUpSchema = z
     .object({
-        email: z.string().email("Invalid email address"),
-        password: z.string().min(8, "Password must be at least 8 characters long"),
+        email: z.string().email('Invalid email address'),
+        password: z.string().min(8, 'Password must be at least 8 characters long'),
         confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        path: ["confirmPassword"],
-        message: "Passwords do not match",
+        path: ['confirmPassword'],
+        message: 'Passwords do not match',
     });
 
 export const SignInSchema = z.object({
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(8, 'Password must be at least 8 characters long'),
 });

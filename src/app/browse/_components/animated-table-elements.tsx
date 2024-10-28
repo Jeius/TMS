@@ -56,12 +56,12 @@ export function AnimatedTableCell<TData>({ row, scrollState, firstColumnId }: An
                         initial={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, y: 30 }}
-                        transition={{ type: "spring", bounce: 0.2 }}
+                        transition={{ type: 'spring', bounce: 0.2 }}
                         scope="col"
                         data-column-id={cell.column.id}
-                        data-state={row.getIsSelected() && "selected"}
-                        data-scroll-state={scrollState.left.isScrolled && "scrolled"}
-                        className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? "md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right" : ""}`}
+                        data-state={row.getIsSelected() && 'selected'}
+                        data-scroll-state={scrollState.left.isScrolled && 'scrolled'}
+                        className={`left-0 align-top border-b p-4 overflow-hidden bg-card data-[state=selected]:bg-accent transition-colors ${isFirstColumn ? 'md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right' : ''}`}
                     >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>

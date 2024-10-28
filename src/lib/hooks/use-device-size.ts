@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export const useDeviceSize = () => {
     const [deviceSize, setDeviceSize] = React.useState({ width: 0, height: 0 });

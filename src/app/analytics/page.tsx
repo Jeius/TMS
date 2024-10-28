@@ -17,35 +17,35 @@ type Props = {
 const getStatistics = (): Statistic[] => {
   return [
     {
-      title: "Total Approved Theses",
+      title: 'Total Approved Theses',
       value: 525,
       icon: <Book className="size-4" />,
-      description: "Archived at the department"
+      description: 'Archived at the department'
     },
     {
-      title: "Borrowed",
+      title: 'Borrowed',
       value: 325,
       icon: <BookUp2Icon className="size-4" />,
-      description: "Total theses borrowed"
+      description: 'Total theses borrowed'
     },
     {
-      title: "Approved Proposals",
+      title: 'Approved Proposals',
       symbol: <strong>+</strong>,
       value: 143,
       icon: <BookOpenCheckIcon className="size-4" />,
-      description: "+16% from last school year"
+      description: '+16% from last school year'
     },
     {
-      title: "Uploaded",
+      title: 'Uploaded',
       symbol: <strong>+</strong>,
       value: 150,
       icon: <BookPlusIcon className="size-4" />,
-      description: "+20% from last school year"
+      description: '+20% from last school year'
     }
   ]
 }
 
-const FILTERS = ["college", "department"];
+const FILTERS = ['college', 'department'];
 
 export default async function Analytics() {
   const statistics = getStatistics()

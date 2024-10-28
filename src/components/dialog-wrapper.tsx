@@ -1,5 +1,5 @@
-import useWindowSize from "@/lib/hooks/use-window-size";
-import React from "react";
+import useWindowSize from '@/lib/hooks/use-window-size';
+import React from 'react';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,7 +10,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger
-} from "./ui/alert-dialog";
+} from './ui/alert-dialog';
 
 type AlertDialogWrapperProps = {
     dialogTitle?: string;
@@ -22,10 +22,10 @@ type AlertDialogWrapperProps = {
 };
 
 export default function AlertDialogWrapper({
-    dialogTitle = "Confirm Action",
-    dialogDescription = "This action cannot be undone. Are you sure you want to proceed?",
-    confirmLabel = "Yes",
-    cancelLabel = "No",
+    dialogTitle = 'Confirm Action',
+    dialogDescription = 'This action cannot be undone. Are you sure you want to proceed?',
+    confirmLabel = 'Yes',
+    cancelLabel = 'No',
     onConfirm,
     children,
 }: AlertDialogWrapperProps) {

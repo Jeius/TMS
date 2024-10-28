@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import ConfirmForm from "./confirm-form";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import ConfirmForm from './confirm-form';
 
 export default function ForgotPassword() {
     return (

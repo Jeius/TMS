@@ -1,7 +1,7 @@
 
-import { Button } from "@/components/ui/button";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { supabaseServerClient } from "@/lib/supabase/server";
+import { Button } from '@/components/ui/button';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { supabaseServerClient } from '@/lib/supabase/server';
 import Image from 'next/image';
 import Link from 'next/link';
 import NavigationMenu from '../navigation/navigation-menu';
@@ -28,7 +28,7 @@ export default async function AppHeader() {
                             className="flex items-center space-x-2 font-semibold text-lg w-fit"
                         >
                             <Image
-                                src={`/images/msuiit-logo-275x280.png`}
+                                src={'/images/msuiit-logo-275x280.png'}
                                 alt="MSU-IIT"
                                 width={40}
                                 height={40}

@@ -4,7 +4,7 @@ import { Table } from '@tanstack/react-table';
 import { Plus } from 'lucide-react';
 
 export function VisibilityColumn<TData>({ table }: { table: Table<TData> }) {
-    const columns = table.getAllColumns().filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible());
+    const columns = table.getAllColumns().filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide() && !column.getIsVisible());
     return (
         <div className="p-2 sm:w-full sm:max-w-xs min-w-[210px] lg:min-w-[280px]">
             <div className="py-3 px-4 font-semibold">
@@ -29,7 +29,7 @@ export function VisibilityColumn<TData>({ table }: { table: Table<TData> }) {
 }
 
 export function VisibilityMenu<TData>({ table }: { table: Table<TData> }) {
-    const columns = table.getAllColumns().filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide() && !column.getIsVisible());
+    const columns = table.getAllColumns().filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide() && !column.getIsVisible());
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

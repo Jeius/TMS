@@ -1,14 +1,14 @@
-"use client"
+'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Skeleton } from "@/components/ui/skeleton";
-import { TooltipWrapper } from "@/components/ui/tooltip";
-import { signOutAction } from "@/server/actions/auth";
-import { accountLinks } from "@/utils/data/test/navigation-links";
-import { LogOutIcon } from "lucide-react";
-import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Skeleton } from '@/components/ui/skeleton';
+import { TooltipWrapper } from '@/components/ui/tooltip';
+import { signOutAction } from '@/server/actions/auth';
+import { accountLinks } from '@/utils/data/test/navigation-links';
+import { LogOutIcon } from 'lucide-react';
+import Link from 'next/link';
 
 export default function UserMenu() {
     return (

@@ -1,7 +1,7 @@
-import BlurryBlob from "@/components/ui/blurry-blob";
-import { getFilters } from "@/server/actions/filters";
-import { getTheses } from "@/server/actions/theses";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import BlurryBlob from '@/components/ui/blurry-blob';
+import { getFilters } from '@/server/actions/filters';
+import { getTheses } from '@/server/actions/theses';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import ThesesTable from './_components/theses-table';
 
 
@@ -10,7 +10,7 @@ export default async function Browse() {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
-        queryKey: ["filters"],
+        queryKey: ['filters'],
         queryFn: getFilters,
     });
 
@@ -26,7 +26,7 @@ export default async function Browse() {
                 <div className="fixed left-0 bottom-0 -rotate-12">
                     <BlurryBlob className="size-40" firstBlobColor="bg-secondary" secondBlobColor="bg-primary" />
                 </div>
-                <div style={{ minHeight: "calc(-110px + 100vh)" }}>
+                <div style={{ minHeight: 'calc(-110px + 100vh)' }}>
                     <div className="mb-28 h-full">
                         <HydrationBoundary state={dehydrate(queryClient)}>
                             <ThesesTable data={theses} />

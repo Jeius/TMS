@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { AUTHROUTES } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import NavigationItems from "./navigation-items";
+import { AUTHROUTES } from '@/lib/constants';
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import NavigationItems from './navigation-items';
 
 export default function NavigationSideBar() {
     const [open, setOpen] = useState(false);
@@ -18,14 +18,14 @@ export default function NavigationSideBar() {
             <motion.div
                 id="navigation-sidebar"
                 className={cn(
-                    "fixed z-10 inset-y-0 left-0 hidden lg:block border-r bg-card/60",
-                    "backdrop-blur-lg shadow-md pb-10 pt-20 px-3 w-[64px]"
+                    'fixed z-10 inset-y-0 left-0 hidden lg:block border-r bg-card/60',
+                    'backdrop-blur-lg shadow-md pb-10 pt-20 px-3 w-[64px]'
                 )}
                 initial={{ x: -60, opacity: 0 }}
                 animate={{ width: width, x: 0, opacity: 1 }}
                 transition={{
-                    type: "spring", duration: 0.2,
-                    x: { type: "spring", duration: 0.4 },
+                    type: 'spring', duration: 0.2,
+                    x: { type: 'spring', duration: 0.4 },
                 }}
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}

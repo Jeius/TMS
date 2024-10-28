@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
 import ThesesTableContent from '@/app/browse/_components/table-content'
 import TableHeader from '@/app/browse/_components/table-header'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { Thesis } from "@/lib/types"
+import { Thesis } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -16,7 +16,7 @@ import {
     SortingState,
     useReactTable,
     VisibilityState,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table'
 import { FileStackIcon } from 'lucide-react'
 import React, { Suspense } from 'react'
 import { columns } from './table-columns'
@@ -28,7 +28,7 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({ author: false, year: false, department: false, dateUploaded: false });
 
-    const { data: width = "auto" } = useQuery<string>({ queryKey: ["tableWidth"] })
+    const { data: width = 'auto' } = useQuery<string>({ queryKey: ['tableWidth'] })
 
     // React Table instance setup
     const table = useReactTable({
@@ -46,7 +46,7 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
 
     return (
         <TooltipProvider>
-            <div id="theses-table" className={cn("relative", className)} {...props}>
+            <div id="theses-table" className={cn('relative', className)} {...props}>
                 <div className="flex flex-col m-auto bg-card/70 dark:bg-card/80 backdrop-blur-md shadow border rounded-xl max-w-fit overflow-hidden">
                     <Suspense>
                         <TableHeader table={table} style={{ maxWidth: width }} />

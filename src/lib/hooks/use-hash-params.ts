@@ -1,6 +1,6 @@
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type HashParams = { [key: string]: string };
 

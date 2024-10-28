@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
-import { Control } from "react-hook-form";
+import { Button } from '@/components/ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
+import { Control } from 'react-hook-form';
 
 type FormFieldProps = {
     formControl: Control<any>
@@ -45,7 +45,7 @@ export function PasswordField({ formControl, name, label }: FormFieldProps) {
                     <div className="relative">
                         <FormControl>
                             <Input
-                                type={showPassword ? "text" : "password"}
+                                type={showPassword ? 'text' : 'password'}
                                 placeholder="your password"
                                 className="bg-card"
                                 required
@@ -56,7 +56,7 @@ export function PasswordField({ formControl, name, label }: FormFieldProps) {
                             <Button
                                 variant="ghost"
                                 type="button"
-                                aria-label={showPassword ? "Hide Password" : "Show Password"}
+                                aria-label={showPassword ? 'Hide Password' : 'Show Password'}
                                 className="p-1.5 rounded-full size-fit text-muted-foreground"
                                 onClick={() => setShowPassword((prev) => !prev)}
                             >

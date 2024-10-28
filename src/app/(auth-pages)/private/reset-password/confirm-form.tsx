@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import SubmitButton, { Status } from '@/components/animated/submit-button';
 import { FormBanner } from '@/components/form/form-banner';
@@ -22,32 +22,32 @@ export default function ConfirmForm() {
 
     const form = useForm<z.infer<typeof ConfirmPasswordSchema>>({
         resolver: zodResolver(ConfirmPasswordSchema),
-        defaultValues: { password: "", confirmPassword: "" }
+        defaultValues: { password: '', confirmPassword: '' }
     });
 
     const onSubmit = async (data: z.infer<typeof ConfirmPasswordSchema>) => {
-        setStatus("loading");
+        setStatus('loading');
         const result = await resetPasswordAction(data);
 
         if (result.success) {
-            setStatus("success");
+            setStatus('success');
             setMessage({ success: result.details ?? result.success });
             router.back();
         } else {
-            setStatus("failed");
+            setStatus('failed');
             setMessage({ error: result.details ?? result.error });
         }
     };
 
-    const passwordValue = form.watch("password");
-    const confirmPasswordValue = form.watch("confirmPassword");
+    const passwordValue = form.watch('password');
+    const confirmPasswordValue = form.watch('confirmPassword');
 
     useEffect(() => {
-        if (form.getFieldState("password").isTouched || form.getFieldState("confirmPassword").isTouched) {
+        if (form.getFieldState('password').isTouched || form.getFieldState('confirmPassword').isTouched) {
             setStatus(undefined);
             setMessage(undefined);
         }
-    }, [passwordValue, confirmPasswordValue]);
+    }, [passwordValue, confirmPasswordValue, form]);
 
     return (
         error

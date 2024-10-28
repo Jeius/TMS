@@ -1,9 +1,9 @@
-import { Account } from "@/components/animated/account";
-import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
-import { supabaseServerClient } from "@/lib/supabase/server";
-import Link from "next/link";
-import SignIn from "./_components/sign-in";
-import SignUp from "./_components/sign-up";
+import { Account } from '@/components/animated/account';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
+import { supabaseServerClient } from '@/lib/supabase/server';
+import Link from 'next/link';
+import SignIn from './_components/sign-in';
+import SignUp from './_components/sign-up';
 
 function SignUpTab() {
     return (
@@ -11,7 +11,7 @@ function SignUpTab() {
             <CardHeader>
                 <h1 className="text-2xl font-medium">Sign Up</h1>
                 <p className="text-sm text text-foreground">
-                    Already have an account?{" "}
+                    Already have an account?{' '}
                     <Link className="text-secondary font-medium underline" href="/login">
                         Sign in
                     </Link>
@@ -30,7 +30,7 @@ function SignInTab() {
             <CardHeader>
                 <h1 className="text-2xl font-medium">Sign In</h1>
                 <p className="text-sm text text-foreground">
-                    Don't have an account?{" "}
+                    Don`&apos;`t have an account?{' '}
                     <Link className="text-secondary font-medium underline" href="/login?signUp=true">
                         Sign up
                     </Link>

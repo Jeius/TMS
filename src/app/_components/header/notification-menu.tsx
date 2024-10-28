@@ -1,28 +1,28 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { TooltipWrapper } from "@/components/ui/tooltip";
-import { Bell } from "lucide-react";
-import Link from "next/link";
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { TooltipWrapper } from '@/components/ui/tooltip';
+import { Bell } from 'lucide-react';
+import Link from 'next/link';
 
 const notifications = [
-    { href: "#", label: 'Notification 1' },
-    { href: "#", label: 'Notification 2' },
-    { href: "#", label: 'Notification 3' },
-    { href: "#", label: 'Notification 4' },
-    { href: "#", label: 'Notification 5' },
-    { href: "#", label: 'Notification 1' },
-    { href: "#", label: 'Notification 2' },
-    { href: "#", label: 'Notification 3' },
-    { href: "#", label: 'Notification 4' },
-    { href: "#", label: 'Notification 5' },
-    { href: "#", label: 'Notification 1' },
-    { href: "#", label: 'Notification 2' },
-    { href: "#", label: 'Notification 3' },
-    { href: "#", label: 'Notification 4' },
-    { href: "#", label: 'Notification 5' },
+    { href: '#', label: 'Notification 1' },
+    { href: '#', label: 'Notification 2' },
+    { href: '#', label: 'Notification 3' },
+    { href: '#', label: 'Notification 4' },
+    { href: '#', label: 'Notification 5' },
+    { href: '#', label: 'Notification 1' },
+    { href: '#', label: 'Notification 2' },
+    { href: '#', label: 'Notification 3' },
+    { href: '#', label: 'Notification 4' },
+    { href: '#', label: 'Notification 5' },
+    { href: '#', label: 'Notification 1' },
+    { href: '#', label: 'Notification 2' },
+    { href: '#', label: 'Notification 3' },
+    { href: '#', label: 'Notification 4' },
+    { href: '#', label: 'Notification 5' },
 ];
 
 export default function NotificationMenu() {

@@ -9,14 +9,14 @@ export function Account({ firstTab, secondTab }: {
 }) {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const currentTab = searchParams.get("signUp") === "true" ? 1 : 0;
+    const currentTab = searchParams.get('signUp') === 'true' ? 1 : 0;
 
     const setTabInURL = (tab: 0 | 1) => {
         const currentParams = new URLSearchParams(searchParams.toString());
         if (tab === 1) {
-            currentParams.set("signUp", "true");
+            currentParams.set('signUp', 'true');
         } else {
-            currentParams.delete("signUp");
+            currentParams.delete('signUp');
         }
         router.push(`?${currentParams.toString()}`);
     };
@@ -34,7 +34,7 @@ export function Account({ firstTab, secondTab }: {
                             initial={{ x: -80, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             exit={{ x: -80, opacity: 0 }}
-                            transition={{ type: "tween", duration: 0.2 }}
+                            transition={{ type: 'tween', duration: 0.2 }}
                         >
                             {firstTab}
                         </motion.div>
@@ -47,7 +47,7 @@ export function Account({ firstTab, secondTab }: {
                             initial={{ x: 80, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             exit={{ x: 80, opacity: 0 }}
-                            transition={{ type: "tween", duration: 0.2 }}
+                            transition={{ type: 'tween', duration: 0.2 }}
                         >
                             {secondTab}
                         </motion.div>
@@ -63,12 +63,12 @@ function Switch({ setTab, currentTab }: {
     currentTab: number;
 }) {
     return (
-        <div className={`relative flex w-full items-center py-1 rounded-lg text-foreground bg-muted`}>
+        <div className={'relative flex w-full items-center py-1 rounded-lg text-foreground bg-muted'}>
             <motion.div
                 transition={{ type: 'keyframes', duration: 0.15, ease: 'easeInOut' }}
                 animate={currentTab === 0 ? { x: 4 } : { x: '98%' }}
                 initial={currentTab === 0 ? { x: 4 } : { x: '98%' }}
-                className={`absolute h-5/6 w-1/2 rounded-md bg-card shadow-md`} />
+                className={'absolute h-5/6 w-1/2 rounded-md bg-card shadow-md'} />
             <button
                 onClick={() => setTab(0)}
                 className="z-10 h-9 w-full rounded-md text-center">

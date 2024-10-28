@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import SubmitButton, { Status } from '@/components/animated/submit-button';
 import { FormBanner } from '@/components/form/form-banner';
@@ -19,35 +19,35 @@ export default function EmailForm() {
 
     const form = useForm<z.infer<typeof EmailSchema>>({
         resolver: zodResolver(EmailSchema),
-        defaultValues: { email: "" }
+        defaultValues: { email: '' }
     });
 
     const onSubmit = async (data: z.infer<typeof EmailSchema>) => {
-        setStatus("loading");
+        setStatus('loading');
         const result = await forgotPasswordAction(data);
 
         if (result.success) {
-            setStatus("success");
+            setStatus('success');
             setMessage({ success: result.details ?? result.success });
             form.reset();
             await wait(2000);
             setStatus(undefined);
         } else {
-            setStatus("failed");
+            setStatus('failed');
             setMessage({ error: result.details ?? result.error });
             await wait(2000);
             setStatus(undefined);
         }
     };
 
-    const emailValue = form.watch("email");
+    const emailValue = form.watch('email');
 
     useEffect(() => {
-        if (form.getFieldState("email").isTouched) {
+        if (form.getFieldState('email').isTouched) {
             setStatus(undefined);
             setMessage(undefined);
         }
-    }, [emailValue]);
+    }, [emailValue, form]);
 
     return (
         <Form {...form}>

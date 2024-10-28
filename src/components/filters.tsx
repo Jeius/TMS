@@ -1,14 +1,14 @@
-"use client"
+'use client'
 
-import { booleanToString, stringToBoolean } from "@/lib/utils";
-import { fetchFilterValues } from "@/mock/actions/fetch-filters";
-import { getFilters } from "@/server/actions/filters";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Combobox } from "./combobox";
-import { Button } from "./ui/button";
+import { booleanToString, stringToBoolean } from '@/lib/utils';
+import { fetchFilterValues } from '@/mock/actions/fetch-filters';
+import { getFilters } from '@/server/actions/filters';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Combobox } from './combobox';
+import { Button } from './ui/button';
 
 type FiltersProps = {
     showInitial?: number
@@ -23,18 +23,18 @@ export default function Filters({
 }: FiltersProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [showMoreFilters, setShowMoreFilters] = useState(stringToBoolean(searchParams.get("moreFilters")));
+    const [showMoreFilters, setShowMoreFilters] = useState(stringToBoolean(searchParams.get('moreFilters')));
     const queryClient = useQueryClient()
 
     const { data: fetchedFilters = [] } = useQuery({
-        queryKey: ["filters"],
+        queryKey: ['filters'],
         queryFn: (!filters && (() => getFilters())) || (() => filters),
         refetchOnMount: true
     });
 
     const filtersWithDefaults = (filters ?? fetchedFilters).map(filter => ({
         key: filter,
-        value: searchParams.get(filter) ?? "",
+        value: searchParams.get(filter) ?? '',
     }));
 
     const initialFilters = filtersWithDefaults.slice(0, showInitial);
@@ -52,19 +52,19 @@ export default function Filters({
 
     const toggleMoreFilters = () => {
         setShowMoreFilters(prev => {
-            updateSearchParams("moreFilters", booleanToString(!prev));
+            updateSearchParams('moreFilters', booleanToString(!prev));
             return !prev;
         });
     };
 
     useEffect(() => {
-        queryClient.invalidateQueries({ queryKey: ["filters"] });
-    }, []);
+        queryClient.invalidateQueries({ queryKey: ['filters'] });
+    }, [queryClient]);
 
     return (
         <div className="flex gap-2 flex-wrap">
             {initialFilters.map(filter => (
-                <motion.div layout key={filter.key} transition={{ type: "tween" }}>
+                <motion.div layout key={filter.key} transition={{ type: 'tween' }}>
                     <Combobox
                         className="flex"
                         placeholder={filter.key}
@@ -81,7 +81,7 @@ export default function Filters({
                         initial={{ x: -60, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -60, opacity: 0 }}
-                        transition={{ type: "tween" }}
+                        transition={{ type: 'tween' }}
                     >
                         <Combobox
                             className="flex"
@@ -97,7 +97,7 @@ export default function Filters({
                 <motion.div layout
                     initial={{ x: -60, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ type: "tween" }}
+                    transition={{ type: 'tween' }}
                 >
                     <Button
                         variant="ghost"
@@ -105,7 +105,7 @@ export default function Filters({
                         className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
                         onClick={toggleMoreFilters}
                     >
-                        {showMoreFilters ? "Less filters" : "More filters"}
+                        {showMoreFilters ? 'Less filters' : 'More filters'}
                     </Button>
                 </motion.div>
             )}

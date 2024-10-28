@@ -1,19 +1,19 @@
-"use client"
+'use client'
 
-import SubmitButton, { Status } from "@/components/animated/submit-button";
-import { FormBanner } from "@/components/form/form-banner";
-import { EmailField, PasswordField } from "@/components/form/form-fields";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { Message, SignInSchema } from "@/lib/types";
-import { wait } from "@/lib/utils";
-import { signInAction } from "@/server/actions/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import SubmitButton, { Status } from '@/components/animated/submit-button';
+import { FormBanner } from '@/components/form/form-banner';
+import { EmailField, PasswordField } from '@/components/form/form-fields';
+import { Button } from '@/components/ui/button';
+import { Form } from '@/components/ui/form';
+import { Message, SignInSchema } from '@/lib/types';
+import { wait } from '@/lib/utils';
+import { signInAction } from '@/server/actions/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 export default function SignIn() {
     const [status, setStatus] = useState<Status | undefined>();
@@ -23,36 +23,36 @@ export default function SignIn() {
     const form = useForm<z.infer<typeof SignInSchema>>({
         resolver: zodResolver(SignInSchema),
         defaultValues: {
-            email: "",
-            password: "",
+            email: '',
+            password: '',
         },
     });
 
     const onSubmit = async (data: z.infer<typeof SignInSchema>) => {
-        setStatus("loading");
+        setStatus('loading');
         const result = await signInAction(data);
 
         if (result.success) {
-            setStatus("success");
+            setStatus('success');
             setMessage({ success: result.details ?? result.success })
-            router.push("/");
+            router.push('/');
         } else {
-            setStatus("failed");
+            setStatus('failed');
             setMessage({ error: result.details ?? result.error })
             await wait(2000);
             setStatus(undefined);
         }
     };
 
-    const emailValue = form.watch("email");
-    const passwordValue = form.watch("password");
+    const emailValue = form.watch('email');
+    const passwordValue = form.watch('password');
 
     useEffect(() => {
-        if (form.getFieldState("email").isTouched || form.getFieldState("password")) {
+        if (form.getFieldState('email').isTouched || form.getFieldState('password')) {
             setStatus(undefined);
             setMessage(undefined);
         }
-    }, [emailValue, passwordValue]);
+    }, [emailValue, passwordValue, form]);
 
     return (
         <Form {...form}>

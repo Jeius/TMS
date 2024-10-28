@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // Custom hook to track whether the component has mounted
 export function useIsMounted() {

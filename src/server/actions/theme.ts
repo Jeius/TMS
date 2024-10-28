@@ -1,12 +1,12 @@
-"use server"
+'use server'
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
 async function setThemeCookies(theme: string) {
-    cookies().set("theme", theme);
+    cookies().set('theme', theme);
 }
 async function deleteThemeCookies() {
-    cookies().delete("theme");
+    cookies().delete('theme');
 }
 
 export { deleteThemeCookies, setThemeCookies };

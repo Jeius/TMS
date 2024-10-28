@@ -1,13 +1,13 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { Thesis } from "@/lib/types"
-import { cn } from "@/lib/utils"
-import { ColumnDef, Row, Table } from "@tanstack/react-table"
-import { HTMLMotionProps, motion } from "framer-motion"
-import { Dot, X } from "lucide-react"
-import Link from "next/link"
+'use client'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Thesis } from '@/lib/types'
+import { cn } from '@/lib/utils'
+import { ColumnDef, Row, Table } from '@tanstack/react-table'
+import { HTMLMotionProps, motion } from 'framer-motion'
+import { Dot, X } from 'lucide-react'
+import Link from 'next/link'
 
 type ColumnsData = {
     accessorKey: string
@@ -16,13 +16,13 @@ type ColumnsData = {
 }
 
 const columnsData: ColumnsData[] = [
-    { accessorKey: "title", size: 500, isMainColumn: true },
-    { accessorKey: "author", size: 250 },
-    { accessorKey: "year", size: 100 },
-    { accessorKey: "adviser", size: 250 },
-    { accessorKey: "specialization", size: 300 },
-    { accessorKey: "department", size: 300 },
-    { accessorKey: "dateUploaded", size: 180 },
+    { accessorKey: 'title', size: 500, isMainColumn: true },
+    { accessorKey: 'author', size: 250 },
+    { accessorKey: 'year', size: 100 },
+    { accessorKey: 'adviser', size: 250 },
+    { accessorKey: 'specialization', size: 300 },
+    { accessorKey: 'department', size: 300 },
+    { accessorKey: 'dateUploaded', size: 180 },
 ];
 
 const createColumns = (columnsData: ColumnsData[]) => {
@@ -56,7 +56,7 @@ function MainColumnHeader<TData>({ table }: MainColumnHeaderProps<TData>) {
             <Checkbox id="theses"
                 checked={
                     table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                    (table.getIsSomePageRowsSelected() && 'indeterminate')
                 }
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                 className="ml-1"
@@ -72,10 +72,10 @@ function MainColumnHeader<TData>({ table }: MainColumnHeaderProps<TData>) {
 type MainColumnCellProps<TData> = { row: Row<TData> }
 
 function MainColumnCell<TData>({ row }: MainColumnCellProps<TData>) {
-    const title = row.getValue("title") as string
-    const author = row.getValue("author") as string
-    const year = row.getValue("year") as string
-    const department = row.getValue("department") as string
+    const title = row.getValue('title') as string
+    const author = row.getValue('author') as string
+    const year = row.getValue('year') as string
+    const department = row.getValue('department') as string
 
     return (
         <div className="flex">
@@ -87,7 +87,7 @@ function MainColumnCell<TData>({ row }: MainColumnCellProps<TData>) {
                 <Button variant="link" data-title={title} asChild
                     className="text-secondary size-fit text-base p-1 line-clamp-3 text-ellipsis font-bold"
                 >
-                    <Link href={"#"}>{title}</Link>
+                    <Link href={'#'}>{title}</Link>
                 </Button>
                 <div className="px-1 text-xs font-semibold" data-author-list={author}>
                     <span>{author}</span>
@@ -100,7 +100,7 @@ function MainColumnCell<TData>({ row }: MainColumnCellProps<TData>) {
     )
 }
 
-type ColumnCellProps<TData> = HTMLMotionProps<"div"> & {
+type ColumnCellProps<TData> = HTMLMotionProps<'div'> & {
     row: Row<TData>;
     accessorKey: string;
 }
@@ -110,7 +110,7 @@ function ColumnCell<TData>({ accessorKey, row, ...props }: ColumnCellProps<TData
         <motion.div
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{ type: "spring", bounce: 0.22 }}
+            transition={{ type: 'spring', bounce: 0.22 }}
             {...props}
         >
             {row.getValue(accessorKey)}
@@ -118,7 +118,7 @@ function ColumnCell<TData>({ accessorKey, row, ...props }: ColumnCellProps<TData
     )
 }
 
-type ColumnHeaderProps<TData> = HTMLMotionProps<"div"> & {
+type ColumnHeaderProps<TData> = HTMLMotionProps<'div'> & {
     table: Table<TData>;
     accessorKey: string;
     hideClose?: boolean;
@@ -128,14 +128,14 @@ function ColumnHeader<TData>({ accessorKey, table, hideClose = false, className,
     return (
         <Tooltip>
             <motion.div
-                className={cn("flex items-center justify-between space-x-2", className)}
+                className={cn('flex items-center justify-between space-x-2', className)}
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ type: "spring", bounce: 0.2 }}
+                transition={{ type: 'spring', bounce: 0.2 }}
                 {...props}
             >
                 <span className="capitalize">
-                    {accessorKey.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                    {accessorKey.replace(/([a-z])([A-Z])/g, '$1 $2')}
                 </span>
                 {!hideClose && (
                     <TooltipTrigger asChild>

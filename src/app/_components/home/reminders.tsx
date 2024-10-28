@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import AlertDialogWrapper from '@/components/dialog-wrapper'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card'
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from '@/components/ui/checkbox'
 import {
     Form,
     FormControl,
@@ -16,7 +16,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
+} from '@/components/ui/form'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -25,25 +25,25 @@ import {
     TooltipTrigger,
     TooltipWrapper
 } from '@/components/ui/tooltip'
-import { toast } from "@/lib/hooks/use-toast"
+import { toast } from '@/lib/hooks/use-toast'
 import { RemindersFormSchema } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { zodResolver } from "@hookform/resolvers/zod"
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion'
 import { ArrowLeft, CheckCheck, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { ControllerRenderProps, useForm } from "react-hook-form"
-import { z } from "zod"
+import { ControllerRenderProps, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 
 // Constant list of reminders, fetch from database
 const REMINDERS = [
-    { id: "reminder-1", label: "Reminder 1" },
-    { id: "reminder-2", label: "Reminder 2" },
-    { id: "reminder-3", label: "Reminder 3" },
-    { id: "reminder-4", label: "Reminder 4" },
-    { id: "reminder-5", label: "Reminder 5" },
+    { id: 'reminder-1', label: 'Reminder 1' },
+    { id: 'reminder-2', label: 'Reminder 2' },
+    { id: 'reminder-3', label: 'Reminder 3' },
+    { id: 'reminder-4', label: 'Reminder 4' },
+    { id: 'reminder-5', label: 'Reminder 5' },
 ] as const
 
 
@@ -58,20 +58,20 @@ function RemindersItems() {
     const [allChecked, setAllChecked] = useState(false)
 
     useEffect(() => {
-        const currentReminders = form.watch("reminders");
+        const currentReminders = form.watch('reminders');
         setAllChecked(currentReminders.length === REMINDERS.length);
     }, [form]);
 
 
     const handleMarkDone = () => {
-        const selectedReminders = form.getValues("reminders")
-        form.setValue("reminders", [])
-        showToast("Done", selectedReminders)
+        const selectedReminders = form.getValues('reminders')
+        form.setValue('reminders', [])
+        showToast('Done', selectedReminders)
     }
 
     const handleDeleteSelected = () => {
-        const selectedReminders = form.getValues("reminders")
-        showToast("Deleted", selectedReminders)
+        const selectedReminders = form.getValues('reminders')
+        showToast('Deleted', selectedReminders)
     }
 
     const showToast = (title: string, reminders: string[]) => {
@@ -85,7 +85,7 @@ function RemindersItems() {
                 ),
             })
         } else {
-            toast({ title: "No reminders selected" })
+            toast({ title: 'No reminders selected' })
         }
 
     }
@@ -93,14 +93,14 @@ function RemindersItems() {
     // Toggle select/unselect all reminders
     const toggleSelectAll = () => {
         const newReminders = allChecked ? [] : REMINDERS.map((reminder) => reminder.id)
-        form.setValue("reminders", newReminders)
+        form.setValue('reminders', newReminders)
     }
 
     function ReminderItem({ id, label }: { id: string; label: string }) {
         const renderFormItem = ({ field }: {
             field: ControllerRenderProps<{
                 reminders: string[];
-            }, "reminders">
+            }, 'reminders'>
         }) => (
             <FormItem className="flex items-center w-full space-x-3 space-y-0 hover:bg-accent p-1.5 rounded-md">
                 <FormControl>
@@ -140,12 +140,12 @@ function RemindersItems() {
                         </FormItem>
                     )} />
                 <AnimatePresence>
-                    {form.watch("reminders").length !== 0 && (
+                    {form.watch('reminders').length !== 0 && (
                         <motion.div
                             initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: 10, opacity: 0 }}
-                            transition={{ type: "tween", duration: 0.1 }}
+                            transition={{ type: 'tween', duration: 0.1 }}
                             className="absolute bottom-0 left-0 right-0 flex justify-between items-center"
                         >
                             <Button
@@ -159,10 +159,10 @@ function RemindersItems() {
                                 Mark as done
                             </Button>
                             <div className="flex space-x-1">
-                                <TooltipWrapper label={allChecked ? "Unselect all" : "Select all"}>
+                                <TooltipWrapper label={allChecked ? 'Unselect all' : 'Select all'}>
                                     <Button
-                                        aria-label={allChecked ? "Unselect all" : "Select all"}
-                                        variant={allChecked ? "default" : "ghost"}
+                                        aria-label={allChecked ? 'Unselect all' : 'Select all'}
+                                        variant={allChecked ? 'default' : 'ghost'}
                                         className="size-fit p-2 data"
                                         type="button"
                                         onClick={toggleSelectAll}
@@ -195,14 +195,14 @@ function RemindersItems() {
     )
 }
 
-type ReminderViewProps = HTMLMotionProps<"div"> & { open?: boolean };
+type ReminderViewProps = HTMLMotionProps<'div'> & { open?: boolean };
 
 export default function RemindersView({ open: isOpen, className, ...props }: ReminderViewProps) {
     const queryClient = useQueryClient()
-    const { data: date } = useQuery<Date>({ queryKey: ["calendar", "date"] })
-    const { data: isCalendarInView = true } = useQuery<boolean>({ queryKey: ["calendar", "view"] })
+    const { data: date } = useQuery<Date>({ queryKey: ['calendar', 'date'] })
+    const { data: isCalendarInView = true } = useQuery<boolean>({ queryKey: ['calendar', 'view'] })
 
-    const toggleView = () => queryClient.setQueryData(["calendar", "view"], !isCalendarInView)
+    const toggleView = () => queryClient.setQueryData(['calendar', 'view'], !isCalendarInView)
 
     return (
         (isOpen || !isCalendarInView) && (
@@ -210,7 +210,7 @@ export default function RemindersView({ open: isOpen, className, ...props }: Rem
                 <motion.div
                     id='reminders'
                     key="reminders"
-                    className={cn("flex flex-col w-full p-5", className)}
+                    className={cn('flex flex-col w-full p-5', className)}
                     initial={false}
                     animate={{ x: [60, 0], opacity: [0, 1] }}
                     {...props}

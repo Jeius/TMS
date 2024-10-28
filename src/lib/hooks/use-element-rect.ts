@@ -13,9 +13,9 @@ export function useElementRect(elementId: string) {
     React.useEffect(() => {
         updateRect();
 
-        window.addEventListener("resize", updateRect);
+        window.addEventListener('resize', updateRect);
         return () => {
-            window.removeEventListener("resize", updateRect);
+            window.removeEventListener('resize', updateRect);
         };
     }, [updateRect]);
 

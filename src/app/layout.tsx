@@ -1,14 +1,14 @@
-import { Toaster } from "@/components/ui/toaster";
-import Providers from "@/context/providers";
+import { Toaster } from '@/components/ui/toaster';
+import Providers from '@/context/providers';
 import { GeistSans } from 'geist/font/sans';
-import type { Metadata } from "next";
-import "../styles/globals.css";
-import AppHeader from "./_components/header/app-header";
-import NavigationSideBar from "./_components/navigation/navigation-sidebar";
+import type { Metadata } from 'next';
+import '../styles/globals.css';
+import AppHeader from './_components/header/app-header';
+import NavigationSideBar from './_components/navigation/navigation-sidebar';
 
 export const metadata: Metadata = {
-  title: "Thesis Management System",
-  description: "Archive and management of thesis in the IT Department",
+  title: 'Thesis Management System',
+  description: 'Archive and management of thesis in the IT Department',
 };
 
 export default function RootLayout({

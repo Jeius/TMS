@@ -1,18 +1,18 @@
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons"
-import { useQuery } from "@tanstack/react-query"
-import { motion } from "framer-motion"
-import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon } from "lucide-react"
-import * as React from "react"
-import { useEffect, useRef, useState } from "react"
-import { ScrollArea } from "./ui/scroll-area"
-import { Skeleton } from "./ui/skeleton"
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import { useQuery } from '@tanstack/react-query'
+import { motion } from 'framer-motion'
+import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+import * as React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { ScrollArea } from './ui/scroll-area'
+import { Skeleton } from './ui/skeleton'
 
 export type ComboboxItem = {
     value?: string;
@@ -28,16 +28,16 @@ type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
 
 export function Combobox({
     placeholder,
-    defaultValue = "",
+    defaultValue = '',
     className,
-    variant = "outline",
+    variant = 'outline',
     onValueChanged = () => { },
     itemsFn,
     ...props
 }: ComboboxProps) {
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(defaultValue);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState('');
     const firstItemRef = useRef<HTMLButtonElement | null>(null);
 
     const { data: items = [], isLoading, refetch } = useQuery<string[]>({
@@ -49,16 +49,16 @@ export function Combobox({
     });
 
     const filteredItems = items.filter(
-        item => item.toLowerCase().split(" ").join("").includes(
-            searchTerm.toLowerCase().split(" ").join("")
+        item => item.toLowerCase().split(' ').join('').includes(
+            searchTerm.toLowerCase().split(' ').join('')
         )
     );
 
     const handleSelect = (value: string) => {
-        setSelectedValue(value === selectedValue ? "" : value);
-        onValueChanged(value === selectedValue ? "" : value);
+        setSelectedValue(value === selectedValue ? '' : value);
+        onValueChanged(value === selectedValue ? '' : value);
         setOpen(false);
-        setSearchTerm("");
+        setSearchTerm('');
     };
 
     useEffect(() => {
@@ -76,7 +76,7 @@ export function Combobox({
                     aria-expanded={open}
                     data-selected={open}
                     size="sm"
-                    className={cn("w-min justify-between text-foreground font-semibold", className)}
+                    className={cn('w-min justify-between text-foreground font-semibold', className)}
                     onClick={() => !open && refetch()}
                     {...props}
                 >
@@ -86,7 +86,7 @@ export function Combobox({
                             : placeholder}
                     </span>
                     <motion.div
-                        style={{ transformOrigin: "center" }}
+                        style={{ transformOrigin: 'center' }}
                         animate={{ rotate: open ? 180 : 0 }}
                         aria-hidden="true"
                     >
@@ -104,15 +104,15 @@ export function Combobox({
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder={`Search ${placeholder.toLowerCase()}...`}
                         className={cn(
-                            "flex h-10 w-full rounded-md bg-transparent py-3 text-xs font-semibold outline-none",
-                            "placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+                            'flex h-10 w-full rounded-md bg-transparent py-3 text-xs font-semibold outline-none',
+                            'placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                         )}
                     />
                 </div>
                 <ScrollArea className="flex flex-col h-min max-h-52 space-y-1 p-2">
                     {isLoading ? (
                         <div className="w-40">
-                            {Array.from({ length: 5 }).map(_ => (
+                            {Array.from({ length: 5 }).map(() => (
                                 <Skeleton key={crypto.randomUUID()} className="mb-2 h-8 w-full" />
                             ))}
                         </div>
@@ -129,8 +129,8 @@ export function Combobox({
                                     className="w-full justify-start"
                                 >
                                     <Check className={cn(
-                                        "mr-2 h-4 w-4",
-                                        selectedValue === item ? "opacity-100" : "opacity-0"
+                                        'mr-2 h-4 w-4',
+                                        selectedValue === item ? 'opacity-100' : 'opacity-0'
                                     )} />
                                     <span className="capitalize whitespace-nowrap text-xs font-semibold">{item}</span>
                                 </Button>

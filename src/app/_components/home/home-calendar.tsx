@@ -1,37 +1,37 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import useWindowSize from "@/lib/hooks/use-window-size";
-import { cn, Screens } from "@/lib/utils";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { HTMLMotionProps, motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import React, { useEffect, useMemo } from "react";
-import RemindersView from "./reminders";
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import useWindowSize from '@/lib/hooks/use-window-size';
+import { cn, Screens } from '@/lib/utils';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { HTMLMotionProps, motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import React, { useEffect, useMemo } from 'react';
+import RemindersView from './reminders';
 
-type CalendarViewProps = HTMLMotionProps<"div"> & { open?: boolean };
+type CalendarViewProps = HTMLMotionProps<'div'> & { open?: boolean };
 
 function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) {
     const queryClient = useQueryClient();
     const today = useMemo(() => new Date(), []);
     const [month, setMonth] = React.useState<Date>(today);
-    const { data: date = today } = useQuery<Date>({ queryKey: ["calendar", "date"] });
-    const { data: isCalendarInView = true } = useQuery<boolean>({ queryKey: ["calendar", "view"] });
+    const { data: date = today } = useQuery<Date>({ queryKey: ['calendar', 'date'] });
+    const { data: isCalendarInView = true } = useQuery<boolean>({ queryKey: ['calendar', 'view'] });
 
-    const toggleView = () => queryClient.setQueryData(["calendar", "view"], !isCalendarInView);
+    const toggleView = () => queryClient.setQueryData(['calendar', 'view'], !isCalendarInView);
 
     const setDate = (date?: Date) => {
-        date && queryClient.setQueryData(["calendar", "date"], date);
+        date && queryClient.setQueryData(['calendar', 'date'], date);
         toggleView();
     };
 
     //Set default states on mount
     React.useEffect(() => {
-        queryClient.setQueryData(["calendar", "date"], today);
-        queryClient.setQueryData(["calendar", "view"], true);
+        queryClient.setQueryData(['calendar', 'date'], today);
+        queryClient.setQueryData(['calendar', 'view'], true);
     }, [queryClient, today]);
 
     return (
@@ -40,7 +40,7 @@ function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) 
                 <motion.div
                     id='calendar'
                     key="calendar"
-                    className={cn("flex flex-col w-min mx-auto p-5 space-y-4 justify-center", className)}
+                    className={cn('flex flex-col w-min mx-auto p-5 space-y-4 justify-center', className)}
                     initial={false}
                     animate={{ x: [-60, 0], opacity: [0, 1] }}
                     {...props}
@@ -107,11 +107,11 @@ export default function HomeCalendar({ className, ...props }: React.ComponentPro
     const width = open ? 600 : 300;
 
     useEffect(() => {
-        if (windowWidth >= Screens["2xl"]) {
+        if (windowWidth >= Screens['2xl']) {
             !open && setOpen(true);
             return;
         }
-        if (windowWidth <= Screens["lg"] && windowWidth >= Screens["md"]) {
+        if (windowWidth <= Screens['lg'] && windowWidth >= Screens['md']) {
             !open && setOpen(true);
             return;
         }
@@ -121,10 +121,10 @@ export default function HomeCalendar({ className, ...props }: React.ComponentPro
     return (
         <motion.div
             animate={{ width: width }}
-            transition={{ type: "tween", duration: 0.2, }}
+            transition={{ type: 'tween', duration: 0.2, }}
         >
             <Card id="calendar/reminders-card" variant="glass"
-                className={cn("flex overflow-hidden w-full h-[450px]", className)}
+                className={cn('flex overflow-hidden w-full h-[450px]', className)}
                 {...props}
             >
                 <CalendarView open={open} />

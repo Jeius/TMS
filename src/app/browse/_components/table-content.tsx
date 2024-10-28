@@ -17,12 +17,12 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
     const [scope, animate] = useAnimate();
     const [scrollState, setScrollState] = useState({ left: { value: 0, isScrolled: false } });
     const { refetch: updateWidth } = useQuery({
-        queryKey: ["tableWidth"], refetchOnMount: false, staleTime: Infinity,
+        queryKey: ['tableWidth'], refetchOnMount: false, staleTime: Infinity,
         queryFn: () => {
             if (scope.current) {
                 return `${scope.current.offsetWidth}px`;
             }
-            return "auto";
+            return 'auto';
         },
     });
 
@@ -44,13 +44,13 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
 
         const handleScrollTop = debounce(() => {
             const currentRect = scope.current?.getBoundingClientRect();
-            const headerRect = document.getElementById("app-header")?.getBoundingClientRect();
+            const headerRect = document.getElementById('app-header')?.getBoundingClientRect();
             if (currentRect && headerRect) {
                 const scrollTop = Math.max(0, headerRect.height - currentRect.top);
-                animate("thead", {
+                animate('thead', {
                     y: scrollTop,
-                    boxShadow: scrollTop > 0 ? "0 0 6px rgba(0, 0, 0, 0.15)" : undefined,
-                }, { type: "tween", duration: 0 });
+                    boxShadow: scrollTop > 0 ? '0 0 6px rgba(0, 0, 0, 0.15)' : undefined,
+                }, { type: 'tween', duration: 0 });
             }
         }, 0);
 

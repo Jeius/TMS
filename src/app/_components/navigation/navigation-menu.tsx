@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { AUTHROUTES } from "@/lib/constants";
-import { Menu } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { AUTHROUTES } from '@/lib/constants';
+import { Menu } from 'lucide-react';
 import Image from 'next/image';
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import NavigationItems from "./navigation-items";
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import NavigationItems from './navigation-items';
 
 
 const LogoTitle = () => (
     <SheetTitle className="flex mt-4 items-center space-x-2 justify-start">
         <Image
-            src={`/images/msuiit-logo-275x280.png`}
+            src={'/images/msuiit-logo-275x280.png'}
             alt='IIT'
             width={40}
             height={40}
