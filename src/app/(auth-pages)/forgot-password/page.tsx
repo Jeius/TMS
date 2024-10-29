@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
-import EmailForm from './email-form';
+import EmailForm from '@/features/auth/forgot-password/components/email-form';
 
 export default function ForgotPassword() {
     return (

@@ -1,10 +1,10 @@
 import { Toaster } from '@/components/ui/toaster';
 import Providers from '@/context/providers';
+import AppHeader from '@/features/layout/components/header/app-header';
+import NavigationSideBar from '@/features/layout/components/sidebar/navigation-sidebar';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import '../styles/globals.css';
-import AppHeader from './_components/header/app-header';
-import NavigationSideBar from './_components/navigation/navigation-sidebar';
 
 export const metadata: Metadata = {
   title: 'Thesis Management System',

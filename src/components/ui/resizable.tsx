@@ -1,11 +1,10 @@
 'use client'
 
-import { DragHandleDots2Icon } from '@radix-ui/react-icons'
-import * as ResizablePrimitive from 'react-resizable-panels'
-
-import { useDeviceSize } from '@/lib/hooks/use-device-size'
+import useWindowSize from '@/lib/hooks/use-window-size'
 import { cn, Screens } from '@/lib/utils'
+import { DragHandleDots2Icon } from '@radix-ui/react-icons'
 import React from 'react'
+import * as ResizablePrimitive from 'react-resizable-panels'
 
 const ResizablePanelGroup = ({
   className,
@@ -28,7 +27,7 @@ const AdaptiveResizablePanelGroup = ({
   changeDirectionAt: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
   direction: 'vertical' | 'horizontal'
 }) => {
-  const deviceSize = useDeviceSize()
+  const deviceSize = useWindowSize()
   const [currentDirection, setCurrentDirection] = React.useState(direction)
 
   React.useEffect(() => {

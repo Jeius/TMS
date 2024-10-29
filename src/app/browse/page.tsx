@@ -1,8 +1,8 @@
-import BlurryBlob from '@/components/ui/blurry-blob';
+import BlurryBlob from '@/components/animated/blurry-blob';
+import ThesesTable from '@/features/browse/components/theses-table';
 import { getFilters } from '@/server/actions/filters';
 import { getTheses } from '@/server/actions/theses';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import ThesesTable from './_components/theses-table';
 
 
 export default async function Browse() {

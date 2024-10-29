@@ -1,7 +1,8 @@
-import { RecentActivitiesCard } from '@/app/analytics/_components/recent-activities-card';
-import { Statistic, StatisticsCard } from '@/app/analytics/_components/stats-card';
-import { ThesesChartCard } from '@/app/analytics/_components/theses-chart-card';
+
 import Filters from '@/components/filters';
+import { RecentActivitiesCard } from '@/features/analytics/components/recent-activities-card';
+import { Statistic, StatisticsCard } from '@/features/analytics/components/stats-card';
+import { ThesesChartCard } from '@/features/analytics/components/theses-chart-card';
 import {
   Book,
   BookOpenCheckIcon,

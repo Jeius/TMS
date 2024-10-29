@@ -1,6 +1,6 @@
-import BlurryBlob from '@/components/ui/blurry-blob';
+import BlurryBlob from '@/components/animated/blurry-blob';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import DashBoard from './_components/home/dashboard';
+import DashBoard from '@/features/dashboard/components/dashboard';
 
 export default function Home() {
     return (

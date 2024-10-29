@@ -1,6 +1,6 @@
 export const AUTHROUTES = {
     login: '/login',
-    resetPassword: '/private/reset-password',
+    resetPassword: '/reset-password',
     forgotPassword: '/forgot-password',
 };
 

@@ -1,8 +1,8 @@
 import { Account } from '@/components/animated/account';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import SignIn from '@/features/auth/login/components/sign-in';
+import SignUp from '@/features/auth/login/components/sign-up';
 import Link from 'next/link';
-import SignIn from './_components/sign-in';
-import SignUp from './_components/sign-up';
 
 function SignUpTab() {
     return (
