@@ -56,24 +56,30 @@ const features = [
     },
 ];
 
-
 export default function Features() {
     return (
-        <section className="mx-auto max-w-fit grid grid-cols-1 grid-rows-10 xl:grid-cols-2 xl:grid-rows-5 px-5 md:px-10">
-            {features.map(({ title, description, icon: Icon }) => (
-                <div key={title} className='flex max-w-3xl py-5 xl:px-16 space-x-2 hover:scale-105 transition-transform'>
-                    <div className='p-5 rounded-lg bg-primary shadow'>
-                        <Icon className='size-full' />
-                    </div>
-                    <div className={cn(
-                        'flex flex-col justify-center grow space-y-2 p-2',
-                        'hover:bg-gradient-to-r from-accent/70 hover:border-l-2 border-primary',
-                    )}>
-                        <h1 className='font-semibold text-lg'>{title}</h1>
-                        <h2 className='text-sm text-foreground/80'>{description}</h2>
-                    </div>
-                </div>
-            ))}
+        <section aria-labelledby="features-heading" className="mx-auto max-w-fit px-5 md:px-10">
+            <h2 id="features-heading" className="sr-only">Key Features</h2>
+            <ul className="grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-5 gap-y-10 gap-x-36">
+                {features.map(({ title, description, icon: Icon }) => (
+                    <li
+                        key={title}
+                        className="flex max-w-2xl space-x-2 hover:scale-105 transition-transform"
+                        aria-labelledby={`${title}-heading`}
+                    >
+                        <div className="p-5 rounded-lg bg-primary min-w-[70px] max-w-[70px] shadow">
+                            <Icon aria-hidden="true" className="size-full" />
+                        </div>
+                        <div className={cn(
+                            'flex flex-col justify-center grow space-y-2 p-2',
+                            'hover:bg-gradient-to-r from-accent/70 hover:border-l-2 border-primary',
+                        )}>
+                            <h3 id={`${title}-heading`} className="font-semibold text-lg">{title}</h3>
+                            <p className="text-sm text-foreground/80">{description}</p>
+                        </div>
+                    </li>
+                ))}
+            </ul>
         </section>
     )
 }
