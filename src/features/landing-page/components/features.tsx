@@ -59,9 +59,9 @@ const features = [
 
 export default function Features() {
     return (
-        <section className="mx-auto max-w-fit grid grid-cols-1 grid-rows-10 xl:grid-cols-2 xl:grid-rows-5">
+        <section className="mx-auto max-w-fit grid grid-cols-1 grid-rows-10 xl:grid-cols-2 xl:grid-rows-5 px-5 md:px-10">
             {features.map(({ title, description, icon: Icon }) => (
-                <div className='flex max-w-3xl py-5 xl:px-16 space-x-2 hover:scale-105 transition-transform'>
+                <div key={title} className='flex max-w-3xl py-5 xl:px-16 space-x-2 hover:scale-105 transition-transform'>
                     <div className='p-5 rounded-lg bg-primary shadow'>
                         <Icon className='size-full' />
                     </div>

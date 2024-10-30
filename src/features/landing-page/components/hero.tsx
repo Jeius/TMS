@@ -13,7 +13,7 @@ const images: ImageCard[] = [
 
 export default function Hero() {
     return (
-        <section className="flex flex-col sm:mt-5 space-y-8 md:space-y-16 items-center">
+        <section className="flex flex-col sm:mt-5 space-y-8 px-5 md:px-10 md:space-y-16 items-center">
             <div className="md:px-10 lg:py-10 max-w-7xl">
                 <div className="hidden md:block"><ImagesReveal images={images} /></div>
                 <div className="block md:hidden"><ImageCarousel images={images} /></div>
