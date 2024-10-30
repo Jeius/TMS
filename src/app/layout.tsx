@@ -1,5 +1,6 @@
 import { Toaster } from '@/components/ui/toaster';
 import Providers from '@/context/providers';
+import Footer from '@/features/layout/components/footer/app-footer';
 import AppHeader from '@/features/layout/components/header/app-header';
 import NavigationSideBar from '@/features/layout/components/sidebar/navigation-sidebar';
 import { GeistSans } from 'geist/font/sans';
@@ -25,6 +26,7 @@ export default function RootLayout({
             <AppHeader />
             {children}
             <NavigationSideBar />
+            <Footer />
           </div>
           <Toaster />
         </Providers>
