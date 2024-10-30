@@ -44,10 +44,10 @@ export default async function AppHeader() {
                             <UserMenu />
                         ) : (
                             <div className="flex items-center sm:pl-5 space-x-2">
-                                <Button variant="outline" size="sm" asChild>
+                                <Button asChild>
                                     <Link href="/login?signUp=true">Sign up</Link>
                                 </Button>
-                                <Button asChild>
+                                <Button variant="outline" size="sm" asChild>
                                     <Link href="/login">Sign in</Link>
                                 </Button>
                             </div>
