@@ -1,7 +1,7 @@
 import { BookOpen, BookOpenCheck, CalendarDays, CalendarFold, ChartLine, FilePlus2, House, Library, LucideInbox, MessageCircle, Search, Send, SendIcon, SettingsIcon, UserIcon } from 'lucide-react';
 
 export const primaryLinks = [
-    { label: 'Home', href: '/', icon: House },
+    { label: 'Home', href: '/dashboard', icon: House },
     { label: 'Browse', href: '/browse', icon: Search },
 ];
 

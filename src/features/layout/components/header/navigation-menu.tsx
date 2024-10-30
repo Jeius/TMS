@@ -47,7 +47,7 @@ export default function NavigationMenu() {
     const isNavigationRoute = Object.values(NAVIGATIONROUTES).includes(pathname);
 
     return (
-        isNavigationRoute && (
+        (isNavigationRoute && pathname !== '/') && (
             <div id="navigation-menu" className="block lg:hidden">
                 <Sheet open={open} onOpenChange={setOpen}>
                     <MenuButton />

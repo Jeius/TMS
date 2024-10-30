@@ -14,7 +14,7 @@ export default function NavigationSideBar() {
     const isNavigationRoute = Object.values(NAVIGATIONROUTES).includes(pathname);
 
     return (
-        isNavigationRoute && (
+        (isNavigationRoute && pathname !== '/') && (
             <motion.div
                 id="navigation-sidebar"
                 className={cn(
