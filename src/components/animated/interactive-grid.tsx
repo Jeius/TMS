@@ -122,7 +122,7 @@ export function Grid() {
                             transitionDelay: active ? `${x + y}ms` : "0ms",
                         }}
                         className={cn(
-                            "h-full w-full scale-90 rounded bg-gray-400/30 opacity-20 transition-all duration-700",
+                            "h-full w-full scale-90 rounded bg-gray-400/30 opacity-10 transition-all duration-700",
                             {
                                 "scale-100 opacity-100": shouldHighlight,
                                 "group-hover:scale-100 group-hover:opacity-100": !shouldHighlight,
