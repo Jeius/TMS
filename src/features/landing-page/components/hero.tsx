@@ -27,9 +27,9 @@ export default function Hero() {
                     </div>
 
                     <div className="flex flex-col text-center max-w-[37.5rem] space-y-4">
-                        <h1 id="hero-heading" className="text-2xl sm:text-4xl font-bold">
+                        <h2 id="hero-heading" className="text-2xl sm:text-4xl font-bold">
                             Empowering Your Thesis Journey
-                        </h1>
+                        </h2>
                         <p className="text-sm sm:text-lg text-foreground/90 p-2">
                             From proposal to defense, our system simplifies every step of thesis management for students and faculty.
                         </p>

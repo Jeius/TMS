@@ -16,6 +16,8 @@ export default async function AppHeader() {
         data: { user },
     } = await supabase.auth.getUser();
 
+    const headingLevel = 2;
+
     return (
         <TooltipProvider>
             <header id="app-header"
@@ -25,17 +27,18 @@ export default async function AppHeader() {
                     <div className="flex grow items-center space-x-2 pl-2">
                         <NavigationMenu />
                         <Link href="/" id="app-title"
+                            aria-label='Go to homepage'
                             className="flex items-center space-x-2 font-semibold text-lg w-fit"
                         >
                             <Image
                                 src={'/images/msuiit-logo-275x280.png'}
-                                alt="MSU-IIT"
-                                width={35}
-                                height={35}
-                                aria-hidden="true"
-                                className='size-auto'
+                                alt="MSU-IIT Seal of Excellence"
+                                width={70}
+                                height={70}
+                                role='img'
+                                className='size-[3rem]'
                             />
-                            <h1 className="hidden md:block">Thesis Management System</h1>
+                            <h1 className="sr-only md:not-sr-only">Thesis Management System</h1>
                         </Link>
                     </div>
                     <div className="flex items-center space-x-2 pl-2">
