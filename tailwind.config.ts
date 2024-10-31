@@ -58,20 +58,19 @@ const config: Config = {
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				md: 'calc(var(--radius) - 0.125rem)',
+				sm: 'calc(var(--radius) - 0.25rem)'
 			},
 			screens: {
-				'xs': '520px',
-				'2xs': '380px',
-			},
-			width: {
-				'xs': '520px',
-				'2xs': '380px',
-			},
-			height: {
-				'xs': '520px',
-				'2xs': '380px',
+				'3xs': '16rem',
+				'2xs': '24rem',
+				xs: '32rem',
+				sm: '40rem',
+				md: '48rem',
+				lg: '64rem',
+				xl: '80rem',
+				'2xl': '96rem',
+				'3xl': '112rem',
 			},
 			boxShadow: {
 				'right': '1px 0 5px rgba(0, 0, 0, 0.1)',
@@ -85,8 +84,8 @@ const config: Config = {
 				},
 				colors: {
 					filter: {
-						'blur-20': 'blur(20px)',
-						'blur-25': 'blur(25px)',
+						'blur-20': 'blur(1.25rem)',
+						'blur-25': 'blur(1.5625rem)',
 					},
 				},
 			},

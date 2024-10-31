@@ -9,7 +9,7 @@ export default function SearchBar() {
         <>
             <Input
                 id="search-input"
-                className="hidden sm:block w-[250px]"
+                className="hidden sm:block max-w-[15.625rem]"
                 type="search"
                 placeholder="Search..."
                 aria-label="Search through site content" />
