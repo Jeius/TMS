@@ -8,7 +8,7 @@ export default function Announcements({
     return (
         <Card {...props}>
             <CardHeader className="pb-4">
-                <CardTitle>Announcements</CardTitle>
+                <CardTitle id="announcements-heading">Announcements</CardTitle>
             </CardHeader>
             <CardContent>
                 <ScrollArea className="border-t h-[18rem]">

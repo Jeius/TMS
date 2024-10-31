@@ -40,17 +40,16 @@ export default function CalendarView({
 
     return (
         (isOpen || view === 'calendar') && (
-            <Tooltip>
-                <motion.div
-                    id='calendar'
-                    key="calendar"
-                    className={cn('flex flex-col w-fit mx-auto p-5 space-y-4 justify-center', className)}
-                    initial={{ x: -60, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    {...props}
-                >
+            <motion.div
+                id='calendar'
+                className={cn('flex flex-col w-fit mx-auto p-5 space-y-4 justify-center', className)}
+                initial={{ x: -60, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                {...props}
+            >
+                <Tooltip>
                     <CardHeader className="flex p-0 flex-row justify-between space-y-0 items-center">
-                        <CardTitle>Calendar</CardTitle>
+                        <CardTitle id='calendar-heading'>Calendar</CardTitle>
                         {!isOpen && (
                             <TooltipTrigger asChild>
                                 <Button
@@ -96,11 +95,12 @@ export default function CalendarView({
                             </Button>
                         </CardFooter>
                     </div>
-                </motion.div>
-                <TooltipContent className="mr-2">
-                    <p>Go to Reminders</p>
-                </TooltipContent>
-            </Tooltip>
+                    <TooltipContent className="mr-2">
+                        <p>Go to Reminders</p>
+                    </TooltipContent>
+                </Tooltip>
+            </motion.div>
+
         )
     );
 }

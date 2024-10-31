@@ -10,9 +10,12 @@ import Link from 'next/link';
 
 export default function WelcomeCard() {
     return (
-        <Card id="welcome-card" variant="gradientGlass" className="w-full bg-primary/70 dark:bg-primary/75">
+        <Card id="welcome-card" variant="gradient"
+            aria-labelledby="dashboard-welcome"
+            className="w-full bg-primary"
+        >
             <CardHeader className="space-y-1">
-                <CardTitle className="font-bold text-3xl text-secondary">
+                <CardTitle id='dashboard-welcome' className="font-bold text-3xl text-secondary">
                     Welcome, [user]
                 </CardTitle>
                 <CardDescription>

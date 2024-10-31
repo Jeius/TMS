@@ -34,15 +34,14 @@ export default function RemindersView({
 
     return (
         (isOpen || view === 'reminders') && (
-            <Tooltip>
-                <motion.div
-                    id='reminders'
-                    key="reminders"
-                    className={cn('flex flex-col grow p-5', className)}
-                    initial={{ x: 60, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    {...props}
-                >
+            <motion.div
+                id='reminders'
+                className={cn('flex flex-col grow p-5', className)}
+                initial={{ x: 60, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                {...props}
+            >
+                <Tooltip>
                     <CardHeader className="flex p-0 flex-row space-y-0 items-center">
                         {!isOpen && (
                             <TooltipTrigger asChild>
@@ -70,11 +69,11 @@ export default function RemindersView({
                     <CardContent className="relative h-full p-0">
                         <RemindersItems />
                     </CardContent>
-                </motion.div>
-                <TooltipContent>
-                    <p>Go to Calendar</p>
-                </TooltipContent>
-            </Tooltip>
+                    <TooltipContent>
+                        <p>Go to Calendar</p>
+                    </TooltipContent>
+                </Tooltip>
+            </motion.div>
         )
     )
 }
