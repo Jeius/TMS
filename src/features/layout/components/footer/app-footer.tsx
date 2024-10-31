@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function Footer() {
     return (
         <footer className="relative overflow-hidden bg-footer text-footer-foreground">
-            <div className="text-sm leading-relaxed container mx-auto px-5 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-sm leading-relaxed max-w-[100rem] mx-auto px-10 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className='md:text-left'>
                     <h3 className="font-semibold text-lg">Quick Links</h3>
                     <ul>
@@ -30,14 +30,14 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Facebook width={25} height={25} />
+                            <Facebook width='1.7rem' height='1.7rem' />
                         </Link>
                         <Link
                             href="https://mail.google.com/mail/?view=cm&to=ccs.ec@g.msuiit.edu.ph&su=Hello&body=Your%20message%20here"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <GmailLight width={25} height={25} />
+                            <GmailLight width='1.7rem' height='1.7rem' />
                         </Link>
                     </div>
                 </div>
