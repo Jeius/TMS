@@ -115,7 +115,7 @@ export default function RemindersItems() {
                     name="reminders"
                     render={() => (
                         <FormItem>
-                            <ScrollArea className="h-[320px] w-full space-y-1 px-1.5">
+                            <ScrollArea className="h-[20rem] w-full space-y-1 px-1.5">
                                 {REMINDERS.map(({ id, label }) => (
                                     <ReminderItem key={id} id={id} label={label} />
                                 ))}

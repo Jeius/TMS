@@ -16,8 +16,6 @@ export default async function AppHeader() {
         data: { user },
     } = await supabase.auth.getUser();
 
-    const headingLevel = 2;
-
     return (
         <TooltipProvider>
             <header id="app-header"

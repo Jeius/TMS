@@ -21,7 +21,6 @@ export default function SubmitButton({
 }: SubmitButtonProps) {
     return (
         <Button
-            variant="gradient"
             size="lg"
             type="submit"
             data-state={status}

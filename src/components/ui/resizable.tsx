@@ -1,7 +1,6 @@
 'use client'
 
-import useWindowSize from '@/lib/hooks/use-window-size'
-import { cn, Screens } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { DragHandleDots2Icon } from '@radix-ui/react-icons'
 import React from 'react'
 import * as ResizablePrimitive from 'react-resizable-panels'
@@ -19,31 +18,31 @@ const ResizablePanelGroup = ({
   />
 )
 
-const AdaptiveResizablePanelGroup = ({
-  changeDirectionAt,
-  direction,
-  ...props
-}: React.ComponentProps<typeof ResizablePrimitive.PanelGroup> & {
-  changeDirectionAt: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-  direction: 'vertical' | 'horizontal'
-}) => {
-  const deviceSize = useWindowSize()
-  const [currentDirection, setCurrentDirection] = React.useState(direction)
+// const AdaptiveResizablePanelGroup = ({
+//   changeDirectionAt,
+//   direction,
+//   ...props
+// }: React.ComponentProps<typeof ResizablePrimitive.PanelGroup> & {
+//   changeDirectionAt: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+//   direction: 'vertical' | 'horizontal'
+// }) => {
+//   const deviceSize = useWindowSize()
+//   const [currentDirection, setCurrentDirection] = React.useState(direction)
 
-  React.useEffect(() => {
-    const isVertical = deviceSize.width >= Screens[changeDirectionAt] ? direction === 'vertical' : false
-    const newDirection = isVertical ? 'vertical' : 'horizontal'
-    setCurrentDirection(newDirection)
-  }, [deviceSize.width, changeDirectionAt, direction])
+//   React.useEffect(() => {
+//     const isVertical = deviceSize.width >= Screens[changeDirectionAt] ? direction === 'vertical' : false
+//     const newDirection = isVertical ? 'vertical' : 'horizontal'
+//     setCurrentDirection(newDirection)
+//   }, [deviceSize.width, changeDirectionAt, direction])
 
-  return (
-    <ResizablePrimitive.PanelGroup
-      key={currentDirection}
-      direction={currentDirection}
-      {...props}
-    />
-  )
-}
+//   return (
+//     <ResizablePrimitive.PanelGroup
+//       key={currentDirection}
+//       direction={currentDirection}
+//       {...props}
+//     />
+//   )
+// }
 
 const ResizablePanel = ResizablePrimitive.Panel
 
@@ -69,5 +68,5 @@ const ResizableHandle = ({
   </ResizablePrimitive.PanelResizeHandle>
 )
 
-export { AdaptiveResizablePanelGroup, ResizableHandle, ResizablePanel, ResizablePanelGroup }
+export { ResizableHandle, ResizablePanel, ResizablePanelGroup }
 

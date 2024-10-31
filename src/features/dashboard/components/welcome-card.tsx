@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -26,7 +28,7 @@ export default function WelcomeCard() {
                             className="size-min p-1 text-card-foreground flex items-center space-x-2 font-semibold">
                             <Link href={href} >
                                 <span>{label}</span>
-                                <Icon size={16} />
+                                <Icon aria-hidden="true" focusable="false" size='1rem' />
                             </Link>
                         </Button>
 
@@ -38,7 +40,7 @@ export default function WelcomeCard() {
                     onClick={async () => await signOutAction()}
                 >
                     <span>Sign out</span>
-                    <LogOutIcon aria-hidden="true" focusable="false" size={15} />
+                    <LogOutIcon aria-hidden="true" focusable="false" size='1rem' />
                 </Button>
             </CardFooter>
         </Card>

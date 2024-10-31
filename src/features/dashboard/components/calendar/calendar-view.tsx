@@ -9,17 +9,23 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { HTMLMotionProps, motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import React, { useMemo } from 'react';
+import { CalendarViews } from './calendar-card';
 
-type CalendarViewProps = HTMLMotionProps<'div'> & { open?: boolean };
+type CalendarViewProps = HTMLMotionProps<'div'> & {
+    open?: boolean
+    view?: CalendarViews
+    setView?: (value: CalendarViews) => void
+};
 
-export default function CalendarView({ open: isOpen, className, ...props }: CalendarViewProps) {
+export default function CalendarView({
+    open: isOpen, view, setView, className, ...props
+}: CalendarViewProps) {
     const queryClient = useQueryClient();
     const today = useMemo(() => new Date(), []);
     const [month, setMonth] = React.useState<Date>(today);
     const { data: date = today } = useQuery<Date>({ queryKey: ['calendar', 'date'] });
-    const { data: isCalendarInView = true } = useQuery<boolean>({ queryKey: ['calendar', 'view'] });
 
-    const toggleView = () => queryClient.setQueryData(['calendar', 'view'], !isCalendarInView);
+    const toggleView = () => setView && setView('reminders');
 
     const setDate = (date?: Date) => {
         date && queryClient.setQueryData(['calendar', 'date'], date);
@@ -33,14 +39,14 @@ export default function CalendarView({ open: isOpen, className, ...props }: Cale
     }, [queryClient, today]);
 
     return (
-        (isOpen || isCalendarInView) && (
+        (isOpen || view === 'calendar') && (
             <Tooltip>
                 <motion.div
                     id='calendar'
                     key="calendar"
-                    className={cn('flex flex-col w-min mx-auto p-5 space-y-4 justify-center', className)}
-                    initial={false}
-                    animate={{ x: [-60, 0], opacity: [0, 1] }}
+                    className={cn('flex flex-col w-fit mx-auto p-5 space-y-4 justify-center', className)}
+                    initial={{ x: -60, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
                     {...props}
                 >
                     <CardHeader className="flex p-0 flex-row justify-between space-y-0 items-center">
@@ -67,7 +73,7 @@ export default function CalendarView({ open: isOpen, className, ...props }: Cale
                                 onMonthChange={setMonth}
                                 selected={date}
                                 onSelect={setDate}
-                                className="flex items-center rounded-md border h-[320px] w-min mx-auto" />
+                                className="flex items-center rounded-md border h-[20rem] w-min mx-auto" />
                         </CardContent>
                         <CardFooter className="flex justify-between p-0">
                             <Button

@@ -14,29 +14,33 @@ import {
     TooltipTrigger
 } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { HTMLMotionProps, motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
+import { CalendarViews } from './calendar-card'
 import RemindersItems from './reminders-items'
 
-type ReminderViewProps = HTMLMotionProps<'div'> & { open?: boolean };
+type ReminderViewProps = HTMLMotionProps<'div'> & {
+    open?: boolean
+    view?: CalendarViews
+    setView?: (value: CalendarViews) => void
+};
 
-export default function RemindersView({ open: isOpen, className, ...props }: ReminderViewProps) {
-    const queryClient = useQueryClient()
-    const { data: date } = useQuery<Date>({ queryKey: ['calendar', 'date'] })
-    const { data: isCalendarInView = true } = useQuery<boolean>({ queryKey: ['calendar', 'view'] })
-
-    const toggleView = () => queryClient.setQueryData(['calendar', 'view'], !isCalendarInView)
+export default function RemindersView({
+    open: isOpen, view, setView, className, ...props
+}: ReminderViewProps) {
+    const { data: date } = useQuery<Date>({ queryKey: ['calendar', 'date'] });
+    const toggleView = () => setView && setView('calendar');
 
     return (
-        (isOpen || !isCalendarInView) && (
+        (isOpen || view === 'reminders') && (
             <Tooltip>
                 <motion.div
                     id='reminders'
                     key="reminders"
-                    className={cn('flex flex-col w-full p-5', className)}
-                    initial={false}
-                    animate={{ x: [60, 0], opacity: [0, 1] }}
+                    className={cn('flex flex-col grow p-5', className)}
+                    initial={{ x: 60, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
                     {...props}
                 >
                     <CardHeader className="flex p-0 flex-row space-y-0 items-center">

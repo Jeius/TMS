@@ -11,7 +11,7 @@ export default function Announcements({
                 <CardTitle>Announcements</CardTitle>
             </CardHeader>
             <CardContent>
-                <ScrollArea className="border-t h-[300px]">
+                <ScrollArea className="border-t h-[18rem]">
                     <div className="flex flex-col space-y-2 p-2">
                         {Array.from({ length: 20 }).map((_, index) => (
                             <p key={index}>Announcement {index}</p>

@@ -34,7 +34,6 @@ export function VisibilityMenu<TData>({ table }: { table: Table<TData> }) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
-                    variant="gradient"
                     className="px-2 text-xs"
                 >
                     <Plus className="mr-2" size={16} aria-hidden="true" />
