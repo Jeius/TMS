@@ -5,12 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const Screens: { [value: string]: number } = {
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  '2xl': 1536,
+export const Screens: { [value: string]: string } = {
+  '3xs': '16rem',
+  '2xs': '24rem',
+  xs: '32rem',
+  sm: '40rem',
+  md: '48rem',
+  lg: '64rem',
+  xl: '80rem',
+  '2xl': '96rem',
+  '3xl': '112rem',
 }
 
 export function booleanToString(value: boolean) {
