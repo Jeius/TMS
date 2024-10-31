@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import NavigationItems from '@/features/layout/components/navigation-items';
 import { NAVIGATIONROUTES } from '@/lib/constants';
@@ -18,7 +18,9 @@ function LogoTitle() {
                 src={'/images/msuiit-logo-275x280.png'}
                 alt='IIT'
                 width={40}
-                height={40} />
+                height={40}
+                className='size-auto'
+            />
             <span className="text-sm text-left font-bold">Thesis Management System</span>
         </SheetTitle>
     );
@@ -55,15 +57,14 @@ export default function NavigationMenu() {
                         onCloseAutoFocus={(e) => e.preventDefault()}
                         className="flex flex-col w-64 sm:w-72 z-[110]"
                         side="left"
-                        aria-describedby="navigation-menu-description"
                     >
                         <SheetHeader>
                             <LogoTitle />
                         </SheetHeader>
 
-                        <p id="navigation-menu-description" className="sr-only">
+                        <SheetDescription className="sr-only">
                             This menu contains links to the primary sections of the Thesis Management System.
-                        </p>
+                        </SheetDescription>
 
                         <div className="grow w-full overflow-y-auto">
                             <NavigationItems open={open} onOpenChanged={setOpen} />

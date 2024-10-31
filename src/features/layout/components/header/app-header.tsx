@@ -30,9 +30,10 @@ export default async function AppHeader() {
                             <Image
                                 src={'/images/msuiit-logo-275x280.png'}
                                 alt="MSU-IIT"
-                                width={40}
-                                height={40}
+                                width={35}
+                                height={35}
                                 aria-hidden="true"
+                                className='size-auto'
                             />
                             <h1 className="hidden md:block">Thesis Management System</h1>
                         </Link>
