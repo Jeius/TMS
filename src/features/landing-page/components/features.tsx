@@ -58,7 +58,7 @@ const features = [
 
 export default function Features() {
     return (
-        <section aria-labelledby="features-heading" className="mx-auto max-w-fit px-5 md:px-10">
+        <section id='features' aria-labelledby="features-heading" className="mx-auto max-w-fit px-5 md:px-10 scroll-mt-32">
             <h2 id="features-heading" className="sr-only">Key Features</h2>
             <ul className="grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-5 gap-y-10 gap-x-36">
                 {features.map(({ title, description, icon: Icon }) => (
