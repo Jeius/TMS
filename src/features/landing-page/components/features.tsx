@@ -64,11 +64,11 @@ export default function Features() {
                 {features.map(({ title, description, icon: Icon }) => (
                     <li
                         key={title}
-                        className="flex max-w-2xl space-x-2 hover:scale-105 transition-transform"
+                        className="flex max-w-2xl space-x-2 hover:scale-105 text-balance transition-transform"
                         aria-labelledby={`${title}-heading`}
                     >
-                        <div className="p-5 rounded-lg bg-primary min-w-[70px] max-w-[70px] shadow">
-                            <Icon aria-hidden="true" className="size-full" />
+                        <div className="hidden p-5 rounded-lg bg-primary 2xs:flex items-center shadow">
+                            <Icon aria-hidden="true" className="size-[2rem] shrink" />
                         </div>
                         <div className={cn(
                             'flex flex-col justify-center grow space-y-2 p-2',
