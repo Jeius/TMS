@@ -48,18 +48,22 @@ export default function NavigationMenu() {
 
     return (
         (isNavigationRoute && pathname !== '/') && (
-            <div id="navigation-menu" className="block lg:hidden">
+            <div id="navigation-menu" role='navigation' aria-label='Navigation Menu' className="block lg:hidden">
                 <Sheet open={open} onOpenChange={setOpen}>
                     <MenuButton />
                     <SheetContent
                         onCloseAutoFocus={(e) => e.preventDefault()}
                         className="flex flex-col w-64 sm:w-72 z-[110]"
                         side="left"
-                        aria-describedby={undefined}
+                        aria-describedby="navigation-menu-description"
                     >
                         <SheetHeader>
                             <LogoTitle />
                         </SheetHeader>
+
+                        <p id="navigation-menu-description" className="sr-only">
+                            This menu contains links to the primary sections of the Thesis Management System.
+                        </p>
 
                         <div className="grow w-full overflow-y-auto">
                             <NavigationItems open={open} onOpenChanged={setOpen} />

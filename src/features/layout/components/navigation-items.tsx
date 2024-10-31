@@ -28,37 +28,44 @@ export default function NavigationItems({ className, open, onOpenChanged: setOpe
 
     return (
         <div className={cn('flex flex-col space-y-1 w-full h-full justify-between', className)} {...props}>
+            <h2 className="sr-only">Main Navigation</h2>
             <ScrollArea className="flex grow flex-col w-full items-center justify-start">
-                {navigationLinks.map((linkGroup, groupIndex) => (
-                    <React.Fragment key={`link-group-${groupIndex}`}>
-                        {linkGroup.map(({ label, icon: Icon, href }) => (
-                            <Button
-                                asChild
-                                key={href}
-                                aria-label={`Go to ${label}`}
-                                variant={isPathName(href) ? 'default' : 'ghost'}
-                                data-state={isPathName(href)}
-                                id={`sidebar-${label.toLowerCase().replace(/ /g, '-')}`}
-                                className='p-2 space-x-3 h-fit my-1 w-full justify-start data-[state=true]:text-secondary'
-                                onClick={handleClick}
-                            >
-                                <Link href={href}>
-                                    <Icon aria-hidden="true" size={20} />
-                                    {open && <span className='pointer-events-none'>{label}</span>}
-                                </Link>
-                            </Button>
-                        ))}
+                <nav aria-label="Navigation links">
+                    {navigationLinks.map((linkGroup, groupIndex) => (
+                        <React.Fragment key={`link-group-${groupIndex}`}>
+                            <ul className="w-full">
+                                {linkGroup.map(({ label, icon: Icon, href }) => (
+                                    <li key={href}>
+                                        <Button
+                                            asChild
+                                            aria-expanded={open}
+                                            aria-label={`Go to ${label}`}
+                                            variant={isPathName(href) ? 'default' : 'ghost'}
+                                            data-state={isPathName(href)}
+                                            id={`${label.toLowerCase().replace(/ /g, '-')}`}
+                                            className='p-2 space-x-3 h-fit my-1 w-full justify-start data-[state=true]:text-secondary'
+                                            onClick={handleClick}
+                                        >
+                                            <Link href={href} aria-current={isPathName(href) ? 'page' : undefined}>
+                                                <Icon aria-hidden="true" size={20} />
+                                                {open && <span className='pointer-events-none'>{label}</span>}
+                                            </Link>
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
 
-                        {groupIndex !== navigationLinks.length - 1 && (
-                            <Separator className='my-1' orientation="horizontal" />
-                        )}
-                    </React.Fragment>
-                ))}
+                            {groupIndex !== navigationLinks.length - 1 && (
+                                <Separator className='my-1' orientation="horizontal" role="separator" />
+                            )}
+                        </React.Fragment>
+                    ))}
+                </nav>
             </ScrollArea>
 
             {isMounted && (
-                <div className="flex flex-col w-full">
-                    <Separator className='my-1' orientation="horizontal" />
+                <div className="flex flex-col w-full" role="contentinfo">
+                    <Separator className='my-1' orientation="horizontal" role="separator" />
                     <ThemeToggle open={open} />
                 </div>
             )}
