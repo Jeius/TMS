@@ -82,6 +82,10 @@ const config: Config = {
 					'66%': { transform: 'scale(0.8)' },
 					'100%': { transform: 'scale(1)' },
 				},
+				'shine': {
+					from: { backgroundPosition: '200% 0' },
+					to: { backgroundPosition: '-200% 0' },
+				},
 				colors: {
 					filter: {
 						'blur-20': 'blur(1.25rem)',
@@ -91,6 +95,7 @@ const config: Config = {
 			},
 			animation: {
 				'pop-blob': 'pop-blob 5s infinite',
+				"shine": "shine 8s ease-in-out infinite",
 			},
 		}
 	},
