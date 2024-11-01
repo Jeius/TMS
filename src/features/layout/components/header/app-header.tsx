@@ -36,7 +36,7 @@ export default async function AppHeader() {
                                 role='img'
                                 className='size-[3rem]'
                             />
-                            <h1 className="sr-only md:not-sr-only">Thesis Management System</h1>
+                            <h1 className="sr-only lg:not-sr-only">Thesis Management System</h1>
                         </Link>
                     </div>
                     <div className="flex items-center space-x-2 pl-2">

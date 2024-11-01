@@ -1,14 +1,17 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import NavigationItems from '@/features/layout/components/navigation-items';
 import { NAVIGATIONROUTES } from '@/lib/constants';
+import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import ThemeSwitch from '../theme-switch';
 
 
 function LogoTitle() {
@@ -16,12 +19,13 @@ function LogoTitle() {
         <SheetTitle className="flex mt-4 items-center space-x-2 justify-start">
             <Image
                 src={'/images/msuiit-logo-275x280.png'}
-                alt='IIT'
-                width={40}
-                height={40}
-                className='size-auto'
+                alt="MSU-IIT Seal of Excellence"
+                width={70}
+                height={70}
+                role='img'
+                className='size-[3.5rem]'
             />
-            <span className="text-sm text-left font-bold">Thesis Management System</span>
+            <span className="text-left">Thesis Management System</span>
         </SheetTitle>
     );
 }
@@ -31,8 +35,8 @@ function MenuButton() {
         <Tooltip>
             <TooltipTrigger asChild>
                 <SheetTrigger asChild>
-                    <Button className="size-fit p-2" variant="ghost" aria-label="Open Menu">
-                        <Menu aria-hidden="true" focusable="false" />
+                    <Button className='size-fit p-2' variant="ghost" aria-label="Open Menu">
+                        <Menu aria-hidden="true" focusable="false" size='1.5rem' />
                     </Button>
                 </SheetTrigger>
             </TooltipTrigger>
@@ -45,7 +49,8 @@ function MenuButton() {
 
 export default function NavigationMenu() {
     const [open, setOpen] = useState(false);
-    const pathname = usePathname()
+    const pathname = usePathname();
+    const isMounted = useIsMounted();
     const isNavigationRoute = Object.values(NAVIGATIONROUTES).includes(pathname);
 
     return (
@@ -66,8 +71,14 @@ export default function NavigationMenu() {
                             This menu contains links to the primary sections of the Thesis Management System.
                         </SheetDescription>
 
-                        <div className="grow w-full overflow-y-auto">
+                        <div className="grow flex flex-col justify-between w-full overflow-y-auto">
                             <NavigationItems open={open} onOpenChanged={setOpen} />
+                            {isMounted && (
+                                <div className="flex flex-col" role="contentinfo">
+                                    <Separator className='my-1' orientation="horizontal" role="separator" />
+                                    <ThemeSwitch open={open} />
+                                </div>
+                            )}
                         </div>
                     </SheetContent>
                 </Sheet>

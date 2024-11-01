@@ -5,7 +5,7 @@ export default function Social() {
     return (
         <div className='flex items-center space-x-2 mt-2'>
             <Link
-                href='https://www.facebook.com/CCSCouncilOfficial'
+                href='https://www.facebook.com/MSUIITPHCCS?mibextid=ZbWKwL'
                 target="_blank"
                 rel="noopener noreferrer"
             >
