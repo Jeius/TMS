@@ -1,7 +1,7 @@
+import { Switch } from '@/components/ui/switch';
 import { useTheme } from 'next-themes';
-import { Switch } from './ui/switch';
 
-export default function ThemeToggle({ open }: { open?: boolean }) {
+export default function ThemeSwitch({ open }: { open?: boolean }) {
     const { theme, setTheme } = useTheme();
 
     const handleClick = (isChecked: boolean) => {

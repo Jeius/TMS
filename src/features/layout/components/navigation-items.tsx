@@ -1,6 +1,5 @@
 'use client'
 
-import ThemeToggle from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -10,6 +9,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
+import ThemeSwitch from './theme-switch';
 
 type NavigationItemsProps = React.HTMLAttributes<HTMLDivElement> & {
     open?: boolean, onOpenChanged?: (value: boolean) => void,
@@ -66,7 +66,7 @@ export default function NavigationItems({ className, open, onOpenChanged: setOpe
             {isMounted && (
                 <div className="flex flex-col w-full" role="contentinfo">
                     <Separator className='my-1' orientation="horizontal" role="separator" />
-                    <ThemeToggle open={open} />
+                    <ThemeSwitch open={open} />
                 </div>
             )}
         </div>
