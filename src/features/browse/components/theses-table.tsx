@@ -6,6 +6,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import ThesesTableContent from '@/features/browse/components/table-content'
 import { Thesis } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { useQuery } from '@tanstack/react-query'
 import {
     ColumnFiltersState,
     getCoreRowModel,
@@ -29,6 +30,7 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({ author: false, year: false, department: false, dateUploaded: false });
+    const { data: width = 'auto' } = useQuery<string>({ queryKey: ['tableWidth'] });
 
     // React Table instance setup
     const table = useReactTable({
@@ -48,7 +50,9 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
         <TooltipProvider>
             <div id="theses-table" className={cn('relative', className)} {...props}>
                 <div className="flex flex-col m-auto bg-card shadow border rounded-xl max-w-fit overflow-hidden">
-                    <div className='overflow-hidden p-4 gap-14 flex justify-between flex-col xs:flex-row items-center xs:items-end'>
+                    <div style={{ maxWidth: width }}
+                        className='overflow-hidden p-4 gap-14 flex justify-between flex-col xs:flex-row items-center xs:items-end'
+                    >
                         <Suspense><Filters /></Suspense>
                         <motion.div layout
                             transition={{ type: 'tween' }}
@@ -61,7 +65,9 @@ export default function ThesesTable({ data, className, ...props }: TableProps) {
 
                     <ThesesTableContent table={table} />
 
-                    <div className="flex w-full max-w-full overflow-hidden p-4 text-card-foreground">
+                    <div style={{ maxWidth: width }}
+                        className="flex w-full max-w-full overflow-hidden border-t p-4 text-card-foreground"
+                    >
                         <Button className="mx-auto font-bold flex-wrap h-auto min-h-10">
                             <BookCopyIcon aria-hidden="true" size='1.5rem' className='mr-2' />
                             Load more theses

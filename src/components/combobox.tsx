@@ -20,19 +20,21 @@ export type ComboboxItem = {
 }
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
-    onValueChanged?: (value: string) => void
-    placeholder: string
-    defaultValue?: string
-    itemsFn: (() => Promise<string[]>) | (() => string[])
+    itemsKey: string | number;
+    placeholder: string;
+    defaultValue?: string;
+    items: (() => Promise<string[]>) | (() => string[]);
+    onValueChanged?: (value: string) => void;
 }
 
 export function Combobox({
     placeholder,
+    itemsKey,
     defaultValue = '',
     className,
     variant = 'outline',
     onValueChanged = () => { },
-    itemsFn,
+    items: itemsFn,
     ...props
 }: ComboboxProps) {
     const [open, setOpen] = useState(false);
@@ -40,13 +42,12 @@ export function Combobox({
     const [searchTerm, setSearchTerm] = useState('');
     const firstItemRef = useRef<HTMLButtonElement | null>(null);
 
-    const { data: items = [], isLoading, refetch } = useQuery<string[]>({
-        queryKey: [placeholder],
+    const { data: items = [], isLoading, refetch } = useQuery({
+        queryKey: [itemsKey],
         queryFn: itemsFn,
-        staleTime: 60 * 1000,
-        refetchOnMount: true,
-        refetchInterval: 60 * 1000,
+        refetchOnMount: false,
     });
+
 
     const filteredItems = items.filter(
         item => item.toLowerCase().split(' ').join('').includes(
@@ -76,7 +77,7 @@ export function Combobox({
                     aria-expanded={open}
                     data-selected={open}
                     size="sm"
-                    className={cn('w-min justify-between text-foreground font-semibold', className)}
+                    className={cn('w-min justify-between', className)}
                     onClick={() => !open && refetch()}
                     {...props}
                 >

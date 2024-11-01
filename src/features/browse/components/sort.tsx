@@ -23,7 +23,7 @@ export default function SortOptions<TData>({ table }: { table: Table<TData> }) {
         const sortItem = e.currentTarget.value;
         const currentParams = new URLSearchParams(searchParams.toString())
         currentParams.set('sort', sortItem)
-        router.push(`?${currentParams.toString()}`)
+        router.replace(`?${currentParams.toString()}`)
 
         if (sortItem === 'alpha') {
             table.getColumn('title')?.toggleSorting(false) // Ascending

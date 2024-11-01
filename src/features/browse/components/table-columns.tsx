@@ -86,7 +86,7 @@ function MainColumnCell<TData>({ row }: MainColumnCellProps<TData>) {
                     className="p-1 h-fit whitespace-normal justify-start font-bold text-secondary"
                 >
                     <Link href={'#'}>
-                        <h3 className="line-clamp-3 text-ellipsis">{title}</h3>
+                        <h3 className="lg:text-base line-clamp-3 text-ellipsis">{title}</h3>
                     </Link>
                 </Button>
 

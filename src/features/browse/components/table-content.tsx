@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/component
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements';
 import { VisibilityColumn } from '@/features/browse/components/column-visibility';
 import { columns } from '@/features/browse/components/table-columns';
+import { useQuery } from '@tanstack/react-query';
 import { Table as Tb } from '@tanstack/react-table';
 import { useAnimate } from 'framer-motion';
 import { debounce } from 'lodash';
@@ -16,6 +17,24 @@ type ThesesTableContentProps<TData> = {
 export default function ThesesTableContent<TData>({ table }: ThesesTableContentProps<TData>) {
     const [scope, animate] = useAnimate();
     const [scrollState, setScrollState] = useState({ left: { value: 0, isScrolled: false } });
+
+    const { refetch: updateWidth } = useQuery({
+        queryKey: ['tableWidth'],
+        queryFn: () => {
+            if (scope.current) {
+                return `${scope.current.offsetWidth}px`;
+            }
+            return 'auto';
+        },
+        refetchOnMount: false,
+    });
+
+    useEffect(() => {
+        const current = scope.current;
+        const resizeObserver = new ResizeObserver(() => { updateWidth() });
+        scope.current && resizeObserver.observe(scope.current);
+        return () => { current && resizeObserver.unobserve(current) };
+    }, [scope, updateWidth]);
 
     useEffect(() => {
         const handleScrollLeft = debounce((e: Event) => {

@@ -3,10 +3,10 @@
 import { booleanToString, stringToBoolean } from '@/lib/utils';
 import { fetchFilterValues } from '@/mock/actions/fetch-filters';
 import { getFilters } from '@/server/actions/filters';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useIsFetching, useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Combobox } from './combobox';
 import { Button } from './ui/button';
 
@@ -24,12 +24,12 @@ export default function Filters({
     const router = useRouter();
     const searchParams = useSearchParams();
     const [showMoreFilters, setShowMoreFilters] = useState(stringToBoolean(searchParams.get('moreFilters')));
-    const queryClient = useQueryClient()
+    const isFetching = useIsFetching();
 
     const { data: fetchedFilters = [] } = useQuery({
         queryKey: ['filters'],
         queryFn: (!filters && (() => getFilters())) || (() => filters),
-        refetchOnMount: true
+        refetchOnMount: false,
     });
 
     const filtersWithDefaults = (filters ?? fetchedFilters).map(filter => ({
@@ -47,36 +47,31 @@ export default function Filters({
         } else {
             currentParams.delete(key);
         }
-        router.push(`?${currentParams.toString()}`);
+        router.replace(`?${currentParams.toString()}`);
     };
 
     const toggleMoreFilters = () => {
-        setShowMoreFilters(prev => {
-            updateSearchParams('moreFilters', booleanToString(!prev));
-            return !prev;
-        });
+        updateSearchParams('moreFilters', booleanToString(!showMoreFilters));
+        setShowMoreFilters(prev => !prev);
     };
-
-    useEffect(() => {
-        queryClient.invalidateQueries({ queryKey: ['filters'] });
-    }, [queryClient]);
 
     return (
         <div className="flex gap-2 flex-wrap">
-            {initialFilters.map(filter => (
-                <motion.div layout key={filter.key} transition={{ type: 'tween' }}>
+            {initialFilters.map(({ key, value }) => (
+                <motion.div layout key={key} transition={{ type: 'tween' }}>
                     <Combobox
                         className="flex"
-                        placeholder={filter.key}
-                        defaultValue={filter.value}
-                        onValueChanged={(value) => updateSearchParams(filter.key, value)}
-                        itemsFn={() => fetchFilterValues(filter.key)}
+                        itemsKey={key}
+                        placeholder={key}
+                        defaultValue={value}
+                        onValueChanged={(value) => updateSearchParams(key, value)}
+                        items={() => fetchFilterValues(key)}
                     />
                 </motion.div>
             ))}
             <AnimatePresence mode="popLayout">
-                {showMoreFilters && moreFilters.map(filter => (
-                    <motion.div key={filter.key}
+                {showMoreFilters && moreFilters.map(({ key, value }) => (
+                    <motion.div key={key}
                         layout
                         initial={{ x: -60, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
@@ -85,10 +80,11 @@ export default function Filters({
                     >
                         <Combobox
                             className="flex"
-                            placeholder={filter.key}
-                            defaultValue={filter.value}
-                            onValueChanged={(value) => updateSearchParams(filter.key, value)}
-                            itemsFn={() => fetchFilterValues(filter.key)}
+                            itemsKey={key}
+                            placeholder={key}
+                            defaultValue={value}
+                            onValueChanged={(value) => updateSearchParams(key, value)}
+                            items={() => fetchFilterValues(key)}
                         />
                     </motion.div>
                 ))}
@@ -102,7 +98,7 @@ export default function Filters({
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="text-secondary/85 hover:text-secondary hover:bg-transparent font-bold"
+                        className="text-secondary/80 hover:text-secondary hover:bg-transparent font-semibold text-xs"
                         onClick={toggleMoreFilters}
                     >
                         {showMoreFilters ? 'Less filters' : 'More filters'}
