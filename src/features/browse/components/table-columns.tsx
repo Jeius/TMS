@@ -11,25 +11,23 @@ import Link from 'next/link'
 
 type ColumnsData = {
     accessorKey: string
-    size: number
     isMainColumn?: boolean
 }
 
 const columnsData: ColumnsData[] = [
-    { accessorKey: 'title', size: 500, isMainColumn: true },
-    { accessorKey: 'author', size: 250 },
-    { accessorKey: 'year', size: 100 },
-    { accessorKey: 'adviser', size: 250 },
-    { accessorKey: 'specialization', size: 300 },
-    { accessorKey: 'department', size: 300 },
-    { accessorKey: 'dateUploaded', size: 180 },
+    { accessorKey: 'title', isMainColumn: true },
+    { accessorKey: 'author' },
+    { accessorKey: 'year' },
+    { accessorKey: 'adviser' },
+    { accessorKey: 'specialization' },
+    { accessorKey: 'department' },
+    { accessorKey: 'dateUploaded', },
 ];
 
 const createColumns = (columnsData: ColumnsData[]) => {
-    return columnsData.map(({ accessorKey, size, isMainColumn }): ColumnDef<Thesis> => {
+    return columnsData.map(({ accessorKey, isMainColumn }): ColumnDef<Thesis> => {
         return {
             accessorKey,
-            size,
             header: ({ table }: { table: Table<Thesis> }) => (
                 isMainColumn ? (
                     <MainColumnHeader table={table} />
@@ -78,22 +76,27 @@ function MainColumnCell<TData>({ row }: MainColumnCellProps<TData>) {
     const department = row.getValue('department') as string
 
     return (
-        <div className="flex">
+        <div className="flex text-pretty text-left">
             <Checkbox className="my-auto ml-1"
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
                 aria-label={`Select ${title}`} />
             <div className="flex flex-col space-y-1 p-2">
                 <Button variant="link" data-title={title} asChild
-                    className="text-secondary size-fit text-base p-1 line-clamp-3 text-ellipsis font-bold"
+                    className="p-1 h-fit whitespace-normal justify-start font-bold text-secondary"
                 >
-                    <Link href={'#'}>{title}</Link>
+                    <Link href={'#'}>
+                        <h3 className="line-clamp-3 text-ellipsis">{title}</h3>
+                    </Link>
                 </Button>
+
                 <div className="px-1 text-xs font-semibold" data-author-list={author}>
                     <span>{author}</span>
                 </div>
-                <div className="px-1 flex items-center text-sm">
-                    <span>{year}</span> <Dot size={25} aria-hidden="true" /> <span>{department}</span>
+                <div className="px-1 flex flex-col xs:flex-row gap-1 xs:items-center text-sm">
+                    <span>{year}</span>
+                    <Dot size='1.5rem' aria-hidden="true" className='hidden xs:block shrink-0' />
+                    <span>{department}</span>
                 </div>
             </div>
         </div>

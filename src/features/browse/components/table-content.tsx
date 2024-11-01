@@ -4,7 +4,6 @@ import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/component
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements';
 import { VisibilityColumn } from '@/features/browse/components/column-visibility';
 import { columns } from '@/features/browse/components/table-columns';
-import { useQuery } from '@tanstack/react-query';
 import { Table as Tb } from '@tanstack/react-table';
 import { useAnimate } from 'framer-motion';
 import { debounce } from 'lodash';
@@ -17,22 +16,6 @@ type ThesesTableContentProps<TData> = {
 export default function ThesesTableContent<TData>({ table }: ThesesTableContentProps<TData>) {
     const [scope, animate] = useAnimate();
     const [scrollState, setScrollState] = useState({ left: { value: 0, isScrolled: false } });
-    const { refetch: updateWidth } = useQuery({
-        queryKey: ['tableWidth'], refetchOnMount: false, staleTime: Infinity,
-        queryFn: () => {
-            if (scope.current) {
-                return `${scope.current.offsetWidth}px`;
-            }
-            return 'auto';
-        },
-    });
-
-    useEffect(() => {
-        const current = scope.current;
-        const resizeObserver = new ResizeObserver(() => { updateWidth() });
-        scope.current && resizeObserver.observe(scope.current);
-        return () => { current && resizeObserver.unobserve(current) };
-    }, [scope, updateWidth]);
 
     useEffect(() => {
         const handleScrollLeft = debounce((e: Event) => {
@@ -50,10 +33,12 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
                 const scrollTop = Math.max(0, headerRect.height - currentRect.top);
                 animate('thead', {
                     y: scrollTop,
-                    boxShadow: scrollTop > 0 ? '0 0 6px rgba(0, 0, 0, 0.15)' : undefined,
+                    boxShadow: scrollTop > 0 ? '0 0 0.375rem rgba(0, 0, 0, 0.15)' : undefined,
                 }, { type: 'tween', duration: 0 });
             }
-        }, 0);
+        }, 0, { leading: true, maxWait: 0 });
+
+        handleScrollTop();
 
         window.addEventListener('scroll', handleScrollTop);
         const scrollArea = scope.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;

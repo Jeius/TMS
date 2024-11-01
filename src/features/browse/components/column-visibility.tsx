@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { PopoverClose } from '@radix-ui/react-popover';
 import { Table } from '@tanstack/react-table';
-import { Plus } from 'lucide-react';
+import { Plus, PlusIcon } from 'lucide-react';
 
 export function VisibilityColumn<TData>({ table }: { table: Table<TData> }) {
     const columns = table.getAllColumns().filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide() && !column.getIsVisible());
     return (
-        <div className="p-2 sm:w-full sm:max-w-xs min-w-[210px] lg:min-w-[280px]">
+        <div className="p-2 sm:w-full sm:max-w-xs min-w-[13.125rem] lg:min-w-[17.5rem]">
             <div className="py-3 px-4 font-semibold">
                 <h3>Add Columns</h3>
             </div>
@@ -15,11 +16,11 @@ export function VisibilityColumn<TData>({ table }: { table: Table<TData> }) {
                     key={column.id}
                     variant="ghost"
                     size="sm"
-                    className="flex items-center space-x-2 capitalize w-full"
+                    className="flex justify-start items-center space-x-2 capitalize w-full"
                     onClick={() => column.toggleVisibility(true)}
                 >
-                    <Plus aria-hidden="true" focusable="false" size={16} />
-                    <span className="line-clamp-2 w-full overflow-hidden text-left capitalize text-ellipsis">
+                    <Plus aria-hidden="true" focusable="false" size='1rem' />
+                    <span className="line-clamp-2 text-left truncate">
                         {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
                     </span>
                 </Button>
@@ -29,35 +30,41 @@ export function VisibilityColumn<TData>({ table }: { table: Table<TData> }) {
 }
 
 export function VisibilityMenu<TData>({ table }: { table: Table<TData> }) {
-    const columns = table.getAllColumns().filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide() && !column.getIsVisible());
+    const columns = table
+        .getAllColumns()
+        .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide() && !column.getIsVisible());
+
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    className="px-2 text-xs"
-                >
-                    <Plus className="mr-2" size={16} aria-hidden="true" />
-                    <span>Add Columns</span>
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button size='sm' className='font-semibold'>
+                    Add Columns
                 </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[150px] min-h-[100px]">
-                <DropdownMenuLabel>Select Columns</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {columns.length
-                    ? (columns.map((column) => {
-                        return (
-                            <DropdownMenuCheckboxItem
-                                key={column.id}
-                                className="capitalize"
-                                checked={column.getIsVisible()}
-                                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                            >
-                                {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
-                            </DropdownMenuCheckboxItem>
-                        );
-                    }))
-                    : (<DropdownMenuItem disabled><span className="mx-auto text-sm">Nothing to add...</span></DropdownMenuItem>)}
-            </DropdownMenuContent>
-        </DropdownMenu>
+            </PopoverTrigger>
+            <PopoverContent align='end' className='p-1 w-fit sm:p-2 sm:w-52 z-10'>
+                <h3 className='sr-only'>Select columns to add</h3>
+                <ul className='flex flex-col'>
+                    {columns.length
+                        ? (columns.map((column) => (
+                            <li key={column.id}>
+                                <PopoverClose asChild>
+                                    <Button
+                                        size='sm'
+                                        variant='ghost'
+                                        className='capitalize w-full justify-start text-xs'
+                                        onClick={() => column.toggleVisibility(true)}
+                                    >
+                                        <PlusIcon aria-hidden='true' size='1rem' className='mr-2' />
+                                        {column.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
+                                    </Button>
+                                </PopoverClose>
+                            </li>
+                        )))
+                        : (
+                            <li className="mx-auto text-sm">Nothing to add...</li>
+                        )}
+                </ul>
+            </PopoverContent>
+        </Popover>
     );
 }

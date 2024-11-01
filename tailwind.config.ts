@@ -73,7 +73,7 @@ const config: Config = {
 				'3xl': '112rem',
 			},
 			boxShadow: {
-				'right': '1px 0 5px rgba(0, 0, 0, 0.1)',
+				'right': '0.0625rem 0 0.3125rem rgba(0, 0, 0, 0.1)',
 			},
 			keyframes: {
 				'pop-blob': {
