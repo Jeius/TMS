@@ -61,6 +61,9 @@ const config: Config = {
 				md: 'calc(var(--radius) - 0.125rem)',
 				sm: 'calc(var(--radius) - 0.25rem)'
 			},
+			borderWidth: {
+				'0.5': '0.03125rem',
+			},
 			screens: {
 				'3xs': '16rem',
 				'2xs': '24rem',
