@@ -1,9 +1,9 @@
 'use client'
 
+import { fetchFilters } from '@/features/browse/lib/actions';
 import { booleanToString, stringToBoolean } from '@/lib/utils';
 import { fetchFilterValues } from '@/mock/actions/fetch-filters';
-import { getFilters } from '@/server/actions/filters';
-import { useIsFetching, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -24,12 +24,11 @@ export default function Filters({
     const router = useRouter();
     const searchParams = useSearchParams();
     const [showMoreFilters, setShowMoreFilters] = useState(stringToBoolean(searchParams.get('moreFilters')));
-    const isFetching = useIsFetching();
 
-    const { data: fetchedFilters = [] } = useQuery({
+    const { data: fetchedFilters = [] } = useQuery<string[]>({
         queryKey: ['filters'],
-        queryFn: (!filters && (() => getFilters())) || (() => filters),
-        refetchOnMount: false,
+        queryFn: fetchFilters,
+        enabled: !filters,
     });
 
     const filtersWithDefaults = (filters ?? fetchedFilters).map(filter => ({

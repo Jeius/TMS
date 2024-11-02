@@ -6,22 +6,21 @@ import { AnimatePresence } from 'framer-motion';
 type AnimatedTableHeadProps<TData, TValue> = {
     headers: Header<TData, TValue>[];
     scrollState: { left: { isScrolled: boolean } };
-    firstColumnId: string;
 };
 
 export function AnimatedTableHead<TData, TValue>({
-    headers, scrollState, firstColumnId
+    headers, scrollState
 }: AnimatedTableHeadProps<TData, TValue>) {
     return (
         <AnimatePresence mode="popLayout">
             {headers.map(header => {
-                const isFirstColumn = header.id === firstColumnId;
+                const isMainColumn = header.id === 'theses';
                 return (
                     <TableHead
                         key={header.id}
                         scope="col"
-                        layout={!isFirstColumn ? true : undefined}
-                        motion={!isFirstColumn}
+                        layout={!isMainColumn ? true : undefined}
+                        motion={!isMainColumn}
                         initial={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, y: 30 }}
@@ -29,7 +28,7 @@ export function AnimatedTableHead<TData, TValue>({
                         data-scroll-state={scrollState.left.isScrolled && 'scrolled'}
                         className={cn(
                             'left-0 px-4 border-y bg-muted bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45',
-                            isFirstColumn ? 'md:sticky z-[1] w-[min(32rem,85vw)] data-[scroll-state=scrolled]:md:shadow-right' : 'w-[14rem] z-0',
+                            isMainColumn ? 'md:sticky z-[1] w-[min(32rem,85vw)] data-[scroll-state=scrolled]:md:shadow-right' : 'w-[14rem] z-0',
                         )}
                     >
                         {flexRender(header.column.columnDef.header, header.getContext())}
@@ -43,20 +42,19 @@ export function AnimatedTableHead<TData, TValue>({
 type AnimatedTableCellProps<TData> = {
     row: Row<TData>;
     scrollState: { left: { isScrolled: boolean } };
-    firstColumnId: string;
 };
 
-export function AnimatedTableCell<TData>({ row, scrollState, firstColumnId }: AnimatedTableCellProps<TData>) {
+export function AnimatedTableCell<TData>({ row, scrollState }: AnimatedTableCellProps<TData>) {
     return (
         <AnimatePresence mode="popLayout">
             {row.getVisibleCells().map((cell) => {
-                const isFirstColumn = cell.column.id === firstColumnId
+                const isMainColumn = cell.column.id === 'theses';
                 return (
                     <TableCell
                         scope="col"
                         key={cell.id}
-                        layout={!isFirstColumn ? true : undefined}
-                        motion={!isFirstColumn}
+                        layout={!isMainColumn ? true : undefined}
+                        motion={!isMainColumn}
                         initial={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, y: 30 }}
@@ -66,7 +64,7 @@ export function AnimatedTableCell<TData>({ row, scrollState, firstColumnId }: An
                         data-scroll-state={scrollState.left.isScrolled && 'scrolled'}
                         className={cn(
                             'left-0 align-top border-b p-4 bg-card data-[state=selected]:bg-accent transition-colors',
-                            isFirstColumn ? 'md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right' : ''
+                            isMainColumn ? 'md:sticky z-[1] data-[scroll-state=scrolled]:md:shadow-right' : ''
                         )}
                     >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

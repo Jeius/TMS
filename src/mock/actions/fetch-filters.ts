@@ -129,3 +129,15 @@ export async function fetchFilterValues(filter: string) {
 
   return (fetcher && await fetcher()) ?? [];
 }
+
+export async function fetchMockFilters() {
+  return [
+    'college',
+    'department',
+    'year',
+    'specialization',
+    'author',
+    'adviser',
+    'panelist',
+  ];
+};

@@ -1,72 +1,97 @@
+'use client'
 
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/components/ui/table';
-import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements';
-import { VisibilityColumn } from '@/features/browse/components/column-visibility';
-import { columns } from '@/features/browse/components/table-columns';
-import { useQuery } from '@tanstack/react-query';
-import { Table as Tb } from '@tanstack/react-table';
-import { useAnimate } from 'framer-motion';
-import { debounce } from 'lodash';
-import { useEffect, useState } from 'react';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/components/ui/table'
+import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements'
+import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility'
+import { Thesis } from '@/lib/types'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+    ColumnFiltersState,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    SortingState,
+    useReactTable,
+    VisibilityState
+} from '@tanstack/react-table'
+import { useAnimate } from 'framer-motion'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { useResizeObserver, useScrollEvents } from '../lib/hooks'
+import { createColumns, createMainColumn } from './table-columns'
 
-type ThesesTableContentProps<TData> = {
-    table: Tb<TData>;
+type ThesesTableContentProps = {
+    theses: Thesis[];
+    columnIds: string[];
 }
 
-export default function ThesesTableContent<TData>({ table }: ThesesTableContentProps<TData>) {
+const initialHidden = { author: false, year: false, department: false, dateUploaded: false };
+const initialScrollState = { left: { value: 0, isScrolled: false } };
+
+export default function ThesesTableContent({ theses, columnIds }: ThesesTableContentProps) {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const columns = useMemo(() => [createMainColumn(), ...createColumns(columnIds)], [columnIds]);
+
+    const visibleColumns = useMemo(() => {
+        const columnsParam = searchParams.get('cols');
+        return columnsParam ? columnsParam.split(',') : [];
+    }, [searchParams]);
+
+    const initialColumns = useMemo(() => {
+        const visibility: VisibilityState = {};
+        columns.forEach(col => {
+            if (col.id !== 'theses') visibility[col.id as string] = visibleColumns.includes(col.id as string);
+        });
+        return visibility;
+    }, [visibleColumns]);
+
+    const queryClient = useQueryClient();
     const [scope, animate] = useAnimate();
-    const [scrollState, setScrollState] = useState({ left: { value: 0, isScrolled: false } });
+    const [scrollState, setScrollState] = useState(initialScrollState);
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initialColumns);
 
-    const { refetch: updateWidth } = useQuery({
-        queryKey: ['tableWidth'],
-        queryFn: () => {
-            if (scope.current) {
-                return `${scope.current.offsetWidth}px`;
-            }
-            return 'auto';
-        },
-        refetchOnMount: false,
-    });
+    const table = useReactTable({
+        data: theses,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        onColumnVisibilityChange: setColumnVisibility,
+        initialState: { columnVisibility: initialHidden },
+        state: { sorting, columnFilters, columnVisibility },
+    })
+
+    function updateWidth() {
+        const width = scope.current ? `${scope.current.offsetWidth}px` : 'auto';
+        queryClient.setQueryData(['tableWidth'], width);
+    }
+
+    useResizeObserver({ scopeRef: scope, updateWidth });
+    useScrollEvents({ scopeRef: scope, setScrollState, animate });
 
     useEffect(() => {
-        const current = scope.current;
-        const resizeObserver = new ResizeObserver(() => { updateWidth() });
-        scope.current && resizeObserver.observe(scope.current);
-        return () => { current && resizeObserver.unobserve(current) };
-    }, [scope, updateWidth]);
+        queryClient.setQueryData(['thesesTable'], table)
+    }, [table]);
 
     useEffect(() => {
-        const handleScrollLeft = debounce((e: Event) => {
-            const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
-            setScrollState(prevState => ({
-                ...prevState,
-                left: { value: scrollLeft, isScrolled: scrollLeft > 0 }
-            }));
-        }, 200, { leading: true });
+        const params = new URLSearchParams(searchParams.toString());
+        const visibleColumns = Object.entries(columnVisibility).filter(entry => entry[1]).map(entry => entry[0]);
 
-        const handleScrollTop = debounce(() => {
-            const currentRect = scope.current?.getBoundingClientRect();
-            const headerRect = document.getElementById('app-header')?.getBoundingClientRect();
-            if (currentRect && headerRect) {
-                const scrollTop = Math.max(0, headerRect.height - currentRect.top);
-                animate('thead', {
-                    y: scrollTop,
-                    boxShadow: scrollTop > 0 ? '0 0 0.375rem rgba(0, 0, 0, 0.15)' : undefined,
-                }, { type: 'tween', duration: 0 });
-            }
-        }, 0, { leading: true, maxWait: 0 });
-
-        handleScrollTop();
-
-        window.addEventListener('scroll', handleScrollTop);
-        const scrollArea = scope.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
-        scrollArea && scrollArea.addEventListener('scroll', handleScrollLeft);
-        return () => {
-            scrollArea && scrollArea.removeEventListener('scroll', handleScrollLeft);
-            window.removeEventListener('scroll', handleScrollTop);
-        };
-    }, [scope, animate]);
+        if (visibleColumns.length !== 0) {
+            params.set('cols', visibleColumns.join(','));
+        } else {
+            params.delete('cols');
+        }
+        router.replace(`?${params.toString()}`);
+    }, [searchParams, columnVisibility]);
 
     return (
         <ScrollArea
@@ -78,7 +103,7 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
                     <TableHeader className="sticky top-0 z-10 text-xs hover:bg-transparent">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id} className="align-top border-0 hover:bg-transparent">
-                                <AnimatedTableHead firstColumnId="title" headers={headerGroup.headers} scrollState={scrollState} />
+                                <AnimatedTableHead headers={headerGroup.headers} scrollState={scrollState} />
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -86,7 +111,7 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
                         {table.getRowModel().rows.length
                             ? (table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} className="align-top hover:bg-transparent">
-                                    <AnimatedTableCell firstColumnId='title' row={row} scrollState={scrollState} />
+                                    <AnimatedTableCell row={row} scrollState={scrollState} />
                                 </TableRow>
                             )))
                             : (
@@ -101,7 +126,7 @@ export default function ThesesTableContent<TData>({ table }: ThesesTableContentP
                 {table.getAllColumns().filter(column => column.getCanHide() && !column.getIsVisible()).length
                     ? (
                         <div className="block border-l border-y bg-card/80 z-10 lg:pr-20">
-                            <VisibilityColumn table={table} />
+                            <ColumnVisibilityControl type='column' />
                         </div>
                     ) : (null)}
             </div>

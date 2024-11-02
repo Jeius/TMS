@@ -9,49 +9,40 @@ import { HTMLMotionProps, motion } from 'framer-motion'
 import { Dot, X } from 'lucide-react'
 import Link from 'next/link'
 
-type ColumnsData = {
-    accessorKey: string
-    isMainColumn?: boolean
-}
 
-const columnsData: ColumnsData[] = [
-    { accessorKey: 'title', isMainColumn: true },
-    { accessorKey: 'author' },
-    { accessorKey: 'year' },
-    { accessorKey: 'adviser' },
-    { accessorKey: 'specialization' },
-    { accessorKey: 'department' },
-    { accessorKey: 'dateUploaded', },
-];
-
-const createColumns = (columnsData: ColumnsData[]) => {
-    return columnsData.map(({ accessorKey, isMainColumn }): ColumnDef<Thesis> => {
+export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
+    return columnsData.map(accessorKey => {
         return {
             accessorKey,
+            id: accessorKey,
             header: ({ table }: { table: Table<Thesis> }) => (
-                isMainColumn ? (
-                    <MainColumnHeader table={table} />
-                ) : (
-                    <ColumnHeader table={table} accessorKey={accessorKey} />
-                )
+                <ColumnHeader table={table} accessorKey={accessorKey} />
             ),
             cell: ({ row }: { row: Row<Thesis> }) => (
-                isMainColumn ? (
-                    <MainColumnCell row={row} />
-                ) : (
-                    <ColumnCell accessorKey={accessorKey} row={row} />
-                )
+                <ColumnCell accessorKey={accessorKey} row={row} />
             ),
         }
-    });
-};
+    })
+}
 
-type MainColumnHeaderProps<TData> = { table: Table<TData> }
+export function createMainColumn(): ColumnDef<Thesis> {
+    return {
+        id: 'theses',
+        enableHiding: false,
+        header: ({ table }: { table: Table<Thesis> }) => (
+            <MainColumnHeader id='theses' table={table} />
+        ),
+        cell: ({ row }: { row: Row<Thesis> }) => (
+            <MainColumnCell row={row} />
+        ),
+    };
+}
 
-function MainColumnHeader<TData>({ table }: MainColumnHeaderProps<TData>) {
+
+function MainColumnHeader<TData>({ table, id }: { table: Table<TData>, id: string }) {
     return (
         <div className="flex items-center space-x-3 text-foreground min-w-32">
-            <Checkbox id="theses"
+            <Checkbox id={id}
                 checked={
                     table.getIsAllPageRowsSelected() ||
                     (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -60,16 +51,14 @@ function MainColumnHeader<TData>({ table }: MainColumnHeaderProps<TData>) {
                 className="ml-1"
                 aria-label="Select all"
             />
-            <label
-                htmlFor="theses"
-                className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >Theses</label>
+            <label htmlFor={id} className="leading-none capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                {id}
+            </label>
         </div>)
 }
 
-type MainColumnCellProps<TData> = { row: Row<TData> }
 
-function MainColumnCell<TData>({ row }: MainColumnCellProps<TData>) {
+function MainColumnCell<TData>({ row }: { row: Row<TData> }) {
     const title = row.getValue('title') as string
     const author = row.getValue('author') as string
     const year = row.getValue('year') as string
@@ -124,10 +113,13 @@ function ColumnCell<TData>({ accessorKey, row, ...props }: ColumnCellProps<TData
 type ColumnHeaderProps<TData> = HTMLMotionProps<'div'> & {
     table: Table<TData>;
     accessorKey: string;
-    hideClose?: boolean;
 }
 
-function ColumnHeader<TData>({ accessorKey, table, hideClose = false, className, ...props }: ColumnHeaderProps<TData>) {
+function ColumnHeader<TData>({ accessorKey, table, className, ...props }: ColumnHeaderProps<TData>) {
+    function handleClick() {
+        table?.getColumn(accessorKey)?.toggleVisibility(false);
+    }
+
     return (
         <Tooltip>
             <motion.div
@@ -140,18 +132,18 @@ function ColumnHeader<TData>({ accessorKey, table, hideClose = false, className,
                 <span className="capitalize">
                     {accessorKey.replace(/([a-z])([A-Z])/g, '$1 $2')}
                 </span>
-                {!hideClose && (
+                {
                     <TooltipTrigger asChild>
                         <Button
                             variant="ghost"
                             aria-label="Remove column"
                             className="rounded-full p-0.5 size-5 text-muted-foreground hover:text-foreground hover:bg-transparent"
-                            onClick={() => table?.getColumn(accessorKey)?.toggleVisibility(false)}
+                            onClick={handleClick}
                         >
                             <X aria-hidden="true" />
                         </Button>
                     </TooltipTrigger>
-                )}
+                }
             </motion.div>
             <TooltipContent>
                 <p>Remove column</p>
@@ -159,5 +151,3 @@ function ColumnHeader<TData>({ accessorKey, table, hideClose = false, className,
         </Tooltip>
     );
 }
-
-export const columns = createColumns(columnsData);

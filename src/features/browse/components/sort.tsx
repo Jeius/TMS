@@ -2,7 +2,10 @@
 
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Thesis } from '@/lib/types'
 import { PopoverClose } from '@radix-ui/react-popover'
+import { useQuery } from '@tanstack/react-query'
 import { Table } from '@tanstack/react-table'
 import { CheckIcon, ChevronsUpDown } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -14,10 +17,12 @@ const sortItems = [
     { label: 'Z - A', value: '-alpha' },
 ]
 
-export default function SortOptions<TData>({ table }: { table: Table<TData> }) {
+export default function SortOptions() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const defaultValue = sortItems?.find(item => item.value === searchParams.get('sort'))?.value
+
+    const { data: table, isFetching } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const sortItem = e.currentTarget.value;
@@ -26,13 +31,13 @@ export default function SortOptions<TData>({ table }: { table: Table<TData> }) {
         router.replace(`?${currentParams.toString()}`)
 
         if (sortItem === 'alpha') {
-            table.getColumn('title')?.toggleSorting(false) // Ascending
+            table?.getColumn('title')?.toggleSorting(false) // Ascending
         } else if (sortItem === '-alpha') {
-            table.getColumn('title')?.toggleSorting(true) // Descending
+            table?.getColumn('title')?.toggleSorting(true) // Descending
         } else if (sortItem === 'latest') {
-            table.getColumn('year')?.toggleSorting(true) // Descending (latest first)
+            table?.getColumn('year')?.toggleSorting(true) // Descending (latest first)
         } else if (sortItem === 'old') {
-            table.getColumn('year')?.toggleSorting(false) // Ascending (oldest first)
+            table?.getColumn('year')?.toggleSorting(false) // Ascending (oldest first)
         }
     }
 
@@ -49,21 +54,26 @@ export default function SortOptions<TData>({ table }: { table: Table<TData> }) {
                 <ul>
                     {sortItems.map(({ label, value }) => (
                         <li key={value}>
-                            <PopoverClose asChild>
-                                <Button
-                                    variant='ghost'
-                                    value={value} onClick={handleClick}
-                                    className='justify-start w-full text-xs'
-                                >
-                                    <CheckIcon
-                                        aria-hidden='true'
-                                        size='1rem'
-                                        data-selected={defaultValue === value}
-                                        className='mr-2 opacity-0 data-[selected=true]:opacity-100'
-                                    />
-                                    {label}
-                                </Button>
-                            </PopoverClose>
+                            {isFetching
+                                ? (<Skeleton className='h-10 w-full border' />)
+                                : (
+                                    <PopoverClose asChild>
+                                        <Button
+                                            variant='ghost'
+                                            value={value} onClick={handleClick}
+                                            className='justify-start w-full text-xs'
+                                        >
+                                            <CheckIcon
+                                                aria-hidden='true'
+                                                size='1rem'
+                                                data-selected={defaultValue === value}
+                                                className='mr-2 opacity-0 data-[selected=true]:opacity-100'
+                                            />
+                                            {label}
+                                        </Button>
+                                    </PopoverClose>
+                                )
+                            }
                         </li>
                     ))}
                 </ul>
