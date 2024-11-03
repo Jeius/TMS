@@ -6,35 +6,25 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon } from 'lucide-react'
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { ScrollArea } from './ui/scroll-area'
-import { Skeleton } from './ui/skeleton'
-
-export type ComboboxItem = {
-    value?: string;
-    label?: string;
-}
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
-    itemsKey: string | number;
     placeholder: string;
-    defaultValue?: string;
-    items: (() => Promise<string[]>) | (() => string[]);
-    onValueChanged?: (value: string) => void;
+    items?: string[];
+    onValueChanged?: (value?: string) => void;
 }
 
 export function Combobox({
     placeholder,
-    itemsKey,
-    defaultValue = '',
+    defaultValue,
     className,
     variant = 'outline',
     onValueChanged = () => { },
-    items: itemsFn,
+    items = [],
     ...props
 }: ComboboxProps) {
     const [open, setOpen] = useState(false);
@@ -42,22 +32,18 @@ export function Combobox({
     const [searchTerm, setSearchTerm] = useState('');
     const firstItemRef = useRef<HTMLButtonElement | null>(null);
 
-    const { data: items = [], isLoading, refetch } = useQuery({
-        queryKey: [itemsKey],
-        queryFn: itemsFn,
-        refetchOnMount: false,
-    });
-
-
-    const filteredItems = items.filter(
-        item => item.toLowerCase().split(' ').join('').includes(
-            searchTerm.toLowerCase().split(' ').join('')
-        )
+    const filteredItems = items.filter(item =>
+        item.toLowerCase()
+            .split(' ')
+            .join('')
+            .includes(searchTerm.toLowerCase().split(' ').join(''))
     );
 
-    const handleSelect = (value: string) => {
-        setSelectedValue(value === selectedValue ? '' : value);
-        onValueChanged(value === selectedValue ? '' : value);
+    function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        const item = e.currentTarget.value;
+        const value = item === selectedValue ? undefined : item;
+        setSelectedValue(value);
+        onValueChanged(value);
         setOpen(false);
         setSearchTerm('');
     };
@@ -66,7 +52,7 @@ export function Combobox({
         if (open && firstItemRef.current) {
             firstItemRef.current.focus();
         }
-    }, [open, firstItemRef])
+    }, [open, firstItemRef]);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -77,15 +63,13 @@ export function Combobox({
                     aria-expanded={open}
                     data-selected={open}
                     size="sm"
-                    className={cn('w-min justify-between', className)}
-                    onClick={() => !open && refetch()}
+                    className={cn('w-min justify-between capitalize text-xs', className)}
                     {...props}
                 >
-                    <span className="capitalize mr-2">
-                        {selectedValue
-                            ? items.find((item) => item === selectedValue) ?? selectedValue
-                            : placeholder}
-                    </span>
+                    {selectedValue
+                        ? <span className="font-semibold mr-2">{selectedValue}</span>
+                        : <span className="text-foreground/80 mr-2">{placeholder}</span>
+                    }
                     <motion.div
                         style={{ transformOrigin: 'center' }}
                         animate={{ rotate: open ? 180 : 0 }}
@@ -111,32 +95,26 @@ export function Combobox({
                     />
                 </div>
                 <ScrollArea className="flex flex-col h-min max-h-52 space-y-1 p-2">
-                    {isLoading ? (
-                        <div className="w-40">
-                            {Array.from({ length: 5 }).map(() => (
-                                <Skeleton key={crypto.randomUUID()} className="mb-2 h-8 w-full" />
-                            ))}
-                        </div>
-                    ) : (
-                        filteredItems?.length === 0
-                            ? <p className="w-40 text-xs text-center py-4">No results found...</p>
-                            : filteredItems?.map((item, index) => (
-                                <Button
-                                    key={item}
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleSelect(item)}
-                                    ref={index === 0 ? firstItemRef : null}
-                                    className="w-full justify-start"
-                                >
-                                    <Check className={cn(
-                                        'mr-2 h-4 w-4',
-                                        selectedValue === item ? 'opacity-100' : 'opacity-0'
-                                    )} />
-                                    <span className="capitalize whitespace-nowrap text-xs font-semibold">{item}</span>
-                                </Button>
-                            ))
-                    )}
+                    {filteredItems?.length === 0
+                        ? <p className="w-40 text-xs text-center py-4">No results found...</p>
+                        : filteredItems?.map((item, index) => (
+                            <Button
+                                key={item}
+                                variant="ghost"
+                                size="sm"
+                                value={item}
+                                onClick={handleClick}
+                                ref={index === 0 ? firstItemRef : null}
+                                className="w-full justify-start"
+                            >
+                                <Check className={cn(
+                                    'mr-2 h-4 w-4',
+                                    selectedValue === item ? 'opacity-100' : 'opacity-0'
+                                )} />
+                                <span className="capitalize whitespace-nowrap text-xs font-semibold">{item}</span>
+                            </Button>
+                        ))
+                    }
                 </ScrollArea>
             </PopoverContent>
         </Popover>

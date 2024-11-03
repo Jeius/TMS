@@ -74,7 +74,7 @@ function PopoverType({ columns, onClick: handleClick }: VisibilityTypeProps) {
 }
 
 export function ColumnVisibilityControl({ type }: { type: 'popover' | 'column' }) {
-    const { data: table, isFetching } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
+    const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
     const columns = table && table
         .getAllColumns()
         .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide());

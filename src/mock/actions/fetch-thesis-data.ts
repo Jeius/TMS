@@ -1,22 +1,10 @@
 'use server'
 
-export async function fetchMockColumnIds() {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    return [
-        'title',
-        'author',
-        'year',
-        'adviser',
-        'specialization',
-        'department',
-        'dateUploaded'
-    ];
-}
+import { Thesis } from "@/lib/types";
 
 export async function fetchMockTheses() {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return [
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return ([
         {
             id: '1',
             title: 'A Study on Quantum Computing Applications',
@@ -238,5 +226,8 @@ export async function fetchMockTheses() {
             dateUploaded: '01/05/2024',
             department: 'Information Technology Department'
         }
-    ];
+    ].map(thesis => ({
+        ...thesis,
+        year: thesis.year.toString()
+    })) as Array<Thesis>);
 }

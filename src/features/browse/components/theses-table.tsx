@@ -3,13 +3,12 @@ import Filters from '@/components/filters'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import ThesesTableContent from '@/features/browse/components/table-content'
-import { Thesis } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { fetchFilterValues } from '@/mock/actions/fetch-filters'
+import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
+import { fetchMockTheses } from '@/mock/actions/fetch-thesis-data'
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 import { BookCopyIcon } from 'lucide-react'
 import React from 'react'
-import { fetchColumnIds, fetchFilters, fetchTheses } from '../lib/actions'
 import { ColumnVisibilityControl } from './column-visibility'
 import Container from './container'
 import SortOptions from './sort'
@@ -17,24 +16,15 @@ import SortOptions from './sort'
 type TableProps = React.HtmlHTMLAttributes<HTMLDivElement>
 
 export default async function ThesesTable({ className, ...props }: TableProps) {
-    const columnIds = await fetchColumnIds() as string[];
-    const theses = await fetchTheses() as Thesis[];
-    const filters = await fetchFilters() as string[];
     const queryClient = new QueryClient();
+    const theses = await fetchMockTheses();
+    const columnIds = Object.keys(theses[0] ?? {}).filter(key => key !== 'id');
 
     await queryClient.prefetchQuery({
-        queryKey: ['filters'],
-        queryFn: () => filters,
+        queryKey: ['filterIds'],
+        queryFn: fetchMockFilterIds,
     });
 
-    await Promise.all(
-        filters.map(filter =>
-            queryClient.prefetchQuery({
-                queryKey: [filter],
-                queryFn: () => fetchFilterValues(filter),
-            })
-        )
-    );
 
     return (
         <TooltipProvider>
@@ -50,7 +40,9 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
                         </div>
                     </Container>
 
-                    <ThesesTableContent theses={theses} columnIds={columnIds} />
+                    <HydrationBoundary state={dehydrate(queryClient)}>
+                        <ThesesTableContent theses={theses} columnIds={columnIds} />
+                    </HydrationBoundary>
 
                     <Container className="flex w-full max-w-full overflow-hidden border-t p-4 text-card-foreground">
                         <Button className="mx-auto font-bold flex-wrap h-auto min-h-10">

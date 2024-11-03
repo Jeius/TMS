@@ -2,7 +2,7 @@
 export type Thesis = {
     id: string
     title: string
-    year: number
+    year: string
     author: string
     adviser: string
     keywords: string

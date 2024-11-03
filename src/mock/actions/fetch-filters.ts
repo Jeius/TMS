@@ -115,22 +115,7 @@ export const fetchMockPanelists = async () => {
   ].map(item => item.name);
 };
 
-export async function fetchFilterValues(filter: string) {
-  const filters = [
-    { filter: 'college', action: fetchMockColleges },
-    { filter: 'department', action: fetchMockDepartments },
-    { filter: 'specialization', action: fetchMockSpecializations },
-    { filter: 'year', action: fetchMockPublicationYears },
-    { filter: 'author', action: fetchMockAuthors },
-    { filter: 'adviser', action: fetchMockAdvisers },
-    { filter: 'panelist', action: fetchMockPanelists },
-  ]
-  const fetcher = filters.find(item => item.filter === filter)?.action;
-
-  return (fetcher && await fetcher()) ?? [];
-}
-
-export async function fetchMockFilters() {
+export async function fetchMockFilterIds() {
   return [
     'college',
     'department',

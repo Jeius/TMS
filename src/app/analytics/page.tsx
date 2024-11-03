@@ -58,7 +58,7 @@ export default async function Analytics() {
           <h1 className='font-bold text-2xl lg:text-4xl'>
             Overview
           </h1>
-          <Filters showInitial={FILTERS.length} filters={FILTERS} hideShowMore />
+          <Filters initial={FILTERS.length} filterIds={FILTERS} canExpand />
         </div>
 
         <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-3 md:gap-4 w-full max-w-screen-2xl'>

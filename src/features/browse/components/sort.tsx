@@ -8,65 +8,48 @@ import { PopoverClose } from '@radix-ui/react-popover'
 import { useQuery } from '@tanstack/react-query'
 import { Table } from '@tanstack/react-table'
 import { CheckIcon, ChevronsUpDown } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-
-const sortItems = [
-    { label: 'Latest First', value: 'latest' },
-    { label: 'Oldest First', value: 'old' },
-    { label: 'A - Z', value: 'alpha' },
-    { label: 'Z - A', value: '-alpha' },
-]
+import { useSearchParams } from 'next/navigation'
+import { SORTVALUES } from '../lib/constants'
 
 export default function SortOptions() {
-    const router = useRouter()
     const searchParams = useSearchParams()
-    const defaultValue = sortItems?.find(item => item.value === searchParams.get('sort'))?.value
+    const defaultLabel = SORTVALUES.find(item => item.id === searchParams.get('sort'))?.label;
 
     const { data: table, isFetching } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        const sortItem = e.currentTarget.value;
-        const currentParams = new URLSearchParams(searchParams.toString())
-        currentParams.set('sort', sortItem)
-        router.replace(`?${currentParams.toString()}`)
-
-        if (sortItem === 'alpha') {
-            table?.getColumn('title')?.toggleSorting(false) // Ascending
-        } else if (sortItem === '-alpha') {
-            table?.getColumn('title')?.toggleSorting(true) // Descending
-        } else if (sortItem === 'latest') {
-            table?.getColumn('year')?.toggleSorting(true) // Descending (latest first)
-        } else if (sortItem === 'old') {
-            table?.getColumn('year')?.toggleSorting(false) // Ascending (oldest first)
-        }
+        const id = e.currentTarget.value;
+        const columnSort = SORTVALUES.find(item => item.id === id)?.value;
+        columnSort && table?.getColumn(columnSort.id)?.toggleSorting(columnSort.desc);
     }
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant='outline' size='sm' className='text-xs capitalize'>
-                    Sort by: {sortItems.find(item => item.value === defaultValue)?.label}
+                    Sort by: {defaultLabel}
                     <ChevronsUpDown size='1rem' className='ml-2' />
                 </Button>
             </PopoverTrigger>
             <PopoverContent align='start' className='p-1 w-fit sm:p-2 sm:w-52 z-10'>
                 <h3 className='sr-only'>Select a sort option</h3>
                 <ul>
-                    {sortItems.map(({ label, value }) => (
-                        <li key={value}>
+                    {SORTVALUES.map(({ label, id, }) => (
+                        <li key={id}>
                             {isFetching
                                 ? (<Skeleton className='h-10 w-full border' />)
                                 : (
                                     <PopoverClose asChild>
                                         <Button
+                                            value={id}
                                             variant='ghost'
-                                            value={value} onClick={handleClick}
+                                            onClick={handleClick}
                                             className='justify-start w-full text-xs'
                                         >
                                             <CheckIcon
                                                 aria-hidden='true'
                                                 size='1rem'
-                                                data-selected={defaultValue === value}
+                                                data-selected={label === defaultLabel}
                                                 className='mr-2 opacity-0 data-[selected=true]:opacity-100'
                                             />
                                             {label}

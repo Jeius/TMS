@@ -15,6 +15,8 @@ export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
         return {
             accessorKey,
             id: accessorKey,
+            filterFn: 'includesString',
+            enableGlobalFilter: true,
             header: ({ table }: { table: Table<Thesis> }) => (
                 <ColumnHeader table={table} accessorKey={accessorKey} />
             ),
@@ -28,7 +30,11 @@ export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
 export function createMainColumn(): ColumnDef<Thesis> {
     return {
         id: 'theses',
+        accessorKey: 'title',
         enableHiding: false,
+        sortingFn: 'alphanumeric',
+        filterFn: 'includesString',
+        enableGlobalFilter: true,
         header: ({ table }: { table: Table<Thesis> }) => (
             <MainColumnHeader id='theses' table={table} />
         ),

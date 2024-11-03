@@ -5,10 +5,12 @@ import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/component
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements'
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility'
 import { Thesis } from '@/lib/types'
-import { useQueryClient } from '@tanstack/react-query'
+import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
     ColumnFiltersState,
     getCoreRowModel,
+    getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
@@ -19,6 +21,7 @@ import {
 import { useAnimate } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
+import { SORTVALUES } from '../lib/constants'
 import { useResizeObserver, useScrollEvents } from '../lib/hooks'
 import { createColumns, createMainColumn } from './table-columns'
 
@@ -34,26 +37,37 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
     const searchParams = useSearchParams();
     const router = useRouter();
     const columns = useMemo(() => [createMainColumn(), ...createColumns(columnIds)], [columnIds]);
-
-    const visibleColumns = useMemo(() => {
-        const columnsParam = searchParams.get('cols');
-        return columnsParam ? columnsParam.split(',') : [];
-    }, [searchParams]);
-
-    const initialColumns = useMemo(() => {
-        const visibility: VisibilityState = {};
-        columns.forEach(col => {
-            if (col.id !== 'theses') visibility[col.id as string] = visibleColumns.includes(col.id as string);
-        });
-        return visibility;
-    }, [visibleColumns]);
+    const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: fetchMockFilterIds });
 
     const queryClient = useQueryClient();
     const [scope, animate] = useAnimate();
     const [scrollState, setScrollState] = useState(initialScrollState);
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initialColumns);
+
+    const visibleColumIds = searchParams.get('cols')?.split(',') ?? [];
+    const sortValueId = searchParams.get('sort');
+    const filterValues = useMemo(() => Array.from(searchParams.entries()).filter(entry => filters.includes(entry[0])), [searchParams]);
+
+    const columnVisibility = useMemo(() => {
+        const visibility: VisibilityState = {};
+        columns.forEach(col => {
+            if (col.id !== 'theses') {
+                visibility[col.id as string] = visibleColumIds.includes(col.id as string);
+            }
+        });
+        return visibility;
+    }, [visibleColumIds]);
+
+    const sorting = useMemo((): SortingState => {
+        if (sortValueId) {
+            const columnSort = SORTVALUES.find(item => item.id === sortValueId)?.value
+            return columnSort ? [columnSort] : []
+        }
+        return [];
+    }, [sortValueId, SORTVALUES]);
+
+    const columnFilters = useMemo((): ColumnFiltersState => {
+        return filterValues.map(([id, value]) => ({ id: id, value: value }))
+    }, [filterValues]);
 
     const table = useReactTable({
         data: theses,
@@ -62,11 +76,8 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        onColumnVisibilityChange: setColumnVisibility,
-        initialState: { columnVisibility: initialHidden },
-        state: { sorting, columnFilters, columnVisibility },
+        getFacetedUniqueValues: getFacetedUniqueValues(),
+        initialState: { sorting, columnFilters, columnVisibility },
     })
 
     function updateWidth() {
@@ -81,17 +92,41 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         queryClient.setQueryData(['thesesTable'], table)
     }, [table]);
 
+
+    const visibleColumns = table.getVisibleLeafColumns().map(col => col.id);
+    const filterState = table.getState().columnFilters;
+    const sortingState = table.getState().sorting;
+
+    const sortId = useMemo(() =>
+        SORTVALUES.find(({ value }) =>
+            sortingState.some((columnSort) =>
+                value.desc === columnSort.desc && value.id === columnSort.id
+            )
+        )?.id,
+        [sortingState]
+    );
+
     useEffect(() => {
         const params = new URLSearchParams(searchParams.toString());
-        const visibleColumns = Object.entries(columnVisibility).filter(entry => entry[1]).map(entry => entry[0]);
 
-        if (visibleColumns.length !== 0) {
-            params.set('cols', visibleColumns.join(','));
-        } else {
-            params.delete('cols');
+        // Update visible columns
+        if (visibleColumns.length !== 0) params.set('cols', visibleColumns.join(','));
+        else params.delete('cols');
+
+        // Update filters
+        filterState.forEach(({ id, value }) => params.set(id, value as string));
+
+        // Update sorting
+        if (sortId) params.set('sort', sortId);
+        else params.delete('sort');
+
+
+        const newSearch = params.toString();
+        if (newSearch !== searchParams.toString()) {
+            router.replace(`?${newSearch}`);
         }
-        router.replace(`?${params.toString()}`);
-    }, [searchParams, columnVisibility]);
+    }, [visibleColumns, sortingState, filterState, sortId, router]);
+
 
     return (
         <ScrollArea

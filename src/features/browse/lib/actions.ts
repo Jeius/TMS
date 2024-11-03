@@ -1,28 +1,28 @@
 'use server'
 
+import { Thesis } from "@/lib/types";
+import { fetchMockAdvisers, fetchMockAuthors, fetchMockColleges, fetchMockDepartments, fetchMockPanelists, fetchMockPublicationYears, fetchMockSpecializations } from "@/mock/actions/fetch-filters";
+import { fetchMockTheses } from "@/mock/actions/fetch-thesis-data";
+
+export async function fetchFiltersById(filter: string) {
+    const filters = {
+        'college': fetchMockColleges,
+        'department': fetchMockDepartments,
+        'specialization': fetchMockSpecializations,
+        'year': fetchMockPublicationYears,
+        'author': fetchMockAuthors,
+        'adviser': fetchMockAdvisers,
+        'panelist': fetchMockPanelists,
+    }
+
+    const fetcher = Object.entries(filters).find(entry => entry[0] === filter)?.[1];
+
+    return fetcher ? await fetcher() : [];
+}
+
 export async function fetchColumnIds() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/theses/columns`);
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
+    const theses = await fetchMockTheses();
+    const columnIds = Object.keys(theses[0] ?? {}).filter(key => key !== 'id') as Array<keyof Thesis>;
+    return columnIds;
 }
 
-export async function fetchTheses() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/theses`);
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
-}
-
-export async function fetchFilters() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/theses/filters`);
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
-}
