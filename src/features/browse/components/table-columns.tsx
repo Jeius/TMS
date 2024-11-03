@@ -2,21 +2,35 @@
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import responsivePx from '@/lib/responsive-px'
 import { Thesis } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import { HTMLMotionProps, motion } from 'framer-motion'
 import { Dot, X } from 'lucide-react'
 import Link from 'next/link'
+import { ColumnVisibilityControl } from './column-visibility'
 
+export const visibilityColumn: ColumnDef<Thesis> = {
+    id: 'visibilityColumn',
+    size: responsivePx(250),
+    header: () => <h3>Add Columns</h3>,
+    cell: () => {
+        return <ColumnVisibilityControl type='column' />;
+    }
+}
 
 export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
     return columnsData.map(accessorKey => {
         return {
-            accessorKey,
             id: accessorKey,
+            accessorKey,
+            size: responsivePx(200),
+            minSize: responsivePx(50),
+            maxSize: responsivePx(300),
+            sortingFn: 'alphanumeric',
             filterFn: 'includesString',
-            enableGlobalFilter: true,
+            enablePinning: false,
             header: ({ table }: { table: Table<Thesis> }) => (
                 <ColumnHeader table={table} accessorKey={accessorKey} />
             ),
@@ -31,10 +45,12 @@ export function createMainColumn(): ColumnDef<Thesis> {
     return {
         id: 'theses',
         accessorKey: 'title',
-        enableHiding: false,
+        size: responsivePx(500),
+        minSize: responsivePx(450),
+        maxSize: responsivePx(600),
         sortingFn: 'alphanumeric',
         filterFn: 'includesString',
-        enableGlobalFilter: true,
+        enableHiding: false,
         header: ({ table }: { table: Table<Thesis> }) => (
             <MainColumnHeader id='theses' table={table} />
         ),

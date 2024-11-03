@@ -77,7 +77,7 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        initialState: { sorting, columnFilters, columnVisibility },
+        initialState: { sorting, columnFilters, columnVisibility, columnPinning: { left: ['theses'] } },
     })
 
     function updateWidth() {
@@ -134,7 +134,9 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
             className="scroll-smooth whitespace-nowrap max-w-fit"
         >
             <div className="flex flex-1 text-sm">
-                <Table className="relative w-min h-full table-fixed sm:static whitespace-normal border-separate border-spacing-0">
+                <Table
+                    className="relative sm:static whitespace-normal border-separate border-spacing-0"
+                >
                     <TableHeader className="sticky top-0 z-10 text-xs hover:bg-transparent">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id} className="align-top border-0 hover:bg-transparent">
