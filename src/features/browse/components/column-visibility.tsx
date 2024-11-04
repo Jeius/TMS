@@ -19,7 +19,7 @@ function ColumnType({ columns, onClick: handleClick }: VisibilityTypeProps) {
             <div className="py-3 px-4 font-semibold">
                 <h3>Add Columns</h3>
             </div>
-            {columns?.filter(col => !col.getIsVisible()).map(col => (
+            {columns?.map(col => (
                 <Button
                     key={col.id}
                     variant="ghost"
@@ -49,7 +49,7 @@ function PopoverType({ columns, onClick: handleClick }: VisibilityTypeProps) {
                 <h3 className='sr-only'>Select columns to add</h3>
                 <ul className='flex flex-col'>
                     {columns?.length
-                        ? (columns?.filter(col => !col.getIsVisible()).map((column) => (
+                        ? (columns?.map((column) => (
                             <li key={column.id}>
                                 <PopoverClose asChild>
                                     <Button
@@ -75,12 +75,18 @@ function PopoverType({ columns, onClick: handleClick }: VisibilityTypeProps) {
 
 export function ColumnVisibilityControl({ type }: { type: 'popover' | 'column' }) {
     const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
-    const columns = table && table
-        .getAllColumns()
-        .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide());
+    const columns = table && table.getAllColumns().filter((column) => column.getCanHide() && !column.getIsVisible());
 
     function handleClick(column: Column<Thesis, unknown>) {
         column.toggleVisibility(true);
+
+        const columns = table?.getAllFlatColumns();
+        if (columns) {
+            const newOrder = columns
+                .filter(col => col.id !== column.id && col.getIsVisible())
+                .map(col => col.id);
+            table?.setColumnOrder([...newOrder, column.id]);
+        }
     }
 
     if (type === 'popover') return <PopoverType columns={columns} onClick={handleClick} />;

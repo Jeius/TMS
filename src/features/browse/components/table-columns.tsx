@@ -27,7 +27,7 @@ export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
             accessorKey,
             size: responsivePx(200),
             minSize: responsivePx(50),
-            maxSize: responsivePx(800),
+            maxSize: responsivePx(600),
             sortingFn: 'alphanumeric',
             filterFn: 'includesString',
             enablePinning: false,
