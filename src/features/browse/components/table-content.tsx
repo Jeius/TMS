@@ -8,21 +8,23 @@ import { Thesis } from '@/lib/types'
 import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+    ColumnDef,
     ColumnFiltersState,
     getCoreRowModel,
     getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
+    Row,
     SortingState,
     useReactTable,
     VisibilityState
 } from '@tanstack/react-table'
 import { useAnimate } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { SORTVALUES } from '../lib/constants'
-import { useResizeObserver, useScrollEvents } from '../lib/hooks'
+import { ScrollState, useResizeObserver, useScrollEvents } from '../lib/hooks'
 import { createColumns, createMainColumn } from './table-columns'
 
 type ThesesTableContentProps = {
@@ -30,7 +32,6 @@ type ThesesTableContentProps = {
     columnIds: string[];
 }
 
-const initialHidden = { author: false, year: false, department: false, dateUploaded: false };
 const initialScrollState = { left: { value: 0, isScrolled: false } };
 
 export default function ThesesTableContent({ theses, columnIds }: ThesesTableContentProps) {
@@ -77,7 +78,11 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
+        columnResizeMode: 'onChange',
         initialState: { sorting, columnFilters, columnVisibility, columnPinning: { left: ['theses'] } },
+        debugTable: true,
+        debugHeaders: true,
+        debugColumns: true,
     })
 
     function updateWidth() {
@@ -127,6 +132,16 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         }
     }, [visibleColumns, sortingState, filterState, sortId, router]);
 
+    const columnSizeVars = useMemo(() => {
+        const headers = table.getFlatHeaders()
+        const colSizes: { [key: string]: number } = {}
+        headers.forEach((header) => {
+            colSizes[`--header-${header.id}-size`] = header.getSize();
+            colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
+        })
+        return colSizes
+    }, [table.getState().columnSizingInfo, table.getState().columnSizing])
+
 
     return (
         <ScrollArea
@@ -136,6 +151,10 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
             <div className="flex flex-1 text-sm">
                 <Table
                     className="relative sm:static whitespace-normal border-separate border-spacing-0"
+                    style={{
+                        ...columnSizeVars,
+                        width: table.getTotalSize()
+                    }}
                 >
                     <TableHeader className="sticky top-0 z-10 text-xs hover:bg-transparent">
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -144,25 +163,11 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows.length
-                            ? (table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id} className="align-top hover:bg-transparent">
-                                    <AnimatedTableCell row={row} scrollState={scrollState} />
-                                </TableRow>
-                            )))
-                            : (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                                        No records.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                    </TableBody>
+                    <MemoizedTableBody rows={table.getRowModel().rows} columns={columns} scrollState={scrollState} />
                 </Table>
                 {table.getAllColumns().filter(column => column.getCanHide() && !column.getIsVisible()).length
                     ? (
-                        <div className="block border-l border-y bg-card/80 z-10 lg:pr-20">
+                        <div className="block border-l border-y bg-card/80 z-10 pr-8 lg:pr-16">
                             <ColumnVisibilityControl type='column' />
                         </div>
                     ) : (null)}
@@ -171,3 +176,26 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         </ScrollArea>
     );
 }
+
+
+const MemoizedTableBody = memo(function TableBodyContent({
+    rows, columns, scrollState
+}: { rows: Row<Thesis>[], columns: ColumnDef<Thesis>[], scrollState: ScrollState }) {
+    return (
+        <TableBody>
+            {rows.length ? (
+                rows.map((row) => (
+                    <TableRow key={row.id} className="align-top hover:bg-transparent">
+                        <AnimatedTableCell row={row} scrollState={scrollState} />
+                    </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                        No records.
+                    </TableCell>
+                </TableRow>
+            )}
+        </TableBody>
+    );
+});

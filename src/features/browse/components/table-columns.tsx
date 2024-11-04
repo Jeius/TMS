@@ -27,7 +27,7 @@ export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
             accessorKey,
             size: responsivePx(200),
             minSize: responsivePx(50),
-            maxSize: responsivePx(300),
+            maxSize: responsivePx(800),
             sortingFn: 'alphanumeric',
             filterFn: 'includesString',
             enablePinning: false,
@@ -45,9 +45,9 @@ export function createMainColumn(): ColumnDef<Thesis> {
     return {
         id: 'theses',
         accessorKey: 'title',
-        size: responsivePx(500),
-        minSize: responsivePx(450),
-        maxSize: responsivePx(600),
+        size: responsivePx(600),
+        minSize: responsivePx(300),
+        maxSize: responsivePx(800),
         sortingFn: 'alphanumeric',
         filterFn: 'includesString',
         enableHiding: false,
@@ -73,9 +73,9 @@ function MainColumnHeader<TData>({ table, id }: { table: Table<TData>, id: strin
                 className="ml-1"
                 aria-label="Select all"
             />
-            <label htmlFor={id} className="leading-none capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <h3 className="leading-none capitalize peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 {id}
-            </label>
+            </h3>
         </div>)
 }
 
@@ -88,10 +88,12 @@ function MainColumnCell<TData>({ row }: { row: Row<TData> }) {
 
     return (
         <div className="flex text-pretty text-left">
-            <Checkbox className="my-auto ml-1"
+            <Checkbox
+                className="my-auto ml-1"
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label={`Select ${title}`} />
+                aria-label={`Select ${title}`}
+            />
             <div className="flex flex-col space-y-1 p-2">
                 <Button variant="link" data-title={title} asChild
                     className="p-1 h-fit whitespace-normal justify-start font-bold text-secondary"
@@ -125,6 +127,7 @@ function ColumnCell<TData>({ accessorKey, row, ...props }: ColumnCellProps<TData
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ type: 'spring', bounce: 0.22 }}
+            className='text-pretty'
             {...props}
         >
             {row.getValue(accessorKey)}
