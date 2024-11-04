@@ -6,7 +6,7 @@ import { DesktopIcon } from '@radix-ui/react-icons';
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
-export default function ThemeToggle({ open }: { open?: boolean }) {
+export default function ThemeToggle() {
     const { theme, setTheme } = useTheme();
     const isMounted = useIsMounted();
 

@@ -29,7 +29,7 @@ function SignInTab() {
             <CardHeader>
                 <h1 className="text-2xl font-medium">Sign In</h1>
                 <p className="text-sm text text-foreground">
-                    Don`&apos;`t have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <Link className="text-secondary font-medium underline" href="/login?signUp=true">
                         Sign up
                     </Link>

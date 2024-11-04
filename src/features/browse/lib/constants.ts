@@ -1,4 +1,4 @@
-import { SortValue } from "./types";
+import { SortValue } from './types';
 
 export const SORTVALUES: SortValue[] = [
     { id: 'alpha', label: 'A - Z', value: { id: 'theses', desc: false } },

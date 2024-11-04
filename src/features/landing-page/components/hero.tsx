@@ -6,10 +6,10 @@ import Link from 'next/link'
 import ImageCarousel from './image-carousel'
 
 const images: ImageCard[] = [
-    { src: "/images/academics.png", alt: "students", angle: '-8deg' },
-    { src: "/images/faculty-staff.png", alt: "faculty and staff", angle: '5deg' },
-    { src: "/images/students-reading.jpg", alt: "students reading", angle: '-5deg' },
-    { src: "/images/student-writing.png", alt: "student writing", angle: '8deg' },
+    { src: '/images/academics.png', alt: 'students', angle: '-8deg' },
+    { src: '/images/faculty-staff.png', alt: 'faculty and staff', angle: '5deg' },
+    { src: '/images/students-reading.jpg', alt: 'students reading', angle: '-5deg' },
+    { src: '/images/student-writing.png', alt: 'student writing', angle: '8deg' },
 ];
 
 export default function Hero() {

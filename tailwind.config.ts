@@ -98,7 +98,7 @@ const config: Config = {
 			},
 			animation: {
 				'pop-blob': 'pop-blob 5s infinite',
-				"shine": "shine 8s ease-in-out infinite",
+				'shine': 'shine 8s ease-in-out infinite',
 			},
 		}
 	},

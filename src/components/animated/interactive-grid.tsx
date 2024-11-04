@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 function useGridLayout() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -23,8 +23,8 @@ function useGridLayout() {
         updateLayout();
 
         // Can be debounced if needed
-        window.addEventListener("resize", updateLayout);
-        return () => window.removeEventListener("resize", updateLayout);
+        window.addEventListener('resize', updateLayout);
+        return () => window.removeEventListener('resize', updateLayout);
     }, []);
 
     return {
@@ -60,7 +60,7 @@ function plotSquares(width: number, height: number, size: number): { x: number; 
 
 const size = 24; // h-6
 const boxClassName =
-    "absolute h-6 w-6 rounded-md bg-transparent z-0 p-px border border-gray-400/30 border-box group ";
+    'absolute h-6 w-6 rounded-md bg-transparent z-0 p-px border border-gray-400/30 border-box group ';
 
 export function Grid() {
     const {
@@ -119,13 +119,13 @@ export function Grid() {
                 >
                     <div
                         style={{
-                            transitionDelay: active ? `${x + y}ms` : "0ms",
+                            transitionDelay: active ? `${x + y}ms` : '0ms',
                         }}
                         className={cn(
-                            "h-full w-full scale-90 rounded bg-gray-400/30 opacity-10 transition-all duration-700",
+                            'h-full w-full scale-90 rounded bg-gray-400/30 opacity-10 transition-all duration-700',
                             {
-                                "scale-100 opacity-100": shouldHighlight,
-                                "group-hover:scale-100 group-hover:opacity-100": !shouldHighlight,
+                                'scale-100 opacity-100': shouldHighlight,
+                                'group-hover:scale-100 group-hover:opacity-100': !shouldHighlight,
                             },
                         )}
                     />
@@ -138,8 +138,8 @@ export function Grid() {
         <div
             ref={containerRef}
             onClick={onMouseEnter}
-            className={cn("absolute inset-0 h-full max-h-[400px] w-full z-0", {
-                "top-1/4": vertical > 96 * 4, // 96 * 4 is the height of the grid
+            className={cn('absolute inset-0 h-full max-h-[400px] w-full z-0', {
+                'top-1/4': vertical > 96 * 4, // 96 * 4 is the height of the grid
             })}
         >
             {cells}
@@ -158,10 +158,10 @@ export default function InteractiveGrid({
 }) {
     return (
         <div
-            className={cn("storybook-fix relative h-full w-full overflow-hidden bg-gradient-to-b from-transparent via-card dark:via-footer", className)}
+            className={cn('storybook-fix relative h-full w-full overflow-hidden bg-gradient-to-b from-transparent via-card dark:via-footer', className)}
         >
             <Grid />
-            <div className={cn("relative mx-auto h-full w-fit", contentClassName)}>{children}</div>
+            <div className={cn('relative mx-auto h-full w-fit', contentClassName)}>{children}</div>
         </div>
     );
 }

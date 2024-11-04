@@ -226,5 +226,5 @@ export async function getTheses(): Promise<Thesis[]> {
             dateUploaded: '01/05/2024',
             department: 'Information Technology Department'
         }
-    ];
+    ].map(thesis => ({ ...thesis, year: thesis.year.toString() }));
 }

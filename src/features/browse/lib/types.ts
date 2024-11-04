@@ -1,4 +1,4 @@
-import { ColumnSort } from "@tanstack/react-table";
+import { ColumnSort } from '@tanstack/react-table';
 
 export type SortValue = {
     id: string;

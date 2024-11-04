@@ -17,12 +17,15 @@ type TableProps = React.HtmlHTMLAttributes<HTMLDivElement>
 
 export default async function ThesesTable({ className, ...props }: TableProps) {
     const queryClient = new QueryClient();
-    const theses = await fetchMockTheses();
-    const columnIds = Object.keys(theses[0] ?? {}).filter(key => key !== 'id');
 
     await queryClient.prefetchQuery({
         queryKey: ['filterIds'],
         queryFn: fetchMockFilterIds,
+    });
+
+    await queryClient.prefetchQuery({
+        queryKey: ['theses'],
+        queryFn: fetchMockTheses,
     });
 
 
@@ -41,7 +44,7 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
                     </Container>
 
                     <HydrationBoundary state={dehydrate(queryClient)}>
-                        <ThesesTableContent theses={theses} columnIds={columnIds} />
+                        <ThesesTableContent />
                     </HydrationBoundary>
 
                     <Container className="flex w-full max-w-full overflow-hidden border-t p-4 text-card-foreground">

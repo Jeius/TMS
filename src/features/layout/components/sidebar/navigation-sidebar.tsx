@@ -27,7 +27,6 @@ export default function NavigationSideBar() {
             <motion.div
                 id="navigation-sidebar"
                 role='navigation'
-                aria-expanded={open}
                 aria-label='Navigation sidebar'
                 className={cn(
                     'fixed z-10 inset-y-0 left-0 hidden lg:block border-r bg-card/60',

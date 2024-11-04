@@ -1,7 +1,7 @@
 'use client'
 
-import { motion } from "framer-motion";
-import Image from "next/image";
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface CustomProps {
     index: number;
@@ -17,7 +17,7 @@ const cardVariants = {
         transition: {
             delay: custom.index * 0.1,
             duration: 0.3,
-            type: "spring",
+            type: 'spring',
             stiffness: 150,
             damping: 20,
             mass: 0.5,
@@ -52,9 +52,9 @@ export default function ImagesReveal({ title, images }: ImagesRevealProps) {
                         variants={cardVariants}
                         whileHover={{
                             scale: 1.3,
-                            rotate: "0deg",
+                            rotate: '0deg',
                             zIndex: 10,
-                            transition: { duration: 0.3, type: "spring", stiffness: 150, damping: 20 },
+                            transition: { duration: 0.3, type: 'spring', stiffness: 150, damping: 20 },
                         }}
                     >
                         <Image alt={alt} src={src} height={720} width={1080} className="object-cover rounded-2xl size-full" />

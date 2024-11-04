@@ -1,10 +1,10 @@
 'use client'
 
-import { ImageCard } from "@/components/animated/image-reveal";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import Image from "next/image";
-import { useRef } from "react";
+import { ImageCard } from '@/components/animated/image-reveal';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import Image from 'next/image';
+import { useRef } from 'react';
 
 type ImageCarouselProps = {
     images: ImageCard[]

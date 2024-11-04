@@ -1,9 +1,9 @@
 'use server'
 
-import { Thesis } from "@/lib/types";
+import { Thesis } from '@/lib/types';
 
 export async function fetchMockTheses() {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 100));
     return ([
         {
             id: '1',

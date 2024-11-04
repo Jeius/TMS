@@ -4,71 +4,53 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/components/ui/table'
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements'
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility'
-import { Thesis } from '@/lib/types'
 import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
+import { fetchMockTheses } from '@/mock/actions/fetch-thesis-data'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
-    ColumnDef,
-    ColumnFiltersState,
     getCoreRowModel,
     getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    Row,
-    SortingState,
-    useReactTable,
-    VisibilityState
+    useReactTable
 } from '@tanstack/react-table'
 import { useAnimate } from 'framer-motion'
+import { isEqual } from 'lodash'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { memo, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { SORTVALUES } from '../lib/constants'
-import { ScrollState, useResizeObserver, useScrollEvents } from '../lib/hooks'
+import { getColumnFilters, getColumnVisibility, getSorting } from '../lib/helpers'
+import { useResizeObserver, useScrollEvents } from '../lib/hooks'
 import { createColumns, createMainColumn } from './table-columns'
 
-type ThesesTableContentProps = {
-    theses: Thesis[];
-    columnIds: string[];
-}
 
 const initialScrollState = { left: { value: 0, isScrolled: false } };
 
-export default function ThesesTableContent({ theses, columnIds }: ThesesTableContentProps) {
+export default function ThesesTableContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const columns = useMemo(() => [createMainColumn(), ...createColumns(columnIds)], [columnIds]);
-    const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: fetchMockFilterIds });
-
     const queryClient = useQueryClient();
     const [scope, animate] = useAnimate();
     const [scrollState, setScrollState] = useState(initialScrollState);
 
-    const visibleColumIds = searchParams.get('cols')?.split(',') ?? [];
-    const sortValueId = searchParams.get('sort');
-    const filterValues = useMemo(() => Array.from(searchParams.entries()).filter(entry => filters.includes(entry[0])), [searchParams]);
+    const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: () => fetchMockFilterIds() });
+    const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: () => fetchMockTheses(), refetchOnMount: true });
 
-    const columnVisibility = useMemo(() => {
-        const visibility: VisibilityState = {};
-        columns.forEach(col => {
-            if (col.id !== 'theses') {
-                visibility[col.id as string] = visibleColumIds.includes(col.id as string);
-            }
-        });
-        return visibility;
-    }, [visibleColumIds]);
+    const columns = useMemo(() => {
+        const columnIds = Object.keys(theses[0] ?? {}).filter(key => key !== 'id');
+        return [createMainColumn(), ...createColumns(columnIds)];
+    }, [theses]);
 
-    const sorting = useMemo((): SortingState => {
-        if (sortValueId) {
-            const columnSort = SORTVALUES.find(item => item.id === sortValueId)?.value
-            return columnSort ? [columnSort] : []
-        }
-        return [];
-    }, [sortValueId, SORTVALUES]);
+    const initialVisibleColumns = useMemo(() => searchParams.get('cols')?.split(',') ?? [], [searchParams]);
+    const initialSortValue = searchParams.get('sort');
+    const initialFilterValues = useMemo(() => Array.from(searchParams.entries()).filter(entry => filters.includes(entry[0])), [searchParams, filters]);
 
-    const columnFilters = useMemo((): ColumnFiltersState => {
-        return filterValues.map(([id, value]) => ({ id: id, value: value }))
-    }, [filterValues]);
+    const columnVisibility = useMemo(() => getColumnVisibility(columns, initialVisibleColumns), [initialVisibleColumns, columns]);
+    const sorting = useMemo(() => getSorting(initialSortValue), [initialSortValue]);
+    const columnFilters = useMemo(() => getColumnFilters(initialFilterValues), [initialFilterValues]);
+    const columnOrder = initialVisibleColumns;
+    const columnPinning = { left: ['theses'] };
 
     const table = useReactTable({
         data: theses,
@@ -79,24 +61,21 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         getFilteredRowModel: getFilteredRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
         columnResizeMode: 'onChange',
-        initialState: { sorting, columnFilters, columnVisibility, columnPinning: { left: ['theses'] } },
-        debugTable: true,
-        debugHeaders: true,
-        debugColumns: true,
+        initialState: { sorting, columnFilters, columnVisibility, columnOrder, columnPinning },
     })
 
-    function updateWidth() {
-        const width = scope.current ? `${scope.current.offsetWidth}px` : 'auto';
-        queryClient.setQueryData(['tableWidth'], width);
-    }
+    const headers = table.getFlatHeaders();
+    const columnSizingInfo = table.getState().columnSizingInfo;
+    const columnSizing = table.getState().columnSizing;
 
-    useResizeObserver({ scopeRef: scope, updateWidth });
-    useScrollEvents({ scopeRef: scope, setScrollState, animate });
-
-    useEffect(() => {
-        queryClient.setQueryData(['thesesTable'], table)
-    }, [table]);
-
+    const columnSizeVars = useMemo(() => {
+        const colSizes: { [key: string]: number } = {};
+        headers.forEach((header) => {
+            colSizes[`--header-${header.id}-size`] = header.getSize();
+            colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
+        })
+        return colSizes;
+    }, [headers, columnSizing, columnSizingInfo]);
 
     const visibleColumns = table.getVisibleLeafColumns().map(col => col.id);
     const filterState = table.getState().columnFilters;
@@ -104,12 +83,8 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
 
     const sortId = useMemo(() =>
         SORTVALUES.find(({ value }) =>
-            sortingState.some((columnSort) =>
-                value.desc === columnSort.desc && value.id === columnSort.id
-            )
-        )?.id,
-        [sortingState]
-    );
+            sortingState.some(columnSort => isEqual(value, columnSort)))?.id
+        , [sortingState]);
 
     useEffect(() => {
         const params = new URLSearchParams(searchParams.toString());
@@ -125,23 +100,24 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         if (sortId) params.set('sort', sortId);
         else params.delete('sort');
 
-
         const newSearch = params.toString();
         if (newSearch !== searchParams.toString()) {
             router.replace(`?${newSearch}`);
         }
-    }, [visibleColumns, sortingState, filterState, sortId, router]);
+    }, [visibleColumns, sortingState, filterState, sortId, router, searchParams]);
 
-    const columnSizeVars = useMemo(() => {
-        const headers = table.getFlatHeaders()
-        const colSizes: { [key: string]: number } = {}
-        headers.forEach((header) => {
-            colSizes[`--header-${header.id}-size`] = header.getSize();
-            colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
-        })
-        return colSizes
-    }, [table.getState().columnSizingInfo, table.getState().columnSizing])
+    function updateWidth() {
+        const width = scope.current ? `${scope.current.offsetWidth}px` : 'auto';
+        queryClient.setQueryData(['tableWidth'], width);
+    }
 
+    useResizeObserver({ scopeRef: scope, updateWidth });
+
+    useScrollEvents({ scopeRef: scope, setScrollState, animate });
+
+    useEffect(() => {
+        queryClient.setQueryData(['thesesTable'], table)
+    }, [table, queryClient]);
 
     return (
         <ScrollArea
@@ -163,7 +139,21 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <MemoizedTableBody rows={table.getRowModel().rows} columns={columns} scrollState={scrollState} />
+                    <TableBody>
+                        {table.getRowModel().rows.length
+                            ? (table.getRowModel().rows.map((row) => (
+                                <TableRow key={row.id} className="align-top hover:bg-transparent">
+                                    <AnimatedTableCell row={row} scrollState={scrollState} />
+                                </TableRow>
+                            )))
+                            : (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                                        No records.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                    </TableBody>
                 </Table>
                 {table.getAllColumns().filter(column => column.getCanHide() && !column.getIsVisible()).length
                     ? (
@@ -176,26 +166,3 @@ export default function ThesesTableContent({ theses, columnIds }: ThesesTableCon
         </ScrollArea>
     );
 }
-
-
-const MemoizedTableBody = memo(function TableBodyContent({
-    rows, columns, scrollState
-}: { rows: Row<Thesis>[], columns: ColumnDef<Thesis>[], scrollState: ScrollState }) {
-    return (
-        <TableBody>
-            {rows.length ? (
-                rows.map((row) => (
-                    <TableRow key={row.id} className="align-top hover:bg-transparent">
-                        <AnimatedTableCell row={row} scrollState={scrollState} />
-                    </TableRow>
-                ))
-            ) : (
-                <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                        No records.
-                    </TableCell>
-                </TableRow>
-            )}
-        </TableBody>
-    );
-});
