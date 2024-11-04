@@ -57,7 +57,7 @@ export default function Filters({
         } else {
             currentParams.delete(key);
         }
-        router.replace(`?${currentParams.toString()}`);
+        router.replace(`?${currentParams.toString()}`, { scroll: false });
     }
 
     function toggleMoreFilters() {

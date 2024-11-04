@@ -21,8 +21,8 @@ export function AnimatedTableHead<TData, TValue>({
                 scope="col"
                 data-scrolled={scrollState.left.isScrolled}
                 className={cn(
-                    'left-0 px-4 border-y bg-muted bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45',
-                    isPinned ? 'md:sticky z-[1] data-[scrolled=true]:md:shadow-right' : 'relative z-0',
+                    'relative left-0 px-4 border-y bg-muted bg-gradient-to-b from-white/75 dark:bg-gradient-to-t dark:from-black/45',
+                    isPinned ? 'md:sticky z-[1] data-[scrolled=true]:md:shadow-right' : 'z-0',
                     isResizing ? 'pointer-events-none' : 'pointer-events-auto'
                 )}
                 style={{ width: `calc(var(--header-${header?.id}-size) * 1px)`, }}

@@ -102,7 +102,7 @@ export default function ThesesTableContent() {
 
         const newSearch = params.toString();
         if (newSearch !== searchParams.toString()) {
-            router.replace(`?${newSearch}`);
+            router.replace(`?${newSearch}`, { scroll: false });
         }
     }, [visibleColumns, sortingState, filterState, sortId, router, searchParams]);
 
