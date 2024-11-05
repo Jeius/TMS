@@ -46,7 +46,7 @@ export default function Filters({
         const columnFilterIds = columnFilters.map(({ id }) => id);
         return columns?.filter(({ id }) => columnFilterIds.includes(id)).map(col => {
             const uniqueValuesMap = col.getFacetedUniqueValues().keys();
-            return { id: col.id, values: Array.from(uniqueValuesMap) as string[] }
+            return { id: col.id, values: Array.from(uniqueValuesMap).filter(value => value) as string[] }
         }) ?? [];
     }, [columns, columnFilters]);
 

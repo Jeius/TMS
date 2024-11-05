@@ -22,7 +22,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { SORTVALUES } from '../lib/constants'
 import { getColumnFilters, getColumnVisibility, getSorting } from '../lib/helpers'
 import { useResizeObserver, useScrollEvents } from '../lib/hooks'
-import { createColumns, createMainColumn } from './table-columns'
+import { columns } from './table-columns'
 
 
 const initialScrollState = { left: { value: 0, isScrolled: false } };
@@ -36,11 +36,6 @@ export default function ThesesTableContent() {
 
     const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: () => fetchMockFilterIds() });
     const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: () => fetchMockTheses(), refetchOnMount: true });
-
-    const columns = useMemo(() => {
-        const columnIds = Object.keys(theses[0] ?? {}).filter(key => key !== 'id');
-        return [createMainColumn(), ...createColumns(columnIds)];
-    }, [theses]);
 
     const initialVisibleColumns = useMemo(() => searchParams.get('cols')?.split(',') ?? [], [searchParams]);
     const initialSortValue = searchParams.get('sort');

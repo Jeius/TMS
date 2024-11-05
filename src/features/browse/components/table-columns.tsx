@@ -1,4 +1,3 @@
-'use client'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -9,16 +8,10 @@ import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import { HTMLMotionProps, motion } from 'framer-motion'
 import { Dot, X } from 'lucide-react'
 import Link from 'next/link'
-import { ColumnVisibilityControl } from './column-visibility'
+import { COLUMNIDS } from '../lib/constants'
 
-export const visibilityColumn: ColumnDef<Thesis> = {
-    id: 'visibilityColumn',
-    size: responsivePx(250),
-    header: () => <h3>Add Columns</h3>,
-    cell: () => {
-        return <ColumnVisibilityControl type='column' />;
-    }
-}
+
+export const columns = [createMainColumn(), ...createColumns(COLUMNIDS)];
 
 export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
     return columnsData.map(accessorKey => {
