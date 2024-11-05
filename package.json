@@ -63,6 +63,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.14.0",
     "@tanstack/eslint-plugin-query": "^5.59.7",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.9.0",
