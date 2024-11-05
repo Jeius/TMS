@@ -1,20 +1,15 @@
 
-import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NavigationMenu from '@/features/layout/components/header/navigation-menu';
-import { supabaseServerClient } from '@/lib/supabase/server';
 import Image from 'next/image';
 import Link from 'next/link';
+import AuthButtons from './auth-buttons';
 import NotificationMenu from './notification-menu';
 import SearchBar from './searchbar';
 import UserMenu from './user-menu';
 
 
 export default async function AppHeader() {
-    const supabase = await supabaseServerClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
 
     return (
         <TooltipProvider>
@@ -24,7 +19,7 @@ export default async function AppHeader() {
                 <div className="flex items-center justify-between">
                     <div className="flex grow items-center space-x-2 pl-2">
                         <NavigationMenu />
-                        <Link href="/" id="app-title"
+                        <Link href="/" id="thesis-management-system"
                             aria-label='Go to homepage'
                             className="flex items-center space-x-2 font-semibold text-lg w-fit"
                         >
@@ -41,19 +36,9 @@ export default async function AppHeader() {
                     </div>
                     <div className="flex items-center space-x-2 pl-2">
                         <SearchBar />
-                        {user && <NotificationMenu />}
-                        {user ? (
-                            <UserMenu />
-                        ) : (
-                            <div className="flex items-center sm:pl-5 space-x-2">
-                                <Button asChild>
-                                    <Link href="/login?signUp=true">Sign up</Link>
-                                </Button>
-                                <Button variant="outline" size="sm" asChild>
-                                    <Link href="/login">Sign in</Link>
-                                </Button>
-                            </div>
-                        )}
+                        <NotificationMenu />
+                        <UserMenu />
+                        <AuthButtons />
                     </div>
                 </div>
             </header>
