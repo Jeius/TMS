@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import NavigationItems from '@/features/layout/components/navigation-items';
+import NavLinks from '@/features/layout/components/nav-links';
 import { NAVIGATIONROUTES } from '@/lib/constants';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { Menu } from 'lucide-react';
@@ -72,7 +72,7 @@ export default function NavigationMenu() {
                         </SheetDescription>
 
                         <div className="grow flex flex-col justify-between w-full overflow-y-auto">
-                            <NavigationItems open={open} onOpenChanged={setOpen} />
+                            <NavLinks open={open} onOpenChanged={setOpen} />
                             {isMounted && (
                                 <div className="flex flex-col" role="contentinfo">
                                     <Separator className='my-1' orientation="horizontal" role="separator" />

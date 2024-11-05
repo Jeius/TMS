@@ -1,16 +1,16 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
-import NavigationItems from '@/features/layout/components/navigation-items';
+import NavLinks from '@/features/layout/components/nav-links';
 import { NAVIGATIONROUTES } from '@/lib/constants';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import ThemeSwitch from '../theme-switch';
+import ThemeSwitch from './theme-switch';
 
-export default function NavigationSideBar() {
+export default function SideNav() {
     const [open, setOpen] = useState(false);
     const [width, setWidth] = useState<string>();
     const pathname = usePathname();
@@ -44,7 +44,7 @@ export default function NavigationSideBar() {
                 onBlur={() => setOpen(false)}
             >
                 <div className='flex flex-col space-y-1 w-full h-full justify-between'>
-                    <NavigationItems open={open} />
+                    <NavLinks open={open} />
                     {isMounted && (
                         <div className="flex flex-col" role="contentinfo">
                             <Separator className='my-1' orientation="horizontal" role="separator" />

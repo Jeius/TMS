@@ -12,7 +12,7 @@ type NavigationItemsProps = {
     open?: boolean, onOpenChanged?: (value: boolean) => void,
 }
 
-export default function NavigationItems({ open, onOpenChanged: setOpen }: NavigationItemsProps) {
+export default function NavLinks({ open, onOpenChanged: setOpen }: NavigationItemsProps) {
     const pathname = usePathname();
     const navigationLinks = [primaryLinks, userLinks, toolLinks];
     const isPathName = (href: string) => pathname === href;
