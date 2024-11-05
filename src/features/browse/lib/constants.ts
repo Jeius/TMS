@@ -5,4 +5,16 @@ export const SORTVALUES: SortValue[] = [
     { id: '-alpha', label: 'Z - A', value: { id: 'theses', desc: true } },
     { id: 'latest', label: 'Latest First', value: { id: 'year', desc: true } },
     { id: 'oldest', label: 'Oldest First', value: { id: 'year', desc: false } }
-]
+];
+
+export const COLUMNIDS: string[] = [
+    'title',
+    'year',
+    'author',
+    'adviser',
+    'keywords',
+    'specialization',
+    'dateUploaded',
+    'department',
+    'college',
+];
