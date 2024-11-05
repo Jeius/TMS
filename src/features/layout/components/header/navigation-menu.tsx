@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import NavLinks from '@/features/layout/components/nav-links';
-import { NAVIGATIONROUTES } from '@/lib/constants';
+import { NAVROUTES } from '@/lib/constants';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
@@ -51,7 +51,7 @@ export default function NavigationMenu() {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
     const isMounted = useIsMounted();
-    const isNavigationRoute = Object.values(NAVIGATIONROUTES).includes(pathname);
+    const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
     return (
         (isNavigationRoute && pathname !== '/') && (

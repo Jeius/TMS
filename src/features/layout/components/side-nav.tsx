@@ -2,7 +2,7 @@
 
 import { Separator } from '@/components/ui/separator';
 import NavLinks from '@/features/layout/components/nav-links';
-import { NAVIGATIONROUTES } from '@/lib/constants';
+import { NAVROUTES } from '@/lib/constants';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -15,7 +15,7 @@ export default function SideNav() {
     const [width, setWidth] = useState<string>();
     const pathname = usePathname();
     const isMounted = useIsMounted();
-    const isNavigationRoute = Object.values(NAVIGATIONROUTES).includes(pathname);
+    const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
     useEffect(() => {
         const newWidth = open ? '15rem' : '4rem';
@@ -25,12 +25,12 @@ export default function SideNav() {
     return (
         (isNavigationRoute && pathname !== '/') && (
             <motion.div
-                id="navigation-sidebar"
+                id="side-navigation"
                 role='navigation'
-                aria-label='Navigation sidebar'
+                aria-label='Side Navigation'
                 className={cn(
                     'fixed z-10 inset-y-0 left-0 hidden lg:block border-r bg-card/60',
-                    'backdrop-blur-lg shadow-md pb-10 pt-20 px-3 w-fit'
+                    'backdrop-blur-lg shadow-md pb-10 pt-20 px-3 overflow-x-hidden'
                 )}
                 initial={{ x: -60, opacity: 0, }}
                 animate={{ width: width, x: 0, opacity: 1 }}
