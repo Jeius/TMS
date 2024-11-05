@@ -28,7 +28,7 @@ export default function CalendarView({
     const toggleView = () => setView && setView('reminders');
 
     const setDate = (date?: Date) => {
-        date && queryClient.setQueryData(['calendar', 'date'], date);
+        if (date) queryClient.setQueryData(['calendar', 'date'], date);
         toggleView();
     };
 

@@ -41,7 +41,7 @@ export default function ThesesTableContent() {
     const initialSortValue = searchParams.get('sort');
     const initialFilterValues = useMemo(() => Array.from(searchParams.entries()).filter(entry => filters.includes(entry[0])), [searchParams, filters]);
 
-    const columnVisibility = useMemo(() => getColumnVisibility(columns, initialVisibleColumns), [initialVisibleColumns, columns]);
+    const columnVisibility = useMemo(() => getColumnVisibility(columns, initialVisibleColumns), [initialVisibleColumns]);
     const sorting = useMemo(() => getSorting(initialSortValue), [initialSortValue]);
     const columnFilters = useMemo(() => getColumnFilters(initialFilterValues), [initialFilterValues]);
     const columnOrder = initialVisibleColumns;
@@ -60,8 +60,6 @@ export default function ThesesTableContent() {
     })
 
     const headers = table.getFlatHeaders();
-    const columnSizingInfo = table.getState().columnSizingInfo;
-    const columnSizing = table.getState().columnSizing;
 
     const columnSizeVars = useMemo(() => {
         const colSizes: { [key: string]: number } = {};
@@ -70,7 +68,7 @@ export default function ThesesTableContent() {
             colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
         })
         return colSizes;
-    }, [headers, columnSizing, columnSizingInfo]);
+    }, [headers]);
 
     const visibleColumns = table.getVisibleLeafColumns().map(col => col.id);
     const filterState = table.getState().columnFilters;

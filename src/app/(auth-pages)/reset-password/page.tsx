@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ConfirmForm from '@/features/auth/reset-password/components/confirm-form';
+import { Suspense } from 'react';
 
 export default function ForgotPassword() {
     return (
@@ -9,7 +10,9 @@ export default function ForgotPassword() {
                     <h1 className="text-2xl font-medium">Reset Password</h1>
                 </CardHeader>
                 <CardContent>
-                    <ConfirmForm />
+                    <Suspense>
+                        <ConfirmForm />
+                    </Suspense>
                 </CardContent>
             </Card>
         </main>

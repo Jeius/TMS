@@ -25,15 +25,15 @@ export default function CalendarCard({ className, ...props }: React.ComponentPro
         }
 
         if (toRem(windowWidth) >= toNumber(Screens['2xl'])) {
-            !open && setOpen(true);
+            if (!open) setOpen(true);
             return;
         }
         if (toRem(windowWidth) <= toNumber(Screens['lg'])
             && toRem(windowWidth) >= toNumber(Screens['md'])) {
-            !open && setOpen(true);
+            if (!open) setOpen(true);
             return;
         }
-        open && setOpen(false);
+        if (open) setOpen(false);
     }, [windowWidth, open, baseFontSize]);
 
     return (

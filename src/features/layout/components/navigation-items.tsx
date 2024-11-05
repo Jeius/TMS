@@ -18,7 +18,7 @@ export default function NavigationItems({ open, onOpenChanged: setOpen }: Naviga
     const isPathName = (href: string) => pathname === href;
 
     const handleClick = () => {
-        setOpen && setOpen(false);
+        if (setOpen) setOpen(false);
     };
 
     return (

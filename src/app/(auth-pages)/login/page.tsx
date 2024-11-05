@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import SignIn from '@/features/auth/login/components/sign-in';
 import SignUp from '@/features/auth/login/components/sign-up';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 function SignUpTab() {
     return (
@@ -47,7 +48,9 @@ export default async function Login() {
         <main className="p-5 sm:p-10">
             <Card variant="glass" className="mx-auto max-w-[480px] sm:p-5">
                 <div className="w-full m-auto overflow-hidden p-5 pb-0">
-                    <Account firstTab={<SignInTab />} secondTab={<SignUpTab />} />
+                    <Suspense>
+                        <Account firstTab={<SignInTab />} secondTab={<SignUpTab />} />
+                    </Suspense>
                 </div>
             </Card>
         </main >

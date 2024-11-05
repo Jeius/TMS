@@ -3,14 +3,6 @@
 import * as React from 'react'
 import * as RechartsPrimitive from 'recharts'
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  NameType,
-  Payload,
-  ValueType,
-} from 'recharts/types/component/DefaultTooltipContent'
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { cn } from '@/lib/utils'
 
 // Format: { THEME_NAME: CSS_SELECTOR }
@@ -365,10 +357,9 @@ function getPayloadConfigFromPayload(
 }
 
 export {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
+  ChartContainer, ChartLegend,
   ChartLegendContent,
-  ChartStyle,
+  ChartStyle, ChartTooltip,
+  ChartTooltipContent
 }
+

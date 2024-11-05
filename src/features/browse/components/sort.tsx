@@ -20,7 +20,7 @@ export default function SortOptions() {
     const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const id = e.currentTarget.value;
         const columnSort = SORTVALUES.find(item => item.id === id)?.value;
-        columnSort && table?.getColumn(columnSort.id)?.toggleSorting(columnSort.desc);
+        if (columnSort) table?.getColumn(columnSort.id)?.toggleSorting(columnSort.desc);
     }
 
     return (

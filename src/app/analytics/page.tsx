@@ -9,6 +9,7 @@ import {
   BookPlusIcon,
   BookUp2Icon
 } from 'lucide-react';
+import { Suspense } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type Props = {
@@ -58,7 +59,9 @@ export default async function Analytics() {
           <h1 className='font-bold text-2xl lg:text-4xl'>
             Overview
           </h1>
-          <Filters initial={FILTERS.length} filterIds={FILTERS} canExpand />
+          <Suspense>
+            <Filters initial={FILTERS.length} filterIds={FILTERS} canExpand />
+          </Suspense>
         </div>
 
         <section className='grid grid-cols-1 md:grid-row-2 lg:grid-flow-row gap-3 md:gap-4 w-full max-w-screen-2xl'>
