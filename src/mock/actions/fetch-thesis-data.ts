@@ -3,7 +3,7 @@
 import { Thesis } from '@/lib/types';
 
 export async function fetchMockTheses() {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     return ([
         {
             id: '1',
