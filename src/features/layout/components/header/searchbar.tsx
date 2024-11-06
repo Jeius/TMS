@@ -9,18 +9,19 @@ export default function SearchBar() {
         <>
             <Input
                 id="search-input"
-                className="hidden sm:block max-w-[15.625rem]"
+                className="hidden sm:block max-w-[16rem] bg-background/80"
                 type="search"
                 placeholder="Search..."
                 aria-label="Search through site content" />
             <TooltipWrapper label="Search">
                 <Button
                     id="search-button"
-                    className="sm:hidden rounded-full size-fit p-2 text-foreground"
+                    size='icon'
+                    className='block sm:hidden rounded-full shrink-0'
                     variant="ghost"
                     aria-label="Search button"
                 >
-                    <Search className="size-5" />
+                    <Search aria-hidden="true" />
                 </Button>
             </TooltipWrapper>
         </>

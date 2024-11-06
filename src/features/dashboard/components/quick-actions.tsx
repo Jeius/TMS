@@ -73,9 +73,16 @@ export default function QuickActions() {
                     aria-label="Quick Actions Carousel"
                     plugins={[plugin.current]}
                 >
-                    <CarouselContent id="carousel-content" className="flex items-center p-2 gap-2">
+                    <CarouselContent
+                        id="carousel-content"
+                        className="flex items-center py-2 px-3 -ml-5"
+                    >
                         {quickActionsLinks.map(({ href, label, icon: Icon }) => (
-                            <CarouselItem key={`carousel-${href}`} className="xs:basis-1/2" role="listitem">
+                            <CarouselItem
+                                key={`carousel-${href}`}
+                                role="listitem"
+                                className="xs:basis-1/2 pl-5 last:pr-5"
+                            >
                                 <QuickActionCard
                                     href={href}
                                     icon={Icon}

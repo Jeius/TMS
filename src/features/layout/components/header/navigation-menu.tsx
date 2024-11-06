@@ -2,13 +2,14 @@
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import NavLinks from '@/features/layout/components/nav-links';
 import { NAVROUTES } from '@/lib/constants';
 import useAuthListener from '@/lib/hooks/use-auth-listener';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import ThemeSwitch from '../theme-switch';
@@ -16,16 +17,24 @@ import ThemeSwitch from '../theme-switch';
 
 function LogoTitle() {
     return (
-        <SheetTitle className="flex mt-4 items-center space-x-2 justify-start">
-            <Image
-                src={'/images/msuiit-logo-275x280.png'}
-                alt="MSU-IIT Seal of Excellence"
-                width={275}
-                height={280}
-                role='img'
-                className='size-[3.5rem]'
-            />
-            <span className="text-left">Thesis Management System</span>
+        <SheetTitle>
+            <SheetClose asChild>
+                <Link
+                    href='/'
+                    aria-label='Go to homepage'
+                    className="flex mt-4 items-center text-base justify-start text-left"
+                >
+                    <Image
+                        src={'/images/msuiit-logo-275x280.png'}
+                        alt="MSU-IIT Seal of Excellence"
+                        width={275}
+                        height={280}
+                        role='img'
+                        className='size-14 mr-2'
+                    />
+                    Thesis Management System
+                </Link>
+            </SheetClose>
         </SheetTitle>
     );
 }
@@ -35,12 +44,17 @@ function MenuButton() {
         <Tooltip>
             <TooltipTrigger asChild>
                 <SheetTrigger asChild>
-                    <Button className='size-fit p-2' variant="ghost" aria-label="Open Menu">
-                        <Menu aria-hidden="true" focusable="false" size='1.5rem' />
+                    <Button
+                        size='icon'
+                        variant="ghost"
+                        aria-label="Open Menu"
+                        className='hover:bg-transparent p-0'
+                    >
+                        <Menu aria-hidden="true" />
                     </Button>
                 </SheetTrigger>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent align='start'>
                 <p>Menu</p>
             </TooltipContent>
         </Tooltip>

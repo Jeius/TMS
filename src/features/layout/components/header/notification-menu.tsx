@@ -30,20 +30,27 @@ export default function NotificationMenu() {
                 <PopoverTrigger asChild>
                     <Button
                         id="notification-button"
-                        className="rounded-full size-fit p-2 text-foreground"
+                        size='icon'
+                        className="rounded-full shrink-0"
                         variant="ghost"
                         aria-label="Open Notifications"
                     >
-                        <Bell aria-hidden="true" focusable="false" className="size-5" />
+                        <Bell aria-hidden="true" />
                     </Button>
                 </PopoverTrigger>
             </TooltipWrapper>
-            <PopoverContent id="user-menu" sideOffset={15} className="p-2 pb-4 h-min mr-4"
+            <PopoverContent id="user-menu" align='end' className="p-2"
                 onCloseAutoFocus={e => e.preventDefault()}
             >
                 <ScrollArea className="flex flex-col max-h-52 w-full space-y-1">
                     {notifications.map((item, index) => (
-                        <Button key={index} size="sm" variant="ghost" className="w-full justify-start" asChild>
+                        <Button
+                            key={index}
+                            size="sm"
+                            variant="ghost"
+                            className="w-full justify-start"
+                            asChild
+                        >
                             <Link href={item.href}>{item.label}</Link>
                         </Button>
                     ))}

@@ -50,7 +50,7 @@ export default function UserMenu() {
                     </Button>
                 </PopoverTrigger>
             </TooltipWrapper>
-            <PopoverContent id="user-menu" sideOffset={12} className="mr-1 p-2 max-w-40"
+            <PopoverContent id="user-menu" align='end' className="p-2 max-w-40"
                 onCloseAutoFocus={e => e.preventDefault()}
             >
                 <div className="flex flex-col space-y-1">
