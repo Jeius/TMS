@@ -21,6 +21,7 @@ function LogoTitle() {
                 alt="MSU-IIT Seal of Excellence"
                 width={275}
                 height={280}
+                priority
                 role='img'
                 className='size-12 shrink-0'
             />
