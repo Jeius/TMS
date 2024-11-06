@@ -5,18 +5,26 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TooltipWrapper } from '@/components/ui/tooltip';
+import { useToast } from '@/lib/hooks/use-toast';
 import { accountLinks } from '@/lib/navigation-links';
 import { supabaseBrowserClient } from '@/lib/supabase/client';
 import { LogOutIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function UserMenu() {
+    const router = useRouter();
+    const { toast } = useToast();
+
     const handleLogout = async () => {
         const { error } = await supabaseBrowserClient().auth.signOut();
         if (error) {
-            console.error('Error logging out:', error.message);
+            toast({
+                title: 'Error signing out',
+                description: error.message,
+            })
         } else {
-            console.log('Logged out successfully');
+            router.refresh();
         }
     };
 
