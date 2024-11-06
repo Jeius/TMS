@@ -46,6 +46,7 @@ export async function updateSession(request: NextRequest) {
         // No user, redirect to login
         const url = request.nextUrl.clone();
         url.pathname = AUTHROUTES.login;
+        url.searchParams.set('redirect_to', request.nextUrl.pathname)
         return NextResponse.redirect(url);
     }
 
