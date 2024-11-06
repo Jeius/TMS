@@ -2,6 +2,7 @@ export const AUTHROUTES = {
     login: '/login',
     resetPassword: '/reset-password',
     forgotPassword: '/forgot-password',
+    auth: '/auth'
 };
 
 export const PUBLICROUTES = {
