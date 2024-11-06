@@ -2,6 +2,7 @@
 
 import { supabaseServerClient } from '@/lib/supabase/server';
 import { AuthActionResponse } from '@/lib/types';
+import { revalidatePath } from 'next/cache';
 import * as z from 'zod';
 import { SignInSchema, SignUpSchema } from '../lib/schema';
 
@@ -29,6 +30,7 @@ export async function signUpAction(data: z.infer<typeof SignUpSchema>): Promise<
         console.error(signUpError.code + ' ' + signUpError.message);
         return { error: 'Authentication error', details: signUpError.message };
     } else {
+        revalidatePath('/', 'layout');
         return {
             success: 'Signed up successfully',
             details: `Please verify your account! Confirmation link was sent to "${email}".`
@@ -56,6 +58,7 @@ export async function signInAction(data: z.infer<typeof SignInSchema>): Promise<
     if (error) {
         return { error: 'Authentication error', details: error.message };
     } else {
+        revalidatePath('/', 'layout');
         return { success: 'Signed in successfully' };
     }
 }
