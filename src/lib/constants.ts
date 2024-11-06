@@ -20,7 +20,7 @@ export const USERROUTES = {
     inbox: '/inbox',
 };
 
-export const NAVIGATIONROUTES = {
+export const NAVROUTES = {
     ...PUBLICROUTES,
     ...USERROUTES,
 };

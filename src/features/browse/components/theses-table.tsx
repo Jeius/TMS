@@ -28,7 +28,6 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
         queryFn: fetchMockTheses,
     });
 
-
     return (
         <TooltipProvider>
             <div id="theses-table" className={cn('relative', className)} {...props}>

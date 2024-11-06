@@ -2,7 +2,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Providers from '@/context/providers';
 import Footer from '@/features/layout/components/footer/app-footer';
 import AppHeader from '@/features/layout/components/header/app-header';
-import NavigationSideBar from '@/features/layout/components/sidebar/navigation-sidebar';
+import SideNav from '@/features/layout/components/side-nav';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import '../styles/globals.css';
@@ -25,7 +25,7 @@ export default function RootLayout({
           <div id="__next">
             <AppHeader />
             {children}
-            <NavigationSideBar />
+            <SideNav />
             <Footer />
           </div>
           <Toaster />
