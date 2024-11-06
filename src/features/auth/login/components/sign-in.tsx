@@ -4,6 +4,7 @@ import SubmitButton, { Status } from '@/components/animated/submit-button';
 import { FormBanner } from '@/components/form/form-banner';
 import { EmailField, PasswordField } from '@/components/form/form-fields';
 import { Button } from '@/components/ui/button';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { supabaseBrowserClient } from '@/lib/supabase/client';
 import { Message } from '@/lib/types';
@@ -76,19 +77,34 @@ export default function SignIn() {
     }, [emailValue, passwordValue, form]);
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col w-full justify-center space-y-8 mx-auto"
-            >
-                <EmailField control={form.control} name="email" label="Email" />
-                <PasswordField control={form.control} name="password" label="Password" />
-                <Button variant="link" size="sm" className="text-muted-foreground w-fit p-0 hover:text-foreground hover:no-underline" asChild>
-                    <Link href="/forgot-password">Forgot password</Link>
-                </Button>
-                {message && <FormBanner message={message} />}
-                <SubmitButton status={status}>Sign In</SubmitButton>
-            </form>
-        </Form>
+        <>
+            <CardHeader>
+                <CardTitle className="text-2xl">Welcome!</CardTitle>
+                <CardDescription className='text-foreground leading-6 [&:not(:first-child)]:mt-6'>
+                    Please enter your email and password to sign in. <br />
+                    Don&apos;t have an account?{' '}
+                    <Link className="text-secondary/80 font-semibold hover:text-secondary" href={`/login?${searchParams.toString()}&signUp=true`}>
+                        Sign up
+                    </Link>
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}
+                        className="flex flex-col w-full justify-center space-y-8 mx-auto"
+                    >
+                        <EmailField control={form.control} name="email" label="Email" />
+                        <PasswordField control={form.control} name="password" label="Password" />
+                        <Button variant="link" size="sm" className="text-muted-foreground w-fit p-0 hover:text-foreground hover:no-underline" asChild>
+                            <Link href="/forgot-password">Forgot password</Link>
+                        </Button>
+                        {message && <FormBanner message={message} />}
+                        <SubmitButton status={status}>Sign In</SubmitButton>
+                    </form>
+                </Form>
+            </CardContent>
+        </>
+
     );
 }
 

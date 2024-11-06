@@ -3,9 +3,12 @@
 import SubmitButton, { Status } from '@/components/animated/submit-button';
 import { FormBanner } from '@/components/form/form-banner';
 import { EmailField, PasswordField } from '@/components/form/form-fields';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { Message } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -15,6 +18,8 @@ import { signUpAction } from '../server/actions';
 export default function SignUp() {
     const [status, setStatus] = useState<Status | undefined>();
     const [message, setMessage] = useState<Message>();
+    const searchParams = new URLSearchParams(useSearchParams().toString());
+    searchParams.delete('signUp');
 
     const form = useForm<z.infer<typeof SignUpSchema>>({
         resolver: zodResolver(SignUpSchema),
@@ -54,17 +59,31 @@ export default function SignUp() {
     }, [emailValue, passwordValue, confirmPasswordValue, form]);
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col justify-center space-y-8 mx-auto"
-            >
-                <EmailField control={form.control} name="email" label="Email" />
-                <PasswordField control={form.control} name="password" label="Password" />
-                <PasswordField control={form.control} name="confirmPassword" label="Confirm Password" />
-                {message && <FormBanner message={message} />}
-                <SubmitButton status={status}>Sign Up</SubmitButton>
-            </form>
-        </Form>
+        <>
+            <CardHeader>
+                <CardTitle className="text-2xl font-medium">Create account</CardTitle>
+                <CardDescription className="text-foreground">
+                    Already have an account?{' '}
+                    <Link className="text-secondary/80 font-semibold hover:text-secondary" href={`/login?${searchParams.toString()}`}>
+                        Sign in
+                    </Link>
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}
+                        className="flex flex-col justify-center space-y-8 mx-auto"
+                    >
+                        <EmailField control={form.control} name="email" label="Email" />
+                        <PasswordField control={form.control} name="password" label="Password" />
+                        <PasswordField control={form.control} name="confirmPassword" label="Confirm Password" />
+                        {message && <FormBanner message={message} />}
+                        <SubmitButton status={status}>Sign Up</SubmitButton>
+                    </form>
+                </Form>
+            </CardContent>
+        </>
+
     );
 }
 

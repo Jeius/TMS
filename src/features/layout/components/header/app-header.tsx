@@ -39,12 +39,12 @@ export default function AppHeader() {
                     </div>
                     <div className="flex items-center space-x-2 pl-2">
                         <SearchBar />
-                        {isSignedIn && isMounted
-                            ? (<>
+                        {isMounted && (isSignedIn
+                            ? <>
                                 <NotificationMenu />
                                 <UserMenu />
-                            </>)
-                            : <AuthButtons />}
+                            </>
+                            : <AuthButtons />)}
                     </div>
                 </div>
             </header>
