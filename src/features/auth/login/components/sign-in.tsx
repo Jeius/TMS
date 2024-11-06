@@ -5,6 +5,7 @@ import { FormBanner } from '@/components/form/form-banner';
 import { EmailField, PasswordField } from '@/components/form/form-fields';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { supabaseBrowserClient } from '@/lib/supabase/client';
 import { Message } from '@/lib/types';
 import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +15,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { SignInSchema } from '../lib/schema';
-import { signInAction } from '../server/actions';
 
 export default function SignIn() {
     const [status, setStatus] = useState<Status | undefined>();
@@ -31,18 +31,32 @@ export default function SignIn() {
 
     const onSubmit = async (data: z.infer<typeof SignInSchema>) => {
         setStatus('loading');
-        const result = await signInAction(data);
 
-        if (result.success) {
-            setStatus('success');
-            setMessage({ success: result.details ?? result.success })
-            await wait(500);
-            router.back();
-        } else {
+        const result = SignInSchema.safeParse(data);
+
+        if (!result.success) {
+            setMessage({ error: 'Invalid form submission' });
+            return;
+        }
+
+        const { email, password } = result.data;
+        const supabase = supabaseBrowserClient();
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (error) {
             setStatus('failed');
-            setMessage({ error: result.details ?? result.error })
+            setMessage({ error: error.message });
             await wait(2000);
             setStatus(undefined);
+        } else {
+            setStatus('success');
+            setMessage({ success: 'Signed in successfully' });
+            await wait(100);
+            router.back();
         }
     };
 

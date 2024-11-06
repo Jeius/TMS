@@ -1,15 +1,39 @@
+'use client'
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NavigationMenu from '@/features/layout/components/header/navigation-menu';
+import { supabaseBrowserClient } from '@/lib/supabase/client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import AuthButtons from './auth-buttons';
 import NotificationMenu from './notification-menu';
 import SearchBar from './searchbar';
 import UserMenu from './user-menu';
 
 
-export default async function AppHeader() {
+export default function AppHeader() {
+    const supabase = supabaseBrowserClient();
+    const [isSignedIn, setIsSignedIn] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setIsSignedIn(!!user);
+            setIsMounted(true);
+        };
+        checkUser();
+
+        const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
+            if (event === 'SIGNED_IN') setIsSignedIn(true);
+            if (event === 'SIGNED_OUT') setIsSignedIn(false);
+        });
+
+        return () => {
+            authListener?.subscription.unsubscribe();
+        };
+    }, []);
 
     return (
         <TooltipProvider>
@@ -26,8 +50,8 @@ export default async function AppHeader() {
                             <Image
                                 src={'/images/msuiit-logo-275x280.png'}
                                 alt="MSU-IIT Seal of Excellence"
-                                width={70}
-                                height={70}
+                                width={275}
+                                height={280}
                                 role='img'
                                 className='size-[3rem]'
                             />
@@ -36,9 +60,11 @@ export default async function AppHeader() {
                     </div>
                     <div className="flex items-center space-x-2 pl-2">
                         <SearchBar />
-                        <NotificationMenu />
-                        <UserMenu />
-                        <AuthButtons />
+                        {isSignedIn && (<>
+                            <NotificationMenu />
+                            <UserMenu />
+                        </>)}
+                        {(!isSignedIn && isMounted) && <AuthButtons />}
                     </div>
                 </div>
             </header>

@@ -20,8 +20,8 @@ function LogoTitle() {
             <Image
                 src={'/images/msuiit-logo-275x280.png'}
                 alt="MSU-IIT Seal of Excellence"
-                width={70}
-                height={70}
+                width={275}
+                height={280}
                 role='img'
                 className='size-[3.5rem]'
             />

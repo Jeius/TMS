@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 
 export default function ForgotPassword() {
     return (
-        <main className="p-5 sm:p-10">
+        <main className="p-5 sm:p-10 min-h-[85vh]">
             <Card variant="glass" className="mx-auto max-w-[480px] sm:p-5" >
                 <CardHeader>
                     <h1 className="text-2xl font-medium">Reset Password</h1>

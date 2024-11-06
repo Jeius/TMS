@@ -6,29 +6,28 @@ import { Separator } from '@/components/ui/separator';
 import { USERROUTES } from '@/lib/constants';
 import { primaryLinks, toolLinks, userLinks } from '@/lib/navigation-links';
 import { supabaseBrowserClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 type NavigationItemsProps = {
-    open?: boolean, onOpenChanged?: (value: boolean) => void,
+    open?: boolean, onOpenChanged?: (value: boolean) => void;
+    isSignedIn?: boolean;
 }
 
-export default function NavLinks({ open, onOpenChanged: setOpen }: NavigationItemsProps) {
+export default function NavLinks({ open, onOpenChanged: setOpen, isSignedIn }: NavigationItemsProps) {
     const pathname = usePathname();
-    const [user, setUser] = useState<User | null>(null);
     const supabase = supabaseBrowserClient();
 
     const navLinks = useMemo(() => {
-        if (user) return [primaryLinks, userLinks, toolLinks];
+        if (isSignedIn) return [primaryLinks, userLinks, toolLinks];
 
         return [
             primaryLinks.filter(link => !Object.values(USERROUTES).includes(link.href)),
             toolLinks
         ];
-    }, [user, primaryLinks, userLinks, toolLinks, USERROUTES]);
+    }, [isSignedIn, primaryLinks, userLinks, toolLinks, USERROUTES]);
 
     function isPathName(href: string) {
         return pathname === href;
@@ -37,23 +36,6 @@ export default function NavLinks({ open, onOpenChanged: setOpen }: NavigationIte
     function handleClick() {
         if (setOpen) setOpen(false);
     }
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const { data } = await supabase.auth.getSession();
-            setUser(data.session?.user ?? null);
-        };
-
-        fetchUser();
-
-        const { data: authListener } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            setUser(session?.user ?? null);
-        });
-
-        return () => {
-            authListener?.subscription.unsubscribe();
-        };
-    }, []);
 
     return (
         <>

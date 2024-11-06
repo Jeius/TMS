@@ -1,14 +1,9 @@
-'use client'
-
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TooltipWrapper } from '@/components/ui/tooltip';
-import { supabaseBrowserClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
 import { Bell } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 const notifications = [
     { href: '#', label: 'Notification 1' },
@@ -29,29 +24,7 @@ const notifications = [
 ];
 
 export default function NotificationMenu() {
-    const [user, setUser] = useState<User | null>(null);
-
-    useEffect(() => {
-        // Fetch the session to get the authenticated user
-        const fetchUser = async () => {
-            const { data } = await supabaseBrowserClient().auth.getSession();
-            setUser(data.session?.user ?? null);
-        };
-
-        fetchUser();
-
-        // Optional: Set up a listener for auth state changes
-        const { data: authListener } = supabaseBrowserClient().auth.onAuthStateChange(async (_event, session) => {
-            setUser(session?.user ?? null);
-        });
-
-        // Clean up the listener on unmount
-        return () => {
-            authListener?.subscription.unsubscribe();
-        };
-    }, []);
-
-    return (user &&
+    return (
         <Popover>
             <TooltipWrapper label="Notifications">
                 <PopoverTrigger asChild>

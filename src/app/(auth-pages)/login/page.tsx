@@ -45,7 +45,7 @@ function SignInTab() {
 
 export default async function Login() {
     return (
-        <main className="p-5 sm:p-10">
+        <main className="p-5 sm:p-10 min-h-[85vh]">
             <Card variant="glass" className="mx-auto max-w-[480px] sm:p-5">
                 <div className="w-full m-auto overflow-hidden p-5 pb-0">
                     <Suspense>

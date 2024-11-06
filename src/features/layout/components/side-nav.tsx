@@ -3,7 +3,7 @@
 import { Separator } from '@/components/ui/separator';
 import NavLinks from '@/features/layout/components/nav-links';
 import { NAVROUTES } from '@/lib/constants';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import { supabaseBrowserClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -14,7 +14,10 @@ export default function SideNav() {
     const [open, setOpen] = useState(false);
     const [width, setWidth] = useState<string>();
     const pathname = usePathname();
-    const isMounted = useIsMounted();
+    const [isSignedIn, setIsSignedIn] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+    const supabase = supabaseBrowserClient();
+
     const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
     useEffect(() => {
@@ -22,8 +25,26 @@ export default function SideNav() {
         setWidth(newWidth);
     }, [open]);
 
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setIsSignedIn(!!user);
+            setIsMounted(true);
+        };
+        checkUser();
+
+        const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
+            if (event === 'SIGNED_IN') setIsSignedIn(true);
+            if (event === 'SIGNED_OUT') setIsSignedIn(false);
+        });
+
+        return () => {
+            authListener?.subscription.unsubscribe();
+        };
+    }, []);
+
     return (
-        (isNavigationRoute && pathname !== '/') && (
+        (isNavigationRoute && pathname !== '/' && isMounted) && (
             <motion.div
                 id="side-navigation"
                 role='navigation'
@@ -44,13 +65,11 @@ export default function SideNav() {
                 onBlur={() => setOpen(false)}
             >
                 <div className='flex flex-col space-y-1 w-full h-full justify-between'>
-                    <NavLinks open={open} />
-                    {isMounted && (
-                        <div className="flex flex-col" role="contentinfo">
-                            <Separator className='my-1' orientation="horizontal" role="separator" />
-                            <ThemeSwitch open={open} />
-                        </div>
-                    )}
+                    <NavLinks isSignedIn={isSignedIn} open={open} />
+                    <div className="flex flex-col" role="contentinfo">
+                        <Separator className='my-1' orientation="horizontal" role="separator" />
+                        <ThemeSwitch open={open} />
+                    </div>
                 </div>
 
             </motion.div>
