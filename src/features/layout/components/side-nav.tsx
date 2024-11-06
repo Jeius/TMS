@@ -3,7 +3,7 @@
 import { Separator } from '@/components/ui/separator';
 import NavLinks from '@/features/layout/components/nav-links';
 import { NAVROUTES } from '@/lib/constants';
-import { supabaseBrowserClient } from '@/lib/supabase/client';
+import useAuthListener from '@/lib/hooks/use-auth-listener';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -14,34 +14,14 @@ export default function SideNav() {
     const [open, setOpen] = useState(false);
     const [width, setWidth] = useState<string>();
     const pathname = usePathname();
-    const [isSignedIn, setIsSignedIn] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
-    const supabase = supabaseBrowserClient();
+    const { isMounted, isSignedIn } = useAuthListener();
 
     const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
     useEffect(() => {
-        const newWidth = open ? '15rem' : '4rem';
+        const newWidth = open ? '15rem' : '4.2rem';
         setWidth(newWidth);
     }, [open]);
-
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setIsSignedIn(!!user);
-            setIsMounted(true);
-        };
-        checkUser();
-
-        const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
-            if (event === 'SIGNED_IN') setIsSignedIn(true);
-            if (event === 'SIGNED_OUT') setIsSignedIn(false);
-        });
-
-        return () => {
-            authListener?.subscription.unsubscribe();
-        };
-    }, []);
 
     return (
         (isNavigationRoute && pathname !== '/' && isMounted) && (
@@ -54,10 +34,10 @@ export default function SideNav() {
                     'backdrop-blur-lg shadow-md pb-10 pt-20 px-3 overflow-x-hidden'
                 )}
                 initial={{ x: -60, opacity: 0, }}
-                animate={{ width: width, x: 0, opacity: 1 }}
+                animate={{ x: 0, opacity: 1, width: width }}
                 transition={{
                     type: 'spring', duration: 0.2,
-                    x: { type: 'spring', duration: 0.4 },
+                    x: { type: 'spring', duration: 0.4 }
                 }}
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}

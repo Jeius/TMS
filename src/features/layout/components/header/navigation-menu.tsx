@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import NavLinks from '@/features/layout/components/nav-links';
 import { NAVROUTES } from '@/lib/constants';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import useAuthListener from '@/lib/hooks/use-auth-listener';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -50,11 +50,11 @@ function MenuButton() {
 export default function NavigationMenu() {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
-    const isMounted = useIsMounted();
+    const { isMounted, isSignedIn } = useAuthListener();
     const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
     return (
-        (isNavigationRoute && pathname !== '/') && (
+        (isNavigationRoute && pathname !== '/' && isMounted) && (
             <div id="navigation-menu" role='navigation' aria-label='Navigation Menu' className="block lg:hidden">
                 <Sheet open={open} onOpenChange={setOpen}>
                     <MenuButton />
@@ -72,13 +72,11 @@ export default function NavigationMenu() {
                         </SheetDescription>
 
                         <div className="grow flex flex-col justify-between w-full overflow-y-auto">
-                            <NavLinks open={open} onOpenChanged={setOpen} />
-                            {isMounted && (
-                                <div className="flex flex-col" role="contentinfo">
-                                    <Separator className='my-1' orientation="horizontal" role="separator" />
-                                    <ThemeSwitch open={open} />
-                                </div>
-                            )}
+                            <NavLinks isSignedIn={isSignedIn} open={open} onOpenChanged={setOpen} />
+                            <div className="flex flex-col" role="contentinfo">
+                                <Separator className='my-1' orientation="horizontal" role="separator" />
+                                <ThemeSwitch open={open} />
+                            </div>
                         </div>
                     </SheetContent>
                 </Sheet>

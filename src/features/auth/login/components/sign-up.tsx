@@ -5,7 +5,6 @@ import { FormBanner } from '@/components/form/form-banner';
 import { EmailField, PasswordField } from '@/components/form/form-fields';
 import { Form } from '@/components/ui/form';
 import { Message } from '@/lib/types';
-import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -36,8 +35,6 @@ export default function SignUp() {
         } else {
             setStatus('failed');
             setMessage({ error: result.details ?? result.error });
-            await wait(2000);
-            setStatus(undefined);
         }
     };
 
@@ -48,8 +45,8 @@ export default function SignUp() {
     useEffect(() => {
         if (
             form.getFieldState('email').isTouched ||
-            form.getFieldState('password') ||
-            form.getFieldState('confirmPassword')
+            form.getFieldState('password').isTouched ||
+            form.getFieldState('confirmPassword').isTouched
         ) {
             setStatus(undefined);
             setMessage(undefined);
@@ -65,7 +62,7 @@ export default function SignUp() {
                 <PasswordField control={form.control} name="password" label="Password" />
                 <PasswordField control={form.control} name="confirmPassword" label="Confirm Password" />
                 {message && <FormBanner message={message} />}
-                <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Sign Up</SubmitButton>
+                <SubmitButton status={status}>Sign Up</SubmitButton>
             </form>
         </Form>
     );

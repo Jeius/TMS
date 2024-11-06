@@ -2,10 +2,9 @@
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NavigationMenu from '@/features/layout/components/header/navigation-menu';
-import { supabaseBrowserClient } from '@/lib/supabase/client';
+import useAuthListener from '@/lib/hooks/use-auth-listener';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import AuthButtons from './auth-buttons';
 import NotificationMenu from './notification-menu';
 import SearchBar from './searchbar';
@@ -13,27 +12,7 @@ import UserMenu from './user-menu';
 
 
 export default function AppHeader() {
-    const supabase = supabaseBrowserClient();
-    const [isSignedIn, setIsSignedIn] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
-
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setIsSignedIn(!!user);
-            setIsMounted(true);
-        };
-        checkUser();
-
-        const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
-            if (event === 'SIGNED_IN') setIsSignedIn(true);
-            if (event === 'SIGNED_OUT') setIsSignedIn(false);
-        });
-
-        return () => {
-            authListener?.subscription.unsubscribe();
-        };
-    }, []);
+    const { isMounted, isSignedIn } = useAuthListener();
 
     return (
         <TooltipProvider>
@@ -60,11 +39,12 @@ export default function AppHeader() {
                     </div>
                     <div className="flex items-center space-x-2 pl-2">
                         <SearchBar />
-                        {isSignedIn && (<>
-                            <NotificationMenu />
-                            <UserMenu />
-                        </>)}
-                        {(!isSignedIn && isMounted) && <AuthButtons />}
+                        {isSignedIn && isMounted
+                            ? (<>
+                                <NotificationMenu />
+                                <UserMenu />
+                            </>)
+                            : <AuthButtons />}
                     </div>
                 </div>
             </header>

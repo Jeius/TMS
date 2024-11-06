@@ -5,8 +5,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { USERROUTES } from '@/lib/constants';
 import { primaryLinks, toolLinks, userLinks } from '@/lib/navigation-links';
-import { supabaseBrowserClient } from '@/lib/supabase/client';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
@@ -18,7 +16,6 @@ type NavigationItemsProps = {
 
 export default function NavLinks({ open, onOpenChanged: setOpen, isSignedIn }: NavigationItemsProps) {
     const pathname = usePathname();
-    const supabase = supabaseBrowserClient();
 
     const navLinks = useMemo(() => {
         if (isSignedIn) return [primaryLinks, userLinks, toolLinks];
@@ -27,7 +24,7 @@ export default function NavLinks({ open, onOpenChanged: setOpen, isSignedIn }: N
             primaryLinks.filter(link => !Object.values(USERROUTES).includes(link.href)),
             toolLinks
         ];
-    }, [isSignedIn, primaryLinks, userLinks, toolLinks, USERROUTES]);
+    }, [isSignedIn]);
 
     function isPathName(href: string) {
         return pathname === href;
@@ -44,31 +41,23 @@ export default function NavLinks({ open, onOpenChanged: setOpen, isSignedIn }: N
                 <nav aria-label="Navigation links">
                     {navLinks.map((linkGroup, groupIndex) => (
                         <React.Fragment key={`link-group-${groupIndex}`}>
-                            <ul className="w-full">
+                            <ul className='space-y-1'>
                                 {linkGroup.map(({ label, icon: Icon, href }) => (
                                     <li key={href}>
                                         <Button
                                             asChild
+                                            size='sm'
                                             aria-expanded={open}
                                             aria-label={`Go to ${label}`}
                                             variant={isPathName(href) ? 'default' : 'ghost'}
                                             data-page={isPathName(href)}
                                             id={`${label.toLowerCase().replace(/ /g, '-')}`}
-                                            className='p-2 space-x-3 grow-0 h-fit my-1 w-full justify-start data-[page=true]:text-secondary'
+                                            className='justify-start w-full data-[page=true]:text-secondary'
                                             onClick={handleClick}
                                         >
                                             <Link href={href} aria-current={isPathName(href) ? 'page' : undefined}>
-                                                <Icon aria-hidden="true" size='1.25rem' className='shrink-0' />
-                                                {open && (
-                                                    <motion.span
-                                                        initial={{ opacity: 0, x: -10 }}
-                                                        animate={{ opacity: 1, x: 0 }}
-                                                        transition={{ duration: 0.15 }}
-                                                        className='pointer-events-none'
-                                                    >
-                                                        {label}
-                                                    </motion.span>
-                                                )}
+                                                <Icon aria-hidden="true" />
+                                                {open && label}
                                             </Link>
                                         </Button>
                                     </li>

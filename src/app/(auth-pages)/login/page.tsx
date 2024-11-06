@@ -1,5 +1,5 @@
 import { Account } from '@/components/animated/account';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import SignIn from '@/features/auth/login/components/sign-in';
 import SignUp from '@/features/auth/login/components/sign-up';
 import Link from 'next/link';
@@ -9,13 +9,13 @@ function SignUpTab() {
     return (
         <>
             <CardHeader>
-                <h1 className="text-2xl font-medium">Sign Up</h1>
-                <p className="text-sm text text-foreground">
+                <CardTitle className="text-2xl font-medium">Create account</CardTitle>
+                <CardDescription className="text-foreground">
                     Already have an account?{' '}
-                    <Link className="text-secondary font-medium underline" href="/login">
+                    <Link className="text-secondary/80 font-semibold hover:text-secondary" href="/login">
                         Sign in
                     </Link>
-                </p>
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <SignUp />
@@ -28,13 +28,10 @@ function SignInTab() {
     return (
         <>
             <CardHeader>
-                <h1 className="text-2xl font-medium">Sign In</h1>
-                <p className="text-sm text text-foreground">
-                    Don&apos;t have an account?{' '}
-                    <Link className="text-secondary font-medium underline" href="/login?signUp=true">
-                        Sign up
-                    </Link>
-                </p>
+                <CardTitle className="text-2xl">Welcome!</CardTitle>
+                <CardDescription className='text-foreground [&:not(:first-child)]:mt-6'>
+                    Please enter your email and password to sign in.
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <SignIn />

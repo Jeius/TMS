@@ -9,37 +9,34 @@ export type Status = 'loading' | 'success' | 'failed';
 
 type SubmitButtonProps = React.ComponentPropsWithRef<typeof Button> & {
     status?: Status;
-    isSubmitting?: boolean;
 };
 
-export default function SubmitButton({
-    status,
-    isSubmitting,
-    className,
-    children,
-    ...props
-}: SubmitButtonProps) {
+export default function SubmitButton({ status, className, children, ...props }: SubmitButtonProps) {
+    function getVariant() {
+        if (status === 'failed') return 'destructive';
+        return 'default';
+    }
+
     return (
         <Button
             size="lg"
             type="submit"
-            data-state={status}
-            disabled={isSubmitting || (status !== undefined)}
+            variant={getVariant()}
+            disabled={status !== undefined}
             className={cn(
-                'group relative h-10 w-full overflow-hidden font-semibold duration-300 disabled:opacity-100',
-                'data-[state=failed]:bg-destructive data-[state=failed]:hover:bg-destructive/80',
+                'group relative w-full overflow-hidden disabled:opacity-85',
                 className,
             )}
             {...props}
         >
             <AnimatePresence mode="wait" initial={false}>
-                <motion.span
+                <motion.div
                     key={status}
                     initial={{ opacity: 0, y: -15 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ duration: 0.1 }}
-                    className='flex items-center justify-center gap-1 capitalize'
+                    className='flex items-center justify-center gap-1.5 capitalize'
                 >
                     {status === 'success' && (
                         <motion.span
@@ -64,11 +61,11 @@ export default function SubmitButton({
                     )}
 
                     {status == 'loading' ? (
-                        <CircleDashed className='h-4 w-4 animate-spin text-foreground' />
+                        <CircleDashed className='animate-spin text-foreground' />
                     ) : (
                         status ?? children
                     )}
-                </motion.span>
+                </motion.div>
             </AnimatePresence>
         </Button>
     );

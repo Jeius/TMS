@@ -25,7 +25,7 @@ export function EmailField<TFieldValues extends FieldValues, TName extends Path<
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
                         <Input
-                            placeholder="name@example.com"
+                            placeholder="Enter your email address"
                             className="bg-card"
                             autoComplete="email"
                             required
@@ -57,7 +57,7 @@ export function PasswordField<TFieldValues extends FieldValues, TName extends Pa
                         <FormControl>
                             <Input
                                 type={showPassword ? 'text' : 'password'}
-                                placeholder="your password"
+                                placeholder="Enter your password"
                                 className="bg-card"
                                 required
                                 {...field}

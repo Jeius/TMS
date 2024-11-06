@@ -10,7 +10,7 @@ import { Message } from '@/lib/types';
 import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -20,6 +20,7 @@ export default function SignIn() {
     const [status, setStatus] = useState<Status | undefined>();
     const [message, setMessage] = useState<Message>();
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const form = useForm<z.infer<typeof SignInSchema>>({
         resolver: zodResolver(SignInSchema),
@@ -31,7 +32,6 @@ export default function SignIn() {
 
     const onSubmit = async (data: z.infer<typeof SignInSchema>) => {
         setStatus('loading');
-
         const result = SignInSchema.safeParse(data);
 
         if (!result.success) {
@@ -50,13 +50,18 @@ export default function SignIn() {
         if (error) {
             setStatus('failed');
             setMessage({ error: error.message });
-            await wait(2000);
-            setStatus(undefined);
         } else {
             setStatus('success');
             setMessage({ success: 'Signed in successfully' });
             await wait(100);
-            router.back();
+
+            const redirectTo = searchParams.get('redirect_to');
+
+            if (redirectTo && redirectTo !== '/') {
+                router.replace(redirectTo);
+            } else {
+                router.replace('/dashboard');
+            }
         }
     };
 
@@ -64,7 +69,7 @@ export default function SignIn() {
     const passwordValue = form.watch('password');
 
     useEffect(() => {
-        if (form.getFieldState('email').isTouched || form.getFieldState('password')) {
+        if (form.getFieldState('email').isTouched || form.getFieldState('password').isTouched) {
             setStatus(undefined);
             setMessage(undefined);
         }
@@ -81,7 +86,7 @@ export default function SignIn() {
                     <Link href="/forgot-password">Forgot password</Link>
                 </Button>
                 {message && <FormBanner message={message} />}
-                <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Sign In</SubmitButton>
+                <SubmitButton status={status}>Sign In</SubmitButton>
             </form>
         </Form>
     );

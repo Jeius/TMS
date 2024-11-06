@@ -1,7 +1,7 @@
 import ImagesReveal, { ImageCard } from '@/components/animated/image-reveal'
 import InteractiveGrid from '@/components/animated/interactive-grid'
 import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { Search } from 'lucide-react'
 import Link from 'next/link'
 import ImageCarousel from './image-carousel'
 
@@ -37,19 +37,16 @@ export default function Hero() {
                         <div className="flex items-center justify-center flex-wrap gap-3 sm:gap-5">
                             <Button
                                 size="lg" asChild
-                                className="h-12 sm:text-lg shadow-md font-semibold hover:scale-105 transition-transform"
+                                className="h-12 sm:text-lg font-semibold shadow-md hover:scale-105 transition-transform"
                             >
-                                <Link href='/login' aria-label="Sign up to start using the thesis management system">
+                                <Link href='/login?signUp=true' aria-label="Sign up to start using the thesis management system">
                                     Sign Up
                                 </Link>
                             </Button>
-                            <Button
-                                size="lg" variant="outline" asChild
-                                className="flex space-x-2 px-4 shadow"
-                            >
+                            <Button variant="outline" className="shadow" asChild>
                                 <Link href='/browse' aria-label="Browse thesis resources">
                                     <span>Browse</span>
-                                    <ArrowRight size={18} aria-hidden="true" />
+                                    <Search size={18} aria-hidden="true" />
                                 </Link>
                             </Button>
                         </div>
