@@ -57,7 +57,7 @@ export default function EmailForm() {
             >
                 <EmailField control={form.control} name="email" label="Email" />
                 {message && <FormBanner message={message} />}
-                <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Submit</SubmitButton>
+                <SubmitButton status={status}>Submit</SubmitButton>
             </form>
         </Form>
     );

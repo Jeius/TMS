@@ -61,7 +61,7 @@ export default function ConfirmForm() {
                         <PasswordField control={form.control} name="password" label="New Password" />
                         <PasswordField control={form.control} name="confirmPassword" label="Confirm New Password" />
                         {message && <FormBanner message={message} />}
-                        <SubmitButton status={status} isSubmitting={form.formState.isSubmitting}>Submit</SubmitButton>
+                        <SubmitButton status={status}>Submit</SubmitButton>
                     </form>
                 </Form>
             )

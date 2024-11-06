@@ -14,9 +14,9 @@ export default function UserMenu() {
     const handleLogout = async () => {
         const { error } = await supabaseBrowserClient().auth.signOut();
         if (error) {
-            console.error("Error logging out:", error.message);
+            console.error('Error logging out:', error.message);
         } else {
-            console.log("Logged out successfully");
+            console.log('Logged out successfully');
         }
     };
 
