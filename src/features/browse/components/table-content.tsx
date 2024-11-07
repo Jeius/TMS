@@ -25,8 +25,6 @@ import { useStickyTHead } from '../lib/hooks/use-sticky-thead'
 import { columns } from './table-columns'
 
 
-const initialScrollState = { left: { value: 0, isScrolled: false } };
-
 export default function ThesesTableContent() {
     const searchParams = useSearchParams();
     const router = useRouter();

@@ -36,7 +36,7 @@ export function useScrollEvents(scrollAreaId: string, scope: RefObject<HTMLEleme
         return () => {
             scrollArea?.removeEventListener('scroll', handleScroll);
         };
-    }, [scrollAreaId, setScrollState]);
+    }, [scrollAreaId, setScrollState, scope]);
 
     return scrollState;
 }
