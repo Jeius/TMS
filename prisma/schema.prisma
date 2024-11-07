@@ -8,54 +8,6 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
-  instance_id                                            String?          @db.Uuid
-  id                                                     String           @id @db.Uuid
-  aud                                                    String?          @db.VarChar(255)
-  role                                                   String?          @db.VarChar(255)
-  email                                                  String?          @unique @db.VarChar(255)
-  encrypted_password                                     String?          @db.VarChar(255)
-  email_confirmed_at                                     DateTime?        @db.Timestamptz(6)
-  invited_at                                             DateTime?        @db.Timestamptz(6)
-  confirmation_token                                     String?          @db.VarChar(255)
-  confirmation_sent_at                                   DateTime?        @db.Timestamptz(6)
-  recovery_token                                         String?          @db.VarChar(255)
-  recovery_sent_at                                       DateTime?        @db.Timestamptz(6)
-  email_change_token_new                                 String?          @db.VarChar(255)
-  email_change                                           String?          @db.VarChar(255)
-  email_change_sent_at                                   DateTime?        @db.Timestamptz(6)
-  last_sign_in_at                                        DateTime?        @db.Timestamptz(6)
-  raw_app_meta_data                                      Json?
-  raw_user_meta_data                                     Json?
-  is_super_admin                                         Boolean?
-  created_at                                             DateTime?        @db.Timestamptz(6)
-  updated_at                                             DateTime?        @db.Timestamptz(6)
-  phone                                                  String?          @unique
-  phone_confirmed_at                                     DateTime?        @db.Timestamptz(6)
-  phone_change                                           String?          @default("")
-  phone_change_token                                     String?          @default("") @db.VarChar(255)
-  phone_change_sent_at                                   DateTime?        @db.Timestamptz(6)
-  confirmed_at                                           DateTime?        @db.Timestamptz(6)
-  email_change_token_current                             String?          @default("") @db.VarChar(255)
-  email_change_confirm_status                            Int?             @default(0) @db.SmallInt
-  banned_until                                           DateTime?        @db.Timestamptz(6)
-  reauthentication_token                                 String?          @default("") @db.VarChar(255)
-  reauthentication_sent_at                               DateTime?        @db.Timestamptz(6)
-  is_sso_user                                            Boolean          @default(false)
-  deleted_at                                             DateTime?        @db.Timestamptz(6)
-  is_anonymous                                           Boolean          @default(false)
-  advisers                                               Advisers[]
-  authors                                                Author[]
-  panelists                                              Panelist[]
-  profiles                                               Profile?
-  review_feedbacks_review_feedbacks_feedbacker_idTousers ReviewFeedback[] @relation("review_feedbacks_feedbacker_idTousers")
-  reviews                                                Review[]
-
-  @@index([instance_id])
-  @@index([is_anonymous])
-  @@map("users")
-}
-
 model Thesis {
   id                                   String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   title                                String                 @unique
@@ -212,7 +164,7 @@ model ReviewFeedback {
   created_at                                  DateTime  @default(now())
   deleted_at                                  DateTime? @db.Timestamp(6)
   feedbacker_id                               String    @db.Uuid
-  users_review_feedbacks_feedbacker_idTousers User      @relation("review_feedbacks_feedbacker_idTousers", fields: [feedbacker_id], references: [id])
+  users_review_feedbacks_feedbacker_idTousers Profile   @relation("review_feedbacks_feedbacker_idTousers", fields: [feedbacker_id], references: [id])
   users_review_feedbacks_review_idTousers     Review    @relation("review_feedbacks_review_idTousers", fields: [review_id], references: [id], map: "review_feedbacks_reviewer_id_fkey")
 
   @@map("review_feedbacks")
@@ -250,7 +202,7 @@ model Advisers {
   created_at DateTime     @default(now()) @db.Timestamptz(6)
   updated_at DateTime?    @db.Timestamp(6)
   deleted_at DateTime?    @db.Timestamp(6)
-  users      User         @relation(fields: [adviser_id], references: [id], onDelete: Cascade)
+  users      Profile      @relation(fields: [adviser_id], references: [id])
   theses     Thesis       @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
   @@id([thesis_id, adviser_id, role])
@@ -263,7 +215,7 @@ model Author {
   author_id  String    @db.Uuid
   updated_at DateTime? @db.Timestamp(6)
   deleted_at DateTime? @db.Timestamp(6)
-  users      User      @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  users      Profile   @relation(fields: [author_id], references: [id])
   theses     Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade, map: "thesis_participants_thesis_id_fkey")
 
   @@id([thesis_id, author_id])
@@ -290,7 +242,7 @@ model Panelist {
   panelist_id String    @db.Uuid
   deleted_at  DateTime? @db.Timestamp(6)
   updated_at  DateTime? @db.Timestamp(6)
-  users       User      @relation(fields: [panelist_id], references: [id], onDelete: Cascade)
+  users       Profile   @relation(fields: [panelist_id], references: [id])
   theses      Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
   @@id([thesis_id, panelist_id])
@@ -298,23 +250,26 @@ model Panelist {
 }
 
 model Profile {
-  id               String          @id(map: "user_profiles_pkey") @db.Uuid
-  role_id          String?         @db.Uuid
-  first_name       String?         @db.VarChar(100)
-  last_name        String?         @db.VarChar(100)
-  id_number        String?         @unique(map: "user_profiles_idNumber_key") @db.VarChar(15)
-  theme_preference ThemePreference @default(DARK)
-  bio              String?         @db.VarChar(500)
-  avatar           String?         @db.VarChar(255)
-  created_at       DateTime        @default(now())
-  updated_at       DateTime?
-  accessControls   AccessControl[]
-  activityLogs     ActivityLog[]
-  messagesReceived ChatMessage[]   @relation("UserReceiver")
-  messagesSent     ChatMessage[]   @relation("UserSender")
-  notifications    Notification[]
-  users            User            @relation(fields: [id], references: [id], onDelete: Cascade)
-  roles            Role?           @relation(fields: [role_id], references: [id])
+  id                                                     String           @id(map: "user_profiles_pkey") @db.Uuid
+  role_id                                                String?          @db.Uuid
+  first_name                                             String?          @db.VarChar(100)
+  last_name                                              String?          @db.VarChar(100)
+  id_number                                              String?          @unique(map: "user_profiles_idNumber_key") @db.VarChar(15)
+  theme_preference                                       ThemePreference  @default(DARK)
+  avatar                                                 String?          @db.VarChar(255)
+  created_at                                             DateTime         @default(now())
+  updated_at                                             DateTime?
+  accessControls                                         AccessControl[]
+  activityLogs                                           ActivityLog[]
+  advisers                                               Advisers[]
+  authors                                                Author[]
+  messagesReceived                                       ChatMessage[]    @relation("UserReceiver")
+  messagesSent                                           ChatMessage[]    @relation("UserSender")
+  notifications                                          Notification[]
+  panelists                                              Panelist[]
+  roles                                                  Role?            @relation(fields: [role_id], references: [id])
+  review_feedbacks_review_feedbacks_feedbacker_idTousers ReviewFeedback[] @relation("review_feedbacks_feedbacker_idTousers")
+  reviews                                                Review[]
 
   @@map("profiles")
 }
@@ -328,7 +283,7 @@ model Review {
   created_at                                         DateTime         @default(now())
   deleted_at                                         DateTime?        @db.Timestamp(6)
   review_feedbacks_review_feedbacks_review_idTousers ReviewFeedback[] @relation("review_feedbacks_review_idTousers")
-  users                                              User             @relation(fields: [reviewer_id], references: [id])
+  users                                              Profile          @relation(fields: [reviewer_id], references: [id])
   theses                                             Thesis           @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
   @@map("reviews")
