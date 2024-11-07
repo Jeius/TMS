@@ -15,13 +15,13 @@ import {
     getSortedRowModel,
     useReactTable
 } from '@tanstack/react-table'
-import { useAnimate } from 'framer-motion'
 import { isEqual } from 'lodash'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { SORTVALUES } from '../lib/constants'
 import { getColumnFilters, getColumnVisibility, getSorting } from '../lib/helpers'
-import { useResizeObserver, useScrollEvents } from '../lib/hooks'
+import { useScrollEvents } from '../lib/hooks/use-scroll-events'
+import { useStickyTHead } from '../lib/hooks/use-sticky-thead'
 import { columns } from './table-columns'
 
 
@@ -31,8 +31,8 @@ export default function ThesesTableContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const queryClient = useQueryClient();
-    const [scope, animate] = useAnimate();
-    const [scrollState, setScrollState] = useState(initialScrollState);
+    const scope = useStickyTHead('app-header');
+    const scrollState = useScrollEvents('data-radix-scroll-area-viewport', scope);
 
     const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: () => fetchMockFilterIds() });
     const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: () => fetchMockTheses(), refetchOnMount: true });
@@ -99,15 +99,6 @@ export default function ThesesTableContent() {
         }
     }, [visibleColumns, sortingState, filterState, sortId, router, searchParams]);
 
-    function updateWidth() {
-        const width = scope.current ? `${scope.current.offsetWidth}px` : 'auto';
-        queryClient.setQueryData(['tableWidth'], width);
-    }
-
-    useResizeObserver({ scopeRef: scope, updateWidth });
-
-    useScrollEvents({ scopeRef: scope, setScrollState, animate });
-
     useEffect(() => {
         queryClient.setQueryData(['thesesTable'], table)
     }, [table, queryClient]);
@@ -117,7 +108,7 @@ export default function ThesesTableContent() {
             ref={scope}
             className="scroll-smooth whitespace-nowrap max-w-fit"
         >
-            <div className="flex flex-1 text-sm">
+            <div className="flex text-sm">
                 <Table
                     className="relative sm:static whitespace-normal border-separate border-spacing-0"
                     style={{

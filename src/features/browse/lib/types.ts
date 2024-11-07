@@ -5,3 +5,7 @@ export type SortValue = {
     label: string;
     value: ColumnSort
 };
+export type ScrollState = {
+    left?: { value: number; isScrolled: boolean; };
+    top?: { value: number; isScrolled: boolean; };
+};

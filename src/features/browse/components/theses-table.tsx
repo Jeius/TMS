@@ -10,7 +10,6 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import { BookCopyIcon } from 'lucide-react'
 import React from 'react'
 import { ColumnVisibilityControl } from './column-visibility'
-import Container from './container'
 import SortOptions from './sort'
 
 type TableProps = React.HtmlHTMLAttributes<HTMLDivElement>
@@ -31,8 +30,8 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
     return (
         <TooltipProvider>
             <div id="theses-table" className={cn('relative', className)} {...props}>
-                <div className="flex flex-col m-auto bg-card shadow border rounded-xl max-w-fit overflow-hidden">
-                    <Container className='overflow-hidden p-4 gap-14 flex justify-between flex-col xs:flex-row items-center xs:items-end'>
+                <div className="flex flex-col m-auto bg-card shadow border rounded-xl max-w-min overflow-hidden">
+                    <div className='overflow-hidden p-4 gap-14 flex justify-between flex-col xs:flex-row items-center xs:items-end'>
                         <HydrationBoundary state={dehydrate(queryClient)}>
                             <Filters />
                         </HydrationBoundary>
@@ -40,18 +39,18 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
                             <SortOptions />
                             <ColumnVisibilityControl type='popover' />
                         </div>
-                    </Container>
+                    </div>
 
                     <HydrationBoundary state={dehydrate(queryClient)}>
                         <ThesesTableContent />
                     </HydrationBoundary>
 
-                    <Container className="flex w-full max-w-full overflow-hidden border-t p-4 text-card-foreground">
-                        <Button className="mx-auto font-bold flex-wrap h-auto min-h-10">
-                            <BookCopyIcon aria-hidden="true" size='1.5rem' className='mr-2' />
+                    <div className="flex border-t p-4 text-card-foreground">
+                        <Button size='lg' className="mx-auto font-bold flex-wrap">
+                            <BookCopyIcon aria-hidden="true" />
                             Load more theses
                         </Button>
-                    </Container>
+                    </div>
                 </div>
             </div>
         </TooltipProvider>
