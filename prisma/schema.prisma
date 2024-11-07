@@ -40,14 +40,15 @@ model Thesis {
 }
 
 model ThesisSpecialization {
-  id                  String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   thesis_id           String            @db.Uuid
   tag_id              BigInt
   created_at          DateTime          @default(now()) @db.Timestamp(6)
   deleted_at          DateTime?         @db.Timestamp(6)
+  updated_at          DateTime?         @db.Timestamp(6)
   specialization_tags SpecializationTag @relation(fields: [tag_id], references: [id], onDelete: Cascade)
   theses              Thesis            @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
+  @@id([thesis_id, tag_id])
   @@map("specializations")
 }
 
@@ -71,6 +72,7 @@ model Department {
   deleted_at DateTime? @db.Timestamp(6)
   updated_at DateTime? @db.Timestamp(6)
   college    College   @relation(fields: [college_id], references: [id])
+  profiles   Profile[]
   theses     Thesis[]
 
   @@map("departments")
@@ -196,6 +198,20 @@ model DefenseSchedule {
   @@map("defense_schedules")
 }
 
+model Milestone {
+  id         String    @id(map: "thesis_milestones_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  thesis_id  String    @db.Uuid
+  title      String
+  start_date DateTime  @db.Date
+  end_date   DateTime  @db.Date
+  completed  Boolean   @default(false)
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  theses     Thesis    @relation(fields: [thesis_id], references: [id], map: "thesis_milestones_thesis_id_fkey")
+
+  @@map("milestones")
+}
+
 model Advisers {
   thesis_id  String       @db.Uuid
   adviser_id String       @db.Uuid
@@ -223,20 +239,6 @@ model Author {
   @@map("authors")
 }
 
-model Milestone {
-  id         String    @id(map: "thesis_milestones_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  thesis_id  String    @db.Uuid
-  title      String
-  start_date DateTime  @db.Date
-  end_date   DateTime  @db.Date
-  completed  Boolean   @default(false)
-  created_at DateTime  @default(now()) @db.Timestamp(6)
-  deleted_at DateTime? @db.Timestamp(6)
-  theses     Thesis    @relation(fields: [thesis_id], references: [id], map: "thesis_milestones_thesis_id_fkey")
-
-  @@map("milestones")
-}
-
 model Panelist {
   thesis_id   String    @db.Uuid
   created_at  DateTime  @default(now()) @db.Timestamptz(6)
@@ -260,6 +262,8 @@ model Profile {
   avatar                                                 String?          @db.VarChar(255)
   created_at                                             DateTime         @default(now())
   updated_at                                             DateTime?
+  prefix_id                                              BigInt?
+  department_id                                          String?          @db.Uuid
   accessControls                                         AccessControl[]
   activityLogs                                           ActivityLog[]
   advisers                                               Advisers[]
@@ -268,7 +272,9 @@ model Profile {
   messagesSent                                           ChatMessage[]    @relation("UserSender")
   notifications                                          Notification[]
   panelists                                              Panelist[]
-  roles                                                  Role?            @relation(fields: [role_id], references: [id])
+  departments                                            Department?      @relation(fields: [department_id], references: [id], onDelete: SetDefault)
+  prefix                                                 Prefix?          @relation(fields: [prefix_id], references: [id])
+  role                                                   Role?            @relation(fields: [role_id], references: [id])
   review_feedbacks_review_feedbacks_feedbacker_idTousers ReviewFeedback[] @relation("review_feedbacks_feedbacker_idTousers")
   reviews                                                Review[]
 
@@ -308,6 +314,18 @@ model SpecializationTag {
   specializations ThesisSpecialization[]
 
   @@map("specialization_tags")
+}
+
+model Prefix {
+  id          BigInt    @id @unique @default(autoincrement())
+  name        String    @unique @db.VarChar
+  description String
+  is_active   Boolean   @default(true)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamp(6)
+  profiles    Profile[]
+
+  @@map("prefixes")
 }
 
 enum ThemePreference {
