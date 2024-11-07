@@ -20,6 +20,7 @@ model Thesis {
   created_at                           DateTime               @default(now())
   updated_at                           DateTime?
   deleted_at                           DateTime?              @db.Timestamp(6)
+  year_approved                        Int?
   accessControls                       AccessControl[]
   advisers                             Advisers[]
   authors                              Author[]
