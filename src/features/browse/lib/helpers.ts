@@ -1,6 +1,6 @@
 import { Thesis } from '@/lib/types';
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table';
-import { SORTVALUES } from './constants';
+import { SORT_VALUES } from './constants';
 
 export const getColumnVisibility = (columns: ColumnDef<Thesis>[], initialVisibleColumns: string[]): VisibilityState => {
     const visibility: VisibilityState = {};
@@ -18,7 +18,7 @@ export const getColumnFilters = (initialFilterValues: [string, string][]): Colum
 
 export const getSorting = (initialSortValue: string | null): SortingState => {
     if (initialSortValue) {
-        const columnSort = SORTVALUES.find(item => item.id === initialSortValue)?.value;
+        const columnSort = SORT_VALUES.find(item => item.id === initialSortValue)?.value;
         return columnSort ? [columnSort] : [];
     }
     return [];

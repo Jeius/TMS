@@ -9,17 +9,17 @@ import { useQuery } from '@tanstack/react-query'
 import { Table } from '@tanstack/react-table'
 import { CheckIcon, ChevronsUpDown } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { SORTVALUES } from '../lib/constants'
+import { SORT_VALUES } from '../lib/constants'
 
 export default function SortOptions() {
     const searchParams = useSearchParams()
-    const defaultLabel = SORTVALUES.find(item => item.id === searchParams.get('sort'))?.label;
+    const defaultLabel = SORT_VALUES.find(item => item.id === searchParams.get('sort'))?.label;
 
     const { data: table, isFetching } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const id = e.currentTarget.value;
-        const columnSort = SORTVALUES.find(item => item.id === id)?.value;
+        const columnSort = SORT_VALUES.find(item => item.id === id)?.value;
         if (columnSort) table?.getColumn(columnSort.id)?.toggleSorting(columnSort.desc);
     }
 
@@ -34,7 +34,7 @@ export default function SortOptions() {
             <PopoverContent align='start' className='p-1 w-fit sm:p-2 sm:w-52 z-10'>
                 <h3 className='sr-only'>Select a sort option</h3>
                 <ul>
-                    {SORTVALUES.map(({ label, id, }) => (
+                    {SORT_VALUES.map(({ label, id, }) => (
                         <li key={id}>
                             {isFetching
                                 ? (<Skeleton className='h-10 w-full border' />)

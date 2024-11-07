@@ -18,7 +18,7 @@ import {
 import { isEqual } from 'lodash'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo } from 'react'
-import { SORTVALUES } from '../lib/constants'
+import { SORT_VALUES } from '../lib/constants'
 import { getColumnFilters, getColumnVisibility, getSorting } from '../lib/helpers'
 import { useScrollEvents } from '../lib/hooks/use-scroll-events'
 import { useStickyTHead } from '../lib/hooks/use-sticky-thead'
@@ -75,7 +75,7 @@ export default function ThesesTableContent() {
     const sortingState = table.getState().sorting;
 
     const sortId = useMemo(() =>
-        SORTVALUES.find(({ value }) =>
+        SORT_VALUES.find(({ value }) =>
             sortingState.some(columnSort => isEqual(value, columnSort)))?.id
         , [sortingState]);
 

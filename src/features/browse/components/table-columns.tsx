@@ -8,10 +8,10 @@ import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import { HTMLMotionProps, motion } from 'framer-motion'
 import { Dot, X } from 'lucide-react'
 import Link from 'next/link'
-import { COLUMNIDS } from '../lib/constants'
+import { COLUMN_IDS } from '../lib/constants'
 
 
-export const columns = [createMainColumn(), ...createColumns(COLUMNIDS)];
+export const columns = [createMainColumn(), ...createColumns(COLUMN_IDS)];
 
 export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
     return columnsData.map(accessorKey => {
