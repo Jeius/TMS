@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Archive, Calendar, CalendarCheck, FileText, FolderOpen, MessageSquare, Shield, Star, User, Users } from 'lucide-react';
 
-const features = [
+const FEATURES = [
     {
         title: 'User Profiles and Roles',
         description: 'Create personalized profiles for students, advisors, and admins, enabling tailored access and a centralized view of each user\'s tasks and responsibilities.',
@@ -61,10 +61,10 @@ export default function Features() {
         <section id='features' aria-labelledby="features-heading" className="mx-auto max-w-fit px-5 md:px-10 scroll-mt-32">
             <h2 id="features-heading" className="sr-only">Key Features</h2>
             <ul className="grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-5 gap-y-10 gap-x-36">
-                {features.map(({ title, description, icon: Icon }) => (
+                {FEATURES.map(({ title, description, icon: Icon }) => (
                     <li
                         key={title}
-                        className="flex max-w-2xl space-x-2 hover:scale-105 text-balance transition-transform"
+                        className="flex max-w-2xl space-x-2 hover:scale-[1.02] sm:hover:scale-[1.03] text-balance transition-transform"
                         aria-labelledby={`${title}-heading`}
                     >
                         <div className="hidden p-5 rounded-lg bg-primary 2xs:flex items-center shadow">

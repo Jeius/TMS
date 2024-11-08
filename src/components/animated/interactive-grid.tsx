@@ -158,7 +158,7 @@ export default function InteractiveGrid({
 }) {
     return (
         <div
-            className={cn('storybook-fix relative h-full w-full overflow-hidden bg-gradient-to-b from-transparent via-card dark:via-footer', className)}
+            className={cn('storybook-fix relative h-full w-full bg-gradient-to-b from-transparent via-card dark:via-footer', className)}
         >
             <Grid />
             <div className={cn('relative mx-auto h-full w-fit', contentClassName)}>{children}</div>

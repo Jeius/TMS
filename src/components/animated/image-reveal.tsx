@@ -45,7 +45,7 @@ export default function ImagesReveal({ title, images }: ImagesRevealProps) {
                 {images.map(({ angle, src, alt }, i) => (
                     <motion.div
                         key={i}
-                        className={`relative overflow-hidden size-full aspect-square basis-[${basis}%] rounded-2xl p-1.5 backdrop-blur-md shadow-xl`}
+                        className={`relative overflow-hidden size-full aspect-square basis-[${basis}%] rounded-2xl p-1 lg:p-1.5 backdrop-blur-md shadow-xl`}
                         custom={{ index: i, angle: angle }}
                         initial="hidden"
                         animate="visible"
@@ -57,7 +57,7 @@ export default function ImagesReveal({ title, images }: ImagesRevealProps) {
                             transition: { duration: 0.3, type: 'spring', stiffness: 150, damping: 20 },
                         }}
                     >
-                        <Image alt={alt} src={src} height={720} width={1080} className="object-cover rounded-2xl size-full" />
+                        <Image alt={alt} src={src} height={720} width={1080} priority className="object-cover rounded-2xl size-full" />
                     </motion.div>
                 ))}
             </div>
