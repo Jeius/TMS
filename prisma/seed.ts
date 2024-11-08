@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { Adviser_role, College, Department, PrismaClient, SpecializationTag, ThesisStatus } from '@prisma/client';
-import { createClient, User } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 
 const prisma = new PrismaClient();
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -82,7 +82,6 @@ async function seedTheses(colleges: College[], departments: Department[], specia
                 abstract: `This is an abstract for Thesis ${i}. It provides an overview of the study.`,
                 status: status,
                 year_approved: yearApproved,
-                college: { connect: { id: colleges[i % colleges.length].id } },
                 department: { connect: { id: departments[i % departments.length].id } },
             },
         });
@@ -147,53 +146,72 @@ async function createSupabaseUser() {
     return user;
 }
 
-async function updateProfile(user: User) {
-    const roles = await prisma.role.findMany();
-    const randomRole = roles[Math.floor(Math.random() * roles.length)];
+async function createUser() {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@g.msuiit.edu.ph`;
 
-    let prefixId = null;
-    if (randomRole.name !== 'Student') {
-        const prefixes = await prisma.prefix.findMany();
-        prefixId = prefixes[Math.floor(Math.random() * prefixes.length)].id;
-    }
+    const user = await prisma.user.create({
+        data: { email: email, is_anonymous: true }
+    })
 
-    await prisma.profile.update({
-        where: { id: user.id },
+    await prisma.profile.create({
         data: {
-            first_name: user.user_metadata.firstName,
-            last_name: user.user_metadata.lastName,
-            role_id: randomRole.id,
-            prefix_id: prefixId,
-        },
-    });
+            id: user.id,
+            first_name: firstName,
+            last_name: lastName,
+            created_at: user.created_at
+        }
+    })
+
+    return user;
 }
 
-async function seedUsersAndProfiles() {
+async function seedNonStudents() {
     const numberOfUsersToSeed = 20;
+    const departments = await prisma.department.findMany();
+    const roles = await prisma.role.findMany();
 
     for (let i = 0; i < numberOfUsersToSeed; i++) {
-        const user = await createSupabaseUser();
+        const user = await createUser();
+        const randomDepartment = departments[Math.floor(Math.random() * departments.length)];
+        const randomRole = roles[Math.floor(Math.random() * roles.length)];
+
         if (user) {
-            await updateProfile(user);
+            if (randomRole.name !== 'Student') {
+                const prefixes = await prisma.prefix.findMany();
+                const prefixId = prefixes[Math.floor(Math.random() * prefixes.length)].id;
+
+                await prisma.profile.update({
+                    where: { id: user.id },
+                    data: {
+                        role_id: randomRole.id,
+                        department_id: randomDepartment.id,
+                        prefix_id: prefixId,
+                    },
+                });
+            }
             console.log(`Created user with ID: ${user.id} and profile.`);
         }
     }
 }
 
-async function seedUserStudents() {
+async function seedStudents() {
     const numberOfUsersToSeed = 20;
+    const departments = await prisma.department.findMany();
     const role = await prisma.role.findFirst({
         where: { name: 'Student' }
     });
 
     for (let i = 0; i < numberOfUsersToSeed; i++) {
-        const user = await createSupabaseUser();
+        const user = await createUser();
+        const randomDepartment = departments[Math.floor(Math.random() * departments.length)];
+
         if (user) {
             await prisma.profile.update({
                 where: { id: user.id },
                 data: {
-                    first_name: user.user_metadata.firstName,
-                    last_name: user.user_metadata.lastName,
+                    department_id: randomDepartment.id,
                     role_id: role?.id,
                 },
             });
@@ -202,22 +220,6 @@ async function seedUserStudents() {
     }
 }
 
-async function seedUserDepartments() {
-    const departments = await prisma.department.findMany();
-    const profilesWithoutDepartment = await prisma.profile.findMany({
-        where: { department_id: null },
-    });
-
-    for (const profile of profilesWithoutDepartment) {
-        const randomDepartment = departments[Math.floor(Math.random() * departments.length)];
-
-        await prisma.profile.update({
-            where: { id: profile.id },
-            data: { department_id: randomDepartment.id },
-        });
-    }
-    console.log(`Updated department column of users`);
-}
 
 async function seedAuthors() {
     const theses = await prisma.thesis.findMany({
@@ -274,7 +276,6 @@ async function seedAdvisers() {
         where: { department_id: { not: null }, role: { name: { not: 'Student' } } },
     });
 
-    // Create a map to quickly find students by department_id
     const advisersByDepartment = advisers.reduce((acc, adviser) => {
         if (!acc[adviser.department_id!]) {
             acc[adviser.department_id!] = [];
@@ -283,13 +284,11 @@ async function seedAdvisers() {
         return acc;
     }, {} as Record<string, string[]>);
 
-    // Prepare data for author creation
     const adviserData = theses
         .map((thesis) => {
             const departmentAdvisers = advisersByDepartment[thesis.department_id!] || [];
-            if (departmentAdvisers.length === 0) return null; // Skip if no students in department
+            if (departmentAdvisers.length === 0) return null;
 
-            // Randomly pick a student from the department
             const randomAdviserId = departmentAdvisers[Math.floor(Math.random() * departmentAdvisers.length)];
 
             return {
@@ -300,7 +299,6 @@ async function seedAdvisers() {
         })
         .filter(thesis => thesis !== null);
 
-    // Bulk insert authors
     if (adviserData.length > 0) {
         await prisma.advisers.createMany({
             data: adviserData,
@@ -310,22 +308,96 @@ async function seedAdvisers() {
     }
 }
 
+async function seedPanelists() {
+    const theses = await prisma.thesis.findMany({
+        select: { id: true, department_id: true },
+    });
+
+    const panelists = await prisma.profile.findMany({
+        select: { id: true, department_id: true },
+        where: { department_id: { not: null }, role: { name: { not: 'Student' } } },
+    });
+
+    const panelistsByDepartment = panelists.reduce((acc, panelists) => {
+        if (!acc[panelists.department_id!]) {
+            acc[panelists.department_id!] = [];
+        }
+        acc[panelists.department_id!].push(panelists.id);
+        return acc;
+    }, {} as Record<string, string[]>);
+
+
+    const panelistData = theses
+        .map((thesis) => {
+            const departmentPanelists = panelistsByDepartment[thesis.department_id!] || [];
+            if (departmentPanelists.length === 0) return null;
+
+            const randomPanelistId = departmentPanelists[Math.floor(Math.random() * departmentPanelists.length)];
+
+            return {
+                thesis_id: thesis.id,
+                panelist_id: randomPanelistId
+            };
+        })
+        .filter(thesis => thesis !== null);
+
+    const panelistData1 = theses
+        .map((thesis) => {
+            const departmentPanelists = panelistsByDepartment[thesis.department_id!] || [];
+            if (departmentPanelists.length === 0) return null;
+
+            const randomPanelistId = departmentPanelists[Math.floor(Math.random() * departmentPanelists.length)];
+
+            return {
+                thesis_id: thesis.id,
+                panelist_id: randomPanelistId
+            };
+        })
+        .filter(thesis => thesis !== null);
+
+    const panelistData2 = theses
+        .map((thesis) => {
+            const departmentPanelists = panelistsByDepartment[thesis.department_id!] || [];
+            if (departmentPanelists.length === 0) return null;
+
+            // Randomly pick a student from the department
+            const randomPanelistId = departmentPanelists[Math.floor(Math.random() * departmentPanelists.length)];
+
+            return {
+                thesis_id: thesis.id,
+                panelist_id: randomPanelistId
+            };
+        })
+        .filter(thesis => thesis !== null);
+
+    const data = [...panelistData, ...panelistData1, ...panelistData2];
+
+    data.forEach(async (d) => {
+        try {
+            await prisma.panelist.create({ data: d });
+            console.error('Panelist created');
+        } catch (error) {
+            console.error('Error during seeding:', error);
+        }
+    })
+}
+
 
 // Main seeding function
 async function main() {
     try {
-        const colleges = await seedColleges();
-        const departments = await seedDepartments(colleges);
-        const specializationTags = await seedSpecializationTags();
+        // const colleges = await seedColleges();
+        // const departments = await seedDepartments(colleges);
+        // const specializationTags = await seedSpecializationTags();
 
-        await seedTheses(colleges, departments, specializationTags);
-        await seedPrefixes();
+        // await seedTheses(colleges, departments, specializationTags);
+        // await seedPrefixes();
         await seedRoles();
-        await seedUsersAndProfiles();
-        await seedUserStudents();
-        await seedUserDepartments();
+        await seedNonStudents();
+        await seedStudents();
         await seedAuthors();
         await seedAdvisers();
+        await seedPanelists();
     } catch (error) {
         console.error('Error during seeding:', error);
     } finally {

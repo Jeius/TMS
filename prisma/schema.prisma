@@ -16,10 +16,9 @@ model Thesis {
   final_file_id                        String?                @db.Uuid
   status                               ThesisStatus?
   department_id                        String?                @db.Uuid
-  college_id                           String?                @db.Uuid
-  created_at                           DateTime               @default(now())
-  updated_at                           DateTime?
-  deleted_at                           DateTime?              @db.Timestamp(6)
+  created_at                           DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at                           DateTime?              @db.Timestamptz(6)
+  deleted_at                           DateTime?              @db.Timestamptz(6)
   year_approved                        Int?
   accessControls                       AccessControl[]
   advisers                             Advisers[]
@@ -31,7 +30,6 @@ model Thesis {
   plagiarismReports                    PlagiarismReport[]
   reviews                              Review[]
   specializations                      ThesisSpecialization[]
-  college                              College?               @relation(fields: [college_id], references: [id], onDelete: Restrict)
   department                           Department?            @relation(fields: [department_id], references: [id], onDelete: Restrict)
   files_theses_final_file_idTofiles    File?                  @relation("theses_final_file_idTofiles", fields: [final_file_id], references: [id], map: "theses_finalFile_id_fkey")
   files_theses_proposal_file_idTofiles File?                  @relation("theses_proposal_file_idTofiles", fields: [proposal_file_id], references: [id], onDelete: Restrict, map: "theses_proposalFile_id_fkey")
@@ -59,7 +57,6 @@ model College {
   deleted_at  DateTime?    @db.Timestamp(6)
   updated_at  DateTime?    @db.Timestamp(6)
   departments Department[]
-  theses      Thesis[]
 
   @@map("colleges")
 }
@@ -71,7 +68,7 @@ model Department {
   created_at DateTime  @default(now()) @db.Timestamp(6)
   deleted_at DateTime? @db.Timestamp(6)
   updated_at DateTime? @db.Timestamp(6)
-  college    College   @relation(fields: [college_id], references: [id])
+  college    College   @relation(fields: [college_id], references: [id], onDelete: Cascade)
   profiles   Profile[]
   theses     Thesis[]
 
@@ -219,8 +216,8 @@ model Advisers {
   created_at DateTime     @default(now()) @db.Timestamptz(6)
   updated_at DateTime?    @db.Timestamp(6)
   deleted_at DateTime?    @db.Timestamp(6)
-  users      Profile      @relation(fields: [adviser_id], references: [id])
-  theses     Thesis       @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
+  profile    Profile      @relation(fields: [adviser_id], references: [id], onDelete: Cascade)
+  thesis     Thesis       @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
   @@id([thesis_id, adviser_id, role])
   @@map("advisers")
@@ -232,8 +229,8 @@ model Author {
   author_id  String    @db.Uuid
   updated_at DateTime? @db.Timestamp(6)
   deleted_at DateTime? @db.Timestamp(6)
-  users      Profile   @relation(fields: [author_id], references: [id])
-  theses     Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade, map: "thesis_participants_thesis_id_fkey")
+  profile    Profile   @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  thesis     Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade, map: "thesis_participants_thesis_id_fkey")
 
   @@id([thesis_id, author_id])
   @@map("authors")
@@ -245,8 +242,8 @@ model Panelist {
   panelist_id String    @db.Uuid
   deleted_at  DateTime? @db.Timestamp(6)
   updated_at  DateTime? @db.Timestamp(6)
-  users       Profile   @relation(fields: [panelist_id], references: [id])
-  theses      Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
+  profile     Profile   @relation(fields: [panelist_id], references: [id], onDelete: Cascade)
+  thesis      Thesis    @relation(fields: [thesis_id], references: [id], onDelete: Cascade)
 
   @@id([thesis_id, panelist_id])
   @@map("panelists")
@@ -254,16 +251,16 @@ model Panelist {
 
 model Profile {
   id                                                     String           @id(map: "user_profiles_pkey") @db.Uuid
-  role_id                                                String?          @db.Uuid
   first_name                                             String?          @db.VarChar(100)
   last_name                                              String?          @db.VarChar(100)
   id_number                                              String?          @unique(map: "user_profiles_idNumber_key") @db.VarChar(15)
   theme_preference                                       ThemePreference  @default(DARK)
   avatar                                                 String?          @db.VarChar(255)
-  created_at                                             DateTime         @default(now())
-  updated_at                                             DateTime?
+  created_at                                             DateTime         @db.Timestamptz(6)
+  updated_at                                             DateTime?        @db.Timestamptz(6)
   prefix_id                                              BigInt?
   department_id                                          String?          @db.Uuid
+  role_id                                                Int?
   accessControls                                         AccessControl[]
   activityLogs                                           ActivityLog[]
   advisers                                               Advisers[]
@@ -272,9 +269,10 @@ model Profile {
   messagesSent                                           ChatMessage[]    @relation("UserSender")
   notifications                                          Notification[]
   panelists                                              Panelist[]
-  departments                                            Department?      @relation(fields: [department_id], references: [id], onDelete: SetDefault)
+  department                                             Department?      @relation(fields: [department_id], references: [id], onDelete: SetDefault)
+  user                                                   User             @relation(fields: [id], references: [id], onDelete: Cascade)
   prefix                                                 Prefix?          @relation(fields: [prefix_id], references: [id])
-  role                                                   Role?            @relation(fields: [role_id], references: [id])
+  role                                                   Role?            @relation(fields: [role_id], references: [id], onDelete: SetDefault)
   review_feedbacks_review_feedbacks_feedbacker_idTousers ReviewFeedback[] @relation("review_feedbacks_feedbacker_idTousers")
   reviews                                                Review[]
 
@@ -297,10 +295,10 @@ model Review {
 }
 
 model Role {
-  id         String    @id(map: "user_roles_pkey") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name       String    @unique(map: "user_roles_name_key")
-  created_at DateTime  @default(now()) @db.Timestamp(6)
-  deleted_at DateTime? @db.Timestamp(6)
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  name       String    @unique @db.VarChar
+  updated_at DateTime? @db.Timestamptz(6)
+  id         Int       @id @unique @default(autoincrement())
   profiles   Profile[]
 
   @@map("roles")
@@ -326,6 +324,21 @@ model Prefix {
   profiles    Profile[]
 
   @@map("prefixes")
+}
+
+model User {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String?   @db.VarChar
+  encrypted_password String?
+  created_at         DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime? @db.Timestamptz(6)
+  deleted_at         DateTime? @db.Timestamptz(6)
+  is_anonymous       Boolean   @default(false)
+  last_signed_in     DateTime? @db.Timestamptz(6)
+  is_active          Boolean?  @default(false)
+  profiles           Profile?
+
+  @@map("users")
 }
 
 enum ThemePreference {
