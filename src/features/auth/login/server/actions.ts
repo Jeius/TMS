@@ -18,7 +18,7 @@ export async function signUpAction(data: z.infer<typeof SignUpSchema>): Promise<
 
     const { email, password } = result.data;
     const supabase = await supabaseServerClient();
-    const origin = (await headers()).get("origin");
+    const origin = (await headers()).get('origin');
 
     const { error: signUpError } = await supabase.auth.signUp({
         email,
