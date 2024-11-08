@@ -5,7 +5,7 @@ import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
 
-type FormFieldProps<TFieldValues extends FieldValues, TName extends Path<TFieldValues>> = {
+type FormFieldProps<TFieldValues extends FieldValues, TName extends Path<TFieldValues>> = React.ComponentPropsWithRef<typeof Input> & {
     control: Control<TFieldValues>; // Ensure control is required here
     name: TName;
     label: string;
@@ -15,6 +15,7 @@ export function EmailField<TFieldValues extends FieldValues, TName extends Path<
     label,
     control,
     name,
+    ...props
 }: FormFieldProps<TFieldValues, TName>) {
     return (
         <FormField
@@ -25,11 +26,10 @@ export function EmailField<TFieldValues extends FieldValues, TName extends Path<
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
                         <Input
-                            placeholder="Enter your email address"
                             className="bg-card"
-                            autoComplete="email"
                             required
                             {...field}
+                            {...props}
                         />
                     </FormControl>
                     <FormMessage />
@@ -43,6 +43,7 @@ export function PasswordField<TFieldValues extends FieldValues, TName extends Pa
     label,
     control,
     name,
+    ...props
 }: FormFieldProps<TFieldValues, TName>) {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -57,18 +58,19 @@ export function PasswordField<TFieldValues extends FieldValues, TName extends Pa
                         <FormControl>
                             <Input
                                 type={showPassword ? 'text' : 'password'}
-                                placeholder="Enter your password"
-                                className="bg-card"
+                                className="bg-card pr-8"
                                 required
                                 {...field}
+                                {...props}
                             />
                         </FormControl>
-                        <div className="absolute right-1 top-1 bottom-1 flex items-center bg-card">
+                        <div className="absolute right-0 top-0 bottom-0 flex items-center">
                             <Button
                                 variant="ghost"
                                 type="button"
+                                size='icon'
                                 aria-label={showPassword ? 'Hide Password' : 'Show Password'}
-                                className="p-1.5 rounded-full size-fit text-muted-foreground"
+                                className="p-1 rounded-full text-muted-foreground hover:bg-transparent"
                                 onClick={() => setShowPassword((prev) => !prev)}
                             >
                                 {showPassword ? <EyeClosedIcon aria-hidden="true" /> : <EyeOpenIcon aria-hidden="true" />}

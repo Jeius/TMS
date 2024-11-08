@@ -93,8 +93,20 @@ export default function SignIn() {
                     <form onSubmit={form.handleSubmit(onSubmit)}
                         className="flex flex-col w-full justify-center space-y-8 mx-auto"
                     >
-                        <EmailField control={form.control} name="email" label="Email" />
-                        <PasswordField control={form.control} name="password" label="Password" />
+                        <EmailField
+                            placeholder='name@example.com'
+                            autoComplete='email webauthn'
+                            control={form.control}
+                            name="email"
+                            label="Email"
+                        />
+                        <PasswordField
+                            placeholder='Enter your password'
+                            autoComplete='current-password webauthn'
+                            control={form.control}
+                            name="password"
+                            label="Password"
+                        />
                         <Button variant="link" size="sm" className="text-muted-foreground w-fit p-0 hover:text-foreground hover:no-underline" asChild>
                             <Link href="/forgot-password">Forgot password</Link>
                         </Button>

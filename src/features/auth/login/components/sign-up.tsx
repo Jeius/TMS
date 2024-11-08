@@ -74,9 +74,27 @@ export default function SignUp() {
                     <form onSubmit={form.handleSubmit(onSubmit)}
                         className="flex flex-col justify-center space-y-8 mx-auto"
                     >
-                        <EmailField control={form.control} name="email" label="Email" />
-                        <PasswordField control={form.control} name="password" label="Password" />
-                        <PasswordField control={form.control} name="confirmPassword" label="Confirm Password" />
+                        <EmailField
+                            placeholder='Enter your email address'
+                            autoComplete='email webauthn'
+                            control={form.control}
+                            name="email"
+                            label="Email"
+                        />
+                        <PasswordField
+                            placeholder='Enter your password'
+                            autoComplete='new-password webauthn'
+                            control={form.control}
+                            name="password"
+                            label="Password"
+                        />
+                        <PasswordField
+                            placeholder='Confirm your password'
+                            autoComplete='new-password webauthn'
+                            control={form.control}
+                            name="confirmPassword"
+                            label="Confirm Password"
+                        />
                         {message && <FormBanner message={message} />}
                         <SubmitButton status={status}>Sign Up</SubmitButton>
                     </form>

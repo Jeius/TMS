@@ -55,7 +55,7 @@ export default function EmailForm() {
             <form onSubmit={form.handleSubmit(onSubmit)}
                 className="flex flex-col w-full justify-center space-y-8 mx-auto"
             >
-                <EmailField control={form.control} name="email" label="Email" />
+                <EmailField placeholder='Enter your email' autoComplete='email webauthn' control={form.control} name="email" label="Email" />
                 {message && <FormBanner message={message} />}
                 <SubmitButton status={status}>Submit</SubmitButton>
             </form>
