@@ -256,7 +256,7 @@ model Profile {
   id_number                                              String?          @unique(map: "user_profiles_idNumber_key") @db.VarChar(15)
   theme_preference                                       ThemePreference  @default(DARK)
   avatar                                                 String?          @db.VarChar(255)
-  created_at                                             DateTime         @db.Timestamptz(6)
+  created_at                                             DateTime         @default(now()) @db.Timestamptz(6)
   updated_at                                             DateTime?        @db.Timestamptz(6)
   prefix_id                                              BigInt?
   department_id                                          String?          @db.Uuid
@@ -314,6 +314,7 @@ model SpecializationTag {
   @@map("specialization_tags")
 }
 
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model Prefix {
   id          BigInt    @id @unique @default(autoincrement())
   name        String    @unique @db.VarChar
@@ -328,8 +329,8 @@ model Prefix {
 
 model User {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email              String?   @db.VarChar
-  encrypted_password String?
+  email              String    @unique @db.VarChar
+  encrypted_password String?   @db.VarChar
   created_at         DateTime  @default(now()) @db.Timestamptz(6)
   updated_at         DateTime? @db.Timestamptz(6)
   deleted_at         DateTime? @db.Timestamptz(6)
