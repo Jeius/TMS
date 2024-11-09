@@ -4,34 +4,35 @@ import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Thesis } from '@/lib/types'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useQuery } from '@tanstack/react-query'
-import { Table } from '@tanstack/react-table'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { SortingState, Table } from '@tanstack/react-table'
 import { CheckIcon, ChevronsUpDown } from 'lucide-react'
-import { useQueryState } from 'nuqs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SORT_VALUES } from '../lib/constants'
+import { getSortValue } from '../lib/hooks/use-sort-state'
 
 export default function SortOptions() {
-    const { data: table, isFetching } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
-    const [sortId] = useQueryState('sort');
-    const defaultLabel = SORT_VALUES.find(item => item.id === sortId)?.label;
-    const [selectedLabel, setSelectedLabel] = useState(defaultLabel);
+    const queryClient = useQueryClient();
+    const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
+    const [sortState, setSortState] = useState<SortingState | undefined>(table?.getState().sorting);
+    const selectedValue = getSortValue(sortState ?? []);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const id = e.currentTarget.value;
         const sortValue = SORT_VALUES.find(item => item.id === id);
-        setSelectedLabel(prev => sortValue?.label ?? prev);
-
         const columnSort = sortValue?.value;
-        if (columnSort) table?.getColumn(columnSort.id)?.toggleSorting(columnSort.desc);
+        if (columnSort) table?.setSorting([columnSort]);
+        queryClient.setQueryData(['thesisTable'], table);
     }
+
+    useEffect(() => setSortState(table?.getState().sorting), [table]);
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant='outline' size='sm' className='text-xs capitalize'>
-                    Sort by: {selectedLabel ?? defaultLabel}
-                    <ChevronsUpDown size='1rem' className='ml-2' />
+                    Sort by: {selectedValue?.label}
+                    <ChevronsUpDown />
                 </Button>
             </PopoverTrigger>
             <PopoverContent align='start' className='p-1 w-fit sm:p-2 sm:w-52 z-10'>
@@ -39,24 +40,21 @@ export default function SortOptions() {
                 <ul>
                     {SORT_VALUES.map(({ label, id, }) => (
                         <li key={id}>
-                            {
-                                <PopoverClose asChild>
-                                    <Button
-                                        value={id}
-                                        variant='ghost'
-                                        onClick={handleClick}
-                                        disabled={isFetching}
-                                        className='justify-start w-full text-xs'
-                                    >
-                                        <CheckIcon
-                                            aria-hidden='true'
-                                            data-selected={label === (selectedLabel ?? defaultLabel)}
-                                            className='opacity-0 data-[selected=true]:opacity-100'
-                                        />
-                                        {label}
-                                    </Button>
-                                </PopoverClose>
-                            }
+                            <PopoverClose asChild>
+                                <Button
+                                    value={id}
+                                    variant='ghost'
+                                    onClick={handleClick}
+                                    className='justify-start w-full text-xs'
+                                >
+                                    <CheckIcon
+                                        aria-hidden='true'
+                                        data-selected={label === (selectedValue?.label)}
+                                        className='opacity-0 data-[selected=true]:opacity-100'
+                                    />
+                                    {label}
+                                </Button>
+                            </PopoverClose>
                         </li>
                     ))}
                 </ul>

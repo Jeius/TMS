@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import ThesesTableContent from '@/features/browse/components/table-content'
 import { cn } from '@/lib/utils'
-import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 import { BookCopyIcon } from 'lucide-react'
 import React from 'react'
@@ -15,11 +14,6 @@ type TableProps = React.HtmlHTMLAttributes<HTMLDivElement>
 
 export default async function ThesesTable({ className, ...props }: TableProps) {
     const queryClient = new QueryClient();
-
-    await queryClient.prefetchQuery({
-        queryKey: ['filterIds'],
-        queryFn: fetchMockFilterIds,
-    });
 
     await queryClient.prefetchQuery({
         queryKey: ['theses'],

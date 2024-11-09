@@ -4,7 +4,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/components/ui/table'
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements'
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility'
-import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
+import responsivePx from '@/lib/responsive-px'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
     getCoreRowModel,
@@ -30,14 +30,19 @@ export default function ThesesTableContent() {
     const scope = useStickyTHead('app-header');
     const scrollState = useScrollEvents('data-radix-scroll-area-viewport', scope);
 
-    const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: () => fetchMockFilterIds() });
-    const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: () => fetchTheses(), refetchOnMount: true });
+    const { data: theses = [] } = useQuery({
+        queryKey: ['theses'],
+        queryFn: () => fetchTheses(),
+        refetchOnMount: false
+    });
 
-    const [columnFilters, setColumnFilters] = useFilterState();
+    const columnPinning = { left: ['theses'] };
+    const columnOrder = useQueryState('cols', parseAsArrayOf(parseAsString).withDefault(['specializations', 'adviser']))[0];
+    const columnSizing = { 'theses': responsivePx(420), 'year': responsivePx(120) };
     const [columnVisibility, setColumnVisibilty] = useVisibilityState(columns);
     const [sorting, setSorting] = useSortState();
-    const [columnOrder] = useQueryState('cols', parseAsArrayOf(parseAsString).withDefault([]));
-    const columnPinning = { left: ['theses'] };
+    const [columnFilters, setColumnFilters] = useFilterState();
+
 
     const table = useReactTable({
         data: theses,
@@ -47,24 +52,24 @@ export default function ThesesTableContent() {
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
+        columnResizeMode: 'onChange',
+        initialState: { columnPinning, columnOrder, columnSizing },
+        state: { columnVisibility, sorting },
         onColumnVisibilityChange: setColumnVisibilty,
         onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        columnResizeMode: 'onChange',
-        initialState: { columnPinning, columnOrder },
-        state: { columnVisibility, sorting, columnFilters },
     })
 
     const headers = table.getFlatHeaders();
+    const colSizing = table.getState().columnSizing;
 
     const columnSizeVars = useMemo(() => {
         const colSizes: { [key: string]: number } = {};
         headers.forEach((header) => {
-            colSizes[`--header-${header.id}-size`] = header.getSize();
-            colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
+            colSizes[`--header-${header.id}-size`] = colSizing[header.id];
+            colSizes[`--col-${header.column.id}-size`] = colSizing[header.id];
         })
         return colSizes;
-    }, [headers]);
+    }, [headers, colSizing]);
 
     useEffect(() => {
         queryClient.setQueryData(['thesesTable'], table)

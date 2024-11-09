@@ -19,7 +19,7 @@ export function createColumns(): ColumnDef<Thesis>[] {
             id: accessorKey,
             accessorKey,
             size: responsivePx(200),
-            minSize: responsivePx(50),
+            minSize: responsivePx(120),
             maxSize: responsivePx(600),
             sortingFn: 'alphanumeric',
             filterFn: 'includesString',
@@ -38,9 +38,9 @@ export function createMainColumn(): ColumnDef<Thesis> {
     return {
         id: 'theses',
         accessorKey: 'title',
-        size: responsivePx(600),
+        size: responsivePx(420),
         minSize: responsivePx(300),
-        maxSize: responsivePx(800),
+        maxSize: responsivePx(600),
         sortingFn: 'alphanumeric',
         filterFn: 'includesString',
         enableHiding: false,
@@ -119,35 +119,39 @@ type ColumnCellProps = HTMLMotionProps<'div'> & {
 
 function ColumnCell({ accessorKey, row, ...props }: ColumnCellProps) {
     const rowValue = row.getValue(accessorKey);
-    return (<>
-        {rowValue instanceof Array && (
-            <motion.ul
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ type: 'spring', bounce: 0.22 }}
-                className='flex flex-col gap-2 text-pretty'
-            >
-                {rowValue.map((value, i) => (
-                    <li key={i}>
-                        {value}
-                    </li>
-                ))}
-            </motion.ul>
-        )}
 
-        {(rowValue instanceof String || rowValue instanceof Number) && (
-            <motion.div
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ type: 'spring', bounce: 0.22 }}
-                className='text-pretty'
-                {...props}
-            >
-                {rowValue as string}
-            </motion.div>
-        )}
-    </>)
+    return (
+        <>
+            {Array.isArray(rowValue) && (
+                <motion.ul
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ type: 'spring', bounce: 0.22 }}
+                    className='flex flex-col gap-2 text-pretty'
+                >
+                    {rowValue.map((value, i) => (
+                        <li key={i}>
+                            {value}
+                        </li>
+                    ))}
+                </motion.ul>
+            )}
+
+            {(typeof rowValue === 'string' || typeof rowValue === 'number') && (
+                <motion.div
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ type: 'spring', bounce: 0.22 }}
+                    className='text-pretty'
+                    {...props}
+                >
+                    {rowValue}
+                </motion.div>
+            )}
+        </>
+    );
 }
+
 
 type ColumnHeaderProps<TData> = HTMLMotionProps<'div'> & {
     table: Table<TData>;
@@ -174,9 +178,10 @@ function ColumnHeader<TData>({ accessorKey, table, className, ...props }: Column
                 {
                     <TooltipTrigger asChild>
                         <Button
+                            size='icon'
                             variant="ghost"
                             aria-label="Remove column"
-                            className="rounded-full p-0.5 size-5 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                            className="p-1 size-fit text-muted-foreground hover:text-foreground hover:bg-transparent"
                             onClick={handleClick}
                         >
                             <X aria-hidden="true" />
