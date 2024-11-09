@@ -1,14 +1,13 @@
 
 export type Thesis = {
-    id: string
-    title: string
-    year: string
-    author: string
-    adviser: string
-    keywords: string
-    specialization: string
-    dateUploaded: string
-    department: string
+    title: string | null
+    year: number | null
+    authors: string[]
+    adviser: string | null
+    panelists: string[]
+    specializations: string[]
+    department: string | null
+    college: string | null
 }
 
 export type AuthActionResponse = {

@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -258,9 +259,10 @@ model Profile {
   avatar                                                 String?          @db.VarChar(255)
   created_at                                             DateTime         @default(now()) @db.Timestamptz(6)
   updated_at                                             DateTime?        @db.Timestamptz(6)
-  prefix_id                                              BigInt?
+  suffix_id                                              BigInt?
   department_id                                          String?          @db.Uuid
   role_id                                                Int?
+  prefix_id                                              Int?
   accessControls                                         AccessControl[]
   activityLogs                                           ActivityLog[]
   advisers                                               Advisers[]
@@ -271,8 +273,9 @@ model Profile {
   panelists                                              Panelist[]
   department                                             Department?      @relation(fields: [department_id], references: [id], onDelete: SetDefault)
   user                                                   User             @relation(fields: [id], references: [id], onDelete: Cascade)
-  prefix                                                 Prefix?          @relation(fields: [prefix_id], references: [id])
+  prefix                                                 Prefix?          @relation(fields: [prefix_id], references: [id], onDelete: SetDefault)
   role                                                   Role?            @relation(fields: [role_id], references: [id], onDelete: SetDefault)
+  suffixes                                               Suffix?          @relation(fields: [suffix_id], references: [id], onDelete: SetDefault)
   review_feedbacks_review_feedbacks_feedbacker_idTousers ReviewFeedback[] @relation("review_feedbacks_feedbacker_idTousers")
   reviews                                                Review[]
 
@@ -298,7 +301,7 @@ model Role {
   created_at DateTime  @default(now()) @db.Timestamptz(6)
   name       String    @unique @db.VarChar
   updated_at DateTime? @db.Timestamptz(6)
-  id         Int       @id @unique @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   profiles   Profile[]
 
   @@map("roles")
@@ -316,12 +319,12 @@ model SpecializationTag {
 
 /// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model Prefix {
-  id          BigInt    @id @unique @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String    @unique @db.VarChar
-  description String
-  is_active   Boolean   @default(true)
+  description String    @db.VarChar
   created_at  DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime? @db.Timestamp(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  deleted_at  DateTime? @db.Timestamptz(6)
   profiles    Profile[]
 
   @@map("prefixes")
@@ -340,6 +343,48 @@ model User {
   profiles           Profile?
 
   @@map("users")
+}
+
+model Suffix {
+  id          BigInt    @id @default(autoincrement())
+  name        String    @unique @db.VarChar
+  description String
+  created_at  DateTime  @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  profiles    Profile[]
+
+  @@map("suffixes")
+}
+
+view ApprovedThesisView {
+  title           String?
+  abstract        String?
+  year            Int?
+  file_path       String?
+  department      String?
+  college         String?
+  authors         String[]
+  adviser         String?
+  panelists       String[]
+  specializations String[] @db.VarChar
+  id              String   @unique @db.Uuid
+
+  @@map("approved_theses_view")
+}
+
+view ThesisProposalView {
+  title           String?
+  status          ThesisStatus?
+  file_path       String?
+  department      String?
+  college         String?
+  authors         String[]
+  adviser         String?
+  panelists       String[]
+  specializations String[]      @db.VarChar
+  id              String        @unique @db.Uuid
+
+  @@map("thesis_proposals_view")
 }
 
 enum ThemePreference {

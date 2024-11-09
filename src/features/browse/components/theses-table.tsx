@@ -1,14 +1,13 @@
 
-import Filters from '@/components/filters'
 import { Button } from '@/components/ui/button'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import ThesesTableContent from '@/features/browse/components/table-content'
 import { cn } from '@/lib/utils'
 import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
-import { fetchMockTheses } from '@/mock/actions/fetch-thesis-data'
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 import { BookCopyIcon } from 'lucide-react'
 import React from 'react'
+import { fetchTheses } from '../lib/actions'
 import { ColumnVisibilityControl } from './column-visibility'
 import SortOptions from './sort'
 
@@ -24,7 +23,7 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
 
     await queryClient.prefetchQuery({
         queryKey: ['theses'],
-        queryFn: fetchMockTheses,
+        queryFn: fetchTheses,
     });
 
     return (
@@ -33,7 +32,7 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
                 <div className="flex flex-col m-auto bg-card shadow border rounded-xl max-w-min overflow-hidden">
                     <div className='overflow-hidden p-4 gap-14 flex justify-between flex-col xs:flex-row items-center xs:items-end'>
                         <HydrationBoundary state={dehydrate(queryClient)}>
-                            <Filters />
+                            {/* <Filters /> */}
                         </HydrationBoundary>
                         <div className='flex justify-between w-full xs:w-fit xs:justify-end items-center gap-2 flex-wrap'>
                             <SortOptions />

@@ -11,10 +11,10 @@ import Link from 'next/link'
 import { COLUMN_IDS } from '../lib/constants'
 
 
-export const columns = [createMainColumn(), ...createColumns(COLUMN_IDS)];
+export const columns = [createMainColumn(), ...createColumns()];
 
-export function createColumns(columnsData: string[]): ColumnDef<Thesis>[] {
-    return columnsData.map(accessorKey => {
+export function createColumns(): ColumnDef<Thesis>[] {
+    return COLUMN_IDS.map(accessorKey => {
         return {
             id: accessorKey,
             accessorKey,
@@ -73,9 +73,9 @@ function MainColumnHeader<TData>({ table, id }: { table: Table<TData>, id: strin
 }
 
 
-function MainColumnCell<TData>({ row }: { row: Row<TData> }) {
+function MainColumnCell({ row }: { row: Row<Thesis> }) {
     const title = row.getValue('title') as string
-    const author = row.getValue('author') as string
+    const authors = row.getValue('authors') as string[]
     const year = row.getValue('year') as string
     const department = row.getValue('department') as string
 
@@ -96,9 +96,12 @@ function MainColumnCell<TData>({ row }: { row: Row<TData> }) {
                     </Link>
                 </Button>
 
-                <div className="px-1 text-xs font-semibold" data-author-list={author}>
-                    <span>{author}</span>
-                </div>
+                <ul className="px-1 text-xs gap-1 font-semibold" data-author-list={authors}>
+                    {authors.map((author, i) => (
+                        <li key={i}>{author}<span className='last:hidden'>,</span></li>
+                    ))}
+                </ul>
+
                 <div className="px-1 flex flex-col xs:flex-row gap-1 xs:items-center text-sm">
                     <span>{year}</span>
                     <Dot size='1.5rem' aria-hidden="true" className='hidden xs:block shrink-0' />
@@ -109,23 +112,41 @@ function MainColumnCell<TData>({ row }: { row: Row<TData> }) {
     )
 }
 
-type ColumnCellProps<TData> = HTMLMotionProps<'div'> & {
-    row: Row<TData>;
+type ColumnCellProps = HTMLMotionProps<'div'> & {
+    row: Row<Thesis>;
     accessorKey: string;
 }
 
-function ColumnCell<TData>({ accessorKey, row, ...props }: ColumnCellProps<TData>) {
-    return (
-        <motion.div
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ type: 'spring', bounce: 0.22 }}
-            className='text-pretty'
-            {...props}
-        >
-            {row.getValue(accessorKey)}
-        </motion.div>
-    )
+function ColumnCell({ accessorKey, row, ...props }: ColumnCellProps) {
+    const rowValue = row.getValue(accessorKey);
+    return (<>
+        {rowValue instanceof Array && (
+            <motion.ul
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: 'spring', bounce: 0.22 }}
+                className='flex flex-col gap-2 text-pretty'
+            >
+                {rowValue.map((value, i) => (
+                    <li key={i}>
+                        {value}
+                    </li>
+                ))}
+            </motion.ul>
+        )}
+
+        {(rowValue instanceof String || rowValue instanceof Number) && (
+            <motion.div
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: 'spring', bounce: 0.22 }}
+                className='text-pretty'
+                {...props}
+            >
+                {rowValue as string}
+            </motion.div>
+        )}
+    </>)
 }
 
 type ColumnHeaderProps<TData> = HTMLMotionProps<'div'> & {

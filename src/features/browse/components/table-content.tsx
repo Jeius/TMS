@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/component
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements'
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility'
 import { fetchMockFilterIds } from '@/mock/actions/fetch-filters'
-import { fetchMockTheses } from '@/mock/actions/fetch-thesis-data'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
     getCoreRowModel,
@@ -17,6 +16,7 @@ import {
 } from '@tanstack/react-table'
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 import { useEffect, useMemo } from 'react'
+import { fetchTheses } from '../lib/actions'
 import useFilterState from '../lib/hooks/use-filter-state'
 import { useScrollEvents } from '../lib/hooks/use-scroll-events'
 import useSortState from '../lib/hooks/use-sort-state'
@@ -31,7 +31,7 @@ export default function ThesesTableContent() {
     const scrollState = useScrollEvents('data-radix-scroll-area-viewport', scope);
 
     const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: () => fetchMockFilterIds() });
-    const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: () => fetchMockTheses(), refetchOnMount: true });
+    const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: () => fetchTheses(), refetchOnMount: true });
 
     const [columnFilters, setColumnFilters] = useFilterState();
     const [columnVisibility, setColumnVisibilty] = useVisibilityState(columns);
