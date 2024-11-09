@@ -1,25 +1,31 @@
-import { Thesis } from '@/lib/types';
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table';
+import { isEqual } from 'lodash';
 import { SORT_VALUES } from './constants';
 
-export const getColumnVisibility = (columns: ColumnDef<Thesis>[], initialVisibleColumns: string[]): VisibilityState => {
+export function getVisibilityState<TData>(cols: ColumnDef<TData>[], visibleCols: string[]): VisibilityState {
     const visibility: VisibilityState = {};
-    columns.forEach(col => {
+    cols.forEach(col => {
         if (col.id !== 'theses') {
-            visibility[col.id as string] = initialVisibleColumns.includes(col.id as string);
+            visibility[col.id as string] = visibleCols.includes(col.id as string);
         }
     });
     return visibility;
-};
+}
 
-export const getColumnFilters = (initialFilterValues: [string, string][]): ColumnFiltersState => {
+export function getFiltersState(initialFilterValues: [string, string][]): ColumnFiltersState {
     return initialFilterValues.map(([id, value]) => ({ id, value }));
-};
+}
 
-export const getSorting = (initialSortValue: string | null): SortingState => {
-    if (initialSortValue) {
-        const columnSort = SORT_VALUES.find(item => item.id === initialSortValue)?.value;
+export function getSorting(sortId: string | null): SortingState {
+    if (sortId) {
+        const columnSort = SORT_VALUES.find(({ id }) => id === sortId)?.value;
         return columnSort ? [columnSort] : [];
     }
     return [];
-};
+}
+
+export function getSortValue(sortState: SortingState) {
+    const sortValue = SORT_VALUES.find(({ value: sortValue }) =>
+        sortState.some(columnSort => isEqual(sortValue, columnSort)));
+    return sortValue;
+}

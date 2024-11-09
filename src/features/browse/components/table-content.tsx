@@ -15,19 +15,17 @@ import {
     getSortedRowModel,
     useReactTable
 } from '@tanstack/react-table'
-import { isEqual } from 'lodash'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 import { useEffect, useMemo } from 'react'
-import { SORT_VALUES } from '../lib/constants'
-import { getColumnFilters, getColumnVisibility, getSorting } from '../lib/helpers'
+import useFilterState from '../lib/hooks/use-filter-state'
 import { useScrollEvents } from '../lib/hooks/use-scroll-events'
+import useSortState from '../lib/hooks/use-sort-state'
 import { useStickyTHead } from '../lib/hooks/use-sticky-thead'
+import useVisibilityState from '../lib/hooks/use-visibility-state'
 import { columns } from './table-columns'
 
 
 export default function ThesesTableContent() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
     const queryClient = useQueryClient();
     const scope = useStickyTHead('app-header');
     const scrollState = useScrollEvents('data-radix-scroll-area-viewport', scope);
@@ -35,14 +33,10 @@ export default function ThesesTableContent() {
     const { data: filters = [] } = useQuery({ queryKey: ['filterIds'], queryFn: () => fetchMockFilterIds() });
     const { data: theses = [] } = useQuery({ queryKey: ['theses'], queryFn: () => fetchMockTheses(), refetchOnMount: true });
 
-    const initialVisibleColumns = useMemo(() => searchParams.get('cols')?.split(',') ?? [], [searchParams]);
-    const initialSortValue = searchParams.get('sort');
-    const initialFilterValues = useMemo(() => Array.from(searchParams.entries()).filter(entry => filters.includes(entry[0])), [searchParams, filters]);
-
-    const columnVisibility = useMemo(() => getColumnVisibility(columns, initialVisibleColumns), [initialVisibleColumns]);
-    const sorting = useMemo(() => getSorting(initialSortValue), [initialSortValue]);
-    const columnFilters = useMemo(() => getColumnFilters(initialFilterValues), [initialFilterValues]);
-    const columnOrder = initialVisibleColumns;
+    const [columnFilters, setColumnFilters] = useFilterState();
+    const [columnVisibility, setColumnVisibilty] = useVisibilityState(columns);
+    const [sorting, setSorting] = useSortState();
+    const [columnOrder] = useQueryState('cols', parseAsArrayOf(parseAsString).withDefault([]));
     const columnPinning = { left: ['theses'] };
 
     const table = useReactTable({
@@ -53,8 +47,12 @@ export default function ThesesTableContent() {
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
+        onColumnVisibilityChange: setColumnVisibilty,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
         columnResizeMode: 'onChange',
-        initialState: { sorting, columnFilters, columnVisibility, columnOrder, columnPinning },
+        initialState: { columnPinning, columnOrder },
+        state: { columnVisibility, sorting, columnFilters },
     })
 
     const headers = table.getFlatHeaders();
@@ -67,35 +65,6 @@ export default function ThesesTableContent() {
         })
         return colSizes;
     }, [headers]);
-
-    const visibleColumns = table.getVisibleLeafColumns().map(col => col.id);
-    const filterState = table.getState().columnFilters;
-    const sortingState = table.getState().sorting;
-
-    const sortId = useMemo(() =>
-        SORT_VALUES.find(({ value }) =>
-            sortingState.some(columnSort => isEqual(value, columnSort)))?.id
-        , [sortingState]);
-
-    useEffect(() => {
-        const params = new URLSearchParams(searchParams.toString());
-
-        // Update visible columns
-        if (visibleColumns.length !== 0) params.set('cols', visibleColumns.join(','));
-        else params.delete('cols');
-
-        // Update filters
-        filterState.forEach(({ id, value }) => params.set(id, value as string));
-
-        // Update sorting
-        if (sortId) params.set('sort', sortId);
-        else params.delete('sort');
-
-        const newSearch = params.toString();
-        if (newSearch !== searchParams.toString()) {
-            router.replace(`?${newSearch}`, { scroll: false });
-        }
-    }, [visibleColumns, sortingState, filterState, sortId, router, searchParams]);
 
     useEffect(() => {
         queryClient.setQueryData(['thesesTable'], table)

@@ -5,6 +5,7 @@ import AppHeader from '@/features/layout/components/header/app-header';
 import SideNav from '@/features/layout/components/side-nav';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
@@ -22,13 +23,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${GeistSans.className} antialiased`}>
         <Providers>
-          <div id="__next">
-            <AppHeader />
-            {children}
-            <SideNav />
-            <Footer />
-          </div>
-          <Toaster />
+          <NuqsAdapter>
+            <div id="__next">
+              <AppHeader />
+              {children}
+              <SideNav />
+              <Footer />
+            </div>
+            <Toaster />
+          </NuqsAdapter>
         </Providers>
       </body>
     </html>

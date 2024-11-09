@@ -10,10 +10,11 @@ export const SORT_VALUES: SortValue[] = [
 export const COLUMN_IDS: string[] = [
     'title',
     'year',
-    'author',
+    'authors',
     'adviser',
     'keywords',
-    'specialization',
+    'specializations',
+    'panelists',
     'dateUploaded',
     'department',
     'college',
