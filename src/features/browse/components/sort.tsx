@@ -21,8 +21,10 @@ export default function SortOptions() {
         const id = e.currentTarget.value;
         const sortValue = SORT_VALUES.find(item => item.id === id);
         const columnSort = sortValue?.value;
-        if (columnSort) table?.setSorting([columnSort]);
-        queryClient.setQueryData(['thesisTable'], table);
+        if (columnSort) {
+            table?.setSorting([columnSort])
+            setSortState([columnSort])
+        };
     }
 
     useEffect(() => setSortState(table?.getState().sorting), [table]);

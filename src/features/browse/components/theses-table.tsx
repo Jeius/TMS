@@ -17,24 +17,22 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
 
     await queryClient.prefetchQuery({
         queryKey: ['theses'],
-        queryFn: fetchTheses,
+        queryFn: () => fetchTheses({}),
     });
 
     return (
         <TooltipProvider>
             <div id="theses-table" className={cn('relative', className)} {...props}>
                 <div className="flex flex-col m-auto bg-card shadow border rounded-xl max-w-min overflow-hidden">
-                    <div className='overflow-hidden p-4 gap-14 flex justify-between flex-col xs:flex-row items-center xs:items-end'>
-                        <HydrationBoundary state={dehydrate(queryClient)}>
-                            {/* <Filters /> */}
-                        </HydrationBoundary>
-                        <div className='flex justify-between w-full xs:w-fit xs:justify-end items-center gap-2 flex-wrap'>
-                            <SortOptions />
-                            <ColumnVisibilityControl type='popover' />
-                        </div>
-                    </div>
-
                     <HydrationBoundary state={dehydrate(queryClient)}>
+                        <div className='overflow-hidden p-4 gap-14 flex justify-between flex-col xs:flex-row items-center xs:items-end'>
+                            {/* <Filters /> */}
+                            <div className='flex justify-between w-full xs:w-fit xs:justify-end items-center gap-2 flex-wrap'>
+                                <SortOptions />
+                                <ColumnVisibilityControl type='popover' />
+                            </div>
+                        </div>
+
                         <ThesesTableContent />
                     </HydrationBoundary>
 

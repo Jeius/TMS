@@ -4,6 +4,8 @@ import { Thesis } from '@/lib/types';
 import { fetchMockAdvisers, fetchMockAuthors, fetchMockColleges, fetchMockDepartments, fetchMockPanelists, fetchMockPublicationYears, fetchMockSpecializations } from '@/mock/actions/fetch-filters';
 import { fetchMockTheses } from '@/mock/actions/fetch-thesis-data';
 import { PrismaClient } from '@prisma/client';
+import { VisibilityState } from '@tanstack/react-table';
+import { ColumnID } from './types';
 
 export async function fetchFiltersById(filter: string) {
     const filters = {
@@ -27,19 +29,17 @@ export async function fetchColumnIds() {
     return columnIds;
 }
 
-export async function fetchTheses() {
+type FetchThesesParams = {
+    columns?: VisibilityState
+    order?: Record<ColumnID, 'asc' | 'desc'>[]
+}
+
+export async function fetchTheses({ columns, order }: FetchThesesParams) {
     const prisma = new PrismaClient();
+    const defaultCols = { title: true, year: true, authors: true, department: true, specializations: true, adviser: true }
     const approvedThesis = await prisma.approvedThesisView.findMany({
-        select: {
-            title: true,
-            year: true,
-            authors: true,
-            adviser: true,
-            panelists: true,
-            specializations: true,
-            department: true,
-            college: true,
-        }
+        select: columns,
+        orderBy: order
     });
-    return approvedThesis as Thesis[];
+    return approvedThesis as unknown;
 }

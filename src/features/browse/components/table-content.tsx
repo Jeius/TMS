@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/component
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements'
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility'
 import responsivePx from '@/lib/responsive-px'
+import { Thesis } from '@/lib/types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
     getCoreRowModel,
@@ -12,10 +13,11 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
+    SortingState,
     useReactTable
 } from '@tanstack/react-table'
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { fetchTheses } from '../lib/actions'
 import useFilterState from '../lib/hooks/use-filter-state'
 import { useScrollEvents } from '../lib/hooks/use-scroll-events'
@@ -32,7 +34,7 @@ export default function ThesesTableContent() {
 
     const { data: theses = [] } = useQuery({
         queryKey: ['theses'],
-        queryFn: () => fetchTheses(),
+        queryFn: () => fetchTheses({ columns: columnVisibility }),
         refetchOnMount: false
     });
 
@@ -40,12 +42,13 @@ export default function ThesesTableContent() {
     const columnOrder = useQueryState('cols', parseAsArrayOf(parseAsString).withDefault(['specializations', 'adviser']))[0];
     const columnSizing = { 'theses': responsivePx(420), 'year': responsivePx(120) };
     const [columnVisibility, setColumnVisibilty] = useVisibilityState(columns);
-    const [sorting, setSorting] = useSortState();
+    const [sorting, setSorting] = useState<SortingState>([{ id: 'year', desc: true }]);
+    const [sortingQuery, setSortingQuery] = useSortState()
     const [columnFilters, setColumnFilters] = useFilterState();
 
 
     const table = useReactTable({
-        data: theses,
+        data: theses as Thesis[],
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -73,7 +76,12 @@ export default function ThesesTableContent() {
 
     useEffect(() => {
         queryClient.setQueryData(['thesesTable'], table)
+        console.log("Table changed", table.getState().sorting)
     }, [table, queryClient]);
+
+    useEffect(() => {
+        setSortingQuery(sorting)
+    }, [sorting]);
 
     return (
         <ScrollArea
