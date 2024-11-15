@@ -13,11 +13,10 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    SortingState,
     useReactTable
 } from '@tanstack/react-table'
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { fetchTheses } from '../lib/actions'
 import useFilterState from '../lib/hooks/use-filter-state'
 import { useScrollEvents } from '../lib/hooks/use-scroll-events'
@@ -42,8 +41,7 @@ export default function ThesesTableContent() {
     const columnOrder = useQueryState('cols', parseAsArrayOf(parseAsString).withDefault(['specializations', 'adviser']))[0];
     const columnSizing = { 'theses': responsivePx(420), 'year': responsivePx(120) };
     const [columnVisibility, setColumnVisibilty] = useVisibilityState(columns);
-    const [sorting, setSorting] = useState<SortingState>([{ id: 'year', desc: true }]);
-    const [sortingQuery, setSortingQuery] = useSortState()
+    const [sorting, setSorting] = useSortState()
     const [columnFilters, setColumnFilters] = useFilterState();
 
 
@@ -78,10 +76,6 @@ export default function ThesesTableContent() {
         queryClient.setQueryData(['thesesTable'], table)
         console.log("Table changed", table.getState().sorting)
     }, [table, queryClient]);
-
-    useEffect(() => {
-        setSortingQuery(sorting)
-    }, [sorting]);
 
     return (
         <ScrollArea

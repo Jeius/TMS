@@ -5,6 +5,7 @@ import {
     parseAsStringLiteral,
     useQueryState
 } from 'nuqs';
+import { useEffect, useState } from 'react';
 import { SORT_VALUES } from '../constants';
 import { SortId } from '../types';
 
@@ -22,13 +23,11 @@ export function getSortValue(sortState: SortingState) {
 }
 
 const parseAsSortState = createParser({
-    parse: (query) => {
-        console.log('parse query', query)
+    parse: query => {
         const sortId = parseAsStringLiteral(sortIds).parse(query);
         return sortId === null ? null : getSorting(sortId);
     },
-    serialize: (value) => {
-        console.log('serialize value', value)
+    serialize: value => {
         const sortId = getSortValue(value)?.id ?? 'latest';
         return parseAsStringLiteral(sortIds).serialize(sortId);
     },
@@ -36,6 +35,10 @@ const parseAsSortState = createParser({
 
 export default function useSortState() {
     const defaultState = [{ id: 'year', desc: true }];
+    const [sortQuery, setSortQuery] = useQueryState('sort', parseAsSortState.withDefault(defaultState));
+    const [sortState, setSortState] = useState<SortingState>(sortQuery);
 
-    return useQueryState('sort', parseAsSortState.withDefault(defaultState));
+    useEffect(() => { setSortQuery(sortState) }, [sortState]);
+
+    return [sortState, setSortState] as const;
 }

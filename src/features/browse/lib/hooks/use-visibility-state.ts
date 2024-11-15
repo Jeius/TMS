@@ -5,6 +5,7 @@ import {
     parseAsString,
     useQueryState
 } from 'nuqs';
+import { useEffect, useState } from 'react';
 
 
 function getVisibilityState<TData>(cols: ColumnDef<TData>[], visibleCols: string[]): VisibilityState {
@@ -17,19 +18,26 @@ function getVisibilityState<TData>(cols: ColumnDef<TData>[], visibleCols: string
     return visibility;
 }
 
-export default function useVisibilityState<TData>(columns: ColumnDef<TData>[]) {
-    const defaultState = getVisibilityState(columns, ['specializations', 'adviser']);
-    const parseAsVisibilityState = createParser({
+function visibilityStateParser<TData>(columns: ColumnDef<TData>[]) {
+    return createParser({
         parse: query => {
-            console.log('parse query', query)
             const visibleCols = parseAsArrayOf(parseAsString).parse(query);
             return visibleCols === null ? null : getVisibilityState(columns, visibleCols);
         },
         serialize: value => {
-            console.log('serialize value', value)
             const visibleCols = Object.entries(value).filter(entry => entry[1]).map(entry => entry[0]);
             return parseAsArrayOf(parseAsString).serialize(visibleCols);
         },
     });
-    return useQueryState('cols', parseAsVisibilityState.withDefault(defaultState));
+}
+
+export default function useVisibilityState<TData>(columns: ColumnDef<TData>[]) {
+    const defaultState = getVisibilityState(columns, ['specializations', 'adviser']);
+    const parseAsVisibilityState = visibilityStateParser<TData>(columns);
+    const [visibilityQuery, setVisibilityQuery] = useQueryState('cols', parseAsVisibilityState.withDefault(defaultState));
+    const [visibilityState, setVisibilityState] = useState<VisibilityState>(visibilityQuery);
+
+    useEffect(() => { setVisibilityQuery(visibilityState) }, [visibilityState]);
+
+    return [visibilityState, setVisibilityState] as const
 }
