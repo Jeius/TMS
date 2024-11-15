@@ -16,20 +16,20 @@ const filterParsers = {
     college: parseAsString,
     department: parseAsString,
     year: parseAsInteger,
-    authors: parseAsArrayOf(parseAsString, ','),
-    specializations: parseAsArrayOf(parseAsString, ','),
+    authors: parseAsArrayOf(parseAsString),
+    specializations: parseAsArrayOf(parseAsString),
     adviser: parseAsString,
-    panelists: parseAsArrayOf(parseAsString, ','),
+    panelists: parseAsArrayOf(parseAsString),
 }
 
 const filterUrlKeys = {
-    college: 'college',
+    college: 'col',
     department: 'dept',
-    year: 'year',
-    authors: 'authors',
+    year: 'yr',
+    authors: 'aut',
     specializations: 'sp',
-    adviser: 'adviser',
-    panelists: 'panelists',
+    adviser: 'adv',
+    panelists: 'pnls',
 }
 
 type SetFilterStateParam = ColumnFiltersState | undefined;
@@ -95,7 +95,7 @@ export default function useFilterState() {
     }
 
     useEffect(() => {
-        setColFiltersState(colFiltersState);
+        setFilterState(colFiltersState);
     }, [colFiltersState]);
 
     return [colFiltersState, setColFiltersState] as const;
