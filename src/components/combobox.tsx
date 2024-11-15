@@ -6,16 +6,27 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { motion } from 'framer-motion'
-import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon } from 'lucide-react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { motion, useInView } from 'framer-motion'
+import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon, Loader2 } from 'lucide-react'
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
+import { InView } from './animated/in-view'
 import { ScrollArea } from './ui/scroll-area'
+
+export type ComboboxFunction = (page: number, search: string) => Promise<{
+    items: string[],
+    currentPage: number
+    nextPage?: number | null,
+    search?: string
+}>;
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
     placeholder: string;
     items?: string[];
     onValueChanged?: (value?: string) => void;
+    queryKey: string[]
+    queryFn: ComboboxFunction
 }
 
 export function Combobox({
@@ -24,20 +35,25 @@ export function Combobox({
     className,
     variant = 'outline',
     onValueChanged = () => { },
-    items = [],
+    items: initialItems = [],
+    queryKey,
+    queryFn,
     ...props
 }: ComboboxProps) {
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(defaultValue);
     const [searchTerm, setSearchTerm] = useState('');
-    const firstItemRef = useRef<HTMLButtonElement | null>(null);
+    const loaderRef = useRef(null);
+    const inView = useInView(loaderRef)
 
-    const filteredItems = items.filter(item =>
-        item.toLowerCase()
-            .split(' ')
-            .join('')
-            .includes(searchTerm.toLowerCase().split(' ').join(''))
-    );
+    const { data, error, status, fetchNextPage, isFetchingNextPage } =
+        useInfiniteQuery({
+            queryKey,
+            queryFn: async ({ pageParam }) => await queryFn(pageParam, searchTerm),
+            initialPageParam: 0,
+            getNextPageParam: (lastPage) => lastPage.nextPage,
+        });
+
 
     function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         const item = e.currentTarget.value;
@@ -48,11 +64,12 @@ export function Combobox({
         setSearchTerm('');
     };
 
+
     useEffect(() => {
-        if (open && firstItemRef.current) {
-            firstItemRef.current.focus();
+        if (inView) {
+            fetchNextPage();
         }
-    }, [open, firstItemRef]);
+    }, [fetchNextPage, inView]);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -94,27 +111,45 @@ export function Combobox({
                         )}
                     />
                 </div>
-                <ScrollArea className="flex flex-col h-min max-h-52 space-y-1 p-2">
-                    {filteredItems?.length === 0
-                        ? <p className="w-40 text-xs text-center py-4">No results found...</p>
-                        : filteredItems?.map((item, index) => (
-                            <Button
-                                key={item}
-                                variant="ghost"
-                                size="sm"
-                                value={item}
-                                onClick={handleClick}
-                                ref={index === 0 ? firstItemRef : null}
-                                className="w-full justify-start"
+                <ScrollArea className="h-min max-h-52">
+                    <ul className='flex flex-col space-y-1 p-2 items-center'>
+                        {data?.pages.map(({ items, currentPage }) => (
+                            <React.Fragment key={currentPage}>
+                                {items?.length
+                                    ? items?.map((item) => (
+                                        <li key={item}>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                value={item}
+                                                onClick={handleClick}
+                                                className="w-full justify-start"
+                                            >
+                                                <Check className={cn(
+                                                    'mr-2 h-4 w-4',
+                                                    selectedValue === item ? 'opacity-100' : 'opacity-0'
+                                                )} />
+                                                <span className="capitalize whitespace-nowrap text-xs font-semibold">{item}</span>
+                                            </Button>
+                                        </li>
+                                    ))
+                                    : <li className="w-40 text-xs text-center py-4">No results found...</li>}
+                            </React.Fragment>
+                        ))}
+
+                        <li>
+                            <InView
+                                variants={{
+                                    hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
+                                    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+                                }}
+                                viewOptions={{ margin: '0px 0px -20px 0px' }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
                             >
-                                <Check className={cn(
-                                    'mr-2 h-4 w-4',
-                                    selectedValue === item ? 'opacity-100' : 'opacity-0'
-                                )} />
-                                <span className="capitalize whitespace-nowrap text-xs font-semibold">{item}</span>
-                            </Button>
-                        ))
-                    }
+                                <Loader2 ref={loaderRef} className='animate-spin m-auto' />
+                            </InView>
+                        </li>
+                    </ul>
                 </ScrollArea>
             </PopoverContent>
         </Popover>
