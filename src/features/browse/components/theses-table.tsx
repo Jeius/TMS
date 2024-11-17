@@ -20,7 +20,7 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
     await Promise.all([
         ...FILTER_IDS.map((filterId) =>
             queryClient.prefetchInfiniteQuery({
-                queryKey: [filterId, 'filterId'],
+                queryKey: [filterId, 'filter'],
                 queryFn: async ({ pageParam }) => await fetchUniqueDataByColumnId(filterId, pageParam),
                 initialPageParam: 0
             })

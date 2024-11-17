@@ -36,14 +36,20 @@ export async function fetchUniqueDataByColumnId(
 
     // Fetch records with search and pagination
     const records: { [x: string]: string | string[] | number }[] = await prisma.approvedThesisView.findMany({
-        where: search
+        where: (search && columnId !== 'year')
             ? {
                 [columnId]: {
                     contains: search,
                     mode: 'insensitive',
                 },
             }
-            : {},
+            : (search && columnId === 'year')
+                ? {
+                    year: {
+                        equals: parseInt(search),
+                    },
+                }
+                : {},
         distinct: [columnId],
         select: { [columnId]: true },
         skip: skip,
@@ -74,4 +80,14 @@ export async function fetchUniqueDataByColumnId(
         nextPage: uniqueItems.length < itemsPerPage ? null : pageNumber + 1,
         search,
     };
+}
+
+
+export async function fetchApprovedThesesAuthors(
+    pageNumber: number,
+    search?: string
+) {
+    const result = await prisma.profile.findMany({
+        select: { first_name: true, last_name: true }
+    });
 }

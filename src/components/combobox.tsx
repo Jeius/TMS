@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
+import { debounce } from 'lodash'
 import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon, Loader2 } from 'lucide-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
@@ -43,12 +44,13 @@ export function Combobox({
     const { ref: loaderRef, inView } = useInView()
     const placeholder = id
 
-    const { data, error, status, fetchNextPage, isFetchingNextPage } =
+    const { data, error, status, fetchNextPage, isFetchingNextPage, refetch } =
         useInfiniteQuery({
-            queryKey: [id, 'filterId'],
+            queryKey: [id, 'filter', searchTerm],
             queryFn: async ({ pageParam }) => await queryFn(id, pageParam, searchTerm),
             initialPageParam: 0,
             getNextPageParam: (lastPage) => lastPage.nextPage,
+            enabled: !!id,
         });
 
 
@@ -61,12 +63,22 @@ export function Combobox({
         setSearchTerm('');
     };
 
+    const handleSearchChange = debounce((e: React.ChangeEvent<HTMLInputElement>) =>
+        setSearchTerm(e.target.value),
+        200, { trailing: true }
+    )
 
     useEffect(() => {
         if (inView && !isFetchingNextPage) {
             fetchNextPage();
         }
     }, [fetchNextPage, inView]);
+
+    useEffect(() => {
+        if (searchTerm) {
+            refetch()
+        }
+    }, [searchTerm, refetch]);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -99,8 +111,8 @@ export function Combobox({
                 <div className="flex items-center border-b px-3">
                     <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
                     <input
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        defaultValue={searchTerm}
+                        onChange={handleSearchChange}
                         placeholder={`Search ${placeholder.toLowerCase()}...`}
                         className={cn(
                             'flex h-10 w-full rounded-md bg-transparent py-3 text-xs font-semibold outline-none',
