@@ -60,7 +60,7 @@ export default async function Analytics() {
             Overview
           </h1>
           <Suspense>
-            <Filters initial={FILTERS.length} filterIds={FILTERS} canExpand />
+            <Filters initialNum={FILTERS.length} filterIds={FILTERS} canExpand />
           </Suspense>
         </div>
 

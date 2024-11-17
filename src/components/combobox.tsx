@@ -4,52 +4,49 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
+import { ColumnID } from '@/features/browse/lib/types'
 import { cn } from '@/lib/utils'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { motion, useInView } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon, Loader2 } from 'lucide-react'
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { InView } from './animated/in-view'
+import { useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { ScrollArea } from './ui/scroll-area'
 
-export type ComboboxFunction = (page: number, search: string) => Promise<{
+export type ComboboxFunction = (id: ColumnID, page: number, search?: string) => Promise<{
     items: string[],
     currentPage: number
-    nextPage?: number | null,
+    nextPage: number | null,
     search?: string
 }>;
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
-    placeholder: string;
-    items?: string[];
     onValueChanged?: (value?: string) => void;
-    queryKey: string[]
+    id: ColumnID
     queryFn: ComboboxFunction
 }
 
 export function Combobox({
-    placeholder,
     defaultValue,
     className,
     variant = 'outline',
     onValueChanged = () => { },
-    items: initialItems = [],
-    queryKey,
+    id,
     queryFn,
     ...props
 }: ComboboxProps) {
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(defaultValue);
-    const [searchTerm, setSearchTerm] = useState('');
-    const loaderRef = useRef(null);
-    const inView = useInView(loaderRef)
+    const [searchTerm, setSearchTerm] = useState<string | undefined>();
+    const { ref: loaderRef, inView } = useInView()
+    const placeholder = id
 
     const { data, error, status, fetchNextPage, isFetchingNextPage } =
         useInfiniteQuery({
-            queryKey,
-            queryFn: async ({ pageParam }) => await queryFn(pageParam, searchTerm),
+            queryKey: [id, 'filterId'],
+            queryFn: async ({ pageParam }) => await queryFn(id, pageParam, searchTerm),
             initialPageParam: 0,
             getNextPageParam: (lastPage) => lastPage.nextPage,
         });
@@ -66,7 +63,7 @@ export function Combobox({
 
 
     useEffect(() => {
-        if (inView) {
+        if (inView && !isFetchingNextPage) {
             fetchNextPage();
         }
     }, [fetchNextPage, inView]);
@@ -112,7 +109,11 @@ export function Combobox({
                     />
                 </div>
                 <ScrollArea className="h-min max-h-52">
-                    <ul className='flex flex-col space-y-1 p-2 items-center'>
+                    {status === 'pending' ? (
+                        <div className='w-full h-fit p-2'><Loader2 className='animate-spin m-auto size-4' /></div>
+                    ) : status === 'error' ? (
+                        <p className="w-full text-xs text-center py-4">{error.message}</p>
+                    ) : <ul className='flex flex-col space-y-1 p-2'>
                         {data?.pages.map(({ items, currentPage }) => (
                             <React.Fragment key={currentPage}>
                                 {items?.length
@@ -133,23 +134,14 @@ export function Combobox({
                                             </Button>
                                         </li>
                                     ))
-                                    : <li className="w-40 text-xs text-center py-4">No results found...</li>}
+                                    : <li className="w-full text-xs text-center py-4">No results found...</li>}
                             </React.Fragment>
                         ))}
 
-                        <li>
-                            <InView
-                                variants={{
-                                    hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
-                                    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-                                }}
-                                viewOptions={{ margin: '0px 0px -20px 0px' }}
-                                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                            >
-                                <Loader2 ref={loaderRef} className='animate-spin m-auto' />
-                            </InView>
+                        <li ref={loaderRef} className='w-full'>
+                            {isFetchingNextPage && <Loader2 className='animate-spin size-4 m-auto' />}
                         </li>
-                    </ul>
+                    </ul>}
                 </ScrollArea>
             </PopoverContent>
         </Popover>

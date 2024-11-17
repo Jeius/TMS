@@ -1,4 +1,4 @@
-import { SortValue } from './types';
+import { ColumnID, SortValue } from './types';
 
 export const SORT_VALUES: SortValue[] = [
     { id: 'alpha', label: 'A - Z', value: { id: 'theses', desc: false } },
@@ -7,7 +7,7 @@ export const SORT_VALUES: SortValue[] = [
     { id: 'oldest', label: 'Oldest First', value: { id: 'year', desc: false } }
 ];
 
-export const COLUMN_IDS: string[] = [
+export const COLUMN_IDS: ColumnID[] = [
     'title',
     'year',
     'specializations',
@@ -18,12 +18,12 @@ export const COLUMN_IDS: string[] = [
     'college',
 ];
 
-export const FILTER_COLUMN_IDS: string[] = [
+export const FILTER_IDS: ColumnID[] = [
     'college',
     'department',
     'year',
-    'specialization',
-    'author',
+    'specializations',
+    'authors',
     'adviser',
-    'panelist',
+    'panelists',
 ];

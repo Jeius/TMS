@@ -1,91 +1,66 @@
 'use client'
 
+import { fetchUniqueDataByColumnId } from '@/features/browse/lib/actions';
+import { FILTER_IDS } from '@/features/browse/lib/constants';
+import { ColumnID } from '@/features/browse/lib/types';
 import { Thesis } from '@/lib/types';
-import { booleanToString, stringToBoolean } from '@/lib/utils';
-import { fetchMockFilterIds } from '@/mock/actions/fetch-filters';
 import { useQuery } from '@tanstack/react-query';
 import { Table } from '@tanstack/react-table';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { parseAsBoolean, useQueryState } from 'nuqs';
 import { Combobox } from './combobox';
 import { Button } from './ui/button';
 
+
 type FiltersProps = {
-    initial?: number
+    initialNum?: number
     canExpand?: boolean
-    filterIds?: string[]
+    filterIds?: ColumnID[]
 }
 
 export default function Filters({
     filterIds,
-    initial = 3,
+    initialNum = 3,
     canExpand = false,
 }: FiltersProps) {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const [showMoreFilters, setShowMoreFilters] = useState(searchParams.get('moreFilters'));
+    const [moreFilters, setMoreFilters] = useQueryState('more', parseAsBoolean.withDefault(false));
     const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
 
-    const { data: fetchedFiltersIds = [] } = useQuery({
-        queryKey: ['filterIds'],
-        queryFn: fetchMockFilterIds,
-        enabled: !filterIds,
-    });
+    console.log('filterIds:', filterIds);
+    console.log('FILTER_IDS:', FILTER_IDS);
 
-    const columns = table?.getAllLeafColumns();
-    const columnFilters = (filterIds ?? fetchedFiltersIds).map(filterId => ({
+
+    const columnFilters = (filterIds ?? FILTER_IDS).map(filterId => ({
         id: filterId,
-        value: searchParams.get(filterId) ?? undefined,
+        defaultValue: undefined,
     }));
 
-    const initialFilters = columnFilters.slice(0, initial);
-    const moreFilters = columnFilters.slice(initial);
-
-    const filterValues = useMemo(() => {
-        const columnFilterIds = columnFilters.map(({ id }) => id);
-        return columns?.filter(({ id }) => columnFilterIds.includes(id)).map(col => {
-            const uniqueValuesMap = col.getFacetedUniqueValues().keys();
-            return { id: col.id, values: Array.from(uniqueValuesMap).filter(value => value) as string[] }
-        }) ?? [];
-    }, [columns, columnFilters]);
-
-    function updateSearchParams(key: string, value?: string) {
-        const currentParams = new URLSearchParams(searchParams.toString());
-        if (value) {
-            currentParams.set(key, value);
-        } else {
-            currentParams.delete(key);
-        }
-        router.replace(`?${currentParams.toString()}`, { scroll: false });
-    }
+    const initial = columnFilters.slice(0, initialNum);
+    const extension = columnFilters.slice(initialNum);
 
     function toggleMoreFilters() {
-        const value = !stringToBoolean(showMoreFilters);
-        updateSearchParams('moreFilters', booleanToString(value));
-        setShowMoreFilters(booleanToString(value));
+        setMoreFilters(prev => !prev)
     }
 
     function handleValueChanged(id: string, value?: string) {
         table?.getColumn(id)?.setFilterValue(value);
-        if (value === undefined) updateSearchParams(id, value);
     }
 
     return (
         <div className="flex gap-2 flex-wrap">
-            {initialFilters.map(({ id, value }) => (
+            {initial.map(({ id, defaultValue }) => (
                 <motion.div layout key={id} transition={{ type: 'tween' }}>
                     <Combobox
+                        id={id}
                         className="flex"
-                        placeholder={id}
-                        defaultValue={value}
+                        defaultValue={defaultValue}
                         onValueChanged={(value) => handleValueChanged(id, value)}
-                        items={filterValues.find(item => item.id === id)?.values}
+                        queryFn={fetchUniqueDataByColumnId}
                     />
                 </motion.div>
             ))}
             <AnimatePresence mode="popLayout">
-                {stringToBoolean(showMoreFilters) && moreFilters.map(({ id, value }) => (
+                {moreFilters && extension.map(({ id, defaultValue }) => (
                     <motion.div key={id}
                         layout
                         initial={{ x: -60, opacity: 0 }}
@@ -94,11 +69,11 @@ export default function Filters({
                         transition={{ type: 'tween' }}
                     >
                         <Combobox
+                            id={id}
                             className="flex"
-                            placeholder={id}
-                            defaultValue={value}
+                            defaultValue={defaultValue}
                             onValueChanged={(value) => handleValueChanged(id, value)}
-                            items={filterValues.find(item => item.id === id)?.values}
+                            queryFn={fetchUniqueDataByColumnId}
                         />
                     </motion.div>
                 ))}
@@ -113,11 +88,11 @@ export default function Filters({
                         variant="ghost"
                         size="sm"
                         role='checkbox'
-                        aria-checked={stringToBoolean(showMoreFilters)}
+                        aria-checked={moreFilters}
                         className="text-secondary/80 hover:text-secondary hover:bg-transparent font-semibold text-xs"
                         onClick={toggleMoreFilters}
                     >
-                        {stringToBoolean(showMoreFilters) ? 'Less filters' : 'More filters'}
+                        {moreFilters ? 'Less filters' : 'More filters'}
                     </Button>
                 </motion.div>
             )}
