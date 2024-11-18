@@ -1,12 +1,13 @@
 'use client'
 
 import { FILTERS } from '@/features/browse/lib/constants';
+import { filterParsers, filterUrlKeys } from '@/features/browse/lib/hooks/use-filter-state';
 import { ColumnID } from '@/features/browse/lib/types';
 import { Thesis } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import { Table } from '@tanstack/react-table';
 import { AnimatePresence, motion } from 'framer-motion';
-import { parseAsBoolean, useQueryState } from 'nuqs';
+import { parseAsBoolean, useQueryState, useQueryStates } from 'nuqs';
 import { Combobox } from './combobox';
 import { Button } from './ui/button';
 
@@ -24,6 +25,7 @@ export default function Filters({
 }: FiltersProps) {
     const [moreFilters, setMoreFilters] = useQueryState('more', parseAsBoolean.withDefault(false));
     const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
+    const [filtersQuery] = useQueryStates(filterParsers, { urlKeys: filterUrlKeys });
 
     const columnFilters = (filterIds ?? Object.keys(FILTERS)).map(filterId => ({
         id: filterId,
