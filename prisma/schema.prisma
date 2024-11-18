@@ -357,6 +357,7 @@ model Suffix {
 }
 
 view ApprovedThesisView {
+  id              String   @unique @db.Uuid
   title           String?
   abstract        String?
   year            Int?
@@ -367,12 +368,12 @@ view ApprovedThesisView {
   adviser         String?
   panelists       String[]
   specializations String[] @db.VarChar
-  id              String   @unique @db.Uuid
 
   @@map("approved_theses_view")
 }
 
 view ThesisProposalView {
+  id              String        @unique @db.Uuid
   title           String?
   status          ThesisStatus?
   file_path       String?
@@ -382,9 +383,45 @@ view ThesisProposalView {
   adviser         String?
   panelists       String[]
   specializations String[]      @db.VarChar
-  id              String        @unique @db.Uuid
 
   @@map("thesis_proposals_view")
+}
+
+view AdviserView {
+  prefix     String?       @db.VarChar
+  first_name String?       @db.VarChar(100)
+  last_name  String?       @db.VarChar(100)
+  suffix     String?       @db.VarChar
+  status     ThesisStatus?
+  adviser_id String        @db.Uuid
+  thesis_id  String        @db.Uuid
+
+  @@id([thesis_id, adviser_id])
+  @@map("advisers_view")
+}
+
+view AuthorView {
+  first_name String?       @db.VarChar(100)
+  last_name  String?       @db.VarChar(100)
+  status     ThesisStatus?
+  author_id  String        @db.Uuid
+  thesis_id  String        @db.Uuid
+
+  @@id([thesis_id, author_id])
+  @@map("authors_view")
+}
+
+view PanelistView {
+  prefix      String?       @db.VarChar
+  first_name  String?       @db.VarChar(100)
+  last_name   String?       @db.VarChar(100)
+  suffix      String?       @db.VarChar
+  status      ThesisStatus?
+  panelist_id String        @db.Uuid
+  thesis_id   String        @db.Uuid
+
+  @@id([thesis_id, panelist_id])
+  @@map("panelists_view")
 }
 
 enum ThemePreference {
