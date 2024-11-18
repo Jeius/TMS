@@ -4,7 +4,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { ColumnID } from '@/features/browse/lib/types'
 import { cn } from '@/lib/utils'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -16,7 +15,7 @@ import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { ScrollArea } from './ui/scroll-area'
 
-export type ComboboxFunction = (id: ColumnID, page: number, search?: string) => Promise<{
+export type ComboboxFunction = (page: number, search?: string) => Promise<{
     items: string[],
     currentPage: number
     nextPage: number | null,
@@ -25,7 +24,7 @@ export type ComboboxFunction = (id: ColumnID, page: number, search?: string) => 
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
     onValueChanged?: (value?: string) => void;
-    id: ColumnID
+    id: string
     queryFn: ComboboxFunction
 }
 
@@ -40,14 +39,14 @@ export function Combobox({
 }: ComboboxProps) {
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(defaultValue);
-    const [searchTerm, setSearchTerm] = useState<string | undefined>();
+    const [searchTerm, setSearchTerm] = useState('');
     const { ref: loaderRef, inView } = useInView()
     const placeholder = id
 
-    const { data, error, status, fetchNextPage, isFetchingNextPage, refetch } =
+    const { data, status, fetchNextPage, isFetchingNextPage, refetch } =
         useInfiniteQuery({
             queryKey: [id, 'filter', searchTerm],
-            queryFn: async ({ pageParam }) => await queryFn(id, pageParam, searchTerm),
+            queryFn: async ({ pageParam }) => await queryFn(pageParam, searchTerm),
             initialPageParam: 0,
             getNextPageParam: (lastPage) => lastPage.nextPage,
             enabled: !!id,
@@ -63,10 +62,11 @@ export function Combobox({
         setSearchTerm('');
     };
 
-    const handleSearchChange = debounce((e: React.ChangeEvent<HTMLInputElement>) =>
-        setSearchTerm(e.target.value),
-        200, { trailing: true }
-    )
+    const handleSearchChange = debounce((
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => setSearchTerm(e.target.value), 500, {
+        trailing: true
+    })
 
     useEffect(() => {
         if (inView && !isFetchingNextPage) {
@@ -124,7 +124,7 @@ export function Combobox({
                     {status === 'pending' ? (
                         <div className='w-full h-fit p-2'><Loader2 className='animate-spin m-auto size-4' /></div>
                     ) : status === 'error' ? (
-                        <p className="w-full text-xs text-center py-4">{error.message}</p>
+                        <p className="w-full text-xs text-center py-4">Error fetching from database</p>
                     ) : <ul className='flex flex-col space-y-1 p-2'>
                         {data?.pages.map(({ items, currentPage }) => (
                             <React.Fragment key={currentPage}>

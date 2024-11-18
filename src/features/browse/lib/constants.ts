@@ -1,3 +1,5 @@
+import { ComboboxFunction } from '@/components/combobox';
+import { fetchApprovedThesesAdviser, fetchApprovedThesesAuthors, fetchApprovedThesesPanelists, fetchApprovedYears, fetchColleges, fetchDepartments, fetchSpecializations } from './actions';
 import { ColumnID, SortValue } from './types';
 
 export const SORT_VALUES: SortValue[] = [
@@ -12,18 +14,18 @@ export const COLUMN_IDS: ColumnID[] = [
     'year',
     'specializations',
     'authors',
-    'adviser',
+    'advisers',
     'panelists',
     'department',
     'college',
 ];
 
-export const FILTER_IDS: ColumnID[] = [
-    'college',
-    'department',
-    'year',
-    'specializations',
-    'authors',
-    'adviser',
-    'panelists',
-];
+export const FILTERS: { [x: string]: ComboboxFunction } = {
+    college: fetchColleges,
+    department: fetchDepartments,
+    year: fetchApprovedYears,
+    specializations: fetchSpecializations,
+    authors: fetchApprovedThesesAuthors,
+    advisers: fetchApprovedThesesAdviser,
+    panelists: fetchApprovedThesesPanelists,
+}

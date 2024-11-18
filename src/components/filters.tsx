@@ -1,7 +1,6 @@
 'use client'
 
-import { fetchUniqueDataByColumnId } from '@/features/browse/lib/actions';
-import { FILTER_IDS } from '@/features/browse/lib/constants';
+import { FILTERS } from '@/features/browse/lib/constants';
 import { ColumnID } from '@/features/browse/lib/types';
 import { Thesis } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
@@ -26,11 +25,7 @@ export default function Filters({
     const [moreFilters, setMoreFilters] = useQueryState('more', parseAsBoolean.withDefault(false));
     const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
 
-    console.log('filterIds:', filterIds);
-    console.log('FILTER_IDS:', FILTER_IDS);
-
-
-    const columnFilters = (filterIds ?? FILTER_IDS).map(filterId => ({
+    const columnFilters = (filterIds ?? Object.keys(FILTERS)).map(filterId => ({
         id: filterId,
         defaultValue: undefined,
     }));
@@ -55,7 +50,7 @@ export default function Filters({
                         className="flex"
                         defaultValue={defaultValue}
                         onValueChanged={(value) => handleValueChanged(id, value)}
-                        queryFn={fetchUniqueDataByColumnId}
+                        queryFn={FILTERS[id]}
                     />
                 </motion.div>
             ))}
@@ -73,7 +68,7 @@ export default function Filters({
                             className="flex"
                             defaultValue={defaultValue}
                             onValueChanged={(value) => handleValueChanged(id, value)}
-                            queryFn={fetchUniqueDataByColumnId}
+                            queryFn={FILTERS[id]}
                         />
                     </motion.div>
                 ))}

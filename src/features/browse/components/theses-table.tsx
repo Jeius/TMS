@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils'
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
 import { BookCopyIcon } from 'lucide-react'
 import React from 'react'
-import { fetchTheses, fetchUniqueDataByColumnId } from '../lib/actions'
-import { FILTER_IDS } from '../lib/constants'
+import { fetchTheses } from '../lib/actions'
+import { FILTERS } from '../lib/constants'
 import { ColumnVisibilityControl } from './column-visibility'
 import SortOptions from './sort'
 
@@ -18,10 +18,10 @@ export default async function ThesesTable({ className, ...props }: TableProps) {
     const queryClient = new QueryClient();
 
     await Promise.all([
-        ...FILTER_IDS.map((filterId) =>
+        ...Object.entries(FILTERS).map(([filterId, fetcher]) =>
             queryClient.prefetchInfiniteQuery({
-                queryKey: [filterId, 'filter'],
-                queryFn: async ({ pageParam }) => await fetchUniqueDataByColumnId(filterId, pageParam),
+                queryKey: [filterId, 'filter', ''],
+                queryFn: async ({ pageParam }) => await fetcher(pageParam),
                 initialPageParam: 0
             })
         ),

@@ -6,7 +6,7 @@ export type ColumnID = 'title' |
     'year' |
     'specializations' |
     'authors' |
-    'adviser' |
+    'advisers' |
     'panelists' |
     'department' |
     'college'
