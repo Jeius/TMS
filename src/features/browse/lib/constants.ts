@@ -14,7 +14,7 @@ export const COLUMN_IDS: ColumnID[] = [
     'year',
     'specializations',
     'authors',
-    'advisers',
+    'adviser',
     'panelists',
     'department',
     'college',
@@ -26,6 +26,6 @@ export const FILTERS: { [x: string]: ComboboxFunction } = {
     year: fetchApprovedYears,
     specializations: fetchSpecializations,
     authors: fetchApprovedThesesAuthors,
-    advisers: fetchApprovedThesesAdviser,
+    adviser: fetchApprovedThesesAdviser,
     panelists: fetchApprovedThesesPanelists,
 }

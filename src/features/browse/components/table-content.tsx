@@ -34,7 +34,6 @@ export default function ThesesTableContent() {
     const { data: theses = [] } = useQuery({
         queryKey: ['theses'],
         queryFn: () => fetchTheses({ columns: columnVisibility }),
-        refetchOnMount: false
     });
 
     const columnPinning = { left: ['theses'] };
@@ -55,9 +54,10 @@ export default function ThesesTableContent() {
         getFacetedUniqueValues: getFacetedUniqueValues(),
         columnResizeMode: 'onChange',
         initialState: { columnPinning, columnOrder, columnSizing },
-        state: { columnVisibility, sorting },
+        state: { columnVisibility, sorting, columnFilters },
         onColumnVisibilityChange: setColumnVisibilty,
         onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
     })
 
     const headers = table.getFlatHeaders();
