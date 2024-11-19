@@ -4,6 +4,8 @@ import prisma from '@/server/db';
 import { VisibilityState } from '@tanstack/react-table';
 import { ColumnID } from './types';
 
+const LIMIT = 10;
+
 type FetchThesesParams = {
     columns?: VisibilityState
     order?: Record<ColumnID, 'asc' | 'desc'>[]
@@ -29,8 +31,7 @@ export async function fetchColleges(
     pageNumber = 0,
     search?: string
 ) {
-    const itemsPerPage = 10;
-    const skip = (pageNumber) * itemsPerPage;
+    const skip = (pageNumber) * LIMIT;
 
     const results = await prisma.college.findMany({
         select: { name: true },
@@ -43,7 +44,7 @@ export async function fetchColleges(
             })
         },
         skip: skip,
-        take: itemsPerPage,
+        take: LIMIT,
     })
 
     const colleges = results.map(result => result.name);
@@ -51,7 +52,7 @@ export async function fetchColleges(
     return {
         items: colleges,
         currentPage: pageNumber,
-        nextPage: colleges.length < itemsPerPage ? null : pageNumber + 1,
+        nextPage: colleges.length < LIMIT ? null : pageNumber + 1,
         search,
     };
 }
@@ -60,8 +61,7 @@ export async function fetchDepartments(
     pageNumber = 0,
     search?: string
 ) {
-    const itemsPerPage = 10;
-    const skip = (pageNumber) * itemsPerPage;
+    const skip = (pageNumber) * LIMIT;
 
     const results = await prisma.department.findMany({
         select: { name: true },
@@ -74,7 +74,7 @@ export async function fetchDepartments(
             })
         },
         skip: skip,
-        take: itemsPerPage,
+        take: LIMIT,
     })
 
     const departments = results.map(result => result.name);
@@ -82,7 +82,7 @@ export async function fetchDepartments(
     return {
         items: departments,
         currentPage: pageNumber,
-        nextPage: departments.length < itemsPerPage ? null : pageNumber + 1,
+        nextPage: departments.length < LIMIT ? null : pageNumber + 1,
         search,
     };
 }
@@ -91,8 +91,7 @@ export async function fetchApprovedYears(
     pageNumber = 0,
     search?: string
 ) {
-    const itemsPerPage = 10;
-    const skip = (pageNumber) * itemsPerPage;
+    const skip = (pageNumber) * LIMIT;
 
     const results = await prisma.thesis.findMany({
         select: { year_approved: true },
@@ -103,7 +102,7 @@ export async function fetchApprovedYears(
             }
         },
         skip: skip,
-        take: itemsPerPage,
+        take: LIMIT,
     });
 
     const years = results.filter(res => res.year_approved !== null).map(res => res.year_approved!.toString());
@@ -111,7 +110,7 @@ export async function fetchApprovedYears(
     return {
         items: years,
         currentPage: pageNumber,
-        nextPage: years.length < itemsPerPage ? null : pageNumber + 1,
+        nextPage: years.length < LIMIT ? null : pageNumber + 1,
         search,
     };
 }
@@ -120,8 +119,7 @@ export async function fetchSpecializations(
     pageNumber = 0,
     search?: string
 ) {
-    const itemsPerPage = 10;
-    const skip = (pageNumber) * itemsPerPage;
+    const skip = (pageNumber) * LIMIT;
 
     const results = await prisma.specializationTag.findMany({
         select: { name: true },
@@ -134,7 +132,7 @@ export async function fetchSpecializations(
             })
         },
         skip: skip,
-        take: itemsPerPage,
+        take: LIMIT,
     });
 
     const specializations = results.map(result => result.name);
@@ -142,7 +140,7 @@ export async function fetchSpecializations(
     return {
         items: specializations,
         currentPage: pageNumber,
-        nextPage: specializations.length < itemsPerPage ? null : pageNumber + 1,
+        nextPage: specializations.length < LIMIT ? null : pageNumber + 1,
         search,
     };
 }
@@ -152,8 +150,7 @@ export async function fetchApprovedThesesAuthors(
     pageNumber = 0,
     search?: string
 ) {
-    const itemsPerPage = 10;
-    const skip = (pageNumber) * itemsPerPage;
+    const skip = (pageNumber) * LIMIT;
 
     const results = await prisma.authorView.findMany({
         select: { first_name: true, last_name: true },
@@ -178,7 +175,7 @@ export async function fetchApprovedThesesAuthors(
             }),
         },
         skip: skip,
-        take: itemsPerPage,
+        take: LIMIT,
     });
 
     const authors = results.map(result => Object.values(result).join(' '))
@@ -186,7 +183,7 @@ export async function fetchApprovedThesesAuthors(
     return {
         items: authors,
         currentPage: pageNumber,
-        nextPage: authors.length < itemsPerPage ? null : pageNumber + 1,
+        nextPage: authors.length < LIMIT ? null : pageNumber + 1,
         search,
     };
 }
@@ -195,8 +192,7 @@ export async function fetchApprovedThesesAdviser(
     pageNumber = 0,
     search?: string
 ) {
-    const itemsPerPage = 10;
-    const skip = (pageNumber) * itemsPerPage;
+    const skip = (pageNumber) * LIMIT;
 
     const results = await prisma.adviserView.findMany({
         select: { prefix: true, first_name: true, last_name: true, suffix: true },
@@ -221,7 +217,7 @@ export async function fetchApprovedThesesAdviser(
             }),
         },
         skip: skip,
-        take: itemsPerPage,
+        take: LIMIT,
     });
 
     const advisers = results.map(result => {
@@ -235,7 +231,7 @@ export async function fetchApprovedThesesAdviser(
     return {
         items: advisers,
         currentPage: pageNumber,
-        nextPage: advisers.length < itemsPerPage ? null : pageNumber + 1,
+        nextPage: advisers.length < LIMIT ? null : pageNumber + 1,
         search,
     };
 }
@@ -244,8 +240,7 @@ export async function fetchApprovedThesesPanelists(
     pageNumber = 0,
     search?: string
 ) {
-    const itemsPerPage = 10;
-    const skip = (pageNumber) * itemsPerPage;
+    const skip = (pageNumber) * LIMIT;
 
     const results = await prisma.panelistView.findMany({
         select: { prefix: true, first_name: true, last_name: true, suffix: true },
@@ -270,7 +265,7 @@ export async function fetchApprovedThesesPanelists(
             }),
         },
         skip: skip,
-        take: itemsPerPage,
+        take: LIMIT,
     });
 
     const panelists = results.map(result => {
@@ -284,7 +279,7 @@ export async function fetchApprovedThesesPanelists(
     return {
         items: panelists,
         currentPage: pageNumber,
-        nextPage: panelists.length < itemsPerPage ? null : pageNumber + 1,
+        nextPage: panelists.length < LIMIT ? null : pageNumber + 1,
         search,
     };
 }

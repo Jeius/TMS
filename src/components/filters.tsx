@@ -27,10 +27,11 @@ export default function Filters({
     const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
     const [filtersQuery] = useQueryStates(filterParsers, { urlKeys: filterUrlKeys });
 
-    const columnFilters = (filterIds ?? Object.keys(FILTERS)).map(filterId => ({
-        id: filterId,
-        defaultValue: undefined,
-    }));
+    const columnFilters = (filterIds ?? Object.keys(FILTERS)).map(id => {
+        const defaultValue = Object.entries(filtersQuery).find(entry => id === entry[0])?.[1]
+        if (defaultValue) return { id, defaultValue: defaultValue.toString() }
+        return { id, defaultValue: undefined }
+    });
 
     const initial = columnFilters.slice(0, initialNum);
     const extension = columnFilters.slice(initialNum);
