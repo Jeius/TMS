@@ -2,27 +2,25 @@
 
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Thesis } from '@/lib/types'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { SortingState, Table } from '@tanstack/react-table'
+import { SortingState } from '@tanstack/react-table'
 import { CheckIcon, ChevronsUpDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { SORT_VALUES } from '../lib/constants'
 import { getSortValue } from '../lib/hooks/use-sort-state'
+import useThesisTable from '../lib/hooks/use-thesis-table'
 
 export default function SortOptions() {
-    const queryClient = useQueryClient();
-    const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
-    const [sortState, setSortState] = useState<SortingState | undefined>(table?.getState().sorting);
-    const selectedValue = getSortValue(sortState ?? []);
+    const table = useThesisTable();
+    const [sortState, setSortState] = useState<SortingState>(table.getState().sorting);
+    const selectedValue = getSortValue(sortState);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const id = e.currentTarget.value;
         const sortValue = SORT_VALUES.find(item => item.id === id);
         const columnSort = sortValue?.value;
         if (columnSort) {
-            table?.setSorting([columnSort])
+            table.setSorting([columnSort])
             setSortState([columnSort])
         };
     }

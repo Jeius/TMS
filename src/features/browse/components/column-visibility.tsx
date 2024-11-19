@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Thesis } from '@/lib/types';
 import { PopoverClose } from '@radix-ui/react-popover';
-import { useQuery } from '@tanstack/react-query';
-import { Column, Table } from '@tanstack/react-table';
+import { Column } from '@tanstack/react-table';
 import { motion } from 'framer-motion';
 import { Plus, PlusIcon } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
+import useThesisTable from '../lib/hooks/use-thesis-table';
 
 type VisibilityTypeProps = {
     columns?: Column<Thesis, unknown>[];
@@ -81,19 +81,16 @@ function PopoverType({ columns, onClick: handleClick }: VisibilityTypeProps) {
 }
 
 export function ColumnVisibilityControl({ type }: { type: 'popover' | 'column' }) {
-    const { data: table } = useQuery<Table<Thesis>>({ queryKey: ['thesesTable'] });
-    const [columns, setColumns] = useState(table?.getAllColumns());
-
-    const filteredCols = columns?.filter((column) => column.getCanHide() && !column.getIsVisible());
+    const table = useThesisTable();
+    const tableCols = table.getAllColumns();
+    const filteredCols = tableCols.filter((column) => column.getCanHide() && !column.getIsVisible());
 
     const handleClick = useCallback((column: Column<Thesis, unknown>) => {
         column.toggleVisibility(true);
-        const orderState = table?.getState().columnOrder;
-        const newOrder = orderState?.filter(col => col !== column.id) ?? [];
-        table?.setColumnOrder([...newOrder, column.id]);
+        const orderState = table.getState().columnOrder;
+        const newOrder = orderState.filter(col => col !== column.id);
+        table.setColumnOrder([...newOrder, column.id]);
     }, [table]);
-
-    useEffect(() => setColumns(table?.getAllColumns()), [table]);
 
     if (type === 'popover') return <PopoverType columns={filteredCols} onClick={handleClick} />;
     if (type === 'column') return <ColumnType columns={filteredCols} onClick={handleClick} />;

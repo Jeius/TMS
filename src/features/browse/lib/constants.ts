@@ -1,5 +1,13 @@
 import { ComboboxFunction } from '@/components/combobox';
-import { fetchApprovedThesesAdviser, fetchApprovedThesesAuthors, fetchApprovedThesesPanelists, fetchApprovedYears, fetchColleges, fetchDepartments, fetchSpecializations } from './actions';
+import {
+    fetchApprovedThesesAdviser,
+    fetchApprovedThesesAuthors,
+    fetchApprovedThesesPanelists,
+    fetchApprovedYears,
+    fetchColleges,
+    fetchDepartments,
+    fetchSpecializations
+} from './actions';
 import { ColumnID, SortValue } from './types';
 
 export const SORT_VALUES: SortValue[] = [

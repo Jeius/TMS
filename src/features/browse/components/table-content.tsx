@@ -4,62 +4,18 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Table, TableBody, TableCell, TableHeader, TableRow, } from '@/components/ui/table'
 import { AnimatedTableCell, AnimatedTableHead } from '@/features/browse/components/animated-table-elements'
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility'
-import responsivePx from '@/lib/responsive-px'
-import { Thesis } from '@/lib/types'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-    getCoreRowModel,
-    getFacetedUniqueValues,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable
-} from '@tanstack/react-table'
-import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
-import { useEffect, useMemo } from 'react'
-import { fetchTheses } from '../lib/actions'
-import useFilterState from '../lib/hooks/use-filter-state'
+import { useMemo } from 'react'
 import { useScrollEvents } from '../lib/hooks/use-scroll-events'
-import useSortState from '../lib/hooks/use-sort-state'
 import { useStickyTHead } from '../lib/hooks/use-sticky-thead'
-import useVisibilityState from '../lib/hooks/use-visibility-state'
+import useThesisTable from '../lib/hooks/use-thesis-table'
 import { columns } from './table-columns'
 
 
 export default function ThesesTableContent() {
-    const queryClient = useQueryClient();
     const scope = useStickyTHead('app-header');
     const scrollState = useScrollEvents('data-radix-scroll-area-viewport', scope);
 
-    const { data: theses = [] } = useQuery({
-        queryKey: ['theses'],
-        queryFn: () => fetchTheses({ columns: columnVisibility }),
-    });
-
-    const columnPinning = { left: ['theses'] };
-    const columnOrder = useQueryState('cols', parseAsArrayOf(parseAsString).withDefault(['specializations', 'adviser']))[0];
-    const columnSizing = { 'theses': responsivePx(420), 'year': responsivePx(120) };
-    const [columnVisibility, setColumnVisibilty] = useVisibilityState(columns);
-    const [sorting, setSorting] = useSortState()
-    const [columnFilters, setColumnFilters] = useFilterState();
-
-
-    const table = useReactTable({
-        data: theses as Thesis[],
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        getFacetedUniqueValues: getFacetedUniqueValues(),
-        columnResizeMode: 'onChange',
-        initialState: { columnPinning, columnOrder, columnSizing },
-        state: { columnVisibility, sorting, columnFilters },
-        onColumnVisibilityChange: setColumnVisibilty,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-    })
-
+    const table = useThesisTable();
     const headers = table.getFlatHeaders();
     const colSizing = table.getState().columnSizing;
 
@@ -71,11 +27,6 @@ export default function ThesesTableContent() {
         })
         return colSizes;
     }, [headers, colSizing]);
-
-    useEffect(() => {
-        queryClient.setQueryData(['thesesTable'], table)
-        console.log("Table changed", table.getState().sorting)
-    }, [table, queryClient]);
 
     return (
         <ScrollArea
