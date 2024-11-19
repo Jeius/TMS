@@ -3,6 +3,7 @@ import Filters from '@/components/filters';
 import { RecentActivitiesCard } from '@/features/analytics/components/recent-activities-card';
 import { Statistic, StatisticsCard } from '@/features/analytics/components/stats-card';
 import { ThesesChartCard } from '@/features/analytics/components/theses-chart-card';
+import { ColumnID } from '@/features/browse/lib/types';
 import {
   Book,
   BookOpenCheckIcon,
@@ -47,7 +48,7 @@ const getStatistics = (): Statistic[] => {
   ]
 }
 
-const FILTERS = ['college', 'department'];
+const FILTERS: ColumnID[] = ['college', 'department'];
 
 export default async function Analytics() {
   const statistics = getStatistics()

@@ -40,7 +40,7 @@ export default function useFilterState() {
         }
         filterState.forEach(({ id, value }) => newFiltersQuery[id] = value)
         setFiltersQuery(newFiltersQuery);
-    }, [filterState]);
+    }, [filterState, setFiltersQuery]);
 
     return [filterState, setFilterState] as const;
 }

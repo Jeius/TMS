@@ -38,7 +38,7 @@ export default function useSortState() {
     const [sortQuery, setSortQuery] = useQueryState('sort', parseAsSortState.withDefault(defaultState));
     const [sortState, setSortState] = useState<SortingState>(sortQuery);
 
-    useEffect(() => { setSortQuery(sortState) }, [sortState]);
+    useEffect(() => { setSortQuery(sortState) }, [sortState, setSortQuery]);
 
     return [sortState, setSortState] as const;
 }

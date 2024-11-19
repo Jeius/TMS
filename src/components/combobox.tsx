@@ -72,7 +72,7 @@ export function Combobox({
         if (inView && !isFetchingNextPage) {
             fetchNextPage();
         }
-    }, [fetchNextPage, inView]);
+    }, [fetchNextPage, inView, isFetchingNextPage]);
 
     useEffect(() => {
         if (searchTerm) {

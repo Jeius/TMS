@@ -12,14 +12,14 @@ type FetchThesesParams = {
 }
 
 export async function fetchTheses({ columns, order }: FetchThesesParams) {
-    const defaultCols = {
-        title: true,
-        year: true,
-        authors: true,
-        department: true,
-        specializations: true,
-        adviser: true
-    }
+    // const defaultCols = {
+    //     title: true,
+    //     year: true,
+    //     authors: true,
+    //     department: true,
+    //     specializations: true,
+    //     adviser: true
+    // }
     const approvedThesis = await prisma.approvedThesisView.findMany({
         select: columns,
         orderBy: order

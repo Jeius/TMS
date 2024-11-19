@@ -37,7 +37,7 @@ export default function useVisibilityState<TData>(columns: ColumnDef<TData>[]) {
     const [visibilityQuery, setVisibilityQuery] = useQueryState('cols', parseAsVisibilityState.withDefault(defaultState));
     const [visibilityState, setVisibilityState] = useState<VisibilityState>(visibilityQuery);
 
-    useEffect(() => { setVisibilityQuery(visibilityState) }, [visibilityState]);
+    useEffect(() => { setVisibilityQuery(visibilityState) }, [visibilityState, setVisibilityQuery]);
 
     return [visibilityState, setVisibilityState] as const
 }

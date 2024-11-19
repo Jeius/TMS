@@ -1,8 +1,8 @@
-import { columns } from "@/features/browse/components/table-columns";
-import useGlobalState from "@/lib/hooks/use-global-state";
+import { columns } from '@/features/browse/components/table-columns';
+import useGlobalState from '@/lib/hooks/use-global-state';
 import responsivePx from '@/lib/responsive-px';
-import { Thesis } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
+import { Thesis } from '@/lib/types';
+import { useQuery } from '@tanstack/react-query';
 import {
     getCoreRowModel,
     getFacetedUniqueValues,
@@ -10,13 +10,13 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import { useEffect } from 'react';
-import { fetchTheses } from "../actions";
-import useFilterState from "./use-filter-state";
-import useSortState from "./use-sort-state";
-import useVisibilityState from "./use-visibility-state";
+import { fetchTheses } from '../actions';
+import useFilterState from './use-filter-state';
+import useSortState from './use-sort-state';
+import useVisibilityState from './use-visibility-state';
 
 
 export default function useThesisTable() {
@@ -63,7 +63,7 @@ export default function useThesisTable() {
     // Sync local states with global state when they change
     useEffect(() => {
         setGlobalTableState(table);
-    }, [columnVisibility, sorting, columnFilters, setGlobalTableState]);
+    }, [table, columnVisibility, sorting, columnFilters, setGlobalTableState]);
 
 
     return globalTableState;
