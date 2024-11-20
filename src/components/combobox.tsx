@@ -100,7 +100,7 @@ export function Combobox({
           {selectedValue ? (
             <span className="font-semibold">{selectedValue}</span>
           ) : (
-            <span className="text-foreground/80">{placeholder}</span>
+            <span className="dark:text-foreground/80">{placeholder}</span>
           )}
           <motion.span
             style={{ transformOrigin: 'center' }}
@@ -108,9 +108,15 @@ export function Combobox({
             aria-hidden="true"
           >
             {open ? (
-              <ChevronsDownUpIcon size={16} className="opacity-50" />
+              <ChevronsDownUpIcon
+                size="1rem"
+                className="opacity-80 dark:opacity-50"
+              />
             ) : (
-              <ChevronsUpDownIcon size={16} className="opacity-50" />
+              <ChevronsUpDownIcon
+                size="1rem"
+                className="opacity-80 dark:opacity-50"
+              />
             )}
           </motion.span>
         </Button>

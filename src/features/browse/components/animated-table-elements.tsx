@@ -23,7 +23,7 @@ export function AnimatedTableHead<TData, TValue>({
         scope="col"
         data-scrolled={scrollState.left.isScrolled}
         className={cn(
-          'relative left-0 border-y bg-muted bg-gradient-to-b from-white/75 px-4 dark:bg-gradient-to-t dark:from-black/45',
+          'relative left-0 h-14 border-y bg-muted bg-gradient-to-b from-white/75 px-4 dark:bg-gradient-to-t dark:from-black/45',
           isPinned
             ? 'z-[1] md:sticky data-[scrolled=true]:md:shadow-right'
             : 'z-0',

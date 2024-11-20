@@ -14,6 +14,8 @@ import {
   AnimatedTableHead,
 } from '@/features/browse/components/animated-table-elements';
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility';
+import { useElementSize } from '@/lib/hooks/use-element-size';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useScrollState } from '../lib/hooks/use-scroll-events';
@@ -29,13 +31,15 @@ export default function ThesesTableContent() {
     scrollAreaRef
   );
   const [scrollArea, setScrollArea] = useState<HTMLElement | null>(null);
+  const scrollAreaSize = useElementSize(scrollArea);
 
   const canScrollLeft = scrollState.left.isScrolled;
   const canScrollRight =
     scrollState.left.value <
-    (scrollArea?.scrollWidth ?? 0) - (scrollArea?.clientWidth ?? 0);
+    (scrollArea?.scrollWidth ?? 0) - (scrollAreaSize?.width ?? 0);
 
   const table = useThesisTable();
+  const tableWidth = table.getTotalSize();
   const headers = table.getFlatHeaders();
   const colSizing = table.getState().columnSizing;
 
@@ -71,7 +75,7 @@ export default function ThesesTableContent() {
           className="relative border-separate border-spacing-0 whitespace-normal sm:static"
           style={{
             ...columnSizeVars,
-            width: table.getTotalSize(),
+            width: tableWidth,
           }}
         >
           <TableHeader className="sticky top-0 z-10 text-xs hover:bg-transparent">
@@ -109,42 +113,51 @@ export default function ThesesTableContent() {
             )}
           </TableBody>
         </Table>
-        {table
-          .getAllColumns()
-          .filter((column) => column.getCanHide() && !column.getIsVisible())
-          .length ? (
-          <div className="z-10 block border-y border-l bg-card/80 pr-8 lg:pr-16">
-            <ColumnVisibilityControl type="column" />
-          </div>
-        ) : null}
-      </div>
-      <ScrollBar orientation="horizontal" className="z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-black/10 dark:from-black/40">
-        <div ref={scrollButtonsRef} className="relative size-full">
-          <div className="sticky top-24 flex flex-col items-end justify-between space-y-5 pr-5">
-            <Button
-              size="icon"
-              variant={canScrollLeft ? 'shine' : undefined}
-              aria-disabled={!canScrollLeft}
-              disabled={!canScrollLeft}
-              className="pointer-events-auto size-fit rounded-full p-2 [&_svg]:size-7"
-              onClick={scrollLeft}
-            >
-              <ArrowLeft />
-            </Button>
-            <Button
-              size="icon"
-              variant={canScrollRight ? 'shine' : undefined}
-              aria-disabled={!canScrollRight}
-              disabled={!canScrollRight}
-              className="pointer-events-auto size-fit rounded-full p-2 [&_svg]:size-7"
-              onClick={scrollRight}
-            >
-              <ArrowRight />
-            </Button>
-          </div>
+        <div className="z-10 block border-y border-l bg-card/80">
+          <ColumnVisibilityControl type="column" />
         </div>
       </div>
+      <ScrollBar orientation="horizontal" className="z-10" />
+      <AnimatePresence>
+        {(canScrollRight || canScrollLeft) && (
+          <motion.div
+            key="scroll-buttons"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ x: 60, opacity: 0 }}
+            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-black/10 dark:from-black/40"
+          >
+            <div ref={scrollButtonsRef} className="relative size-full">
+              <motion.div
+                initial={{ x: 60, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                className="sticky top-24 flex flex-col items-end justify-between space-y-5 pr-5"
+              >
+                <Button
+                  size="icon"
+                  variant="outline"
+                  aria-disabled={!canScrollLeft}
+                  disabled={!canScrollLeft}
+                  className="pointer-events-auto size-fit rounded-full border-secondary p-2 text-secondary hover:bg-secondary hover:text-secondary-foreground [&_svg]:size-5"
+                  onClick={scrollLeft}
+                >
+                  <ArrowLeft />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  aria-disabled={!canScrollRight}
+                  disabled={!canScrollRight}
+                  className="pointer-events-auto size-fit rounded-full border-secondary p-2 text-secondary hover:bg-secondary hover:text-secondary-foreground [&_svg]:size-5"
+                  onClick={scrollRight}
+                >
+                  <ArrowRight />
+                </Button>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </ScrollArea>
   );
 }

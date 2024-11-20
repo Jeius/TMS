@@ -20,32 +20,36 @@ type VisibilityTypeProps = {
 };
 
 function ColumnType({ columns, onClick: handleClick }: VisibilityTypeProps) {
-  return (
+  const length = columns?.length;
+  return length ? (
     <div className="min-w-[13.125rem] p-2 sm:w-full sm:max-w-xs lg:min-w-[17.5rem]">
       <div className="px-4 py-3 font-semibold">
         <h3>Add Columns</h3>
       </div>
-      {columns?.map((col) => (
-        <Button
-          key={col.id}
-          variant="ghost"
-          size="sm"
-          className="flex w-full items-center justify-start capitalize"
-          onClick={() => handleClick(col)}
-        >
-          <Plus aria-hidden="true" focusable="false" />
-          <motion.span
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-            className="line-clamp-2 truncate text-left"
-          >
-            {col.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
-          </motion.span>
-        </Button>
-      ))}
+      <ul>
+        {columns?.map((col) => (
+          <li key={col.id}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex w-full items-center justify-start capitalize"
+              onClick={() => handleClick(col)}
+            >
+              <Plus aria-hidden="true" focusable="false" />
+              <motion.span
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+                className="line-clamp-2 truncate text-left"
+              >
+                {col.id.replace(/([a-z])([A-Z])/g, '$1 $2')}
+              </motion.span>
+            </Button>
+          </li>
+        ))}
+      </ul>
     </div>
-  );
+  ) : null;
 }
 
 function PopoverType({ columns, onClick: handleClick }: VisibilityTypeProps) {
