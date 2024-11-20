@@ -1,4 +1,4 @@
-import Filters from '@/components/filters';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RecentActivitiesCard } from '@/features/analytics/components/recent-activities-card';
 import {
   Statistic,
@@ -12,9 +12,7 @@ import {
   BookPlusIcon,
   BookUp2Icon,
 } from 'lucide-react';
-import { Suspense } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
@@ -60,13 +58,13 @@ export default async function Analytics() {
       <div className="m-auto box-content flex max-w-none flex-col items-center gap-y-4 p-4 md:gap-y-5 md:p-5">
         <div className="flex w-full max-w-screen-2xl flex-col gap-2 sm:flex-row sm:justify-between">
           <h1 className="text-2xl font-bold lg:text-4xl">Overview</h1>
-          <Suspense>
+          {/* <Suspense>
             <Filters
               initialNum={FILTERS.length}
               filterIds={FILTERS}
               canExpand
             />
-          </Suspense>
+          </Suspense> */}
         </div>
 
         <section className="md:grid-row-2 grid w-full max-w-screen-2xl grid-cols-1 gap-3 md:gap-4 lg:grid-flow-row">

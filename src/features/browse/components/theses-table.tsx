@@ -1,6 +1,6 @@
-import Filters from '@/components/filters';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import Filters from '@/features/browse/components/filters';
 import ThesesTableContent from '@/features/browse/components/table-content';
 import { cn } from '@/lib/utils';
 import {

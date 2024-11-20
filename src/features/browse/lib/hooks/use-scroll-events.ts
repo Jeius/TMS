@@ -13,11 +13,14 @@ import { ScrollState } from '../types';
  *   - `left`: { value, isScrolled } for the horizontal scroll position.
  *   - `top`: { value, isScrolled } for the vertical scroll position.
  */
-export function useScrollEvents(
+export function useScrollState(
   scrollAreaId: string,
   scope: RefObject<HTMLElement>
 ) {
-  const [scrollState, setScrollState] = useState<ScrollState>({});
+  const [scrollState, setScrollState] = useState<ScrollState>({
+    left: { value: 0, isScrolled: false },
+    top: { value: 0, isScrolled: false },
+  });
 
   useEffect(() => {
     // Handle scroll with debounced updates for efficiency

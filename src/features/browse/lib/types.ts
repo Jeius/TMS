@@ -18,6 +18,6 @@ export type SortValue = {
   value: ColumnSort;
 };
 export type ScrollState = {
-  left?: { value: number; isScrolled: boolean };
-  top?: { value: number; isScrolled: boolean };
+  left: { value: number; isScrolled: boolean };
+  top: { value: number; isScrolled: boolean };
 };

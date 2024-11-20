@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
   Table,
@@ -13,15 +14,26 @@ import {
   AnimatedTableHead,
 } from '@/features/browse/components/animated-table-elements';
 import { ColumnVisibilityControl } from '@/features/browse/components/column-visibility';
-import { useMemo } from 'react';
-import { useScrollEvents } from '../lib/hooks/use-scroll-events';
-import { useStickyTHead } from '../lib/hooks/use-sticky-thead';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { useScrollState } from '../lib/hooks/use-scroll-events';
+import { useSticky } from '../lib/hooks/use-sticky';
 import useThesisTable from '../lib/hooks/use-thesis-table';
 import { columns } from './table-columns';
 
 export default function ThesesTableContent() {
-  const scope = useStickyTHead('app-header');
-  const scrollState = useScrollEvents('data-radix-scroll-area-viewport', scope);
+  const scrollAreaRef = useSticky('app-header', 'thead');
+  const scrollButtonsRef = useSticky('app-header', 'div');
+  const scrollState = useScrollState(
+    'data-radix-scroll-area-viewport',
+    scrollAreaRef
+  );
+  const [scrollArea, setScrollArea] = useState<HTMLElement | null>(null);
+
+  const canScrollLeft = scrollState.left.isScrolled;
+  const canScrollRight =
+    scrollState.left.value <
+    (scrollArea?.scrollWidth ?? 0) - (scrollArea?.clientWidth ?? 0);
 
   const table = useThesisTable();
   const headers = table.getFlatHeaders();
@@ -36,9 +48,22 @@ export default function ThesesTableContent() {
     return colSizes;
   }, [headers, colSizing]);
 
+  function scrollRight() {
+    scrollArea?.scrollBy({ left: 300, behavior: 'smooth' });
+  }
+
+  function scrollLeft() {
+    scrollArea?.scrollBy({ left: -300, behavior: 'smooth' });
+  }
+
+  useEffect(
+    () => setScrollArea(document.getElementById('scroll-area-viewport')),
+    []
+  );
+
   return (
     <ScrollArea
-      ref={scope}
+      ref={scrollAreaRef}
       className="max-w-fit scroll-smooth whitespace-nowrap"
     >
       <div className="flex text-sm">
@@ -94,6 +119,32 @@ export default function ThesesTableContent() {
         ) : null}
       </div>
       <ScrollBar orientation="horizontal" className="z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-gradient-to-l from-black/10 dark:from-black/40">
+        <div ref={scrollButtonsRef} className="relative size-full">
+          <div className="sticky top-24 flex flex-col items-end justify-between space-y-5 pr-5">
+            <Button
+              size="icon"
+              variant={canScrollLeft ? 'shine' : undefined}
+              aria-disabled={!canScrollLeft}
+              disabled={!canScrollLeft}
+              className="pointer-events-auto size-fit rounded-full p-2 [&_svg]:size-7"
+              onClick={scrollLeft}
+            >
+              <ArrowLeft />
+            </Button>
+            <Button
+              size="icon"
+              variant={canScrollRight ? 'shine' : undefined}
+              aria-disabled={!canScrollRight}
+              disabled={!canScrollRight}
+              className="pointer-events-auto size-fit rounded-full p-2 [&_svg]:size-7"
+              onClick={scrollRight}
+            >
+              <ArrowRight />
+            </Button>
+          </div>
+        </div>
+      </div>
     </ScrollArea>
   );
 }

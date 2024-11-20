@@ -21,7 +21,7 @@ export function AnimatedTableHead<TData, TValue>({
         key={header.id}
         id={header.id}
         scope="col"
-        data-scrolled={scrollState.left?.isScrolled}
+        data-scrolled={scrollState.left.isScrolled}
         className={cn(
           'relative left-0 border-y bg-muted bg-gradient-to-b from-white/75 px-4 dark:bg-gradient-to-t dark:from-black/45',
           isPinned
@@ -62,7 +62,7 @@ export function AnimatedTableCell<TData>({
         key={cell.id}
         data-column-id={cell.column.id}
         data-state={row.getIsSelected() && 'selected'}
-        data-scrolled={scrollState.left?.isScrolled}
+        data-scrolled={scrollState.left.isScrolled}
         className={cn(
           'left-0 border-b bg-card p-4 align-top transition-colors data-[state=selected]:bg-accent',
           isPinnedLeft
