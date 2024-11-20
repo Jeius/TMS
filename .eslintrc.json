@@ -16,8 +16,6 @@
     "plugin:tailwindcss/recommended"
   ],
   "rules": {
-    "quotes": ["error", "single"],
-    "semi": "error",
     "tailwindcss/no-custom-classname": "off"
   },
   "settings": {
