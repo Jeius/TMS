@@ -8,7 +8,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-secondary',
+        default:
+          'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-secondary',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
@@ -58,7 +59,7 @@ interface IconRefProps {
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
@@ -88,7 +89,7 @@ const Button = React.forwardRef<
         {...props}
       >
         {Icon && iconPlacement === 'left' && (
-          <div className="w-0 translate-x-[0%] pr-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-100 group-hover:pr-2 group-hover:opacity-100">
+          <div className="group-hover:translate-x-100 w-0 translate-x-[0%] pr-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:pr-2 group-hover:opacity-100">
             <Icon />
           </div>
         )}
@@ -105,4 +106,3 @@ const Button = React.forwardRef<
 Button.displayName = 'Button';
 
 export { Button, buttonVariants };
-

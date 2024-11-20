@@ -1,16 +1,15 @@
 import { Message } from '@/lib/types';
 
-
 export function FormBanner({ message }: { message: Message }) {
   return (
-    <div className="flex flex-col gap-2 w-full max-w-md text-sm">
+    <div className="flex w-full max-w-md flex-col gap-2 text-sm">
       {'success' in message && (
-        <div className="text-foreground px-4 border-l-2 border-green-700 bg-gradient-to-r from-green-300/35 dark:from-green-200/10 ">
+        <div className="border-l-2 border-green-700 bg-gradient-to-r from-green-300/35 px-4 text-foreground dark:from-green-200/10">
           {message.success}
         </div>
       )}
       {'error' in message && (
-        <div className="text-foreground border-l-2 px-4 border-destructive bg-gradient-to-r from-destructive/30 dark:from-destructive/10">
+        <div className="border-l-2 border-destructive bg-gradient-to-r from-destructive/30 px-4 text-foreground dark:from-destructive/10">
           {message.error}
         </div>
       )}

@@ -1,28 +1,27 @@
-
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type HashParams = { [key: string]: string };
 
 export function useHashParams(): HashParams {
-    const router = useRouter();
-    const [hashParams, setHashParams] = useState<HashParams>({});
+  const router = useRouter();
+  const [hashParams, setHashParams] = useState<HashParams>({});
 
-    useEffect(() => {
-        const parseHashParams = () => {
-            const hash = window.location.hash;
-            const params = new URLSearchParams(hash.substring(1));
-            const result: HashParams = {};
+  useEffect(() => {
+    const parseHashParams = () => {
+      const hash = window.location.hash;
+      const params = new URLSearchParams(hash.substring(1));
+      const result: HashParams = {};
 
-            params.forEach((value, key) => {
-                result[key] = value;
-            });
+      params.forEach((value, key) => {
+        result[key] = value;
+      });
 
-            setHashParams(result);
-        };
+      setHashParams(result);
+    };
 
-        parseHashParams();
-    }, [router]);
+    parseHashParams();
+  }, [router]);
 
-    return hashParams;
+  return hashParams;
 }

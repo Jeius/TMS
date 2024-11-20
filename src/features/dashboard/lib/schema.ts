@@ -1,5 +1,5 @@
 import * as z from 'zod';
 
 export const RemindersFormSchema = z.object({
-    reminders: z.array(z.string()),
-})
+  reminders: z.array(z.string()),
+});

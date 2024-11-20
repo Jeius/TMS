@@ -11,48 +11,54 @@ import { useEffect, useState } from 'react';
 import ThemeSwitch from './theme-switch';
 
 export default function SideNav() {
-    const [open, setOpen] = useState(false);
-    const [width, setWidth] = useState<string>();
-    const pathname = usePathname();
-    const { isMounted, isSignedIn } = useAuthListener();
+  const [open, setOpen] = useState(false);
+  const [width, setWidth] = useState<string>();
+  const pathname = usePathname();
+  const { isMounted, isSignedIn } = useAuthListener();
 
-    const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
+  const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
-    useEffect(() => {
-        const newWidth = open ? '15rem' : '4.2rem';
-        setWidth(newWidth);
-    }, [open]);
+  useEffect(() => {
+    const newWidth = open ? '15rem' : '4.2rem';
+    setWidth(newWidth);
+  }, [open]);
 
-    return (
-        (isNavigationRoute && pathname !== '/' && isMounted) && (
-            <motion.div
-                id="side-navigation"
-                role='navigation'
-                aria-label='Side Navigation'
-                className={cn(
-                    'fixed z-10 inset-y-0 left-0 hidden lg:block border-r bg-card/60',
-                    'backdrop-blur-lg shadow-md pb-10 pt-20 px-3 overflow-x-hidden'
-                )}
-                initial={{ x: -60, opacity: 0, }}
-                animate={{ x: 0, opacity: 1, width: width }}
-                transition={{
-                    type: 'spring', duration: 0.2,
-                    x: { type: 'spring', duration: 0.4 }
-                }}
-                onMouseEnter={() => setOpen(true)}
-                onMouseLeave={() => setOpen(false)}
-                onFocus={() => setOpen(true)}
-                onBlur={() => setOpen(false)}
-            >
-                <div className='flex flex-col space-y-1 w-full h-full justify-between'>
-                    <NavLinks isSignedIn={isSignedIn} open={open} />
-                    <div className="flex flex-col" role="contentinfo">
-                        <Separator className='my-1' orientation="horizontal" role="separator" />
-                        <ThemeSwitch open={open} />
-                    </div>
-                </div>
-
-            </motion.div>
-        )
-    );
+  return (
+    isNavigationRoute &&
+    pathname !== '/' &&
+    isMounted && (
+      <motion.div
+        id="side-navigation"
+        role="navigation"
+        aria-label="Side Navigation"
+        className={cn(
+          'fixed inset-y-0 left-0 z-10 hidden border-r bg-card/60 lg:block',
+          'overflow-x-hidden px-3 pb-10 pt-20 shadow-md backdrop-blur-lg'
+        )}
+        initial={{ x: -60, opacity: 0 }}
+        animate={{ x: 0, opacity: 1, width: width }}
+        transition={{
+          type: 'spring',
+          duration: 0.2,
+          x: { type: 'spring', duration: 0.4 },
+        }}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+      >
+        <div className="flex h-full w-full flex-col justify-between space-y-1">
+          <NavLinks isSignedIn={isSignedIn} open={open} />
+          <div className="flex flex-col" role="contentinfo">
+            <Separator
+              className="my-1"
+              orientation="horizontal"
+              role="separator"
+            />
+            <ThemeSwitch open={open} />
+          </div>
+        </div>
+      </motion.div>
+    )
+  );
 }

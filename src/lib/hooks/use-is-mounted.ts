@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 
 // Custom hook to track whether the component has mounted
 export function useIsMounted() {
-    const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-    return isMounted;
+  return isMounted;
 }

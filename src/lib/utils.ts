@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export const Screens: { [value: string]: string } = {
@@ -15,7 +15,7 @@ export const Screens: { [value: string]: string } = {
   xl: '80rem',
   '2xl': '96rem',
   '3xl': '112rem',
-}
+};
 
 export function booleanToString(value: boolean) {
   return value ? 'true' : 'false';

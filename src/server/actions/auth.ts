@@ -5,8 +5,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export const signOutAction = async () => {
-    const supabase = await supabaseServerClient();
-    await supabase.auth.signOut();
-    revalidatePath('/', 'layout');
-    return redirect('/');
+  const supabase = await supabaseServerClient();
+  await supabase.auth.signOut();
+  revalidatePath('/', 'layout');
+  return redirect('/');
 };

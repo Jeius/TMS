@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 5% 97%;
@@ -71,7 +70,6 @@
     @apply bg-background text-foreground;
   }
 }
-
 
 @layer utilities {
   .text-balance {
