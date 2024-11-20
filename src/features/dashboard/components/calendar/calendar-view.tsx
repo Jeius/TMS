@@ -90,7 +90,7 @@ export default function CalendarView({
                 onMonthChange={setMonth}
                 selected={date}
                 onSelect={setDate}
-                className="mx-auto flex h-[20rem] w-min items-center rounded-md border"
+                className="mx-auto flex h-80 w-min items-center rounded-md border"
               />
             </CardContent>
             <CardFooter className="flex justify-between p-0">

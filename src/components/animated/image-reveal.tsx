@@ -47,7 +47,7 @@ export default function ImagesReveal({ title, images }: ImagesRevealProps) {
         {images.map(({ angle, src, alt }, i) => (
           <motion.div
             key={i}
-            className={`relative aspect-square size-full overflow-hidden basis-[${basis}%] rounded-2xl p-1 shadow-xl backdrop-blur-md lg:p-1.5`}
+            className={`basis-[ relative aspect-square size-full overflow-hidden${basis}%] rounded-2xl p-1 shadow-xl backdrop-blur-md lg:p-1.5`}
             custom={{ index: i, angle: angle }}
             initial="hidden"
             animate="visible"

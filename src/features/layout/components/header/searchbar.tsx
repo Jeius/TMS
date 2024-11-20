@@ -8,7 +8,7 @@ export default function SearchBar() {
     <>
       <Input
         id="search-input"
-        className="hidden max-w-[16rem] bg-background/80 sm:block"
+        className="hidden max-w-64 bg-background/80 sm:block"
         type="search"
         placeholder="Search..."
         aria-label="Search through site content"

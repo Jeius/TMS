@@ -133,7 +133,7 @@ export default function RemindersItems() {
           name="reminders"
           render={() => (
             <FormItem>
-              <ScrollArea className="h-[20rem] w-full space-y-1 px-1.5">
+              <ScrollArea className="h-80 w-full space-y-1 px-1.5">
                 {REMINDERS.map(({ id, label }) => (
                   <ReminderItem key={id} id={id} label={label} />
                 ))}
@@ -149,7 +149,7 @@ export default function RemindersItems() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 10, opacity: 0 }}
               transition={{ type: 'tween', duration: 0.1 }}
-              className="absolute bottom-0 left-0 right-0 flex items-center justify-between"
+              className="absolute inset-x-0 bottom-0 flex items-center justify-between"
             >
               <Button
                 aria-label="Mark as done"

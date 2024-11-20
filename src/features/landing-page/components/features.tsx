@@ -95,7 +95,7 @@ export default function Features() {
             aria-labelledby={`${title}-heading`}
           >
             <div className="hidden items-center rounded-lg bg-primary p-5 shadow 2xs:flex">
-              <Icon aria-hidden="true" className="size-[2rem] shrink" />
+              <Icon aria-hidden="true" className="size-8 shrink" />
             </div>
             <div
               className={cn(

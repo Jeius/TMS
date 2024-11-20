@@ -47,7 +47,7 @@ export default function SideNav() {
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
       >
-        <div className="flex h-full w-full flex-col justify-between space-y-1">
+        <div className="flex size-full flex-col justify-between space-y-1">
           <NavLinks isSignedIn={isSignedIn} open={open} />
           <div className="flex flex-col" role="contentinfo">
             <Separator

@@ -20,7 +20,7 @@ export default function Hero() {
   return (
     <section id="hero" aria-labelledby="hero-heading" className="scroll-mt-24">
       <InteractiveGrid>
-        <div className="flex flex-col items-center space-y-8 px-5 py-5 md:space-y-16 md:px-10">
+        <div className="flex flex-col items-center space-y-8 p-5 md:space-y-16 md:px-10">
           <div className="max-w-7xl md:px-10 lg:py-10">
             <div className="hidden md:block" aria-hidden="true">
               <ImagesReveal images={images} />

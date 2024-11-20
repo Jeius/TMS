@@ -121,7 +121,7 @@ export function Combobox({
       </PopoverTrigger>
       <PopoverContent className="z-40 w-min min-w-36 p-0">
         <div className="flex items-center border-b px-3">
-          <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+          <MagnifyingGlassIcon className="mr-2 size-4 shrink-0 opacity-50" />
           <input
             defaultValue={searchTerm}
             onChange={handleSearchChange}
@@ -157,7 +157,7 @@ export function Combobox({
                         >
                           <Check
                             className={cn(
-                              'mr-2 h-4 w-4',
+                              'mr-2 size-4',
                               selectedValue === item
                                 ? 'opacity-100'
                                 : 'opacity-0'

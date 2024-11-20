@@ -129,7 +129,7 @@ export function Grid() {
               transitionDelay: active ? `${x + y}ms` : '0ms',
             }}
             className={cn(
-              'h-full w-full scale-90 rounded bg-gray-400/30 opacity-10 transition-all duration-700',
+              'size-full scale-90 rounded bg-gray-400/30 opacity-10 transition-all duration-700',
               {
                 'scale-100 opacity-100': shouldHighlight,
                 'group-hover:scale-100 group-hover:opacity-100':
@@ -146,7 +146,7 @@ export function Grid() {
     <div
       ref={containerRef}
       onClick={onMouseEnter}
-      className={cn('absolute inset-0 z-0 h-full max-h-[400px] w-full', {
+      className={cn('absolute inset-0 z-0 size-full max-h-[400px]', {
         'top-1/4': vertical > 96 * 4, // 96 * 4 is the height of the grid
       })}
     >
@@ -167,7 +167,7 @@ export default function InteractiveGrid({
   return (
     <div
       className={cn(
-        'storybook-fix relative h-full w-full bg-gradient-to-b from-transparent via-card dark:via-footer',
+        'storybook-fix relative size-full bg-gradient-to-b from-transparent via-card dark:via-footer',
         className
       )}
     >

@@ -64,7 +64,7 @@ export function PasswordField<
                 {...props}
               />
             </FormControl>
-            <div className="absolute bottom-0 right-0 top-0 flex items-center">
+            <div className="absolute inset-y-0 right-0 flex items-center">
               <Button
                 variant="ghost"
                 type="button"

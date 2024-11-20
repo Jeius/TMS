@@ -92,7 +92,7 @@ export default function PopoverTextArea() {
                 </motion.span>
                 <textarea
                   aria-label="popover-textarea"
-                  className="h-full w-full resize-none rounded-md bg-transparent px-4 py-3 text-sm outline-none"
+                  className="size-full resize-none rounded-md bg-transparent px-4 py-3 text-sm outline-none"
                   autoFocus
                   onChange={(e) => setNote(e.target.value)}
                 />

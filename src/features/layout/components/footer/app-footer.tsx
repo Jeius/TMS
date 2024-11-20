@@ -9,7 +9,7 @@ import ThemeToggle from './theme-toggle';
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-foreground/40 bg-footer text-footer-foreground dark:border-border lg:pl-16">
-      <div className="mx-auto max-w-[80rem] px-5 md:px-8">
+      <div className="mx-auto max-w-screen-xl px-5 md:px-8">
         <div className="grid grid-cols-1 gap-8 py-8 leading-relaxed md:grid-cols-4">
           <Image
             src={'/images/msuiit-logo-275x280.png'}
@@ -17,7 +17,7 @@ export default function Footer() {
             width={275}
             height={280}
             role="img"
-            className="size-[7rem] shrink-0"
+            className="size-28 shrink-0"
           />
           <QuickLinks />
           <ContactUs />

@@ -45,7 +45,7 @@ export default function SubmitButton({
         >
           {status === 'success' && (
             <motion.span
-              className="h-fit w-fit"
+              className="size-fit"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.1, type: 'spring' }}
@@ -56,7 +56,7 @@ export default function SubmitButton({
 
           {status === 'failed' && (
             <motion.span
-              className="h-fit w-fit"
+              className="size-fit"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.1, type: 'spring' }}
