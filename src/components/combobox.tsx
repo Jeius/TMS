@@ -9,16 +9,12 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { debounce } from 'lodash';
-import {
-  Check,
-  ChevronsDownUpIcon,
-  ChevronsUpDownIcon,
-  Loader2,
-} from 'lucide-react';
+import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon } from 'lucide-react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ScrollArea } from './ui/scroll-area';
+import { Spinner } from './ui/spinner';
 
 export type ComboboxFunction = (
   page: number,
@@ -31,18 +27,18 @@ export type ComboboxFunction = (
 }>;
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
-  onValueChanged?: (value?: string) => void;
   id: string;
   queryFn: ComboboxFunction;
+  onValueChanged?: (value?: string) => void;
 };
 
 export function Combobox({
-  defaultValue,
-  className,
-  variant = 'outline',
-  onValueChanged = () => {},
   id,
   queryFn,
+  className,
+  defaultValue,
+  variant = 'outline',
+  onValueChanged = () => {},
   ...props
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
@@ -102,11 +98,11 @@ export function Combobox({
           {...props}
         >
           {selectedValue ? (
-            <span className="mr-2 font-semibold">{selectedValue}</span>
+            <span className="font-semibold">{selectedValue}</span>
           ) : (
-            <span className="mr-2 text-foreground/80">{placeholder}</span>
+            <span className="text-foreground/80">{placeholder}</span>
           )}
-          <motion.div
+          <motion.span
             style={{ transformOrigin: 'center' }}
             animate={{ rotate: open ? 180 : 0 }}
             aria-hidden="true"
@@ -116,7 +112,7 @@ export function Combobox({
             ) : (
               <ChevronsUpDownIcon size={16} className="opacity-50" />
             )}
-          </motion.div>
+          </motion.span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-40 w-min min-w-36 p-0">
@@ -135,7 +131,7 @@ export function Combobox({
         <ScrollArea className="h-min max-h-52">
           {status === 'pending' ? (
             <div className="h-fit w-full p-2">
-              <Loader2 className="m-auto size-4 animate-spin" />
+              <Spinner size="sm" />
             </div>
           ) : status === 'error' ? (
             <p className="w-full py-4 text-center text-xs">
@@ -178,9 +174,7 @@ export function Combobox({
               ))}
 
               <li ref={loaderRef} className="w-full">
-                {isFetchingNextPage && (
-                  <Loader2 className="m-auto size-4 animate-spin" />
-                )}
+                <Spinner size="xs" show={isFetchingNextPage} />
               </li>
             </ul>
           )}
