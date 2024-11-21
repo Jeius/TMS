@@ -18,7 +18,7 @@ SELECT
     (
       (
         (
-          (COALESCE(adv_prefix.name, '' :: character varying)) :: text || (adv_profile.first_name) :: text
+          COALESCE(((adv_prefix.name) :: text || ' ' :: text), '' :: text) || (adv_profile.first_name) :: text
         ) || ' ' :: text
       ) || (adv_profile.last_name) :: text
     ) || COALESCE(
@@ -32,7 +32,7 @@ SELECT
         (
           (
             (
-              (COALESCE(pan_prefix.name, '' :: character varying)) :: text || (pan_profile.first_name) :: text
+              COALESCE(((pan_prefix.name) :: text || ' ' :: text), '' :: text) || (pan_profile.first_name) :: text
             ) || ' ' :: text
           ) || (pan_profile.last_name) :: text
         ) || COALESCE(
