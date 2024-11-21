@@ -8,7 +8,7 @@ import {
   SpecializationTag,
   Suffix,
   ThesisStatus,
-} from '@prisma/client';
+} from './generated/client';
 import {
   COLLEGES,
   PREFIXES,
@@ -16,6 +16,11 @@ import {
   SPECIALIZTIONTAGS,
   SUFFIXES,
 } from './seeders/data';
+import {
+  getRandomPrefix,
+  getRandomRole,
+  getRandomSuffix,
+} from './seeders/helper-functions';
 
 const prisma = new PrismaClient();
 
@@ -89,7 +94,7 @@ async function seedTheses(
   ];
 
   // Calculate how many theses are assigned to each status
-  const statusesWithFiveEach = statuses.slice(0, statuses.length - 1); // All statuses except APPROVED
+  const statusesWithFiveEach = statuses.slice(0, statuses.length - 1); // All statuses except FINAL_MANUSCRIPT
   const thesesPerStatus = 5;
 
   for (let i = 1; i <= numberOfThesis; i++) {
@@ -99,11 +104,11 @@ async function seedTheses(
       const statusIndex = Math.floor((i - 1) / thesesPerStatus);
       status = statusesWithFiveEach[statusIndex];
     } else {
-      // Assign the remaining theses to APPROVED
-      status = ThesisStatus.APPROVED;
+      // Assign the remaining theses to FINAL_MANUSCRIPT
+      status = ThesisStatus.FINAL_MANUSCRIPT;
     }
 
-    const yearApproved = status === ThesisStatus.APPROVED ? 2023 : null;
+    const yearApproved = status === ThesisStatus.FINAL_MANUSCRIPT ? 2023 : null;
 
     const thesis = await prisma.thesis.create({
       data: {
@@ -131,10 +136,19 @@ async function seedTheses(
   }
 }
 
-async function createUser() {
+async function createUser(
+  roles: Role[],
+  prefixes: Prefix[],
+  suffixes: Suffix[],
+  department_id: string,
+  isStudent?: boolean
+) {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@g.msuiit.edu.ph`;
+  const roleId = getRandomRole(roles, isStudent).id;
+  const prefixId = getRandomPrefix(prefixes, isStudent)?.id ?? null;
+  const suffixId = getRandomSuffix(suffixes, isStudent)?.id ?? null;
 
   const user = await prisma.user.create({
     data: { email: email, is_anonymous: true },
@@ -145,6 +159,10 @@ async function createUser() {
       id: user.id,
       first_name: firstName,
       last_name: lastName,
+      role_id: roleId,
+      prefix_id: prefixId,
+      suffix_id: suffixId,
+      department_id: department_id,
       created_at: user.created_at,
     },
   });
