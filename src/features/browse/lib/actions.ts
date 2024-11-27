@@ -145,7 +145,7 @@ export async function fetchApprovedThesesAuthors(
     select: { first_name: true, last_name: true },
     distinct: ['author_id'],
     where: {
-      status: 'APPROVED',
+      status: 'FINAL_MANUSCRIPT',
       ...(search && {
         OR: [
           {
@@ -187,7 +187,7 @@ export async function fetchApprovedThesesAdviser(
     select: { prefix: true, first_name: true, last_name: true, suffix: true },
     distinct: ['adviser_id'],
     where: {
-      status: 'APPROVED',
+      status: 'FINAL_MANUSCRIPT',
       ...(search && {
         OR: [
           {
@@ -213,7 +213,7 @@ export async function fetchApprovedThesesAdviser(
     const { prefix, first_name, last_name, suffix } = result;
 
     if (prefix && suffix)
-      return `${prefix}${first_name} ${last_name}, ${suffix}`;
+      return `${prefix} ${first_name} ${last_name}, ${suffix}`;
     else if (suffix) return `${first_name} ${last_name}, ${suffix}`;
     else return `${first_name} ${last_name}`;
   });
@@ -236,7 +236,7 @@ export async function fetchApprovedThesesPanelists(
     select: { prefix: true, first_name: true, last_name: true, suffix: true },
     distinct: ['panelist_id'],
     where: {
-      status: 'APPROVED',
+      status: 'FINAL_MANUSCRIPT',
       ...(search && {
         OR: [
           {
@@ -262,7 +262,7 @@ export async function fetchApprovedThesesPanelists(
     const { prefix, first_name, last_name, suffix } = result;
 
     if (prefix && suffix)
-      return `${prefix}${first_name} ${last_name}, ${suffix}`;
+      return `${prefix} ${first_name} ${last_name}, ${suffix}`;
     else if (suffix) return `${first_name} ${last_name}, ${suffix}`;
     else return `${first_name} ${last_name}`;
   });

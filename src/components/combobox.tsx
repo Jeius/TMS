@@ -134,7 +134,7 @@ export function Combobox({
             )}
           />
         </div>
-        <ScrollArea className="h-min max-h-52">
+        <ScrollArea className="h-52">
           {status === 'pending' ? (
             <div className="h-fit w-full p-2">
               <Spinner size="sm" />
@@ -171,7 +171,7 @@ export function Combobox({
                         </Button>
                       </li>
                     ))
-                  ) : (
+                  ) : searchTerm && (
                     <li className="w-full py-4 text-center text-xs">
                       No results found...
                     </li>
