@@ -23,7 +23,7 @@ model Thesis {
   deleted_at                           DateTime?              @db.Timestamptz(6)
   year_approved                        Int?
   accessControls                       AccessControl[]
-  advisers                             Advisers[]
+  advisers                             Adviser[]
   authors                              Author[]
   defenseSchedules                     DefenseSchedule[]
   fileVersions                         FileVersion[]
@@ -211,7 +211,7 @@ model Milestone {
   @@map("milestones")
 }
 
-model Advisers {
+model Adviser {
   thesis_id  String       @db.Uuid
   adviser_id String       @db.Uuid
   role       Adviser_role
@@ -266,7 +266,7 @@ model Profile {
   prefix_id                                              Int?
   accessControls                                         AccessControl[]
   activityLogs                                           ActivityLog[]
-  advisers                                               Advisers[]
+  advisers                                               Adviser[]
   authors                                                Author[]
   messagesReceived                                       ChatMessage[]    @relation("UserReceiver")
   messagesSent                                           ChatMessage[]    @relation("UserSender")

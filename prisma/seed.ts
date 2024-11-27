@@ -17,6 +17,7 @@ import {
   SUFFIXES,
 } from './seeders/data';
 import {
+  getRandomBoolean,
   getRandomPrefix,
   getRandomRole,
   getRandomSuffix,
@@ -24,40 +25,7 @@ import {
 
 const prisma = new PrismaClient();
 
-// const supabaseUrl = process.env.SUPABASE_URL;
-// const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
-
-// if (!supabaseUrl || !supabaseAnonKey) {
-//   throw new Error(
-//     'Supabase URL or Anon Key is missing in the environment variables.'
-//   );
-// }
-// // Helper Types
-// type UserMetaData = { email: string; firstName: string; lastName: string };
-
-// const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// // eslint-disable-next-line @typescript-eslint/no-unused-vars
-// async function createSupabaseUser() {
-//   const email = faker.internet.email();
-//   const firstName = faker.person.firstName();
-//   const lastName = faker.person.lastName();
-
-//   const {
-//     data: { user },
-//     error,
-//   } = await supabase.auth.signInAnonymously({
-//     options: { data: { email, firstName, lastName } as UserMetaData },
-//   });
-
-//   if (error) {
-//     console.error('Error creating user:', error.message);
-//     return null;
-//   }
-
-//   return user;
-// }
-
-async function seedCollegesAndDepartments() {
+async function seedDepartments() {
   for (const college of COLLEGES) {
     const createdCollege = await prisma.college.create({
       data: { name: college.name },
@@ -80,7 +48,10 @@ async function seedCollegesAndDepartments() {
 
 async function seedTheses(
   departments: Department[],
-  specializationTags: SpecializationTag[]
+  specializationTags: SpecializationTag[],
+  roles: Role[],
+  prefixes: Prefix[],
+  suffixes: Suffix[]
 ) {
   const numberOfThesis = 50;
 
@@ -109,74 +80,117 @@ async function seedTheses(
     }
 
     const yearApproved = status === ThesisStatus.FINAL_MANUSCRIPT ? 2023 : null;
-
+    const department_id = departments[i % departments.length].id;
+    const faculties = await getFacultiesID(department_id);
     const thesis = await prisma.thesis.create({
       data: {
         title: `Thesis Title ${i}`,
         abstract: `This is an abstract for Thesis ${i}. It provides an overview of the study.`,
         status: status,
         year_approved: yearApproved,
-        department: { connect: { id: departments[i % departments.length].id } },
+        department: { connect: { id: department_id } },
       },
     });
 
-    // Link ThesisSpecialization tags to each thesis
-    await prisma.thesisSpecialization.createMany({
-      data: [
-        {
-          thesis_id: thesis.id,
-          tag_id: specializationTags[i % specializationTags.length].id, //Random tag
-        },
-        {
-          thesis_id: thesis.id,
-          tag_id: specializationTags[(i + 1) % specializationTags.length].id, //Random tag
-        },
-      ],
+    await createSpecializations(thesis.id, specializationTags);
+
+    await createAuthors({
+      thesis_id: thesis.id,
+      department_id,
+      roles,
+    });
+
+    const createCoAdviser = getRandomBoolean();
+    if (createCoAdviser) {
+      const index = Math.floor(Math.random() * faculties.length);
+      const facultyID = faculties.splice(index, 1)[0];
+      await createAdviser({
+        thesis_id: thesis.id,
+        department_id,
+        roles,
+        prefixes,
+        suffixes,
+        adviser_id: facultyID,
+        adviser_role: Adviser_role.CO_ADVISER,
+      });
+    }
+
+    const index = Math.floor(Math.random() * faculties.length);
+    const facultyID = faculties.splice(index, 1)[0];
+    await createAdviser({
+      thesis_id: thesis.id,
+      department_id,
+      roles,
+      prefixes,
+      suffixes,
+      adviser_id: facultyID,
+      adviser_role: Adviser_role.ADVISER,
+    });
+
+    await createPanelists({
+      thesis_id: thesis.id,
+      department_id,
+      roles,
+      prefixes,
+      suffixes,
+      faculties: Array.from(faculties),
     });
   }
 }
 
-async function createUser(
-  roles: Role[],
-  prefixes: Prefix[],
-  suffixes: Suffix[],
-  department_id: string,
-  isStudent?: boolean
+async function createSpecializations(
+  thesis_id: string,
+  specializationTags: SpecializationTag[]
 ) {
+  const number = Math.floor(Math.random() * 4) + 2;
+  const specializationData = [];
+  for (let i = 0; i < number; i++) {
+    specializationData.push({
+      thesis_id: thesis_id,
+      tag_id: specializationTags[i % specializationTags.length].id, //Random tag
+    });
+  }
+  await prisma.thesisSpecialization.createMany({
+    data: specializationData,
+  });
+}
+
+async function createUser(role_id: number, department_id: string) {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@g.msuiit.edu.ph`;
-  const roleId = getRandomRole(roles, isStudent).id;
-  const prefixId = getRandomPrefix(prefixes, isStudent)?.id ?? null;
-  const suffixId = getRandomSuffix(suffixes, isStudent)?.id ?? null;
-
   const user = await prisma.user.create({
     data: { email: email, is_anonymous: true },
   });
 
-  await prisma.profile.create({
+  const profile = await prisma.profile.create({
     data: {
       id: user.id,
       first_name: firstName,
       last_name: lastName,
-      role_id: roleId,
-      prefix_id: prefixId,
-      suffix_id: suffixId,
       department_id: department_id,
+      role_id: role_id,
       created_at: user.created_at,
     },
   });
 
-  return user;
+  if (user && profile) {
+    console.log(
+      `Created user ${profile.first_name} ${profile.last_name} with ID: ${user.id}`
+    );
+
+    return user;
+  }
+  return null;
 }
 
-async function seedNonStudents(
+async function seedFaculties(
   roles: Role[],
   prefixes: Prefix[],
-  suffixes: Suffix[]
+  suffixes: Suffix[],
+  departments: Department[]
 ) {
-  const numberOfUsersToSeed = 50;
-  const departments = await prisma.department.findMany();
+  const numberOfUsersToSeed = 30;
   const filteredRoles = roles.filter((role) => role.name !== 'Student');
 
   if (!departments.length || !filteredRoles.length) {
@@ -184,7 +198,12 @@ async function seedNonStudents(
   }
 
   for (let i = 0; i < numberOfUsersToSeed; i++) {
-    const user = await createUser();
+    const department = departments[i % departments.length];
+    const role = getRandomRole(filteredRoles);
+    const prefix = getRandomPrefix(prefixes);
+    const suffix = getRandomSuffix(suffixes);
+
+    const user = await createUser(role.id, department.id);
     if (!user) {
       console.log(
         `Skipping user creation at index ${i} as no user was created.`
@@ -192,266 +211,213 @@ async function seedNonStudents(
       continue;
     }
 
-    const assignedDept = departments[i % departments.length];
-    const role = filteredRoles[i % filteredRoles.length];
-    const prefixId = prefixes[i % prefixes.length].id;
-    const suffixId = suffixes[i % suffixes.length].id;
-
     await prisma.profile.update({
       where: { id: user.id },
       data: {
-        role_id: role.id,
-        department_id: assignedDept.id,
-        prefix_id: prefixId,
-        suffix_id: suffixId,
+        prefix_id: prefix?.id,
+        suffix_id: suffix?.id,
       },
     });
     console.log(`Created user with ID: ${user.id} and profile.`);
   }
 }
 
-async function seedStudents(roles: Role[]) {
-  const numberOfUsersToSeed = 50;
-  const departments = await prisma.department.findMany();
+async function createAuthors({
+  thesis_id,
+  roles,
+  department_id,
+}: {
+  thesis_id: string;
+  department_id: string;
+  roles: Role[];
+}) {
+  const number = Math.floor(Math.random() * 3) + 1;
+  const authorData = [];
   const role = roles.find((role) => role.name === 'Student');
 
-  if (!departments.length || !role) {
-    throw new Error('Departments or Student role not found.');
+  if (!role) {
+    throw new Error('Student role not found.');
   }
 
-  const numberOfDepartments = departments.length;
+  for (let i = 0; i < number; i++) {
+    const user = await createUser(role.id, department_id);
+    if (!user) {
+      console.log(
+        `Skipping author creation of thesis ${thesis_id} at index ${i} as no user was created.`
+      );
+      continue;
+    }
 
-  for (let i = 0; i < numberOfUsersToSeed; i++) {
-    const user = await createUser();
-    const assignedDepartment = departments[i % numberOfDepartments]; // Round-robin logic
+    authorData.push({ thesis_id: thesis_id, author_id: user.id });
+  }
 
+  if (authorData.length > 0) {
+    await prisma.author.createMany({
+      data: authorData,
+      skipDuplicates: true, // Skip duplicates to avoid insertion errors
+    });
+    console.log(
+      `${authorData.length} authors assigned successfully for thesis ID: ${thesis_id}.`
+    );
+  } else {
+    console.log(`Error creating authors for thesis ID: ${thesis_id}.`);
+  }
+}
+
+async function createAdviser({
+  thesis_id,
+  adviser_id,
+  adviser_role,
+  roles,
+  department_id,
+  prefixes,
+  suffixes,
+}: {
+  thesis_id: string;
+  department_id: string;
+  roles: Role[];
+  prefixes: Prefix[];
+  suffixes: Suffix[];
+  adviser_id: string;
+  adviser_role: Adviser_role;
+}) {
+  let userId = adviser_id;
+  const filteredRoles = roles.filter((role) => role.name !== 'Student');
+  const create = getRandomBoolean(0.35);
+
+  if (create) {
+    const role = getRandomRole(filteredRoles);
+    const prefix = getRandomPrefix(prefixes);
+    const suffix = getRandomSuffix(suffixes);
+
+    const user = await createUser(role.id, department_id);
     if (user) {
       await prisma.profile.update({
         where: { id: user.id },
         data: {
-          department_id: assignedDepartment.id,
-          role_id: role.id,
+          prefix_id: prefix?.id,
+          suffix_id: suffix?.id,
         },
       });
+      userId = user.id;
+    }
+    console.log(
+      `Skipping adviser creation of thesis ${thesis_id} as no user was created.`
+    );
+  }
+
+  const adviser = await prisma.adviser.create({
+    data: {
+      thesis_id,
+      adviser_id: userId,
+      role: adviser_role,
+    },
+  });
+
+  if (adviser) {
+    console.log(
+      `Adviser ${adviser_id} assigned successfully for thesis ID: ${thesis_id}.`
+    );
+  } else {
+    console.log(`Error assigning adviser for thesis ID: ${thesis_id}.`);
+  }
+}
+
+async function getFacultiesID(department_id: string) {
+  const faculties = await prisma.profile.findMany({
+    select: { id: true, department_id: true },
+    where: { department_id: { not: null }, role: { name: { not: 'Student' } } },
+  });
+
+  // Group faculties by department
+  const facultiesByDept = faculties.reduce(
+    (acc, faculty) => {
+      if (faculty.department_id) {
+        if (!acc[faculty.department_id]) {
+          acc[faculty.department_id] = [];
+        }
+        acc[faculty.department_id].push(faculty.id);
+      }
+      return acc;
+    },
+    {} as Record<string, string[]>
+  );
+
+  return facultiesByDept[department_id!] || [];
+}
+
+async function createPanelists({
+  thesis_id,
+  roles,
+  department_id,
+  prefixes,
+  suffixes,
+  faculties,
+}: {
+  thesis_id: string;
+  department_id: string;
+  roles: Role[];
+  prefixes: Prefix[];
+  suffixes: Suffix[];
+  faculties: string[];
+}) {
+  const number = Math.floor(Math.random() * 3) + 2;
+  const panelistData = [];
+  const filteredRoles = roles.filter((role) => role.name !== 'Student');
+
+  for (let i = 0; i < number; i++) {
+    const index = Math.floor(Math.random() * faculties.length);
+    const panelist_id = faculties.splice(index, 1)[0];
+    const create = getRandomBoolean(0.35);
+    if (!create) {
+      panelistData.push({ thesis_id, panelist_id });
+    } else {
+      const role = getRandomRole(filteredRoles);
+      const prefix = getRandomPrefix(prefixes);
+      const suffix = getRandomSuffix(suffixes);
+
+      const user = await createUser(role.id, department_id);
+      if (user) {
+        await prisma.profile.update({
+          where: { id: user.id },
+          data: {
+            prefix_id: prefix?.id,
+            suffix_id: suffix?.id,
+          },
+        });
+        panelistData.push({
+          thesis_id: thesis_id,
+          panelist_id: user.id,
+        });
+      }
       console.log(
-        `Created user with ID: ${user.id} and assigned to department: ${assignedDepartment.name}.`
+        `Skipping panel creation of thesis ${thesis_id} as no user was created.`
       );
     }
   }
-}
 
-async function seedAuthors() {
-  try {
-    // Fetch theses and students
-    const theses = await prisma.thesis.findMany({
-      select: { id: true, department_id: true },
-    });
-
-    const students = await prisma.profile.findMany({
-      select: { id: true, department_id: true },
-      where: { department_id: { not: null }, role: { name: 'Student' } },
-    });
-
-    // Create a map to quickly find students by department_id
-    const studentsByDepartment = students.reduce(
-      (acc, student) => {
-        if (!acc[student.department_id!]) {
-          acc[student.department_id!] = [];
-        }
-        acc[student.department_id!].push(student.id);
-        return acc;
-      },
-      {} as Record<string, string[]>
-    );
-
-    // Prepare data for author creation
-    const authorData = theses
-      .map((thesis) => {
-        const departmentStudents =
-          studentsByDepartment[thesis.department_id!] || [];
-        if (departmentStudents.length === 0) return null; // Skip if no students in department
-
-        // Pick up to 3 random students from the department
-        const selectedStudents = [];
-        while (selectedStudents.length < 3 && departmentStudents.length > 0) {
-          const randomIndex = Math.floor(
-            Math.random() * departmentStudents.length
-          );
-          const selectedStudentId = departmentStudents.splice(
-            randomIndex,
-            1
-          )[0]; // Remove the student from the pool
-          selectedStudents.push(selectedStudentId);
-        }
-
-        // Return multiple authors for the thesis
-        return selectedStudents.map((studentId) => ({
-          thesis_id: thesis.id,
-          author_id: studentId,
-        }));
-      })
-      .filter((thesis) => thesis !== null) // Remove null results
-      .flat(); // Flatten the array to ensure all authors are included
-
-    // Bulk insert authors
-    if (authorData.length > 0) {
-      await prisma.author.createMany({
-        data: authorData,
-        skipDuplicates: true, // Skip duplicates to avoid insertion errors
-      });
-      console.log(`${authorData.length} authors assigned successfully.`);
-    } else {
-      console.log('No matching students found for any theses.');
-    }
-  } catch (error) {
-    console.error('Error during seeding authors:', error);
-  }
-}
-
-async function seedAdvisers() {
-  // Fetch all theses and advisers
-  const theses = await prisma.thesis.findMany({
-    select: { id: true, department_id: true },
-  });
-
-  const advisers = await prisma.profile.findMany({
-    select: { id: true, department_id: true },
-    where: { department_id: { not: null }, role: { name: { not: 'Student' } } },
-  });
-
-  // Group advisers by department
-  const advisersByDepartment = advisers.reduce(
-    (acc, adviser) => {
-      if (adviser.department_id) {
-        if (!acc[adviser.department_id]) {
-          acc[adviser.department_id] = [];
-        }
-        acc[adviser.department_id].push(adviser.id);
-      }
-      return acc;
-    },
-    {} as Record<string, string[]>
-  );
-
-  // Generate adviser assignments for theses
-  const adviserData = theses.flatMap((thesis) => {
-    const departmentAdvisers =
-      advisersByDepartment[thesis.department_id!] || [];
-    if (departmentAdvisers.length === 0) return []; // Skip if no advisers available
-
-    // To ensure unique advisers per thesis, we'll use a set to track assigned advisers
-    const assignedAdvisers = new Set<string>();
-    const thesisAdviser = [];
-
-    // Randomly assign 1 unique adviser per thesis
-    const randomAdviserId =
-      departmentAdvisers[Math.floor(Math.random() * departmentAdvisers.length)];
-
-    // Ensure the adviser is unique (not already assigned)
-    if (!assignedAdvisers.has(randomAdviserId)) {
-      thesisAdviser.push({
-        thesis_id: thesis.id,
-        adviser_id: randomAdviserId,
-        role: Adviser_role.ADVISER, // Assuming Adviser_role.ADVISER is an enum or string
-      });
-      assignedAdvisers.add(randomAdviserId); // Track this adviser as assigned
-    }
-
-    return thesisAdviser;
-  });
-
-  // Bulk insert adviser data
-  if (adviserData.length > 0) {
-    try {
-      await prisma.advisers.createMany({
-        data: adviserData,
-        skipDuplicates: true, // Ensures no duplicates if they somehow exist
-      });
-      console.log(`${adviserData.length} advisers assigned successfully.`);
-    } catch (error) {
-      console.error('Error during seeding advisers:', error);
-    }
-  } else {
-    console.log('No advisers found for any theses.');
-  }
-}
-
-async function seedPanelists() {
-  // Fetch all theses and panelists
-  const theses = await prisma.thesis.findMany({
-    select: { id: true, department_id: true },
-  });
-
-  const panelists = await prisma.profile.findMany({
-    select: { id: true, department_id: true },
-    where: { department_id: { not: null }, role: { name: { not: 'Student' } } },
-  });
-
-  // Group panelists by department
-  const panelistsByDepartment = panelists.reduce(
-    (acc, panelist) => {
-      if (panelist.department_id) {
-        if (!acc[panelist.department_id]) {
-          acc[panelist.department_id] = [];
-        }
-        acc[panelist.department_id].push(panelist.id);
-      }
-      return acc;
-    },
-    {} as Record<string, string[]>
-  );
-
-  // Generate panelist data for all theses
-  const panelistData = theses.flatMap((thesis) => {
-    const departmentPanelists =
-      panelistsByDepartment[thesis.department_id!] || [];
-    if (departmentPanelists.length === 0) return []; // Skip if no panelists available
-
-    // To ensure unique panelists per thesis, we'll use a set to track assigned panelists
-    const assignedPanelists = new Set<string>();
-    const thesisPanelists = [];
-
-    // Randomly assign 3 unique panelists per thesis
-    while (
-      thesisPanelists.length < 3 &&
-      departmentPanelists.length > thesisPanelists.length
-    ) {
-      const randomPanelistId =
-        departmentPanelists[
-          Math.floor(Math.random() * departmentPanelists.length)
-        ];
-
-      // Ensure the panelist is unique
-      if (!assignedPanelists.has(randomPanelistId)) {
-        thesisPanelists.push({
-          thesis_id: thesis.id,
-          panelist_id: randomPanelistId,
-        });
-        assignedPanelists.add(randomPanelistId); // Add to the set to track the uniqueness
-      }
-    }
-
-    return thesisPanelists;
-  });
-
-  // Bulk insert the panelist data in one go
-  try {
+  if (panelistData.length > 0) {
     await prisma.panelist.createMany({
       data: panelistData,
-      skipDuplicates: true, // Skip duplicates if any
+      skipDuplicates: true, // Skip duplicates to avoid insertion errors
     });
-    console.log(`${panelistData.length} panelists created successfully.`);
-  } catch (error) {
-    console.error('Error during seeding:', error);
+    console.log(
+      `${panelistData.length} panelists assigned successfully for thesis ID: ${thesis_id}.`
+    );
+  } else {
+    console.log(`Error assigning panelist for thesis ID: ${thesis_id}.`);
   }
 }
 
 // Main seeding function
 async function main() {
   try {
-    const departments = await seedCollegesAndDepartments();
+    const departments = await seedDepartments();
     const tags = await prisma.specializationTag.createManyAndReturn({
       data: SPECIALIZTIONTAGS,
+    });
+    const roles = await prisma.role.createManyAndReturn({
+      data: ROLES,
     });
     const prefixes = await prisma.prefix.createManyAndReturn({
       data: PREFIXES,
@@ -459,16 +425,9 @@ async function main() {
     const suffixes = await prisma.suffix.createManyAndReturn({
       data: SUFFIXES,
     });
-    const roles = await prisma.role.createManyAndReturn({
-      data: ROLES,
-    });
 
-    await seedTheses(departments, tags);
-    await seedNonStudents(roles, prefixes, suffixes);
-    await seedStudents(roles);
-    await seedAuthors();
-    await seedAdvisers();
-    await seedPanelists();
+    await seedFaculties(roles, prefixes, suffixes, departments);
+    await seedTheses(departments, tags, roles, prefixes, suffixes);
   } catch (error) {
     console.error('Error during seeding:', error);
   } finally {
