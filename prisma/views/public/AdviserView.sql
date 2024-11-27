@@ -4,6 +4,7 @@ SELECT
   p.last_name,
   suf.name AS suffix,
   t.status,
+  a.role,
   a.adviser_id,
   t.id AS thesis_id
 FROM

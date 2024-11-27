@@ -395,6 +395,7 @@ view AdviserView {
   last_name  String?       @db.VarChar(100)
   suffix     String?       @db.VarChar
   status     ThesisStatus?
+  role       Adviser_role?
   adviser_id String        @db.Uuid
   thesis_id  String        @db.Uuid
 
