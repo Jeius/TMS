@@ -67,12 +67,37 @@ export const COLLEGES = [
   },
 ];
 
-export const SPECIALIZTIONTAGS = [
+export const SPECIALIZATIONTAGS = [
   { name: 'Artificial Intelligence' },
   { name: 'Data Science' },
   { name: 'Quantum Mechanics' },
   { name: 'Structural Engineering' },
   { name: 'Business Strategy' },
+  { name: 'Machine Learning' },
+  { name: 'Cybersecurity' },
+  { name: 'Cloud Computing' },
+  { name: 'Blockchain Technology' },
+  { name: 'Renewable Energy' },
+  { name: 'Biotechnology' },
+  { name: 'Nanotechnology' },
+  { name: 'Robotics' },
+  { name: 'Software Engineering' },
+  { name: 'Economics and Finance' },
+  { name: 'Healthcare Management' },
+  { name: 'Psychology and Behavioral Science' },
+  { name: 'Environmental Science' },
+  { name: 'Astronomy and Astrophysics' },
+  { name: 'Electrical Engineering' },
+  { name: 'Civil Engineering' },
+  { name: 'Mechanical Engineering' },
+  { name: 'Chemical Engineering' },
+  { name: 'Human-Computer Interaction' },
+  { name: 'Marketing and Advertising' },
+  { name: 'Ethics and Philosophy' },
+  { name: 'Linguistics and Communication' },
+  { name: 'Education Technology' },
+  { name: 'Public Policy' },
+  { name: 'Game Development' },
 ];
 
 export const ROLES = [

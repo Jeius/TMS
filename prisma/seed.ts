@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { faker } from '@faker-js/faker';
 import {
   Adviser_role,
@@ -9,13 +10,7 @@ import {
   Suffix,
   ThesisStatus,
 } from './generated/client';
-import {
-  COLLEGES,
-  PREFIXES,
-  ROLES,
-  SPECIALIZTIONTAGS,
-  SUFFIXES,
-} from './seeders/data';
+import { COLLEGES } from './seeders/data';
 import {
   getRandomBoolean,
   getRandomPrefix,
@@ -133,7 +128,7 @@ async function seedTheses(
       roles,
       prefixes,
       suffixes,
-      faculties: Array.from(faculties),
+      faculties: faculties,
     });
   }
 }
@@ -285,7 +280,9 @@ async function createAdviser({
   const filteredRoles = roles.filter((role) => role.name !== 'Student');
   const create = getRandomBoolean(0.35);
 
-  if (create) {
+  if (!create && adviser_id) {
+    userId = adviser_id;
+  } else {
     const role = getRandomRole(filteredRoles);
     const prefix = getRandomPrefix(prefixes);
     const suffix = getRandomSuffix(suffixes);
@@ -301,9 +298,6 @@ async function createAdviser({
       });
       userId = user.id;
     }
-    console.log(
-      `Skipping adviser creation of thesis ${thesis_id} as no user was created.`
-    );
   }
 
   const adviser = await prisma.adviser.create({
@@ -324,26 +318,18 @@ async function createAdviser({
 }
 
 async function getFacultiesID(department_id: string) {
+  if (!department_id) return []; // Handle undefined/null department_id early.
+
   const faculties = await prisma.profile.findMany({
-    select: { id: true, department_id: true },
-    where: { department_id: { not: null }, role: { name: { not: 'Student' } } },
+    select: { id: true },
+    where: {
+      department_id,
+      role: { name: { not: 'Student' } },
+    },
   });
 
-  // Group faculties by department
-  const facultiesByDept = faculties.reduce(
-    (acc, faculty) => {
-      if (faculty.department_id) {
-        if (!acc[faculty.department_id]) {
-          acc[faculty.department_id] = [];
-        }
-        acc[faculty.department_id].push(faculty.id);
-      }
-      return acc;
-    },
-    {} as Record<string, string[]>
-  );
-
-  return facultiesByDept[department_id!] || [];
+  // Extract and return the list of faculty IDs.
+  return faculties.map((faculty) => faculty.id);
 }
 
 async function createPanelists({
@@ -369,7 +355,7 @@ async function createPanelists({
     const index = Math.floor(Math.random() * faculties.length);
     const panelist_id = faculties.splice(index, 1)[0];
     const create = getRandomBoolean(0.35);
-    if (!create) {
+    if (!create && panelist_id) {
       panelistData.push({ thesis_id, panelist_id });
     } else {
       const role = getRandomRole(filteredRoles);
@@ -377,22 +363,23 @@ async function createPanelists({
       const suffix = getRandomSuffix(suffixes);
 
       const user = await createUser(role.id, department_id);
-      if (user) {
-        await prisma.profile.update({
-          where: { id: user.id },
-          data: {
-            prefix_id: prefix?.id,
-            suffix_id: suffix?.id,
-          },
-        });
-        panelistData.push({
-          thesis_id: thesis_id,
-          panelist_id: user.id,
-        });
+      if (user === null) {
+        console.log(
+          `Skipping panel creation of thesis ${thesis_id} as no user was created.`
+        );
+        continue;
       }
-      console.log(
-        `Skipping panel creation of thesis ${thesis_id} as no user was created.`
-      );
+      await prisma.profile.update({
+        where: { id: user.id },
+        data: {
+          prefix_id: prefix?.id,
+          suffix_id: suffix?.id,
+        },
+      });
+      panelistData.push({
+        thesis_id: thesis_id,
+        panelist_id: user.id,
+      });
     }
   }
 
@@ -412,21 +399,28 @@ async function createPanelists({
 // Main seeding function
 async function main() {
   try {
-    const departments = await seedDepartments();
-    const tags = await prisma.specializationTag.createManyAndReturn({
-      data: SPECIALIZTIONTAGS,
-    });
-    const roles = await prisma.role.createManyAndReturn({
-      data: ROLES,
-    });
-    const prefixes = await prisma.prefix.createManyAndReturn({
-      data: PREFIXES,
-    });
-    const suffixes = await prisma.suffix.createManyAndReturn({
-      data: SUFFIXES,
-    });
+    // const departments = await seedDepartments();
+    // const tags = await prisma.specializationTag.createManyAndReturn({
+    //   data: SPECIALIZATIONTAGS,
+    // });
+    // const roles = await prisma.role.createManyAndReturn({
+    //   data: ROLES,
+    // });
+    // const prefixes = await prisma.prefix.createManyAndReturn({
+    //   data: PREFIXES,
+    // });
+    // const suffixes = await prisma.suffix.createManyAndReturn({
+    //   data: SUFFIXES,
+    // });
 
-    await seedFaculties(roles, prefixes, suffixes, departments);
+    // await seedFaculties(roles, prefixes, suffixes, departments);
+
+    const departments = await prisma.department.findMany();
+    const tags = await prisma.specializationTag.findMany();
+    const roles = await prisma.role.findMany();
+    const prefixes = await prisma.prefix.findMany();
+    const suffixes = await prisma.suffix.findMany();
+
     await seedTheses(departments, tags, roles, prefixes, suffixes);
   } catch (error) {
     console.error('Error during seeding:', error);
