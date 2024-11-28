@@ -1,10 +1,8 @@
-import Link from 'next/link';
-
 export default function Copyrights() {
   return (
     <>
       <p>© 2024 MSU - Iligan Institute of Technology. All rights reserved.</p>
-      <p>
+      {/* <p>
         Developed by{' '}
         <Link
           href="https://github.com/jeius"
@@ -14,7 +12,7 @@ export default function Copyrights() {
         >
           Julius Pahama
         </Link>
-      </p>
+      </p> */}
     </>
   );
 }

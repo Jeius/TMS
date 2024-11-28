@@ -113,7 +113,7 @@ function MainColumnCell({ row }: { row: Row<Thesis> }) {
           {authors.map((author, i) => (
             <li key={i}>
               {author}
-              <span className="last:hidden">,</span>
+              {i !== authors.length - 1 && <span>,</span>}
             </li>
           ))}
         </ul>
@@ -147,10 +147,12 @@ function ColumnCell({ accessorKey, row, ...props }: ColumnCellProps) {
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ type: 'spring', bounce: 0.22 }}
-          className="flex flex-col gap-2 text-pretty"
+          className="flex list-outside list-disc flex-col gap-2 text-pretty pl-5"
         >
           {rowValue.map((value, i) => (
-            <li key={i}>{value}</li>
+            <li key={i} className="pl-1">
+              {value}
+            </li>
           ))}
         </motion.ul>
       )}
