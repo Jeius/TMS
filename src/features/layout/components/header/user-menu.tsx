@@ -1,5 +1,6 @@
 'use client';
 
+import LogoutButton from '@/components/logout-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,29 +10,10 @@ import {
 } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TooltipWrapper } from '@/components/ui/tooltip';
-import { useToast } from '@/lib/hooks/use-toast';
 import { accountLinks } from '@/lib/navigation-links';
-import { supabaseBrowserClient } from '@/lib/supabase/client';
-import { LogOutIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function UserMenu() {
-  const router = useRouter();
-  const { toast } = useToast();
-
-  const handleLogout = async () => {
-    const { error } = await supabaseBrowserClient().auth.signOut();
-    if (error) {
-      toast({
-        title: 'Error signing out',
-        description: error.message,
-      });
-    } else {
-      router.refresh();
-    }
-  };
-
   return (
     <Popover>
       <TooltipWrapper label="Account" className="mr-3">
@@ -77,16 +59,10 @@ export default function UserMenu() {
               </Link>
             </Button>
           ))}
-          <Button
-            size="sm"
+          <LogoutButton
             variant="ghost"
-            aria-label="Sign out"
-            className="flex justify-between space-x-3"
-            onClick={handleLogout}
-          >
-            <span>Sign out</span>
-            <LogOutIcon aria-hidden="true" focusable="false" size={15} />
-          </Button>
+            className="flex items-center justify-between space-x-3"
+          />
         </div>
       </PopoverContent>
     </Popover>

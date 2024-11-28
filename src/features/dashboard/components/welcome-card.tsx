@@ -1,3 +1,4 @@
+import LogoutButton from '@/components/logout-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -5,7 +6,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { accountLinks } from '@/lib/navigation-links';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import LogoutButton from './logout-button';
 import WelcomeHeader from './welcome-header';
 
 function HeaderSkeleton() {
@@ -52,7 +52,10 @@ export default function WelcomeCard() {
             />
           </div>
         ))}
-        <LogoutButton />
+        <LogoutButton
+          variant="link"
+          className="flex size-min items-center space-x-2 p-1 font-semibold text-card-foreground"
+        />
       </CardFooter>
     </Card>
   );
