@@ -29,7 +29,8 @@ export type ComboboxFunction = (
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
   id: string;
   queryFn: ComboboxFunction;
-  onValueChanged?: (value?: string) => void;
+  onValueChanged?: (id: string, value?: string) => void;
+  externalResetTrigger?: boolean;
 };
 
 export function Combobox({
@@ -38,6 +39,7 @@ export function Combobox({
   className,
   defaultValue,
   variant = 'outline',
+  externalResetTrigger,
   onValueChanged = () => {},
   ...props
 }: ComboboxProps) {
@@ -60,7 +62,7 @@ export function Combobox({
     const item = e.currentTarget.value;
     const value = item === selectedValue ? undefined : item;
     setSelectedValue(value);
-    onValueChanged(value);
+    onValueChanged(id, value);
     setOpen(false);
     setSearchTerm('');
   }
@@ -84,6 +86,12 @@ export function Combobox({
       refetch();
     }
   }, [searchTerm, refetch]);
+
+  useEffect(() => {
+    if (externalResetTrigger) {
+      setSelectedValue(undefined);
+    }
+  }, [externalResetTrigger]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -147,35 +155,35 @@ export function Combobox({
             <ul className="flex flex-col space-y-1 p-2">
               {data?.pages.map(({ items, currentPage }) => (
                 <React.Fragment key={currentPage}>
-                  {items?.length ? (
-                    items?.map((item) => (
-                      <li key={item}>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          value={item}
-                          onClick={handleClick}
-                          className="w-full justify-start"
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2 size-4',
-                              selectedValue === item
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            )}
-                          />
-                          <span className="whitespace-nowrap text-xs font-semibold capitalize">
-                            {item}
-                          </span>
-                        </Button>
-                      </li>
-                    ))
-                  ) : searchTerm && (
-                    <li className="w-full py-4 text-center text-xs">
-                      No results found...
-                    </li>
-                  )}
+                  {items?.length
+                    ? items?.map((item) => (
+                        <li key={item}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            value={item}
+                            onClick={handleClick}
+                            className="w-full justify-start"
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 size-4',
+                                selectedValue === item
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                            <span className="whitespace-nowrap text-xs font-semibold capitalize">
+                              {item}
+                            </span>
+                          </Button>
+                        </li>
+                      ))
+                    : searchTerm && (
+                        <li className="w-full py-4 text-center text-xs">
+                          No results found...
+                        </li>
+                      )}
                 </React.Fragment>
               ))}
 
