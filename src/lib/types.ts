@@ -1,5 +1,6 @@
 export type Thesis = {
   title: string | null;
+  abstract: string | null;
   year: number | null;
   authors: string[];
   adviser: string | null;

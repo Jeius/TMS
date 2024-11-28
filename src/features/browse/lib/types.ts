@@ -4,6 +4,7 @@ export type SortId = 'latest' | 'oldest' | 'alpha' | '-alpha';
 
 export type ColumnID =
   | 'title'
+  | 'abstract'
   | 'year'
   | 'specializations'
   | 'authors'

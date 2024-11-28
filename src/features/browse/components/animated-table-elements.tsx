@@ -64,10 +64,10 @@ export function AnimatedTableCell<TData>({
         data-state={row.getIsSelected() && 'selected'}
         data-scrolled={scrollState.left.isScrolled}
         className={cn(
-          'left-0 border-b bg-card p-4 align-top transition-colors data-[state=selected]:bg-accent',
+          'left-0 border-b bg-card p-0 transition-colors data-[state=selected]:bg-accent',
           isPinnedLeft
-            ? 'z-[1] md:sticky data-[scrolled=true]:md:shadow-right'
-            : '',
+            ? 'align-center z-[1] md:sticky data-[scrolled=true]:md:shadow-right'
+            : 'align-top',
           isResizing ? 'pointer-events-none' : 'pointer-events-auto'
         )}
         style={{ width: `calc(var(--col-${cell.column.id}-size) * 1px)` }}

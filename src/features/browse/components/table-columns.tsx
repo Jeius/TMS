@@ -1,5 +1,15 @@
+import {
+  Dialog,
+  DialogClose,
+  DialogContainer,
+  DialogContent,
+  DialogSubtitle,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/animated/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Tooltip,
   TooltipContent,
@@ -11,7 +21,6 @@ import { cn } from '@/lib/utils';
 import { ColumnDef, Row, Table } from '@tanstack/react-table';
 import { HTMLMotionProps, motion } from 'framer-motion';
 import { Dot, X } from 'lucide-react';
-import Link from 'next/link';
 import { COLUMN_IDS } from '../lib/constants';
 
 export const columns = [createMainColumn(), ...createColumns()];
@@ -27,6 +36,7 @@ export function createColumns(): ColumnDef<Thesis>[] {
       sortingFn: 'alphanumeric',
       filterFn: 'includesString',
       enablePinning: false,
+      enableHiding: accessorKey === 'abstract' ? false : undefined,
       header: ({ table }: { table: Table<Thesis> }) => (
         <ColumnHeader table={table} accessorKey={accessorKey} />
       ),
@@ -85,49 +95,92 @@ function MainColumnCell({ row }: { row: Row<Thesis> }) {
   const authors = row.getValue('authors') as string[];
   const year = row.getValue('year') as string;
   const department = row.getValue('department') as string;
+  const abstract = row.getValue('abstract') as string;
 
   return (
-    <div className="flex text-pretty text-left">
+    <div className="flex gap-1 text-pretty p-4 text-left">
       <Checkbox
         className="my-auto ml-1"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label={`Select ${title}`}
       />
-      <div className="flex flex-col space-y-1 p-2">
-        <Button
-          variant="link"
-          data-title={title}
-          asChild
-          className="h-fit justify-start whitespace-normal p-1 font-bold text-secondary"
-        >
-          <Link href={'#'}>
-            <h3 className="line-clamp-3 text-ellipsis lg:text-base">{title}</h3>
-          </Link>
-        </Button>
 
-        <ul
-          className="gap-1 px-1 text-xs font-semibold"
-          data-author-list={authors}
-        >
-          {authors.map((author, i) => (
-            <li key={i}>
-              {author}
-              {i !== authors.length - 1 && <span>,</span>}
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex flex-col gap-1 px-1 text-sm xs:flex-row xs:items-center">
-          <span>{year}</span>
-          <Dot
-            size="1.5rem"
-            aria-hidden="true"
-            className="hidden shrink-0 xs:block"
-          />
-          <span>{department}</span>
-        </div>
-      </div>
+      <Dialog
+        transition={{
+          type: 'spring',
+          stiffness: 200,
+          damping: 24,
+        }}
+      >
+        <DialogTrigger className="flex size-full flex-col gap-2 p-2">
+          <DialogTitle className="text-base font-bold text-secondary">
+            <h3 className="line-clamp-3 text-ellipsis whitespace-normal">
+              {title}
+            </h3>
+          </DialogTitle>
+          <DialogSubtitle className="flex flex-col space-y-1">
+            <ul className="gap-1 text-xs font-semibold">
+              {authors.map((author, i) => (
+                <li key={i} className="hover:underline">
+                  {author}
+                  {i !== authors.length - 1 && <span>,</span>}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-col gap-1 text-sm xs:flex-row xs:items-center">
+              <span>{year}</span>
+              <Dot
+                size="1.5rem"
+                aria-hidden="true"
+                className="hidden shrink-0 xs:block"
+              />
+              <span>{department}</span>
+            </div>
+          </DialogSubtitle>
+          <Button
+            variant="outline"
+            className="size-fit rounded-full border-secondary px-2 py-1 text-xs text-secondary hover:bg-secondary hover:text-secondary-foreground"
+          >
+            Request PDF
+          </Button>
+        </DialogTrigger>
+        <DialogContainer>
+          <DialogContent className="relative m-5 h-auto w-full max-w-lg rounded-xl border bg-card">
+            <ScrollArea className="h-[90vh] p-5" type="scroll">
+              <DialogTitle className="p-1 text-lg font-bold text-secondary">
+                <h3 className="line-clamp-3 text-ellipsis whitespace-normal">
+                  {title}
+                </h3>
+              </DialogTitle>
+              <DialogSubtitle>
+                <ul className="flex gap-2 px-1 text-xs font-semibold">
+                  {authors.map((author, i) => (
+                    <li key={i}>
+                      {author}
+                      {i !== authors.length - 1 && <span>,</span>}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-row items-center gap-1 px-1 text-sm">
+                  <span>{year}</span>
+                  <Dot
+                    size="1.5rem"
+                    aria-hidden="true"
+                    className="hidden shrink-0 xs:block"
+                  />
+                  <span>{department}</span>
+                </div>
+                <section className="mt-6">
+                  <h4 className="text-base">Abstract</h4>
+                  <p className="text-justify indent-8 text-sm">{abstract}</p>
+                </section>
+              </DialogSubtitle>
+            </ScrollArea>
+            <DialogClose className="text-muted-foreground" />
+          </DialogContent>
+        </DialogContainer>
+      </Dialog>
     </div>
   );
 }
@@ -141,7 +194,7 @@ function ColumnCell({ accessorKey, row, ...props }: ColumnCellProps) {
   const rowValue = row.getValue(accessorKey);
 
   return (
-    <>
+    <div className="p-4">
       {Array.isArray(rowValue) && (
         <motion.ul
           initial={{ x: 20, opacity: 0 }}
@@ -168,7 +221,7 @@ function ColumnCell({ accessorKey, row, ...props }: ColumnCellProps) {
           {rowValue}
         </motion.div>
       )}
-    </>
+    </div>
   );
 }
 

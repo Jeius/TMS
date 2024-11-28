@@ -19,6 +19,7 @@ export const SORT_VALUES: SortValue[] = [
 
 export const COLUMN_IDS: ColumnID[] = [
   'title',
+  'abstract',
   'year',
   'specializations',
   'authors',
