@@ -1,18 +1,24 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardFooter, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { accountLinks } from '@/lib/navigation-links';
-import { signOutAction } from '@/server/actions/auth';
-import { LogOutIcon } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import LogoutButton from './logout-button';
+import WelcomeHeader from './welcome-header';
+
+function HeaderSkeleton() {
+  return (
+    <CardHeader className="space-y-1">
+      <div className="flex gap-2 text-3xl font-bold leading-none tracking-tight text-secondary">
+        <span>Welcome, </span>
+        <Skeleton className="h-8 w-20 bg-secondary dark:bg-secondary" />
+      </div>
+      <Skeleton className="h-6 w-32" />
+    </CardHeader>
+  );
+}
 
 export default function WelcomeCard() {
   return (
@@ -22,15 +28,9 @@ export default function WelcomeCard() {
       aria-labelledby="dashboard-welcome"
       className="w-full bg-primary"
     >
-      <CardHeader className="space-y-1">
-        <CardTitle
-          id="dashboard-welcome"
-          className="text-3xl font-bold text-secondary"
-        >
-          Welcome, [user]
-        </CardTitle>
-        <CardDescription>Role: [role]</CardDescription>
-      </CardHeader>
+      <Suspense fallback={<HeaderSkeleton />}>
+        <WelcomeHeader />
+      </Suspense>
       <CardFooter className="flex flex-wrap justify-end gap-2 pt-4">
         {accountLinks.map(({ label, href, icon: Icon }) => (
           <div key={label} className="flex items-center space-x-1">
@@ -52,16 +52,7 @@ export default function WelcomeCard() {
             />
           </div>
         ))}
-        <Button
-          size="sm"
-          variant="link"
-          aria-label="Sign out"
-          className="flex size-min items-center space-x-2 p-1 font-semibold text-card-foreground"
-          onClick={async () => await signOutAction()}
-        >
-          <span>Sign out</span>
-          <LogOutIcon aria-hidden="true" focusable="false" size="1rem" />
-        </Button>
+        <LogoutButton />
       </CardFooter>
     </Card>
   );

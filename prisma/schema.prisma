@@ -276,7 +276,7 @@ model Profile {
   user                                                   User             @relation(fields: [id], references: [id], onDelete: Cascade)
   prefix                                                 Prefix?          @relation(fields: [prefix_id], references: [id], onDelete: SetDefault)
   role                                                   Role?            @relation(fields: [role_id], references: [id], onDelete: SetDefault)
-  suffixes                                               Suffix?          @relation(fields: [suffix_id], references: [id], onDelete: SetDefault)
+  suffix                                                 Suffix?          @relation(fields: [suffix_id], references: [id], onDelete: SetDefault)
   review_feedbacks_review_feedbacks_feedbacker_idTousers ReviewFeedback[] @relation("review_feedbacks_feedbacker_idTousers")
   reviews                                                Review[]
 
