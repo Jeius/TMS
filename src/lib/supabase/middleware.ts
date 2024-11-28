@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
-import { AUTHROUTES, PUBLICROUTES } from '../constants';
+import { AUTHROUTES } from '../constants';
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -42,9 +42,7 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute = Object.values(AUTHROUTES).some((route) =>
     pathname.startsWith(route)
   );
-  const isPublicRoute = Object.values(PUBLICROUTES).some(
-    (route) => route === pathname || pathname.startsWith(route + '/')
-  );
+  const isPublicRoute = pathname === '/';
 
   if (!user && !isAuthRoute && !isPublicRoute) {
     // No user, redirect to login

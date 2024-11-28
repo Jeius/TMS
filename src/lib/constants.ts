@@ -5,7 +5,7 @@ export const AUTHROUTES = {
   auth: '/auth',
 };
 
-export const PUBLICROUTES = {
+export const MAINROUTES = {
   home: '/',
   browse: '/browse',
   analytics: '/analytics',
@@ -22,7 +22,7 @@ export const USERROUTES = {
 };
 
 export const NAVROUTES = {
-  ...PUBLICROUTES,
+  ...MAINROUTES,
   ...USERROUTES,
 };
 

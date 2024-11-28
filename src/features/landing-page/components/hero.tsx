@@ -1,7 +1,6 @@
 import ImagesReveal, { ImageCard } from '@/components/animated/image-reveal';
 import InteractiveGrid from '@/components/animated/interactive-grid';
 import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
 import Link from 'next/link';
 import ImageCarousel from './image-carousel';
 
@@ -43,6 +42,7 @@ export default function Hero() {
               <Button
                 size="lg"
                 asChild
+                variant="shine"
                 className="h-12 font-semibold shadow-md transition-transform hover:scale-105 sm:text-lg"
               >
                 <Link
@@ -53,9 +53,11 @@ export default function Hero() {
                 </Link>
               </Button>
               <Button variant="outline" className="shadow" asChild>
-                <Link href="/browse" aria-label="Browse thesis resources">
-                  <span>Browse</span>
-                  <Search size={18} aria-hidden="true" />
+                <Link
+                  href="/login"
+                  aria-label="Sign in if you already have an account."
+                >
+                  Sign In
                 </Link>
               </Button>
             </div>
