@@ -20,6 +20,7 @@ export default function QuickLinks() {
           .filter(
             (entry) => entry[1] !== '/' && entry[1] !== '/plagiarism-tool'
           )
+          .sort((a, b) => a[0].localeCompare(b[0])) //Sort by asc order
           .map(([label, href]) => (
             <li key={href}>
               <Link href={href} className="hover:text-foreground">

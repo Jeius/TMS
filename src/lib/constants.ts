@@ -14,11 +14,11 @@ export const MAINROUTES = {
 
 export const USERROUTES = {
   dashboard: '/dashboard',
+  inbox: '/inbox',
   library: '/library',
+  schedule: '/schedule',
   submit: '/submit',
   upload: '/upload',
-  schedule: '/schedule',
-  inbox: '/inbox',
 };
 
 export const NAVROUTES = {

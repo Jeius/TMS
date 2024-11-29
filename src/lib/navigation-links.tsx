@@ -25,10 +25,10 @@ export const primaryLinks = [
 
 export const userLinks = [
   { label: 'Library', href: '/library', icon: Library },
-  { label: 'Upload', href: '/upload', icon: FilePlus2 },
+  { label: 'Inbox', href: '/inbox', icon: MessageCircle },
   { label: 'Submit', href: '/submit', icon: SendIcon },
   { label: 'Schedule', href: '/schedule', icon: CalendarDays },
-  { label: 'Inbox', href: '/inbox', icon: MessageCircle },
+  { label: 'Upload', href: '/upload', icon: FilePlus2 },
 ];
 
 export const toolLinks = [
