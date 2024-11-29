@@ -76,13 +76,12 @@ function MenuButton() {
 export default function NavigationMenu() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const { isMounted, isSignedIn } = useAuthListener();
+  const { isSignedIn } = useAuthListener();
   const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
   return (
     isNavigationRoute &&
-    pathname !== '/' &&
-    isMounted && (
+    isSignedIn && (
       <div
         id="navigation-menu"
         role="navigation"

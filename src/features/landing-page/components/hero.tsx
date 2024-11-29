@@ -1,6 +1,10 @@
+'use client';
+
 import ImagesReveal, { ImageCard } from '@/components/animated/image-reveal';
 import InteractiveGrid from '@/components/animated/interactive-grid';
 import { Button } from '@/components/ui/button';
+import useAuthListener from '@/lib/hooks/use-auth-listener';
+import { SearchIcon } from 'lucide-react';
 import Link from 'next/link';
 import ImageCarousel from './image-carousel';
 
@@ -16,6 +20,7 @@ const images: ImageCard[] = [
 ];
 
 export default function Hero() {
+  const { isSignedIn, isMounted } = useAuthListener();
   return (
     <section id="hero" aria-labelledby="hero-heading" className="scroll-mt-24">
       <InteractiveGrid>
@@ -45,20 +50,34 @@ export default function Hero() {
                 variant="shine"
                 className="h-12 font-semibold shadow-md transition-transform hover:scale-105 sm:text-lg"
               >
-                <Link
-                  href="/login?signUp=true"
-                  aria-label="Sign up to start using the thesis management system"
-                >
-                  Sign Up
-                </Link>
+                {isMounted &&
+                  (isSignedIn ? (
+                    <Link href="/browse" aria-label="Browse theses">
+                      Browse <SearchIcon aria-hidden="true" />
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/login?signUp=true"
+                      aria-label="Sign up to start using the thesis management system"
+                    >
+                      Sign Up
+                    </Link>
+                  ))}
               </Button>
               <Button variant="outline" className="shadow" asChild>
-                <Link
-                  href="/login"
-                  aria-label="Sign in if you already have an account."
-                >
-                  Sign In
-                </Link>
+                {isMounted &&
+                  (isSignedIn ? (
+                    <Link href="/dashboard" aria-label="Go to dashboard.">
+                      Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/login"
+                      aria-label="Sign in if you already have an account."
+                    >
+                      Sign In
+                    </Link>
+                  ))}
               </Button>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { DashboardIcon } from '@radix-ui/react-icons';
 import {
   BookOpen,
   BookOpenCheck,
@@ -17,7 +18,8 @@ import {
 } from 'lucide-react';
 
 export const primaryLinks = [
-  { label: 'Home', href: '/dashboard', icon: House },
+  { label: 'Home', href: '/', icon: House },
+  { label: 'Dashboard', href: '/dashboard', icon: DashboardIcon },
   { label: 'Browse', href: '/browse', icon: Search },
 ];
 

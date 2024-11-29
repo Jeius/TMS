@@ -14,7 +14,7 @@ export default function SideNav() {
   const [open, setOpen] = useState(false);
   const [width, setWidth] = useState<string>();
   const pathname = usePathname();
-  const { isMounted, isSignedIn } = useAuthListener();
+  const { isSignedIn } = useAuthListener();
 
   const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
@@ -25,8 +25,7 @@ export default function SideNav() {
 
   return (
     isNavigationRoute &&
-    pathname !== '/' &&
-    isMounted && (
+    isSignedIn && (
       <motion.div
         id="side-navigation"
         role="navigation"

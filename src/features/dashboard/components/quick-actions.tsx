@@ -33,7 +33,7 @@ function QuickActionCard({
     <Button
       asChild
       className={cn(
-        'h-32 w-full rounded-xl bg-card hover:bg-card md:w-56 lg:w-64',
+        'h-32 w-full rounded-xl bg-card hover:bg-card md:w-56 lg:w-64 [&_svg]:size-6',
         'border text-card-foreground transition-transform hover:border-secondary hover:text-secondary',
         'flex-col space-y-5 hover:scale-105 focus-visible:scale-105 focus-visible:text-secondary'
       )}

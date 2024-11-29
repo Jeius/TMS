@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TooltipWrapper } from '@/components/ui/tooltip';
-import { Search } from 'lucide-react';
+import { SearchIcon } from 'lucide-react';
 
 export default function SearchBar() {
   return (
@@ -17,11 +17,11 @@ export default function SearchBar() {
         <Button
           id="search-button"
           size="icon"
-          className="block shrink-0 rounded-full sm:hidden"
+          className="shrink-0 rounded-full sm:hidden"
           variant="ghost"
           aria-label="Search button"
         >
-          <Search aria-hidden="true" />
+          <SearchIcon aria-hidden="true" />
         </Button>
       </TooltipWrapper>
     </>
