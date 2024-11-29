@@ -48,7 +48,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <TooltipProvider>{children}</TooltipProvider>
+        <TooltipProvider delayDuration={500}>{children}</TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -23,8 +23,8 @@ export default function QuickLinks() {
           .sort((a, b) => a[0].localeCompare(b[0])) //Sort by asc order
           .map(([label, href]) => (
             <li key={href}>
-              <Link href={href} className="hover:text-foreground">
-                <p className="capitalize tracking-wide">{label}</p>
+              <Link href={href} className="capitalize hover:text-foreground">
+                {label}
               </Link>
             </li>
           ))}

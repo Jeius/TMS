@@ -1,5 +1,6 @@
 'use client';
 
+import BasicTooltip from '@/components/basic-tooltip';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -11,11 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import NavLinks from '@/features/layout/components/nav-links';
 import { NAVROUTES } from '@/lib/constants';
 import useAuthListener from '@/lib/hooks/use-auth-listener';
@@ -53,23 +49,13 @@ function LogoTitle() {
 
 function MenuButton() {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <SheetTrigger asChild>
-          <Button
-            size="icon"
-            variant="ghost"
-            aria-label="Open Navigation Menu"
-            className="p-0 hover:bg-transparent"
-          >
-            <Menu aria-hidden="true" />
-          </Button>
-        </SheetTrigger>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Menu</p>
-      </TooltipContent>
-    </Tooltip>
+    <BasicTooltip label="Menu">
+      <SheetTrigger asChild>
+        <Button size="icon" variant="ghost" aria-label="Open Navigation Menu">
+          <Menu aria-hidden="true" />
+        </Button>
+      </SheetTrigger>
+    </BasicTooltip>
   );
 }
 
