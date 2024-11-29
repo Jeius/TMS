@@ -1,5 +1,6 @@
 'use client';
 
+import BasicTooltip from '@/components/basic-tooltip';
 import LogoutButton from '@/components/logout-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -9,14 +10,13 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
-import { TooltipWrapper } from '@/components/ui/tooltip';
 import { accountLinks } from '@/lib/navigation-links';
 import Link from 'next/link';
 
 export default function UserMenu() {
   return (
     <Popover>
-      <TooltipWrapper label="Account" className="mr-3">
+      <BasicTooltip label="Account">
         <PopoverTrigger asChild>
           <Button
             id="user-avatar"
@@ -36,10 +36,9 @@ export default function UserMenu() {
             </Avatar>
           </Button>
         </PopoverTrigger>
-      </TooltipWrapper>
+      </BasicTooltip>
       <PopoverContent
         id="user-menu"
-        align="end"
         className="max-w-40 p-2"
         onCloseAutoFocus={(e) => e.preventDefault()}
       >

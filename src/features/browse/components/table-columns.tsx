@@ -7,14 +7,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/animated/dialog';
+import BasicTooltip from '@/components/basic-tooltip';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import responsivePx from '@/lib/responsive-px';
 import { Thesis } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -147,7 +143,7 @@ function MainColumnCell({ row }: { row: Row<Thesis> }) {
         </DialogTrigger>
         <DialogContainer>
           <DialogContent className="relative m-5 h-auto w-full max-w-lg rounded-xl border bg-card">
-            <ScrollArea className="h-[90vh] p-5" type="scroll">
+            <ScrollArea className="h-[80vh] p-5" type="scroll">
               <DialogTitle className="p-1 text-lg font-bold text-secondary">
                 <h3 className="line-clamp-3 text-ellipsis whitespace-normal">
                   {title}
@@ -241,34 +237,29 @@ function ColumnHeader<TData>({
   }
 
   return (
-    <Tooltip>
-      <motion.div
-        className={cn('flex items-center justify-between space-x-2', className)}
-        initial={{ x: 20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ type: 'spring', bounce: 0.2 }}
-        {...props}
-      >
-        <span className="capitalize">
-          {accessorKey.replace(/([a-z])([A-Z])/g, '$1 $2')}
-        </span>
-        {
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              variant="ghost"
-              aria-label="Remove column"
-              className="size-fit p-1 text-muted-foreground hover:bg-transparent hover:text-foreground"
-              onClick={handleClick}
-            >
-              <X aria-hidden="true" />
-            </Button>
-          </TooltipTrigger>
-        }
-      </motion.div>
-      <TooltipContent>
-        <p>Remove column</p>
-      </TooltipContent>
-    </Tooltip>
+    <motion.div
+      className={cn('flex items-center justify-between space-x-2', className)}
+      initial={{ x: 20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ type: 'spring', bounce: 0.2 }}
+      {...props}
+    >
+      <span className="capitalize">
+        {accessorKey.replace(/([a-z])([A-Z])/g, '$1 $2')}
+      </span>
+      {
+        <BasicTooltip label="Remove column">
+          <Button
+            size="icon"
+            variant="ghost"
+            aria-label="Remove column"
+            className="size-fit p-1 text-muted-foreground hover:bg-transparent hover:text-foreground"
+            onClick={handleClick}
+          >
+            <X aria-hidden="true" />
+          </Button>
+        </BasicTooltip>
+      }
+    </motion.div>
   );
 }

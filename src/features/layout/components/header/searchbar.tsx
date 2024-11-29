@@ -1,6 +1,6 @@
+import BasicTooltip from '@/components/basic-tooltip';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { TooltipWrapper } from '@/components/ui/tooltip';
 import { SearchIcon } from 'lucide-react';
 
 export default function SearchBar() {
@@ -13,7 +13,7 @@ export default function SearchBar() {
         placeholder="Search..."
         aria-label="Search through site content"
       />
-      <TooltipWrapper label="Search">
+      <BasicTooltip label="Search">
         <Button
           id="search-button"
           size="icon"
@@ -23,7 +23,7 @@ export default function SearchBar() {
         >
           <SearchIcon aria-hidden="true" />
         </Button>
-      </TooltipWrapper>
+      </BasicTooltip>
     </>
   );
 }

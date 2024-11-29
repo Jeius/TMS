@@ -1,5 +1,6 @@
 'use client';
 
+import { TooltipProvider } from '@/components/ui/tooltip';
 import {
   isServer,
   QueryClient,
@@ -47,7 +48,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

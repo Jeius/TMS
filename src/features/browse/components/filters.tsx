@@ -50,17 +50,17 @@ export default function Filters() {
 
   return (
     <div className="flex flex-col items-start gap-2">
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <Input placeholder="Filter by keywords..." />
         {colFilterState.length ? (
           <Button
             variant="destructive"
-            size="sm"
             aria-label="Remove Filters"
             title="Remove Filters"
             onClick={clearFilters}
+            className="size-fit p-2"
           >
-            <FilterX />
+            <FilterX aria-hidden="true" className="shrink-0" />
           </Button>
         ) : null}
       </div>

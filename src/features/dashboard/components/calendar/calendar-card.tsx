@@ -21,11 +21,13 @@ export default function CalendarCard({
   const baseFontSize = useBaseFontSize();
 
   useEffect(() => {
-    const toRem = (value: number) => value / baseFontSize;
-    const toNumber = (value: string) => {
+    function toRem(value: number) {
+      return value / baseFontSize;
+    }
+    function toNumber(value: string) {
       const [result] = value.split('rem');
       return parseFloat(result);
-    };
+    }
 
     if (toRem(windowWidth) >= toNumber(Screens['2xl'])) {
       if (!open) setOpen(true);

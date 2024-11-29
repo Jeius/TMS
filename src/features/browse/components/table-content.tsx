@@ -1,5 +1,6 @@
 'use client';
 
+import BasicTooltip from '@/components/basic-tooltip';
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
@@ -133,26 +134,32 @@ export default function ThesesTableContent() {
                 animate={{ x: 0, opacity: 1 }}
                 className="sticky top-24 flex flex-col items-end justify-between space-y-5 pr-5"
               >
-                <Button
-                  size="icon"
-                  variant="outline"
-                  aria-disabled={!canScrollLeft}
-                  disabled={!canScrollLeft}
-                  className="pointer-events-auto size-fit rounded-full border-secondary p-2 text-secondary hover:bg-secondary hover:text-secondary-foreground [&_svg]:size-5"
-                  onClick={scrollLeft}
-                >
-                  <ArrowLeft />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  aria-disabled={!canScrollRight}
-                  disabled={!canScrollRight}
-                  className="pointer-events-auto size-fit rounded-full border-secondary p-2 text-secondary hover:bg-secondary hover:text-secondary-foreground [&_svg]:size-5"
-                  onClick={scrollRight}
-                >
-                  <ArrowRight />
-                </Button>
+                <BasicTooltip label="Scroll Left">
+                  <Button
+                    size="icon"
+                    aria-label="Scroll Left"
+                    variant="outline"
+                    aria-disabled={!canScrollLeft}
+                    disabled={!canScrollLeft}
+                    className="pointer-events-auto size-fit rounded-full border-secondary p-2 text-secondary hover:bg-secondary hover:text-secondary-foreground [&_svg]:size-5"
+                    onClick={scrollLeft}
+                  >
+                    <ArrowLeft aria-hidden="true" />
+                  </Button>
+                </BasicTooltip>
+                <BasicTooltip label="Scroll Right">
+                  <Button
+                    size="icon"
+                    aria-label="Scroll Right"
+                    variant="outline"
+                    aria-disabled={!canScrollRight}
+                    disabled={!canScrollRight}
+                    className="pointer-events-auto size-fit rounded-full border-secondary p-2 text-secondary hover:bg-secondary hover:text-secondary-foreground [&_svg]:size-5"
+                    onClick={scrollRight}
+                  >
+                    <ArrowRight aria-hidden="true" />
+                  </Button>
+                </BasicTooltip>
               </motion.div>
             </div>
           </motion.div>

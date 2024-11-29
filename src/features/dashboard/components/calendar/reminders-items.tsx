@@ -1,5 +1,6 @@
 'use client';
 
+import BasicTooltip from '@/components/basic-tooltip';
 import AlertDialogWrapper from '@/components/dialog-wrapper';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -16,7 +17,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipWrapper,
 } from '@/components/ui/tooltip';
 import { RemindersFormSchema } from '@/features/dashboard/lib/schema';
 import { toast } from '@/lib/hooks/use-toast';
@@ -46,10 +46,10 @@ export default function RemindersItems() {
 
   const [allChecked, setAllChecked] = useState(false);
 
+  const currentReminders = form.watch('reminders');
   useEffect(() => {
-    const currentReminders = form.watch('reminders');
     setAllChecked(currentReminders.length === REMINDERS.length);
-  }, [form]);
+  }, [currentReminders]);
 
   const handleMarkDone = () => {
     const selectedReminders = form.getValues('reminders');
@@ -143,7 +143,7 @@ export default function RemindersItems() {
           )}
         />
         <AnimatePresence>
-          {form.watch('reminders').length !== 0 && (
+          {currentReminders.length !== 0 && (
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -162,19 +162,19 @@ export default function RemindersItems() {
                 Mark as done
               </Button>
               <div className="flex space-x-1">
-                <TooltipWrapper
+                <BasicTooltip
                   label={allChecked ? 'Unselect all' : 'Select all'}
                 >
                   <Button
                     aria-label={allChecked ? 'Unselect all' : 'Select all'}
                     variant={allChecked ? 'default' : 'ghost'}
-                    className="data size-fit p-2"
+                    className="size-fit p-2"
                     type="button"
                     onClick={toggleSelectAll}
                   >
-                    <CheckCheck aria-hidden="true" className="size-4" />
+                    <CheckCheck aria-hidden="true" />
                   </Button>
-                </TooltipWrapper>
+                </BasicTooltip>
 
                 <Tooltip>
                   <AlertDialogWrapper
@@ -188,11 +188,11 @@ export default function RemindersItems() {
                         className="size-fit p-2"
                         type="button"
                       >
-                        <Trash2 aria-hidden="true" className="size-4" />
+                        <Trash2 aria-hidden="true" />
                       </Button>
                     </TooltipTrigger>
                   </AlertDialogWrapper>
-                  <TooltipContent className="mr-5">
+                  <TooltipContent>
                     <span>Delete</span>
                   </TooltipContent>
                 </Tooltip>

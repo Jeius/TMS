@@ -61,7 +61,7 @@ export default function useThesisTable() {
 
   // Use global state for persistent table configuration
   const [globalTableState, setGlobalTableState] = useGlobalState(
-    'thesesTable',
+    'theses-table',
     table
   );
 

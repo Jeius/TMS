@@ -1,3 +1,4 @@
+import BasicTooltip from '@/components/basic-tooltip';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -5,7 +6,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { TooltipWrapper } from '@/components/ui/tooltip';
 import { Bell } from 'lucide-react';
 import Link from 'next/link';
 
@@ -30,7 +30,7 @@ const notifications = [
 export default function NotificationMenu() {
   return (
     <Popover>
-      <TooltipWrapper label="Notifications">
+      <BasicTooltip label="Notifications">
         <PopoverTrigger asChild>
           <Button
             id="notification-button"
@@ -42,10 +42,9 @@ export default function NotificationMenu() {
             <Bell aria-hidden="true" />
           </Button>
         </PopoverTrigger>
-      </TooltipWrapper>
+      </BasicTooltip>
       <PopoverContent
-        id="user-menu"
-        align="end"
+        id="notification-menu"
         className="p-2"
         onCloseAutoFocus={(e) => e.preventDefault()}
       >

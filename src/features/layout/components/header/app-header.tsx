@@ -1,6 +1,5 @@
 'use client';
 
-import { TooltipProvider } from '@/components/ui/tooltip';
 import NavigationMenu from '@/features/layout/components/header/navigation-menu';
 import useAuthListener from '@/lib/hooks/use-auth-listener';
 import Image from 'next/image';
@@ -36,30 +35,28 @@ export default function AppHeader() {
   const { isMounted, isSignedIn } = useAuthListener();
 
   return (
-    <TooltipProvider>
-      <header
-        id="app-header"
-        className="sticky inset-x-0 top-0 z-50 border-b bg-card/70 p-2 shadow backdrop-blur-lg lg:px-5"
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex grow items-center">
-            <NavigationMenu />
-            <LogoTitle />
-          </div>
-          <div className="flex items-center space-x-1">
-            <SearchBar />
-            {isMounted &&
-              (isSignedIn ? (
-                <>
-                  <NotificationMenu />
-                  <UserMenu />
-                </>
-              ) : (
-                <AuthButtons />
-              ))}
-          </div>
+    <header
+      id="app-header"
+      className="sticky inset-x-0 top-0 z-50 border-b bg-card/70 p-2 shadow backdrop-blur-lg lg:px-5"
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex grow items-center">
+          <NavigationMenu />
+          <LogoTitle />
         </div>
-      </header>
-    </TooltipProvider>
+        <div className="flex items-center space-x-1">
+          <SearchBar />
+          {isMounted &&
+            (isSignedIn ? (
+              <>
+                <NotificationMenu />
+                <UserMenu />
+              </>
+            ) : (
+              <AuthButtons />
+            ))}
+        </div>
+      </div>
+    </header>
   );
 }

@@ -59,14 +59,14 @@ function MenuButton() {
           <Button
             size="icon"
             variant="ghost"
-            aria-label="Open Menu"
+            aria-label="Open Navigation Menu"
             className="p-0 hover:bg-transparent"
           >
             <Menu aria-hidden="true" />
           </Button>
         </SheetTrigger>
       </TooltipTrigger>
-      <TooltipContent align="start">
+      <TooltipContent>
         <p>Menu</p>
       </TooltipContent>
     </Tooltip>
