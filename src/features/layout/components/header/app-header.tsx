@@ -1,7 +1,7 @@
 'use client';
 
+import { useAuth } from '@/context/auth-provider';
 import NavigationMenu from '@/features/layout/components/header/navigation-menu';
-import useAuthListener from '@/lib/hooks/use-auth-listener';
 import Image from 'next/image';
 import Link from 'next/link';
 import AuthButtons from './auth-buttons';
@@ -32,7 +32,7 @@ function LogoTitle() {
 }
 
 export default function AppHeader() {
-  const { isMounted, isSignedIn } = useAuthListener();
+  const { isMounted, isSignedIn } = useAuth();
 
   return (
     <header

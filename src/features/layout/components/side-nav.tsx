@@ -1,9 +1,9 @@
 'use client';
 
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/context/auth-provider';
 import NavLinks from '@/features/layout/components/nav-links';
 import { NAVROUTES } from '@/lib/constants';
-import useAuthListener from '@/lib/hooks/use-auth-listener';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -14,7 +14,7 @@ export default function SideNav() {
   const [open, setOpen] = useState(false);
   const [width, setWidth] = useState<string>();
   const pathname = usePathname();
-  const { isSignedIn } = useAuthListener();
+  const { isSignedIn } = useAuth();
 
   const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 

@@ -3,7 +3,7 @@
 import ImagesReveal, { ImageCard } from '@/components/animated/image-reveal';
 import InteractiveGrid from '@/components/animated/interactive-grid';
 import { Button } from '@/components/ui/button';
-import useAuthListener from '@/lib/hooks/use-auth-listener';
+import { useAuth } from '@/context/auth-provider';
 import { SearchIcon } from 'lucide-react';
 import Link from 'next/link';
 import ImageCarousel from './image-carousel';
@@ -20,7 +20,7 @@ const images: ImageCard[] = [
 ];
 
 export default function Hero() {
-  const { isSignedIn, isMounted } = useAuthListener();
+  const { isSignedIn, isMounted } = useAuth();
   return (
     <section id="hero" aria-labelledby="hero-heading" className="scroll-mt-24">
       <InteractiveGrid>

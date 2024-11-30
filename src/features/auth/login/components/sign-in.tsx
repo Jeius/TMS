@@ -27,6 +27,7 @@ export default function SignIn() {
   const [message, setMessage] = useState<Message>();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect_to');
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -60,8 +61,6 @@ export default function SignIn() {
       setStatus('success');
       setMessage({ success: 'Signed in successfully' });
       await wait(100);
-
-      const redirectTo = searchParams.get('redirect_to');
 
       if (redirectTo && redirectTo !== '/') {
         router.replace(redirectTo);

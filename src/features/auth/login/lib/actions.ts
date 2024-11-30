@@ -5,7 +5,32 @@ import { AuthActionResponse } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 import * as z from 'zod';
-import { SignUpSchema } from '../lib/schema';
+import { SignInSchema, SignUpSchema } from './schema';
+
+export async function signInAction(
+  data: z.infer<typeof SignInSchema>
+): Promise<AuthActionResponse> {
+  const result = SignInSchema.safeParse(data);
+
+  if (!result.success) {
+    const errors = result.error.flatten().fieldErrors;
+    console.log('Validation errors:', errors);
+    return { error: 'Invalid form submission' };
+  }
+
+  const { email, password } = result.data;
+  const supabase = await supabaseServerClient();
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) return { error: error.name, details: error.message };
+
+  revalidatePath('/');
+  return { success: 'Signed in succesfully' };
+}
 
 export async function signUpAction(
   data: z.infer<typeof SignUpSchema>

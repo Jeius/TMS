@@ -12,9 +12,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { useAuth } from '@/context/auth-provider';
 import NavLinks from '@/features/layout/components/nav-links';
 import { NAVROUTES } from '@/lib/constants';
-import useAuthListener from '@/lib/hooks/use-auth-listener';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -62,7 +62,7 @@ function MenuButton() {
 export default function NavigationMenu() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const { isSignedIn } = useAuthListener();
+  const { isSignedIn } = useAuth();
   const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
   return (

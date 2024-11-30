@@ -17,8 +17,8 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { signUpAction } from '../lib/actions';
 import { SignUpSchema } from '../lib/schema';
-import { signUpAction } from '../server/actions';
 
 export default function SignUp() {
   const [status, setStatus] = useState<Status | undefined>();

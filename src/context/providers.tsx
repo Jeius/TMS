@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
+import { AuthProvider } from './auth-provider';
 
 function makeQueryClient() {
   return new QueryClient({
@@ -47,9 +48,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <TooltipProvider delayDuration={500}>{children}</TooltipProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <TooltipProvider delayDuration={500}>{children}</TooltipProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
