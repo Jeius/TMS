@@ -11,15 +11,15 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
-import { supabaseBrowserClient } from '@/lib/supabase/client';
+import { useAuth } from '@/context/auth-provider';
 import { Message } from '@/lib/types';
-import { wait } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { signInAction } from '../lib/actions';
 import { SignInSchema } from '../lib/schema';
 
 export default function SignIn() {
@@ -28,6 +28,7 @@ export default function SignIn() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect_to');
+  const { supabase } = useAuth();
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -37,38 +38,27 @@ export default function SignIn() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof SignInSchema>) => {
+  async function onSubmit(data: z.infer<typeof SignInSchema>) {
     setStatus('loading');
-    const result = SignInSchema.safeParse(data);
+    const result = await signInAction(data);
 
-    if (!result.success) {
-      setMessage({ error: 'Invalid form submission' });
-      return;
-    }
-
-    const { email, password } = result.data;
-    const supabase = supabaseBrowserClient();
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
+    if (result.error) {
       setStatus('failed');
-      setMessage({ error: error.message });
+      setMessage({ error: result.details });
     } else {
       setStatus('success');
-      setMessage({ success: 'Signed in successfully' });
-      await wait(100);
+      setMessage({ success: result.details });
+      await supabase.auth.refreshSession();
 
       if (redirectTo && redirectTo !== '/') {
-        router.replace(redirectTo);
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.delete('redirect_to');
+        router.replace(`${redirectTo}?${newSearchParams}`);
       } else {
         router.replace('/dashboard');
       }
     }
-  };
+  }
 
   const emailValue = form.watch('email');
   const passwordValue = form.watch('password');

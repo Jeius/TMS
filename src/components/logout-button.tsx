@@ -1,19 +1,21 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/auth-provider';
 import { useToast } from '@/lib/hooks/use-toast';
-import { supabaseBrowserClient } from '@/lib/supabase/client';
 import { LogOutIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ComponentPropsWithRef } from 'react';
 
 export default function LogoutButton(
-  props: React.ComponentPropsWithRef<typeof Button>
+  props: ComponentPropsWithRef<typeof Button>
 ) {
   const router = useRouter();
   const { toast } = useToast();
+  const { supabase } = useAuth();
 
   const handleLogout = async () => {
-    const { error } = await supabaseBrowserClient().auth.signOut();
+    const { error } = await supabase.auth.signOut();
     if (error) {
       toast({
         title: 'Error signing out',

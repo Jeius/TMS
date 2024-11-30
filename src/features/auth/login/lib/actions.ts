@@ -29,7 +29,7 @@ export async function signInAction(
   if (error) return { error: error.name, details: error.message };
 
   revalidatePath('/');
-  return { success: 'Signed in succesfully' };
+  return { success: 'Success', details: 'Signed in succesfully' };
 }
 
 export async function signUpAction(

@@ -12,23 +12,26 @@ import {
   useState,
 } from 'react';
 
+const supabase = supabaseBrowserClient();
+
 type ContextValue = {
   isSignedIn: boolean;
   isMounted: boolean;
   user: User | null;
+  supabase: typeof supabase;
 };
 
 const AuthContext = createContext<ContextValue>({
   isSignedIn: false,
   isMounted: false,
   user: null,
+  supabase,
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const supabase = supabaseBrowserClient();
 
   useEffect(() => {
     async function checkUser() {
@@ -44,7 +47,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       if (event === 'SIGNED_OUT') {
         setIsSignedIn(false);
         setUser(null);
-      } else if (event === 'SIGNED_IN') {
+      } else {
         checkUser();
       }
     }, 300);
@@ -57,12 +60,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     return () => {
       authListener?.subscription.unsubscribe();
-      debouncedSetAuthState.cancel(); // Cancel debounce on cleanup
+      debouncedSetAuthState.cancel();
     };
-  }, [supabase]);
+  }, []);
 
   const contextValue: ContextValue = useMemo(
-    () => ({ isSignedIn, isMounted, user }),
+    () => ({ isSignedIn, isMounted, user, supabase }),
     [isSignedIn, isMounted, user]
   );
 

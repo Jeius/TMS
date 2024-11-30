@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 
 export default async function Browse() {
   return (
-    <main id="browse-page" className="pb-4 lg:pl-16">
+    <main id="browse-page" className="min-h-[85vh] p-5 sm:p-10 lg:pl-16">
       <div className="relative m-auto max-w-none px-3 py-5 sm:px-5">
         <div className="mb-28 min-h-[85vh]">
           <Suspense fallback={<TableSkeleton />}>
