@@ -36,25 +36,26 @@ export default function WelcomeCard() {
           <div key={label} className="flex items-center space-x-1">
             <Button
               asChild
-              variant="link"
-              size="sm"
-              className="flex size-min items-center space-x-2 p-1 font-semibold text-card-foreground"
+              variant="text"
+              size="text"
+              className="text-xs font-semibold"
             >
               <Link href={href}>
-                <span>{label}</span>
-                <Icon aria-hidden="true" focusable="false" size="1rem" />
+                {label}
+                <Icon aria-hidden="true" />
               </Link>
             </Button>
 
             <Separator
               orientation="vertical"
-              className="h-4 bg-primary-foreground/60"
+              className="h-4 bg-foreground/60"
             />
           </div>
         ))}
         <LogoutButton
-          variant="link"
-          className="flex size-min items-center space-x-2 p-1 font-semibold text-card-foreground"
+          variant="text"
+          size="text"
+          className="text-xs font-semibold"
         />
       </CardFooter>
     </Card>

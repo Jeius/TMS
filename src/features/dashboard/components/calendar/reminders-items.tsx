@@ -149,13 +149,12 @@ export default function RemindersItems() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 10, opacity: 0 }}
               transition={{ type: 'tween', duration: 0.1 }}
-              className="absolute inset-x-0 bottom-0 flex items-center justify-between"
+              className="absolute inset-x-0 bottom-0 flex items-end justify-between"
             >
               <Button
                 aria-label="Mark as done"
-                variant="link"
-                size="sm"
-                className="text-card-foreground/80 hover:text-card-foreground hover:no-underline"
+                variant="text"
+                size="text"
                 type="button"
                 onClick={handleMarkDone}
               >
@@ -179,12 +178,14 @@ export default function RemindersItems() {
                 <Tooltip>
                   <AlertDialogWrapper
                     dialogTitle="Confirm Delete"
+                    confirmLabel="Delete"
+                    dialogDescription={`Are you sure you want to delete ${form.getValues('reminders').join(', ')}?`}
                     onConfirm={handleDeleteSelected}
                   >
                     <TooltipTrigger asChild>
                       <Button
                         aria-label="Delete"
-                        variant="ghost"
+                        variant="destructive"
                         className="size-fit p-2"
                         type="button"
                       >

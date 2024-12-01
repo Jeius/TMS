@@ -50,17 +50,17 @@ export default function UserMenu() {
               size="sm"
               variant="ghost"
               aria-label={label}
-              className="flex items-center justify-between space-x-3"
+              className="justify-between text-xs font-semibold"
             >
               <Link href={href}>
-                <span>{label}</span>
-                <Icon size={16} />
+                {label}
+                <Icon aria-hidden="true" />
               </Link>
             </Button>
           ))}
           <LogoutButton
             variant="ghost"
-            className="flex items-center justify-between space-x-3"
+            className="justify-between text-xs font-semibold"
           />
         </div>
       </PopoverContent>

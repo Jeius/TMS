@@ -11,8 +11,8 @@ export default async function WelcomeHeader() {
       >
         Welcome, {userProfile ? (userProfile.first_name ?? 'User') : 'User'}
       </CardTitle>
-      <CardDescription>
-        {userProfile?.role && <span>Role: {userProfile.role.name}</span>}
+      <CardDescription className="font-semibold text-foreground">
+        {userProfile?.role && `Role: ${userProfile.role.name}`}
       </CardDescription>
     </CardHeader>
   );

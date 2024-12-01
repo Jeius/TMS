@@ -27,7 +27,7 @@ export default function LogoutButton(
   };
   return (
     <Button size="sm" aria-label="Sign out" onClick={handleLogout} {...props}>
-      <span>Sign out</span>
+      Sign out
       <LogOutIcon aria-hidden="true" focusable="false" size="1rem" />
     </Button>
   );

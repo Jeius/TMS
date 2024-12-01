@@ -23,7 +23,7 @@ export default function Footer() {
           <ContactUs />
           <Legal />
         </div>
-        <div className="text-pretty py-4 pt-0 text-sm leading-relaxed text-foreground/70">
+        <div className="text-pretty py-4 pt-0 text-sm leading-relaxed text-foreground/80 dark:text-foreground/65">
           <Copyrights />
           <div className="flex flex-col justify-between gap-4 sm:flex-row">
             <Social />

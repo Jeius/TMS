@@ -19,7 +19,7 @@ export default function SideNav() {
   const isNavigationRoute = Object.values(NAVROUTES).includes(pathname);
 
   useEffect(() => {
-    const newWidth = open ? '15rem' : '4.2rem';
+    const newWidth = open ? '15rem' : '4rem';
     setWidth(newWidth);
   }, [open]);
 
@@ -32,7 +32,7 @@ export default function SideNav() {
         aria-label="Side Navigation"
         className={cn(
           'fixed inset-y-0 left-0 z-10 hidden border-r bg-card/60 lg:block',
-          'overflow-x-hidden px-3 pb-10 pt-20 shadow-md backdrop-blur-lg'
+          'overflow-x-hidden px-2 pb-10 pt-20 shadow-md backdrop-blur-lg'
         )}
         initial={{ x: -60, opacity: 0 }}
         animate={{ x: 0, opacity: 1, width: width }}

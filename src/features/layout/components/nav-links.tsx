@@ -44,35 +44,33 @@ export default function NavLinks({
   return (
     <>
       <h2 className="sr-only">Main Navigation</h2>
-      <ScrollArea className="flex w-full grow flex-col items-center justify-start">
-        <nav aria-label="Navigation links">
+      <ScrollArea className="w-full" role="navigation">
+        <ul aria-label="Navigation links" className="w-full space-y-1 p-1">
           {navLinks.map((linkGroup, groupIndex) => (
             <React.Fragment key={`link-group-${groupIndex}`}>
-              <ul className="space-y-1">
-                {linkGroup.map(({ label, icon: Icon, href }) => (
-                  <li key={href}>
-                    <Button
-                      asChild
-                      size="sm"
-                      aria-expanded={open}
-                      aria-label={`Go to ${label}`}
-                      variant={isPathName(href) ? 'default' : 'ghost'}
-                      data-page={isPathName(href)}
-                      id={`${label.toLowerCase().replace(/ /g, '-')}`}
-                      className="w-full justify-start data-[page=true]:text-secondary"
-                      onClick={handleClick}
+              {linkGroup.map(({ label, icon: Icon, href }) => (
+                <li key={href}>
+                  <Button
+                    asChild
+                    size="sm"
+                    aria-expanded={open}
+                    aria-label={`Go to ${label}`}
+                    variant={isPathName(href) ? 'default' : 'ghost'}
+                    data-page={isPathName(href)}
+                    id={`${label.toLowerCase().replace(/ /g, '-')}`}
+                    className="w-full justify-start data-[page=true]:text-secondary"
+                    onClick={handleClick}
+                  >
+                    <Link
+                      href={href}
+                      aria-current={isPathName(href) ? 'page' : undefined}
                     >
-                      <Link
-                        href={href}
-                        aria-current={isPathName(href) ? 'page' : undefined}
-                      >
-                        <Icon aria-hidden="true" />
-                        {open && label}
-                      </Link>
-                    </Button>
-                  </li>
-                ))}
-              </ul>
+                      <Icon aria-hidden="true" />
+                      {open && label}
+                    </Link>
+                  </Button>
+                </li>
+              ))}
 
               {groupIndex !== navLinks.length - 1 && (
                 <Separator
@@ -83,7 +81,7 @@ export default function NavLinks({
               )}
             </React.Fragment>
           ))}
-        </nav>
+        </ul>
       </ScrollArea>
     </>
   );

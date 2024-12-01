@@ -70,7 +70,7 @@ export default function CalendarView({
             </BasicTooltip>
           )}
         </CardHeader>
-        <div className="flex grow flex-col justify-between">
+        <div className="flex grow flex-col justify-between gap-2">
           <CardContent className="p-0">
             <Calendar
               mode="single"
@@ -84,18 +84,16 @@ export default function CalendarView({
           <CardFooter className="flex justify-between p-0">
             <Button
               id="go-to-today"
-              variant="link"
-              size="sm"
-              className="text-card-foreground/80 hover:text-card-foreground hover:no-underline"
+              variant="text"
+              size="text"
               onClick={() => setMonth(today)}
             >
               Go to Today
             </Button>
             <Button
               id="go-to-selected"
-              variant="link"
-              size="sm"
-              className="text-card-foreground/80 hover:text-card-foreground hover:no-underline"
+              variant="text"
+              size="text"
               onClick={() => setMonth(date)}
             >
               Go to Selected

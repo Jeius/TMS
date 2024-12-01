@@ -1,5 +1,5 @@
 import useWindowSize from '@/lib/hooks/use-window-size';
-import React from 'react';
+import { useMemo } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +30,7 @@ export default function AlertDialogWrapper({
   children,
 }: AlertDialogWrapperProps) {
   const { width } = useWindowSize();
-  const getMaxWidth = React.useMemo(() => Math.min(width * 0.7, 512), [width]);
+  const getMaxWidth = useMemo(() => Math.min(width * 0.7, 512), [width]);
 
   const handleConfirm = () => {
     onConfirm?.();
