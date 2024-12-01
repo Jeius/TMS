@@ -70,7 +70,7 @@ export default function CalendarView({
             </BasicTooltip>
           )}
         </CardHeader>
-        <div className="flex grow flex-col justify-between space-y-4">
+        <div className="flex grow flex-col justify-between">
           <CardContent className="p-0">
             <Calendar
               mode="single"

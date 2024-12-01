@@ -46,7 +46,7 @@ export default function CalendarCard({
   return (
     <Card
       id="calendar/reminders-card"
-      className={cn('flex h-[28.125rem] w-full overflow-hidden', className)}
+      className={cn('flex h-[27rem] w-full overflow-hidden', className)}
       {...props}
     >
       <AnimatePresence initial={false}>

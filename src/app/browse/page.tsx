@@ -4,13 +4,11 @@ import React, { Suspense } from 'react';
 
 export default async function Browse() {
   return (
-    <main id="browse-page" className="min-h-[85vh] p-5 sm:p-10 lg:pl-16">
-      <div className="relative m-auto max-w-none px-3 py-5 sm:px-5">
-        <div className="mb-28 min-h-[85vh]">
-          <Suspense fallback={<TableSkeleton />}>
-            <ThesesTable />
-          </Suspense>
-        </div>
+    <main id="browse-page" className="mb-28 min-h-[85vh] max-w-none lg:pl-16">
+      <div className="relative m-auto p-4 sm:p-5 lg:p-8">
+        <Suspense fallback={<TableSkeleton />}>
+          <ThesesTable />
+        </Suspense>
       </div>
     </main>
   );

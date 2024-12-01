@@ -8,13 +8,13 @@ export default function Dashboard() {
   return (
     <main
       id="user-dashboard"
-      className="min-h-[85vh] p-5 lg:pl-16"
+      className="min-h-[85vh] lg:pl-16"
       aria-label="User Dashboard"
     >
-      <div className="mx-auto flex justify-between py-5">
+      <div className="mx-auto flex justify-between gap-5 p-4 sm:p-5 lg:px-8 lg:py-0">
         <section
           aria-labelledby="dashboard-welcome"
-          className="mx-auto flex w-fit max-w-full flex-col items-center space-y-16 px-3 sm:px-5"
+          className="mx-auto mb-28 flex w-fit max-w-full flex-col items-center gap-y-16 lg:py-8"
         >
           <WelcomeCard />
 
@@ -71,13 +71,13 @@ export default function Dashboard() {
           <h2 id="sidebar-heading" className="sr-only">
             Sidebar
           </h2>
-          <div className="sticky top-[5.3rem] ml-auto w-[22rem] px-2 2xl:w-[40rem]">
+          <div className="sticky top-16 mb-8 ml-auto w-[22rem] 2xl:w-[36rem] 3xl:w-[45rem]">
             <ScrollArea
               id="sidebar-scroll-area"
-              className="h-[calc(100vh-5.4rem)] pr-3"
+              className="h-[calc(100vh-4.5rem)]"
               aria-label="Sidebar Scroll Area"
             >
-              <div className="flex flex-col space-y-5">
+              <div className="mt-8 flex flex-col space-y-5 px-3">
                 <section aria-labelledby="announcements-heading">
                   <Announcements />
                 </section>

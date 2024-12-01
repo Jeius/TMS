@@ -37,7 +37,7 @@ export default function AppHeader() {
   return (
     <header
       id="app-header"
-      className="sticky inset-x-0 top-0 z-50 border-b bg-card/70 p-2 shadow backdrop-blur-lg lg:px-5"
+      className="sticky inset-x-0 top-0 z-50 h-16 border-b bg-card/70 p-2 shadow backdrop-blur-lg lg:px-5"
     >
       <div className="flex items-center justify-between">
         <div className="flex grow items-center gap-1">
