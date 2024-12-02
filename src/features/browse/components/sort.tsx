@@ -41,7 +41,7 @@ export default function SortOptions() {
           <ChevronsUpDown />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="z-10 w-fit p-1 sm:w-52 sm:p-2">
+      <PopoverContent className="z-10 w-fit p-1 sm:w-52 sm:p-2">
         <h3 className="sr-only">Select a sort option</h3>
         <ul>
           {SORT_VALUES.map(({ label, id }) => (

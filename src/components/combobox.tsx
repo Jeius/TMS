@@ -49,9 +49,9 @@ export function Combobox({
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [searchTerm, setSearchTerm] = useState('');
   const { ref: loaderRef, inView } = useInView();
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const childRef = useRef<HTMLDivElement>(null);
-  const childSize = useElementSize(childRef.current);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const contentSize = useElementSize(contentRef.current);
   const placeholder = id;
 
   const { data, status, fetchNextPage, isFetchingNextPage, refetch } =
@@ -75,14 +75,21 @@ export function Combobox({
   function handleOpenChange(isOpen: boolean) {
     setOpen(isOpen);
 
-    document.body.scrollBy({ top: 300, behavior: 'smooth' });
-
     if (isOpen && triggerRef.current) {
-      triggerRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center', // Adjusts how close the element should be to the viewport
-        inline: 'center',
-      });
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const contentHeight = Math.min(
+        (contentSize?.height ?? Infinity) + 37,
+        245
+      );
+      const availableSpace = window.innerHeight - triggerRect.bottom;
+      const overlap = contentHeight - availableSpace;
+
+      if (overlap > 0) {
+        window.scrollBy({
+          top: overlap + 16, // Adding a small buffer for padding.
+          behavior: 'smooth',
+        });
+      }
     }
   }
 
@@ -116,6 +123,7 @@ export function Combobox({
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
+          ref={triggerRef}
           variant={variant}
           role="combobox"
           aria-expanded={open}
@@ -161,12 +169,12 @@ export function Combobox({
         </div>
         <ScrollArea
           style={{
-            height: childSize
-              ? `min(${childSize.height / 16}rem, 13rem)`
+            height: contentSize
+              ? `min(${contentSize.height / 16}rem, 13rem)`
               : undefined,
           }}
         >
-          <div ref={childRef}>
+          <div ref={contentRef}>
             {status === 'pending' ? (
               <div className="h-fit w-full p-2">
                 <Spinner size="sm" />

@@ -60,7 +60,7 @@ function PopoverType({ columns, onClick: handleClick }: VisibilityTypeProps) {
           Add Columns
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="z-10 w-fit p-2 sm:w-52">
+      <PopoverContent className="z-10 w-fit p-2 sm:w-52">
         <h3 className="sr-only">Select columns to add</h3>
         <ul className="flex flex-col">
           {columns?.length ? (
