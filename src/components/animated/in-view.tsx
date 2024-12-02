@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  HTMLMotionProps,
   motion,
   Transition,
   useInView,
@@ -9,7 +10,7 @@ import {
 } from 'framer-motion';
 import { ReactNode, useRef } from 'react';
 
-interface InViewProps {
+interface InViewProps extends HTMLMotionProps<'div'> {
   children: ReactNode;
   variants?: {
     hidden: Variant;
@@ -29,6 +30,7 @@ export function InView({
   variants = defaultVariants,
   transition,
   viewOptions,
+  ...props
 }: InViewProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, viewOptions);
@@ -40,6 +42,7 @@ export function InView({
       animate={isInView ? 'visible' : 'hidden'}
       variants={variants}
       transition={transition}
+      {...props}
     >
       {children}
     </motion.div>

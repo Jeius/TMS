@@ -22,7 +22,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
       <CarouselContent className="items-center">
         {images.map(({ src, alt }) => (
           <CarouselItem key={alt} className="pb-4">
-            <div className="rounded-xl p-1.5 shadow-md backdrop-blur-md">
+            <div className="rounded-xl shadow-md backdrop-blur-md">
               <Image
                 alt={alt}
                 src={src}
