@@ -4,6 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useElementSize } from '@/lib/hooks/use-element-size';
 import { cn } from '@/lib/utils';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -11,8 +12,9 @@ import { motion } from 'framer-motion';
 import { debounce } from 'lodash';
 import { Check, ChevronsDownUpIcon, ChevronsUpDownIcon } from 'lucide-react';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { Input } from './ui/input';
 import { ScrollArea } from './ui/scroll-area';
 import { Spinner } from './ui/spinner';
 
@@ -47,6 +49,8 @@ export function Combobox({
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [searchTerm, setSearchTerm] = useState('');
   const { ref: loaderRef, inView } = useInView();
+  const childRef = useRef<HTMLDivElement>(null);
+  const childSize = useElementSize(childRef.current);
   const placeholder = id;
 
   const { data, status, fetchNextPage, isFetchingNextPage, refetch } =
@@ -129,69 +133,75 @@ export function Combobox({
           </motion.span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="z-40 w-min min-w-36 p-0">
+      <PopoverContent className="z-40 w-min min-w-40 p-0">
         <div className="flex items-center border-b px-3">
-          <MagnifyingGlassIcon className="mr-2 size-4 shrink-0 opacity-50" />
-          <input
+          <MagnifyingGlassIcon className="size-4 shrink-0 opacity-50" />
+          <Input
             defaultValue={searchTerm}
+            type="search"
             onChange={handleSearchChange}
             placeholder={`Search ${placeholder.toLowerCase()}...`}
-            className={cn(
-              'flex h-10 w-full rounded-md bg-transparent py-3 text-xs font-semibold outline-none',
-              'placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
-            )}
+            className="flex w-full border-none px-2 text-xs shadow-none focus-visible:ring-0"
           />
         </div>
-        <ScrollArea className="h-52">
-          {status === 'pending' ? (
-            <div className="h-fit w-full p-2">
-              <Spinner size="sm" />
-            </div>
-          ) : status === 'error' ? (
-            <p className="w-full py-4 text-center text-xs">
-              Error fetching from database
-            </p>
-          ) : (
-            <ul className="flex flex-col space-y-1 p-2">
-              {data?.pages.map(({ items, currentPage }) => (
-                <React.Fragment key={currentPage}>
-                  {items?.length
-                    ? items?.map((item) => (
-                        <li key={item}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            value={item}
-                            onClick={handleClick}
-                            className="w-full justify-start"
-                          >
-                            <Check
-                              className={cn(
-                                'mr-2 size-4',
-                                selectedValue === item
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                              )}
-                            />
-                            <span className="whitespace-nowrap text-xs font-semibold capitalize">
-                              {item}
-                            </span>
-                          </Button>
-                        </li>
-                      ))
-                    : searchTerm && (
-                        <li className="w-full py-4 text-center text-xs">
-                          No results found...
-                        </li>
-                      )}
-                </React.Fragment>
-              ))}
+        <ScrollArea
+          style={{
+            height: childSize
+              ? `min(${childSize.height / 16}rem, 13rem)`
+              : undefined,
+          }}
+        >
+          <div ref={childRef}>
+            {status === 'pending' ? (
+              <div className="h-fit w-full p-2">
+                <Spinner size="sm" />
+              </div>
+            ) : status === 'error' ? (
+              <p className="w-full py-4 text-center text-xs">
+                Error fetching from database
+              </p>
+            ) : (
+              <ul className="flex flex-col space-y-1 p-2">
+                {data?.pages.map(({ items, currentPage }) => (
+                  <React.Fragment key={currentPage}>
+                    {items?.length
+                      ? items?.map((item) => (
+                          <li key={item}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              value={item}
+                              onClick={handleClick}
+                              className="w-full justify-start"
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 size-4',
+                                  selectedValue === item
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              <span className="whitespace-nowrap text-xs font-semibold capitalize">
+                                {item}
+                              </span>
+                            </Button>
+                          </li>
+                        ))
+                      : searchTerm && (
+                          <li className="w-full py-4 text-center text-xs">
+                            No results found...
+                          </li>
+                        )}
+                  </React.Fragment>
+                ))}
 
-              <li ref={loaderRef} className="w-full">
-                <Spinner size="xs" show={isFetchingNextPage} />
-              </li>
-            </ul>
-          )}
+                <li ref={loaderRef} className="w-full">
+                  <Spinner size="xs" show={isFetchingNextPage} />
+                </li>
+              </ul>
+            )}
+          </div>
         </ScrollArea>
       </PopoverContent>
     </Popover>

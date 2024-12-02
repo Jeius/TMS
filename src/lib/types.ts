@@ -16,4 +16,9 @@ export type AuthActionResponse = {
   details?: string;
 };
 
+export type Size = {
+  width: number;
+  height: number;
+};
+
 export type Message = { success?: string } | { error?: string };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Size } from 'recharts/types/util/types';
+import { Size } from '../types';
 
 export function useElementSize(element: HTMLElement | null) {
   const [size, setWidth] = useState<Size | undefined>();
