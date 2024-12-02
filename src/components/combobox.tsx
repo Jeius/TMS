@@ -49,6 +49,7 @@ export function Combobox({
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [searchTerm, setSearchTerm] = useState('');
   const { ref: loaderRef, inView } = useInView();
+  const triggerRef = useRef<HTMLDivElement>(null);
   const childRef = useRef<HTMLDivElement>(null);
   const childSize = useElementSize(childRef.current);
   const placeholder = id;
@@ -69,6 +70,20 @@ export function Combobox({
     onValueChanged(id, value);
     setOpen(false);
     setSearchTerm('');
+  }
+
+  function handleOpenChange(isOpen: boolean) {
+    setOpen(isOpen);
+
+    document.body.scrollBy({ top: 300, behavior: 'smooth' });
+
+    if (isOpen && triggerRef.current) {
+      triggerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center', // Adjusts how close the element should be to the viewport
+        inline: 'center',
+      });
+    }
   }
 
   const handleSearchChange = debounce(
@@ -98,7 +113,7 @@ export function Combobox({
   }, [externalResetTrigger]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
           variant={variant}
