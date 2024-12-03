@@ -1,6 +1,6 @@
 'use client';
 
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Trash2 as RemoveIcon } from 'lucide-react';
@@ -81,7 +81,7 @@ export const FileUploader = forwardRef<
     const [activeIndex, setActiveIndex] = useState(-1);
     const {
       accept = {
-        'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
+        'image/*': ['.jpg', '.jpeg', '.png', '.gif', 'pdf'],
       },
       maxFiles = 1,
       maxSize = 4 * 1024 * 1024,
@@ -295,7 +295,7 @@ export const FileUploaderItem = forwardRef<
       ref={ref}
       className={cn(
         buttonVariants({ variant: 'ghost' }),
-        'relative h-6 cursor-pointer justify-between p-1',
+        'relative cursor-pointer justify-between p-1',
         className,
         isSelected ? 'bg-muted' : ''
       )}
@@ -304,17 +304,18 @@ export const FileUploaderItem = forwardRef<
       <div className="flex h-full w-full items-center gap-1.5 font-medium leading-none tracking-tight">
         {children}
       </div>
-      <button
+      <Button
         type="button"
         className={cn(
-          'absolute',
-          direction === 'rtl' ? 'left-1 top-1' : 'right-1 top-1'
+          'absolute size-fit p-1.5',
+          direction === 'rtl' ? 'left-1 top-1.5' : 'right-1 top-1.5'
         )}
+        variant="destructive"
         onClick={() => removeFileFromSet(index)}
       >
         <span className="sr-only">remove item {index}</span>
-        <RemoveIcon className="h-4 w-4 duration-200 ease-in-out hover:stroke-destructive" />
-      </button>
+        <RemoveIcon />
+      </Button>
     </div>
   );
 });

@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { TooltipContentProps } from '@radix-ui/react-tooltip';
 import { useEffect, useRef, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
@@ -11,6 +12,7 @@ type BasicTooltipProps = TooltipContentProps & {
 export default function BasicTooltip({
   label,
   children,
+  className,
   ...props
 }: BasicTooltipProps) {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -51,7 +53,11 @@ export default function BasicTooltip({
       >
         {children}
       </TooltipTrigger>
-      <TooltipContent aria-label={`${label} tooltip`} {...props}>
+      <TooltipContent
+        aria-label={`${label} tooltip`}
+        className={cn('capitalize', className)}
+        {...props}
+      >
         <p>{label}</p>
       </TooltipContent>
     </Tooltip>
