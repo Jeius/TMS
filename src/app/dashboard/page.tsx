@@ -8,7 +8,7 @@ export default function Dashboard() {
   return (
     <main
       id="user-dashboard"
-      className="min-h-[85vh] lg:pl-16"
+      className="min-h-[calc(100vh-4rem)] lg:pl-16"
       aria-label="User Dashboard"
     >
       <div className="mx-auto flex justify-between gap-5 p-4 sm:p-5 lg:px-8 lg:py-0">

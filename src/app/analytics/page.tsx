@@ -54,7 +54,7 @@ export default async function Analytics() {
   const statistics = getStatistics();
 
   return (
-    <main className="pb-4 lg:pl-16">
+    <main className="min-h-[calc(100vh-4rem)] pb-4 lg:pl-16">
       <div className="m-auto box-content flex max-w-none flex-col items-center gap-y-4 p-4 md:gap-y-5 md:p-5">
         <div className="flex w-full max-w-screen-2xl flex-col gap-2 sm:flex-row sm:justify-between">
           <h1 className="text-2xl font-bold lg:text-4xl">Overview</h1>
