@@ -50,6 +50,7 @@ export function Combobox({
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const [searchTerm, setSearchTerm] = useState('');
   const { ref: loaderRef, inView } = useInView();
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const scrollAreaContentRef = useRef<HTMLDivElement>(null);
   const scrollAreaContentSize = useElementSize(scrollAreaContentRef.current);
   const placeholder = id;
@@ -70,6 +71,27 @@ export function Combobox({
     onValueChanged(id, value);
     setOpen(false);
     setSearchTerm('');
+  }
+
+  function handleOpenChange(isOpen: boolean) {
+    setOpen(isOpen);
+
+    if (isOpen && triggerRef.current) {
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const contentHeight = Math.min(
+        (scrollAreaContentSize?.height ?? Infinity) + 37,
+        245
+      );
+      const availableSpace = window.innerHeight - triggerRect.bottom;
+      const overlap = contentHeight - availableSpace;
+
+      if (overlap > 0) {
+        window.scrollBy({
+          top: overlap + 16,
+          behavior: 'smooth',
+        });
+      }
+    }
   }
 
   const handleSearchChange = debounce(
@@ -99,9 +121,10 @@ export function Combobox({
   }, [externalResetTrigger]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
+          ref={triggerRef}
           variant={variant}
           role="combobox"
           aria-expanded={open}
