@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Badge } from '@/components/ui/badge';
@@ -258,7 +260,7 @@ const MultiSelectorTrigger = forwardRef<
               onClick={() => onValueChange(item)}
             >
               <span className="sr-only">Remove {item} option</span>
-              <RemoveIcon className="h-4 w-4 hover:stroke-destructive" />
+              <RemoveIcon className="size-4 hover:stroke-destructive" />
             </button>
           </BasicTooltip>
         </Badge>
@@ -373,7 +375,7 @@ const MultiSelectorItem = forwardRef<
       onMouseDown={mousePreventDefault}
     >
       {children}
-      {isIncluded && <Check className="h-4 w-4" />}
+      {isIncluded && <Check className="size-4" />}
     </CommandItem>
   );
 });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -192,7 +193,7 @@ export default function UploadForm() {
                     className="outline-dashed outline-1 outline-slate-500"
                   >
                     <div className="flex w-full flex-col items-center justify-center p-8">
-                      <CloudUpload className="h-10 w-10 text-gray-500" />
+                      <CloudUpload className="size-10 text-gray-500" />
                       <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
                         <span className="font-semibold">Click to upload</span>
                         &nbsp; or drag and drop
@@ -207,7 +208,7 @@ export default function UploadForm() {
                       abstractFile.length > 0 &&
                       abstractFile.map((file, i) => (
                         <FileUploaderItem key={i} index={i}>
-                          <Paperclip className="h-4 w-4 stroke-current" />
+                          <Paperclip className="size-4 stroke-current" />
                           <span>{file.name}</span>
                         </FileUploaderItem>
                       ))}
@@ -315,7 +316,7 @@ export default function UploadForm() {
                             (language) => language.value === field.value
                           )?.label
                         : 'Select adviser'}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -335,7 +336,7 @@ export default function UploadForm() {
                           >
                             <Check
                               className={cn(
-                                'mr-2 h-4 w-4',
+                                'mr-2 size-4',
                                 language.value === field.value
                                   ? 'opacity-100'
                                   : 'opacity-0'
@@ -408,7 +409,7 @@ export default function UploadForm() {
                     className="outline-dashed outline-1 outline-slate-500"
                   >
                     <div className="flex w-full flex-col items-center justify-center p-8">
-                      <CloudUpload className="h-10 w-10 text-gray-500" />
+                      <CloudUpload className="size-10 text-gray-500" />
                       <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
                         <span className="font-semibold">Click to upload</span>
                         &nbsp; or drag and drop
@@ -423,7 +424,7 @@ export default function UploadForm() {
                       manuscript.length > 0 &&
                       manuscript.map((file, i) => (
                         <FileUploaderItem key={i} index={i}>
-                          <Paperclip className="h-4 w-4 stroke-current" />
+                          <Paperclip className="size-4 stroke-current" />
                           <span>{file.name}</span>
                         </FileUploaderItem>
                       ))}
