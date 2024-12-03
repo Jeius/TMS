@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Input } from './ui/input';
 import { ScrollArea } from './ui/scroll-area';
+import { Separator } from './ui/separator';
 import { Spinner } from './ui/spinner';
 
 export type ComboboxFunction = (
@@ -50,8 +51,6 @@ export function Combobox({
   const [searchTerm, setSearchTerm] = useState('');
   const { ref: loaderRef, inView } = useInView();
   const scrollAreaContentRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
   const scrollAreaContentSize = useElementSize(scrollAreaContentRef.current);
   const placeholder = id;
 
@@ -71,27 +70,6 @@ export function Combobox({
     onValueChanged(id, value);
     setOpen(false);
     setSearchTerm('');
-  }
-
-  function handleOpenChange(isOpen: boolean) {
-    setOpen(isOpen);
-
-    // if (isOpen && triggerRef.current) {
-    //   const triggerRect = triggerRef.current.getBoundingClientRect();
-    //   const contentHeight = Math.min(
-    //     (scrollAreaContentSize?.height ?? Infinity) + 37,
-    //     245
-    //   );
-    //   const availableSpace = window.innerHeight - triggerRect.bottom;
-    //   const overlap = contentHeight - availableSpace;
-
-    //   if (overlap > 0) {
-    //     window.scrollBy({
-    //       top: overlap + 16,
-    //       behavior: 'smooth',
-    //     });
-    //   }
-    // }
   }
 
   const handleSearchChange = debounce(
@@ -120,29 +98,10 @@ export function Combobox({
     }
   }, [externalResetTrigger]);
 
-  useEffect(() => {
-    if (open && contentRef.current && triggerRef.current) {
-      console.log('here');
-      const popoverElement = contentRef.current;
-      const triggerRect = triggerRef.current.getBoundingClientRect();
-      const popoverRect = popoverElement.getBoundingClientRect();
-      const availableSpace = window.innerHeight - triggerRect.bottom;
-      const overlap = popoverRect.height - availableSpace;
-
-      if (overlap > 0) {
-        window.scrollBy({
-          top: overlap + 16,
-          behavior: 'smooth',
-        });
-      }
-    }
-  }, [open]); // Runs after `open` state changes
-
   return (
-    <Popover open={open} onOpenChange={handleOpenChange}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          ref={triggerRef}
           variant={variant}
           role="combobox"
           aria-expanded={open}
@@ -177,79 +136,78 @@ export function Combobox({
       </PopoverTrigger>
       <PopoverContent
         id={`${id}-combobox-content`}
-        className="z-40 w-min min-w-40 p-0"
+        className="z-40 flex w-min min-w-40 flex-col p-0 data-[side=top]:flex-col-reverse"
       >
-        <div ref={contentRef}>
-          <div className="flex items-center border-b px-3">
-            <MagnifyingGlassIcon className="size-4 shrink-0 opacity-50" />
-            <Input
-              defaultValue={searchTerm}
-              type="search"
-              onChange={handleSearchChange}
-              placeholder={`Search ${placeholder.toLowerCase()}...`}
-              className="flex w-full border-none px-2 text-xs shadow-none focus-visible:ring-0"
-            />
-          </div>
-          <ScrollArea
-            style={{
-              height: scrollAreaContentSize
-                ? `min(${scrollAreaContentSize.height / 16}rem, 13rem)`
-                : undefined,
-            }}
-          >
-            <div ref={scrollAreaContentRef}>
-              {status === 'pending' ? (
-                <div className="h-fit w-full p-2">
-                  <Spinner size="sm" />
-                </div>
-              ) : status === 'error' ? (
-                <p className="w-full py-4 text-center text-xs">
-                  Error fetching from database
-                </p>
-              ) : (
-                <ul className="flex flex-col space-y-1 p-2">
-                  {data?.pages.map(({ items, currentPage }) => (
-                    <React.Fragment key={currentPage}>
-                      {items?.length
-                        ? items?.map((item) => (
-                            <li key={item}>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                value={item}
-                                onClick={handleClick}
-                                className="w-full justify-start"
-                              >
-                                <Check
-                                  className={cn(
-                                    'mr-2 size-4',
-                                    selectedValue === item
-                                      ? 'opacity-100'
-                                      : 'opacity-0'
-                                  )}
-                                />
-                                <span className="whitespace-nowrap text-xs font-semibold capitalize">
-                                  {item}
-                                </span>
-                              </Button>
-                            </li>
-                          ))
-                        : searchTerm && (
-                            <li className="w-full py-4 text-center text-xs">
-                              No results found...
-                            </li>
-                          )}
-                    </React.Fragment>
-                  ))}
-
-                  <li ref={loaderRef} className="w-full">
-                    <Spinner size="xs" show={isFetchingNextPage} />
-                  </li>
-                </ul>
-              )}
-            </div>
-          </ScrollArea>
+        <div className="flex items-center px-3">
+          <MagnifyingGlassIcon className="size-4 shrink-0 opacity-50" />
+          <Input
+            defaultValue={searchTerm}
+            type="search"
+            onChange={handleSearchChange}
+            placeholder={`Search ${placeholder.toLowerCase()}...`}
+            className="flex w-full border-none px-2 text-xs shadow-none focus-visible:ring-0"
+          />
         </div>
+        <Separator />
+        <ScrollArea
+          style={{
+            height: scrollAreaContentSize
+              ? `min(${scrollAreaContentSize.height / 16}rem, 13rem)`
+              : undefined,
+          }}
+        >
+          <div ref={scrollAreaContentRef}>
+            {status === 'pending' ? (
+              <div className="h-fit w-full p-2">
+                <Spinner size="sm" />
+              </div>
+            ) : status === 'error' ? (
+              <p className="w-full py-4 text-center text-xs">
+                Error fetching from database
+              </p>
+            ) : (
+              <ul className="flex flex-col space-y-1 p-2">
+                {data?.pages.map(({ items, currentPage }) => (
+                  <React.Fragment key={currentPage}>
+                    {items?.length
+                      ? items?.map((item) => (
+                          <li key={item}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              value={item}
+                              onClick={handleClick}
+                              className="w-full justify-start"
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 size-4',
+                                  selectedValue === item
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              <span className="whitespace-nowrap text-xs font-semibold capitalize">
+                                {item}
+                              </span>
+                            </Button>
+                          </li>
+                        ))
+                      : searchTerm && (
+                          <li className="w-full py-4 text-center text-xs">
+                            No results found...
+                          </li>
+                        )}
+                  </React.Fragment>
+                ))}
+
+                <li ref={loaderRef} className="w-full">
+                  <Spinner size="xs" show={isFetchingNextPage} />
+                </li>
+              </ul>
+            )}
+          </div>
+        </ScrollArea>
       </PopoverContent>
     </Popover>
   );
