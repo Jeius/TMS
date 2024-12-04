@@ -58,8 +58,11 @@ export function Combobox({
   const [searchTerm, setSearchTerm] = useState('');
   const { ref: loaderRef, inView } = useInView();
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const scrollAreaContentRef = useRef<HTMLDivElement>(null);
-  const scrollAreaContentSize = useElementSize(scrollAreaContentRef.current);
+  const trigger = triggerRef.current;
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const popoverSize = useElementSize(popoverRef);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollAreaSize = useElementSize(scrollAreaRef);
 
   const { data, status, fetchNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
@@ -80,23 +83,6 @@ export function Combobox({
 
   function handleOpenChange(isOpen: boolean) {
     setOpen(isOpen);
-
-    if (isOpen && triggerRef.current) {
-      const triggerRect = triggerRef.current.getBoundingClientRect();
-      const contentHeight = Math.min(
-        (scrollAreaContentSize?.height ?? Infinity) + 37,
-        245
-      );
-      const availableSpace = window.innerHeight - triggerRect.bottom;
-      const overlap = contentHeight - availableSpace;
-
-      if (overlap > 0) {
-        window.scrollBy({
-          top: overlap + 16,
-          behavior: 'smooth',
-        });
-      }
-    }
   }
 
   const handleSearchChange = debounce(
@@ -125,8 +111,24 @@ export function Combobox({
     }
   }, [externalResetTrigger]);
 
+  useEffect(() => {
+    if (trigger && popoverSize) {
+      const triggerRect = trigger.getBoundingClientRect();
+      const popoverHeight = popoverSize.height;
+      const availableSpace = window.innerHeight - triggerRect.bottom;
+      const overlap = popoverHeight - availableSpace;
+
+      if (open && overlap > 0) {
+        window.scrollBy({
+          top: overlap + 8,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [open, popoverSize, trigger]);
+
   return (
-    <Popover open={open} onOpenChange={handleOpenChange}>
+    <Popover key={`${id}-combobox`} open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
           ref={triggerRef}
@@ -163,6 +165,7 @@ export function Combobox({
         </Button>
       </PopoverTrigger>
       <PopoverContent
+        ref={popoverRef}
         id={`${id}-combobox-content`}
         className="z-40 flex w-min min-w-40 flex-col p-0 data-[side=top]:flex-col-reverse"
       >
@@ -178,61 +181,61 @@ export function Combobox({
         </div>
         <Separator />
         <ScrollArea
+          ref={scrollAreaRef}
+          className="max-h-52"
           style={{
-            height: scrollAreaContentSize
-              ? `min(${scrollAreaContentSize.height / 16}rem, 13rem)`
+            height: scrollAreaSize
+              ? `min(${scrollAreaSize.height / 16}rem, 13rem)`
               : undefined,
           }}
         >
-          <div ref={scrollAreaContentRef}>
-            {status === 'pending' ? (
-              <div className="h-fit w-full p-2">
-                <Spinner size="sm" />
-              </div>
-            ) : status === 'error' ? (
-              <p className="w-full py-4 text-center text-xs">
-                Error fetching from database
-              </p>
-            ) : (
-              <ul className="flex flex-col p-2">
-                {data?.pages.map(({ items, currentPage }) => (
-                  <React.Fragment key={currentPage}>
-                    {items?.length
-                      ? items?.map(({ id, value }) => (
-                          <li key={value}>
-                            <Button
-                              variant="ghost"
-                              value={value}
-                              onClick={() => handleSelect({ id, value })}
-                              className="h-fit w-full justify-start p-2"
-                            >
-                              <Check
-                                className={cn(
-                                  selectedItem?.value === value
-                                    ? 'opacity-100'
-                                    : 'opacity-0'
-                                )}
-                              />
-                              <span className="whitespace-nowrap text-xs font-semibold capitalize">
-                                {value}
-                              </span>
-                            </Button>
-                          </li>
-                        ))
-                      : searchTerm && (
-                          <li className="w-full py-4 text-center text-xs">
-                            No results found...
-                          </li>
-                        )}
-                  </React.Fragment>
-                ))}
+          {status === 'pending' ? (
+            <div className="h-fit w-full p-2">
+              <Spinner size="sm" />
+            </div>
+          ) : status === 'error' ? (
+            <p className="w-full py-4 text-center text-xs">
+              Error fetching from database
+            </p>
+          ) : (
+            <ul className="flex flex-col p-2">
+              {data?.pages.map(({ items, currentPage }) => (
+                <React.Fragment key={currentPage}>
+                  {items?.length
+                    ? items?.map(({ id, value }) => (
+                        <li key={value}>
+                          <Button
+                            variant="ghost"
+                            value={value}
+                            onClick={() => handleSelect({ id, value })}
+                            className="h-fit w-full justify-start p-2"
+                          >
+                            <Check
+                              className={cn(
+                                selectedItem?.value === value
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                            <span className="whitespace-nowrap text-xs font-semibold capitalize">
+                              {value}
+                            </span>
+                          </Button>
+                        </li>
+                      ))
+                    : searchTerm && (
+                        <li className="w-full py-4 text-center text-xs">
+                          No results found...
+                        </li>
+                      )}
+                </React.Fragment>
+              ))}
 
-                <li ref={loaderRef} className="w-full">
-                  <Spinner size="xs" show={isFetchingNextPage} />
-                </li>
-              </ul>
-            )}
-          </div>
+              <li ref={loaderRef} className="w-full">
+                <Spinner size="xs" show={isFetchingNextPage} />
+              </li>
+            </ul>
+          )}
         </ScrollArea>
       </PopoverContent>
     </Popover>

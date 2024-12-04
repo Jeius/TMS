@@ -18,7 +18,7 @@ import { ColumnVisibilityControl } from '@/features/browse/components/column-vis
 import { useElementSize } from '@/lib/hooks/use-element-size';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useScrollState } from '../lib/hooks/use-scroll-events';
 import { useSticky } from '../lib/hooks/use-sticky';
 import useThesisTable from '../lib/hooks/use-thesis-table';
@@ -27,17 +27,13 @@ import { columns } from './table-columns';
 export default function ThesesTableContent() {
   const scrollAreaRef = useSticky('app-header', 'thead');
   const scrollButtonsRef = useSticky('app-header', 'div');
-  const scrollState = useScrollState(
-    'data-radix-scroll-area-viewport',
-    scrollAreaRef
-  );
-  const [scrollArea, setScrollArea] = useState<HTMLElement | null>(null);
-  const scrollAreaSize = useElementSize(scrollArea);
+  const scrollState = useScrollState(scrollAreaRef);
+  const scrollAreaSize = useElementSize(scrollAreaRef);
 
   const canScrollLeft = scrollState.left.isScrolled;
   const canScrollRight =
     scrollState.left.value <
-    (scrollArea?.scrollWidth ?? 0) - (scrollAreaSize?.width ?? 0);
+    (scrollAreaRef.current?.scrollWidth ?? 0) - (scrollAreaSize?.width ?? 0);
 
   const table = useThesisTable();
   const tableWidth = table.getTotalSize();
@@ -54,17 +50,12 @@ export default function ThesesTableContent() {
   }, [headers, colSizing]);
 
   function scrollRight() {
-    scrollArea?.scrollBy({ left: 300, behavior: 'smooth' });
+    scrollAreaRef.current?.scrollBy({ left: 300, behavior: 'smooth' });
   }
 
   function scrollLeft() {
-    scrollArea?.scrollBy({ left: -300, behavior: 'smooth' });
+    scrollAreaRef.current?.scrollBy({ left: -300, behavior: 'smooth' });
   }
-
-  useEffect(
-    () => setScrollArea(document.getElementById('scroll-area-viewport')),
-    []
-  );
 
   return (
     <ScrollArea
