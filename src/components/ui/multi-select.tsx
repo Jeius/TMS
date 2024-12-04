@@ -389,4 +389,7 @@ export {
   MultiSelectorItem,
   MultiSelectorList,
   MultiSelectorTrigger,
+  useMultiSelect,
 };
+
+export type { MultiSelectorProps };

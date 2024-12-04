@@ -70,7 +70,7 @@ export function Combobox({
       enabled: !!id,
     });
 
-  function handleClick(item: ComboboxItem) {
+  function handleSelect(item: ComboboxItem) {
     const newItem = item.value === selectedItem?.value ? undefined : item;
     setSelectedItem(newItem);
     onItemChanged(id, newItem);
@@ -194,7 +194,7 @@ export function Combobox({
                 Error fetching from database
               </p>
             ) : (
-              <ul className="flex flex-col space-y-1 p-2">
+              <ul className="flex flex-col p-2">
                 {data?.pages.map(({ items, currentPage }) => (
                   <React.Fragment key={currentPage}>
                     {items?.length
@@ -202,14 +202,12 @@ export function Combobox({
                           <li key={value}>
                             <Button
                               variant="ghost"
-                              size="sm"
                               value={value}
-                              onClick={() => handleClick({ id, value })}
-                              className="w-full justify-start"
+                              onClick={() => handleSelect({ id, value })}
+                              className="h-fit w-full justify-start p-2"
                             >
                               <Check
                                 className={cn(
-                                  'mr-2 size-4',
                                   selectedItem?.value === value
                                     ? 'opacity-100'
                                     : 'opacity-0'

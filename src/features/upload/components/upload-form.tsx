@@ -47,6 +47,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
+import { getSpecializations } from '../lib/constants';
+import MultiSelect from './multi-select';
 
 const formSchema = z.object({
   title: z.string(),
@@ -109,9 +111,9 @@ export default function UploadForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      specializations: ['test'],
-      authors: ['React'],
-      panelists: ['React'],
+      specializations: [],
+      authors: [],
+      panelists: [],
     },
   });
 
@@ -236,20 +238,11 @@ export default function UploadForm() {
                   loop
                   className="max-w-sm text-sm"
                 >
-                  <MultiSelectorTrigger>
-                    <MultiSelectorInput placeholder="Specify specialization tags" />
-                  </MultiSelectorTrigger>
-                  <MultiSelectorContent>
-                    <MultiSelectorList>
-                      <MultiSelectorItem value={'React'}>
-                        React
-                      </MultiSelectorItem>
-                      <MultiSelectorItem value={'Vue'}>Vue</MultiSelectorItem>
-                      <MultiSelectorItem value={'Svelte'}>
-                        Svelte
-                      </MultiSelectorItem>
-                    </MultiSelectorList>
-                  </MultiSelectorContent>
+                  <MultiSelect
+                    id="specialization"
+                    queryFn={getSpecializations}
+                    placeholder="Select areas of specialization"
+                  />
                 </MultiSelector>
               </FormControl>
               <FormDescription>
