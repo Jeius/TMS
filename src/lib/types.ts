@@ -22,3 +22,14 @@ export type Size = {
 };
 
 export type Message = { success?: string } | { error?: string };
+
+export type ColumnID =
+  | 'title'
+  | 'abstract'
+  | 'year'
+  | 'specializations'
+  | 'authors'
+  | 'adviser'
+  | 'panelists'
+  | 'department'
+  | 'college';

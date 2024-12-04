@@ -1,8 +1,9 @@
 'use server';
 
+import { ColumnID } from '@/lib/types';
 import prisma from '@/server/db';
 import { VisibilityState } from '@tanstack/react-table';
-import { ColumnID } from './types';
+import { ThesisStatus } from '../../prisma/generated/client';
 
 const LIMIT = 10;
 
@@ -31,7 +32,6 @@ export async function fetchColleges(pageNumber = 0, search?: string) {
   const skip = pageNumber * LIMIT;
 
   const results = await prisma.college.findMany({
-    select: { name: true },
     where: {
       ...(search && {
         name: {
@@ -44,12 +44,10 @@ export async function fetchColleges(pageNumber = 0, search?: string) {
     take: LIMIT,
   });
 
-  const colleges = results.map((result) => result.name);
-
   return {
-    items: colleges,
+    data: results,
     currentPage: pageNumber,
-    nextPage: colleges.length < LIMIT ? null : pageNumber + 1,
+    nextPage: results.length < LIMIT ? null : pageNumber + 1,
     search,
   };
 }
@@ -58,7 +56,16 @@ export async function fetchDepartments(pageNumber = 0, search?: string) {
   const skip = pageNumber * LIMIT;
 
   const results = await prisma.department.findMany({
-    select: { name: true },
+    select: {
+      id: true,
+      name: true,
+      created_at: true,
+      deleted_at: true,
+      updated_at: true,
+      college: {
+        select: { id: true, name: true },
+      },
+    },
     where: {
       ...(search && {
         name: {
@@ -71,12 +78,10 @@ export async function fetchDepartments(pageNumber = 0, search?: string) {
     take: LIMIT,
   });
 
-  const departments = results.map((result) => result.name);
-
   return {
-    items: departments,
+    data: results,
     currentPage: pageNumber,
-    nextPage: departments.length < LIMIT ? null : pageNumber + 1,
+    nextPage: results.length < LIMIT ? null : pageNumber + 1,
     search,
   };
 }
@@ -98,10 +103,10 @@ export async function fetchApprovedYears(pageNumber = 0, search?: string) {
 
   const years = results
     .filter((res) => res.year_approved !== null)
-    .map((res) => res.year_approved!.toString());
+    .map((res) => String(res.year_approved));
 
   return {
-    items: years,
+    data: years,
     currentPage: pageNumber,
     nextPage: years.length < LIMIT ? null : pageNumber + 1,
     search,
@@ -112,7 +117,6 @@ export async function fetchSpecializations(pageNumber = 0, search?: string) {
   const skip = pageNumber * LIMIT;
 
   const results = await prisma.specializationTag.findMany({
-    select: { name: true },
     where: {
       ...(search && {
         name: {
@@ -125,27 +129,25 @@ export async function fetchSpecializations(pageNumber = 0, search?: string) {
     take: LIMIT,
   });
 
-  const specializations = results.map((result) => result.name);
-
   return {
-    items: specializations,
+    data: results,
     currentPage: pageNumber,
-    nextPage: specializations.length < LIMIT ? null : pageNumber + 1,
+    nextPage: results.length < LIMIT ? null : pageNumber + 1,
     search,
   };
 }
 
-export async function fetchApprovedThesesAuthors(
+export async function fetchAuthors(
   pageNumber = 0,
-  search?: string
+  search?: string,
+  status: ThesisStatus = 'FINAL_MANUSCRIPT'
 ) {
   const skip = pageNumber * LIMIT;
 
   const results = await prisma.authorView.findMany({
-    select: { first_name: true, last_name: true },
     distinct: ['author_id'],
     where: {
-      status: 'FINAL_MANUSCRIPT',
+      status: status,
       ...(search && {
         OR: [
           {
@@ -167,29 +169,33 @@ export async function fetchApprovedThesesAuthors(
     take: LIMIT,
   });
 
-  const authors = results.map((result) => Object.values(result).join(' '));
-
   return {
-    items: authors,
+    data: results,
     currentPage: pageNumber,
-    nextPage: authors.length < LIMIT ? null : pageNumber + 1,
+    nextPage: results.length < LIMIT ? null : pageNumber + 1,
     search,
   };
 }
 
-export async function fetchApprovedThesesAdviser(
+export async function fetchAdvisers(
   pageNumber = 0,
-  search?: string
+  search?: string,
+  status: ThesisStatus = 'FINAL_MANUSCRIPT'
 ) {
   const skip = pageNumber * LIMIT;
 
   const results = await prisma.adviserView.findMany({
-    select: { prefix: true, first_name: true, last_name: true, suffix: true },
     distinct: ['adviser_id'],
     where: {
-      status: 'FINAL_MANUSCRIPT',
+      status: status,
       ...(search && {
         OR: [
+          {
+            prefix: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
           {
             first_name: {
               contains: search,
@@ -202,6 +208,12 @@ export async function fetchApprovedThesesAdviser(
               mode: 'insensitive',
             },
           },
+          {
+            suffix: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
         ],
       }),
     },
@@ -209,36 +221,33 @@ export async function fetchApprovedThesesAdviser(
     take: LIMIT,
   });
 
-  const advisers = results.map((result) => {
-    const { prefix, first_name, last_name, suffix } = result;
-
-    if (prefix && suffix)
-      return `${prefix} ${first_name} ${last_name}, ${suffix}`;
-    else if (suffix) return `${first_name} ${last_name}, ${suffix}`;
-    else return `${first_name} ${last_name}`;
-  });
-
   return {
-    items: advisers,
+    data: results,
     currentPage: pageNumber,
-    nextPage: advisers.length < LIMIT ? null : pageNumber + 1,
+    nextPage: results.length < LIMIT ? null : pageNumber + 1,
     search,
   };
 }
 
-export async function fetchApprovedThesesPanelists(
+export async function fetchPanelists(
   pageNumber = 0,
-  search?: string
+  search?: string,
+  status: ThesisStatus = 'FINAL_MANUSCRIPT'
 ) {
   const skip = pageNumber * LIMIT;
 
   const results = await prisma.panelistView.findMany({
-    select: { prefix: true, first_name: true, last_name: true, suffix: true },
     distinct: ['panelist_id'],
     where: {
-      status: 'FINAL_MANUSCRIPT',
+      status: status,
       ...(search && {
         OR: [
+          {
+            prefix: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
           {
             first_name: {
               contains: search,
@@ -251,6 +260,12 @@ export async function fetchApprovedThesesPanelists(
               mode: 'insensitive',
             },
           },
+          {
+            suffix: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
         ],
       }),
     },
@@ -258,19 +273,10 @@ export async function fetchApprovedThesesPanelists(
     take: LIMIT,
   });
 
-  const panelists = results.map((result) => {
-    const { prefix, first_name, last_name, suffix } = result;
-
-    if (prefix && suffix)
-      return `${prefix} ${first_name} ${last_name}, ${suffix}`;
-    else if (suffix) return `${first_name} ${last_name}, ${suffix}`;
-    else return `${first_name} ${last_name}`;
-  });
-
   return {
-    items: panelists,
+    data: results,
     currentPage: pageNumber,
-    nextPage: panelists.length < LIMIT ? null : pageNumber + 1,
+    nextPage: results.length < LIMIT ? null : pageNumber + 1,
     search,
   };
 }

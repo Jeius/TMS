@@ -2,17 +2,6 @@ import { ColumnSort } from '@tanstack/react-table';
 
 export type SortId = 'latest' | 'oldest' | 'alpha' | '-alpha';
 
-export type ColumnID =
-  | 'title'
-  | 'abstract'
-  | 'year'
-  | 'specializations'
-  | 'authors'
-  | 'adviser'
-  | 'panelists'
-  | 'department'
-  | 'college';
-
 export type SortValue = {
   id: SortId;
   label: string;

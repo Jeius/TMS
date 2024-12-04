@@ -5,7 +5,7 @@ import {
   StatisticsCard,
 } from '@/features/analytics/components/stats-card';
 import { ThesesChartCard } from '@/features/analytics/components/theses-chart-card';
-import { ColumnID } from '@/features/browse/lib/types';
+import { ColumnID } from '@/lib/types';
 import {
   Book,
   BookOpenCheckIcon,

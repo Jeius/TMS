@@ -1,6 +1,6 @@
 'use client';
 
-import { Combobox } from '@/components/combobox';
+import { Combobox, ComboboxItem } from '@/components/combobox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FILTERS } from '@/features/browse/lib/constants';
@@ -38,8 +38,8 @@ export default function Filters() {
     setMoreFilters((prev) => !prev);
   }
 
-  function handleValueChanged(id: string, value?: string) {
-    table?.getColumn(id)?.setFilterValue(value);
+  function handleValueChanged(id: string, item?: ComboboxItem) {
+    table?.getColumn(id)?.setFilterValue(item?.value);
     setResetTrigger(false);
   }
 
@@ -64,24 +64,23 @@ export default function Filters() {
           </Button>
         ) : null}
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {initial.map(({ id, defaultValue }) => (
-          <div key={id}>
-            <Combobox
-              id={id}
-              key={`${id}-${defaultValue}`}
-              defaultValue={defaultValue}
-              onValueChanged={handleValueChanged}
-              queryFn={FILTERS[id]}
-              externalResetTrigger={resetTrigger}
-            />
-          </div>
+          <Combobox
+            id={id}
+            key={`${id}-filter`}
+            placeholder={id}
+            defaultValue={defaultValue}
+            onItemChanged={handleValueChanged}
+            queryFn={FILTERS[id]}
+            externalResetTrigger={resetTrigger}
+          />
         ))}
         <AnimatePresence mode="popLayout">
           {moreFilters &&
             extension.map(({ id, defaultValue }) => (
               <motion.div
-                key={id}
+                key={`${id}-filter`}
                 initial={{ x: -60, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -60, opacity: 0 }}
@@ -89,9 +88,9 @@ export default function Filters() {
               >
                 <Combobox
                   id={id}
-                  key={`${id}-${defaultValue}`}
                   defaultValue={defaultValue}
-                  onValueChanged={handleValueChanged}
+                  placeholder={id}
+                  onItemChanged={handleValueChanged}
                   queryFn={FILTERS[id]}
                   externalResetTrigger={resetTrigger}
                 />
@@ -104,11 +103,11 @@ export default function Filters() {
           transition={{ type: 'tween' }}
         >
           <Button
-            variant="ghost"
-            size="sm"
+            variant="text"
+            size="text"
             role="checkbox"
             aria-checked={moreFilters}
-            className="text-xs font-semibold text-secondary/80 hover:bg-transparent hover:text-secondary"
+            className="text-xs font-semibold text-secondary/80 hover:text-secondary"
             onClick={toggleMoreFilters}
           >
             {moreFilters ? 'Less filters' : 'More filters'}

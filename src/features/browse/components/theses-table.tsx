@@ -3,6 +3,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import Filters from '@/features/browse/components/filters';
 import ThesesTableContent from '@/features/browse/components/table-content';
 import { cn } from '@/lib/utils';
+import { fetchTheses } from '@/server/actions';
 import {
   dehydrate,
   HydrationBoundary,
@@ -10,7 +11,6 @@ import {
 } from '@tanstack/react-query';
 import { BookCopyIcon } from 'lucide-react';
 import React from 'react';
-import { fetchTheses } from '../lib/actions';
 import { FILTERS } from '../lib/constants';
 import { ColumnVisibilityControl } from './column-visibility';
 import SortOptions from './sort';

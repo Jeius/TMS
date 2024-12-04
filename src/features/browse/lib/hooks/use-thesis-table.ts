@@ -2,6 +2,7 @@ import { columns } from '@/features/browse/components/table-columns';
 import useGlobalState from '@/lib/hooks/use-global-state';
 import responsivePx from '@/lib/responsive-px';
 import { Thesis } from '@/lib/types';
+import { fetchTheses } from '@/server/actions';
 import { useQuery } from '@tanstack/react-query';
 import {
   getCoreRowModel,
@@ -13,7 +14,6 @@ import {
 } from '@tanstack/react-table';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import { useEffect } from 'react';
-import { fetchTheses } from '../actions';
 import useFilterState from './use-filter-state';
 import useSortState from './use-sort-state';
 import useVisibilityState from './use-visibility-state';

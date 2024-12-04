@@ -19,11 +19,13 @@ import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
 import { Spinner } from './ui/spinner';
 
+export type ComboboxItem = { id: string | number; value?: string };
+
 export type ComboboxFunction = (
   page: number,
   search?: string
 ) => Promise<{
-  items: string[];
+  items: ComboboxItem[];
   currentPage: number;
   nextPage: number | null;
   search?: string;
@@ -31,8 +33,9 @@ export type ComboboxFunction = (
 
 type ComboboxProps = React.ComponentPropsWithRef<typeof Button> & {
   id: string;
+  placeholder: string;
   queryFn: ComboboxFunction;
-  onValueChanged?: (id: string, value?: string) => void;
+  onItemChanged?: (id: string, item?: ComboboxItem) => void;
   externalResetTrigger?: boolean;
 };
 
@@ -40,20 +43,23 @@ export function Combobox({
   id,
   queryFn,
   className,
+  placeholder,
   defaultValue,
   variant = 'outline',
   externalResetTrigger,
-  onValueChanged = () => {},
+  onItemChanged = () => {},
   ...props
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(defaultValue);
+  const [selectedItem, setSelectedItem] = useState<ComboboxItem | undefined>({
+    id: '',
+    value: defaultValue ? String(defaultValue) : undefined,
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const { ref: loaderRef, inView } = useInView();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const scrollAreaContentRef = useRef<HTMLDivElement>(null);
   const scrollAreaContentSize = useElementSize(scrollAreaContentRef.current);
-  const placeholder = id;
 
   const { data, status, fetchNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
@@ -64,11 +70,10 @@ export function Combobox({
       enabled: !!id,
     });
 
-  function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    const item = e.currentTarget.value;
-    const value = item === selectedValue ? undefined : item;
-    setSelectedValue(value);
-    onValueChanged(id, value);
+  function handleClick(item: ComboboxItem) {
+    const newItem = item.value === selectedItem?.value ? undefined : item;
+    setSelectedItem(newItem);
+    onItemChanged(id, newItem);
     setOpen(false);
     setSearchTerm('');
   }
@@ -116,7 +121,7 @@ export function Combobox({
 
   useEffect(() => {
     if (externalResetTrigger) {
-      setSelectedValue(undefined);
+      setSelectedItem(undefined);
     }
   }, [externalResetTrigger]);
 
@@ -133,8 +138,8 @@ export function Combobox({
           className={cn('w-min justify-between text-xs capitalize', className)}
           {...props}
         >
-          {selectedValue ? (
-            <span className="font-semibold">{selectedValue}</span>
+          {selectedItem?.value ? (
+            <span className="font-semibold">{selectedItem.value}</span>
           ) : (
             <span className="dark:text-foreground/80">{placeholder}</span>
           )}
@@ -193,25 +198,25 @@ export function Combobox({
                 {data?.pages.map(({ items, currentPage }) => (
                   <React.Fragment key={currentPage}>
                     {items?.length
-                      ? items?.map((item) => (
-                          <li key={item}>
+                      ? items?.map(({ id, value }) => (
+                          <li key={value}>
                             <Button
                               variant="ghost"
                               size="sm"
-                              value={item}
-                              onClick={handleClick}
+                              value={value}
+                              onClick={() => handleClick({ id, value })}
                               className="w-full justify-start"
                             >
                               <Check
                                 className={cn(
                                   'mr-2 size-4',
-                                  selectedValue === item
+                                  selectedItem?.value === value
                                     ? 'opacity-100'
                                     : 'opacity-0'
                                 )}
                               />
                               <span className="whitespace-nowrap text-xs font-semibold capitalize">
-                                {item}
+                                {value}
                               </span>
                             </Button>
                           </li>
